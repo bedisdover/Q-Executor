@@ -20,7 +20,10 @@ hs_err_pid*
 *.settings
 
 # eclipse #
-.project
-.classpath
-.settings/
+*.project
+*.classpath
+*.settings
+
+# spring #
+*.properties
 
