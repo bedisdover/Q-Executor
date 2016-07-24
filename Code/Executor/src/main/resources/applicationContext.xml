@@ -35,7 +35,7 @@
 
 
   <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-    <property name="locations" value="classpath:db.properties1"/>
+    <property name="locations" value="classpath:db.properties"/>
   </bean>
 
   <bean id="local" class="com.mchange.v2.c3p0.ComboPooledDataSource"
