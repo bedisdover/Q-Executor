@@ -8,12 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class test {
-    @RequestMapping("/")
-    public String index(){
-        return "test";
-    }
-    @RequestMapping("test")
-    public void test(){
 
+    @RequestMapping("test1")
+    public String test(){
+        System.out.println("获取到2html");
+        return "test.jsp";
     }
 }
