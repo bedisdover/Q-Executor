@@ -18,15 +18,25 @@
     <context:component-scan base-package="cn.edu.nju.software.service"/>
     <context:component-scan base-package="cn.edu.nju.software.dao"/>
 
+    <!--<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
+        <!--<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>-->
+        <!--<property name="prefix" value="/"/>-->
+        <!--<property name="suffix" value=".jsp"/>-->
+    <!--</bean>-->
 
-
-    <bean
-            class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <!--<property name="prefix">-->
-            <!--<value>/WEB-INF/</value>-->
-        <!--</property>-->
-        <property name="suffix">
-            <value>.jsp</value>
-        </property>
+    <bean  class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="order" value="10"></property>
+        <property name="prefix" value="/"></property>
+        <property name="contentType" value="text/html"></property>
     </bean>
+
+    <!--<bean-->
+            <!--class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
+        <!--<property name="prefix">-->
+        <!--<value>/</value>-->
+    <!--</property>-->
+        <!--&lt;!&ndash;<property name="suffix">&ndash;&gt;-->
+            <!--&lt;!&ndash;<value>.jsp</value>&ndash;&gt;-->
+        <!--&lt;!&ndash;</property>&ndash;&gt;-->
+    <!--</bean>-->
 </beans>
