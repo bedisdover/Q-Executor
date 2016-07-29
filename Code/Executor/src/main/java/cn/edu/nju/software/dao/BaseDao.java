@@ -14,6 +14,8 @@ import java.util.List;
 
 /**
  * Created by Jiayiwu on 16/7/29.
+ * Mail:wujiayi@lgdreamer.com
+ * Change everywhere
  */
 @Repository
 public class BaseDao {

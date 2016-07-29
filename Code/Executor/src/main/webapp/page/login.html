@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
 	<title>登录 | Q-Executor</title>
+	<link rel="icon" href="../images/icon.ico">
 	<link rel="stylesheet" href="../css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
@@ -19,20 +20,20 @@
 
 	<div class="row top bottom">
 		<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-			<input type="text" class="form-control" placeholder="邮箱/用户名">
+			<input type="text" class="form-control" placeholder="邮箱/用户名" id="email">
 		</div>
 	</div>
 
 
 	<div class="row top bottom">
 		<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-			<input type="password" class="form-control" placeholder="密码">
+			<input type="password" class="form-control" placeholder="密码" id="password">
 		</div>
 	</div>
 
 	<div class="row top bottom">
 		<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-			<button class="btn btn-primary btn-block">登录</button>
+			<button class="btn btn-primary btn-block" id="login">登录</button>
 		</div>
 	</div>
 
@@ -49,12 +50,19 @@
 	</div>
 </div>
 
-
 <script src="../js/jquery.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
 <script type="text/javascript">
-
-
+	$('#login').on('click', function() {
+		jQuery.ajax({
+			url: '/login',
+			type: 'post',
+			data: data,
+			success: function(data) {
+				alert(data);
+			}
+		})
+	})
 </script>
 </body>
 </html>
