@@ -40,6 +40,8 @@ public class UserController {
     @RequestMapping("/register")
     @ResponseBody
     public MsgInfo register(HttpSession session,String userName, String nickName, String password, String mail){
+        System.out.println(userName);
+        System.out.println("UserController.register");
       MsgInfo info = userService.register(userName,nickName,password,mail);
       session.setAttribute("user",(User)info.getObject());
        return info;
