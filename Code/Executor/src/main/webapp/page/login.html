@@ -1,68 +1,75 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
-	<title>登录 | Q-Executor</title>
-	<link rel="icon" href="../images/icon.ico">
-	<link rel="stylesheet" href="../css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="../css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <title>登录 | Q-Executor</title>
+    <link rel="icon" href="../images/icon.ico">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 <body>
-
-
 <div class="container">
-	<div class="row top bottom">
-		<div class="page-header text-center">
-			<h3>登录</h3>
-		</div>
-	</div>
+    <div class="row top bottom">
+        <div class="page-header text-center">
+            <h3>登录</h3>
+        </div>
+    </div>
 
-	<div class="row top bottom">
-		<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-			<input type="text" class="form-control" placeholder="邮箱/用户名" id="email">
-		</div>
-	</div>
+    <form id="form">
+        <div class="row top bottom">
+            <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
+                <input type="text" name="userName" class="form-control" placeholder="邮箱/用户名" id="email">
+            </div>
+        </div>
 
+        <div class="row top bottom">
+            <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
+                <input type="password" name="password" class="form-control" placeholder="密码" id="password">
+            </div>
+        </div>
 
-	<div class="row top bottom">
-		<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-			<input type="password" class="form-control" placeholder="密码" id="password">
-		</div>
-	</div>
+        <div class="row top bottom">
+            <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
+                <button type="button" class="btn btn-primary btn-block" id="login">登录</button>
+            </div>
+        </div>
+    </form>
 
-	<div class="row top bottom">
-		<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-			<button class="btn btn-primary btn-block" id="login">登录</button>
-		</div>
-	</div>
-
-	<div class="row top bottom">
-		<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2
+    <div class="row top bottom">
+        <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2
 				col-xs-offset-7 col-sm-offset-7 col-md-offset-7 col-lg-offset-7">
-				<a href="#">注册</a>
-			</div>
-			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-				<a href="#">找回密码</a>
-			</div>
-		</div>
-	</div>
+                <a href="signup.html">注册</a>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <a href="findpw.html">找回密码</a>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="../js/jquery.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
+<script src="../js/check.js"></script>
 <script type="text/javascript">
-	$('#login').on('click', function() {
-		jQuery.ajax({
-			url: '/login',
-			type: 'post',
-			data: data,
-			success: function(data) {
-				alert(data);
-			}
-		})
-	})
+    $('#login').on('click', function () {
+        if ($('#form').find('.error').length == 0) {
+            jQuery.ajax({
+                url: '/login',
+                type: 'post',
+                dataType: 'json',
+                data: $('#form').serialize(),
+                success: function (data) {
+                    if (data.state == true) {
+                        top.location = '../';
+                    } else {
+                        alert(data.info);
+                    }
+                }
+            });
+        }
+    });
 </script>
 </body>
 </html>
