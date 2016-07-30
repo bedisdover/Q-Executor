@@ -1,0 +1,12 @@
+
+.top{
+	margin-top : 32px;
+}
+
+.bottom {
+	margin-bottom : 32px;
+}
+
+.error {
+	border-color: #ff3524;
+}
