@@ -59,7 +59,8 @@
 <script src="../js/check.js"></script>
 <script type="text/javascript">
     $(function () {
-        check();
+        // 昵称可以为空
+        $('#nickName').off('focusout');
     });
 
     $('#register').on('click', function () {
@@ -79,24 +80,6 @@
             });
         }
     });
-
-    /**
-     * 检查表单
-     */
-    function check() {
-        $('#nickName').off('focusout');
-
-        $('#confirmPassword').on('focusout', function () {
-            if ($(this).val().trim() != $('#password').val().trim()) {
-                $(this).addClass('error').attr({
-                    'data-toggle': 'tooltip',
-                    'title': '密码不一致'
-                }).tooltip();
-            } else {
-                $(this).removeClass('error').tooltip('destroy');
-            }
-        });
-    }
 </script>
 </body>
 </html>
