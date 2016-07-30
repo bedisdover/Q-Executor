@@ -17,13 +17,22 @@ public class UserDao {
     @Resource
     BaseDao baseDao;
 
-        public User findUser(String userName){
+        public User findUserbyName(String userName){
                List<User> users = ( List<User>)baseDao.findByProperty(User.class,"userName",userName);
             if(null!=users&&users.size()>=1)
                 return users.get(0);
             else
                 return null;
         }
+
+    public User findUserbymail(String mail){
+        List<User> users = ( List<User>)baseDao.findByProperty(User.class,"mail",mail);
+        if(null!=users&&users.size()>=1)
+            return users.get(0);
+        else
+            return null;
+    }
+
 
     public MsgInfo saveUser(User user){
 
@@ -41,7 +50,7 @@ public class UserDao {
 
     public MsgInfo updateUser(User user){
 
-        User tem = findUser(user.getUserName());
+        User tem = findUserbyName(user.getUserName());
 
         if(null == tem)
             return new MsgInfo(false,"该用户不存在");
