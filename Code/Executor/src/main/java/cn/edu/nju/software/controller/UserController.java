@@ -83,8 +83,30 @@ public class UserController {
         String num = new Random().nextInt(10000)+"";
         MsgInfo info = userService.findPassword(userName, num);
        if(true == info.isState()){
+           session.setAttribute("userName",userName);
            session.setAttribute(SHA256.encrypt(num),userName);
        }
+        return info;
+    }
+
+    /**
+     *
+     * @param session
+     * @return MsgInfo
+     *         MsgInfo 返回格式为Json格式,其结构为private boolean state;
+     *                                          private String info;
+     *                                         private Object object = null;
+     *         其中state表示本次重新发送邮件是否成功,info表示失败的信息
+     */
+    @RequestMapping("/repeatMail")
+    @ResponseBody
+    public MsgInfo repeatMail(HttpSession session){
+        String userName = (String) session.getAttribute("userName");
+        String num = new Random().nextInt(10000)+"";
+        MsgInfo info = userService.findPassword(userName, num);
+        if(true == info.isState()){
+            session.setAttribute(SHA256.encrypt(num),userName);
+        }
         return info;
     }
 
