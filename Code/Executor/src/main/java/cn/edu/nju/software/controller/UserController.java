@@ -39,12 +39,10 @@ public class UserController {
      */
     @RequestMapping("/register")
     @ResponseBody
-    public MsgInfo register(HttpSession session,String userName, String nickName, String password, String mail){
-        System.out.println(userName);
-        System.out.println("UserController.register");
-      MsgInfo info = userService.register(userName,nickName,password,mail);
-      session.setAttribute("user",(User)info.getObject());
-       return info;
+    public MsgInfo register(HttpSession session, String userName, String nickName, String password, String mail) {
+        MsgInfo info = userService.register(userName, nickName, password, mail);
+        session.setAttribute("user", (User) info.getObject());
+        return info;
     }
 
     /**
@@ -62,6 +60,7 @@ public class UserController {
     @RequestMapping("/login")
     @ResponseBody
     public MsgInfo login(HttpSession session,String userName, String password){
+        System.out.println(userName);
         MsgInfo info = userService.login(userName,password);
         session.setAttribute("user",(User)info.getObject());
         return info;

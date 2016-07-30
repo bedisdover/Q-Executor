@@ -15,29 +15,29 @@
 			<h3>注册</h3>
 		</div>
 	</div>
-
+	<form id="form">
 	<div class="row top bottom">
 		<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-			<input type="email" class="form-control" placeholder="邮箱" id="mail">
+			<input type="email" name="mail" class="form-control" placeholder="邮箱" id="mail">
 		</div>
 	</div>
 
 
 	<div class="row top bottom">
 		<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-			<input type="text" class="form-control" placeholder="用户名" id="userName">
+			<input type="text" name="userName" class="form-control" placeholder="用户名" id="userName" >
 		</div>
 	</div>
 
 	<div class="row top bottom">
 		<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-			<input type="text" class="form-control" placeholder="昵称" id="nickName">
+			<input type="text" name="nickName" class="form-control" placeholder="昵称" id="nickName">
 		</div>
 	</div>
 
 	<div class="row top bottom">
 		<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-			<input type="password" class="form-control" placeholder="密码" id="password">
+			<input type="password" name="password" class="form-control" placeholder="密码" id="password">
 		</div>
 	</div>
 
@@ -49,32 +49,46 @@
 
 	<div class="row top bottom">
 		<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-			<button class="btn btn-primary btn-block" id="register">注册</button>
+			<button type="button" class="btn btn-primary btn-block" id="register">注册</button>
 		</div>
 	</div>
+		</form>
 </div>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
 <script type="text/javascript">
-	var data = new Object({
-		userName: $('#userName').val().trim(),
-		nickName: $('#nickName').val().trim(),
-		password: $('#password').val().trim(),
-		mail: $('#mail').val().trim()
-	});
-
 	$('#register').on('click', function () {
 		jQuery.ajax({
 			url: '/register',
 			type: 'post',
-			data: data,
+			dataType: 'json',
+			data: $('#form').serialize(),
 			success: function(data) {
-				alert(data);
-				console.log(data);
-				console.log(typeof data)
+//				var result = JSON.parseJSON(data);
+
+				if (data.state == true) {
+					handleSuccess(data.info);
+				} else {
+					handleError(data.info);
+				}
 			}
 		});
 	});
+
+	function handleSuccess(info) {
+		top.location = '../index.html';
+	}
+
+	function handleError(info) {
+		alert(info);
+	}
+
+	/**
+	 * 检查表单
+	 */
+	function check() {
+
+	}
 </script>
 </body>
 </html>
