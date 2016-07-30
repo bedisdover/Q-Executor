@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+	<title>找回密码 | Q-Executor</title>
+	<link rel="icon" href="../images/icon.ico">
+	<link rel="stylesheet" href="../css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+</head>
+<body>
+<div class="container">
+
+	<div class="row top bottom">
+		<ul id="nav" class="nav nav-tabs">
+			<li><a href="#confirm" data-toggle="tab">确认账号</a></li>
+			<li><a href="#verify" data-toggle="tab">安全验证</a></li>
+			<li><a href="#reset" data-toggle="tab">重置密码</a></li>
+		</ul>
+	</div>
+
+	<div class="tab-content">
+		<div class="tab-pane fade in active" id="confirm">
+			<div class="row top bottom">
+				<div class="col-xs-8 col-sm-6 col-md-4 col-lg-4">
+					<input type="email" class="form-control" placeholder="邮箱">
+				</div>
+			</div>
+			<div class="row top bottom">
+				<div class="col-xs-8 col-sm-6 col-md-4 col-lg-4">
+					<button class="btn btn-primary btn-block">发送重置密码邮件</button>
+				</div>	
+			</div>
+		</div>
+
+		<div class="tab-pane fade" id="verify">
+			<div class="row top bottom">
+				<div class="col-xs-8 col-sm-6 col-md-4 col-lg-4">
+					<input type="text" class="form-control" placeholder="请输入验证码">
+				</div>
+			</div>
+			<div class="row top bottom">
+				<div class="col-xs-8 col-sm-6 col-md-4 col-lg-4">
+					<button class="btn btn-primary btn-block">确定</button>
+				</div>	
+			</div>
+		</div>
+
+		<div class="tab-pane fade" id="reset">
+			<div class="row top bottom">
+				<div class="col-xs-8 col-sm-6 col-md-4 col-lg-4">
+					<input type="password" class="form-control" placeholder="请输入新密码">
+				</div>
+			</div>
+			<div class="row top bottom">
+				<div class="col-xs-8 col-sm-6 col-md-4 col-lg-4">
+					<input type="password" class="form-control" placeholder="新密码确认">
+				</div>
+			</div>
+			<div class="row top bottom">
+				<div class="col-xs-8 col-sm-6 col-md-4 col-lg-4">
+					<button class="btn btn-primary btn-block">确定</button>
+				</div>	
+			</div>
+		</div>
+	</div>
+	
+</div>
+
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+	$('#nav a').on('click', function(event) {
+		event.preventDefault();
+		$(this).tab('show');
+	});
+
+</script>
+</body>
+</html>
