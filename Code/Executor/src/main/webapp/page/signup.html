@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
-	<title>注册 | Q-Executor</title>
-	<link rel="icon" href="../images/icon.ico">
-	<link rel="stylesheet" href="../css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="../css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <title>注册 | Q-Executor</title>
+    <link rel="icon" href="../images/icon.ico">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 <body>
 <div class="container">
@@ -15,80 +15,88 @@
 			<h3>注册</h3>
 		</div>
 	</div>
+
 	<form id="form">
-	<div class="row top-padding bottom-padding">
-		<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-			<input type="email" name="mail" class="form-control" placeholder="邮箱" id="mail">
+		<div class="row top-padding bottom-padding">
+			<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
+				<input type="email" name="mail" class="form-control" placeholder="邮箱" id="mail">
+			</div>
 		</div>
-	</div>
 
-
-	<div class="row top-padding bottom-padding">
-		<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-			<input type="text" name="userName" class="form-control" placeholder="用户名" id="userName" >
+		<div class="row top-padding bottom-padding">
+			<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
+				<input type="text" name="userName" class="form-control" placeholder="用户名" id="userName" >
+			</div>
 		</div>
-	</div>
 
-	<div class="row top-padding bottom-padding">
-		<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-			<input type="text" name="nickName" class="form-control" placeholder="昵称" id="nickName">
+		<div class="row top-padding bottom-padding">
+			<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
+				<input type="text" name="nickName" class="form-control" placeholder="昵称" id="nickName">
+			</div>
 		</div>
-	</div>
 
-	<div class="row top-padding bottom-padding">
-		<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-			<input type="password" name="password" class="form-control" placeholder="密码" id="password">
+		<div class="row top-padding bottom-padding">
+			<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
+				<input type="password" name="password" class="form-control" placeholder="密码" id="password">
+			</div>
 		</div>
-	</div>
 
-	<div class="row top-padding bottom-padding">
-		<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-			<input type="password" class="form-control" placeholder="确认密码" id="confirmPassword">
+		<div class="row top-padding bottom-padding">
+			<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
+				<input type="password" class="form-control" placeholder="确认密码" id="confirmPassword">
+			</div>
 		</div>
-	</div>
 
-	<div class="row top-padding bottom-padding">
-		<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-			<button type="button" class="btn btn-primary btn-block" id="register">注册</button>
+		<div class="row top-padding bottom-padding">
+			<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
+				<button type="button" class="btn btn-primary btn-block" id="register">注册</button>
+			</div>
 		</div>
-	</div>
-		</form>
+	</form>
 </div>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
+<script src="../js/check.js"></script>
 <script type="text/javascript">
-	$('#register').on('click', function () {
-		jQuery.ajax({
-			url: '/register',
-			type: 'post',
-			dataType: 'json',
-			data: $('#form').serialize(),
-			success: function(data) {
-//				var result = JSON.parseJSON(data);
+    $(function () {
+        check();
+    });
 
-				if (data.state == true) {
-					handleSuccess(data.info);
-				} else {
-					handleError(data.info);
-				}
-			}
-		});
-	});
+    $('#register').on('click', function () {
+        if ($('#form').find('.error').length == 0) {
+            jQuery.ajax({
+                url: '/register',
+                type: 'post',
+                dataType: 'json',
+                data: $('#form').serialize(),
+                success: function (data) {
+                    if (data.state == true) {
+                        top.location = '../';
+                    } else {
+                        alert(info);
+                    }
+                }
+            });
+        }
+    });
 
-	function handleSuccess(info) {
-		top.location = '../index.html';
-	}
+    /**
+     * 检查表单
+     */
+    function check() {
+        $('#nickName').off('focusout');
 
-	function handleError(info) {
-		alert(info);
-	}
-
-	/**
-	 * 检查表单
-	 */
-	function check() {
-
-	}
+        $('#confirmPassword').on('focusout', function () {
+            if ($(this).val().trim() != $('#password').val().trim()) {
+                $(this).addClass('error').attr({
+                    'data-toggle': 'tooltip',
+                    'title': '密码不一致'
+                }).tooltip();
+            } else {
+                $(this).removeClass('error').tooltip('destroy');
+            }
+        });
+    }
 </script>
 </body>
 </html>

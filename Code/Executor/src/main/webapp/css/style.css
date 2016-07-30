@@ -6,3 +6,7 @@
 .bottom-padding {
 	margin-bottom : 32px;
 }
+
+.error {
+	border-color: #ff3524;
+}
