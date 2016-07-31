@@ -2,7 +2,7 @@ package cn.edu.nju.software.vo;
 
 public class StockInfoVO {
 	 /**
-    *
+    * Created by Tianqi on 16/8/1.
     * stockCode 股票代码
     * theDate 数据所属日期
     * close 今日收盘价
