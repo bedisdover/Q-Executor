@@ -60,7 +60,6 @@ public class UserController {
     @RequestMapping("/login")
     @ResponseBody
     public MsgInfo login(HttpSession session,String userName, String password){
-        System.out.println(userName);
         MsgInfo info = userService.login(userName,password);
         session.setAttribute("user",(User)info.getObject());
         return info;
