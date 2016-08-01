@@ -1,0 +1,66 @@
+
+.navbar-default {
+    background-color: rgba(0, 0, 0, 0);
+    border-color: rgba(0, 0, 0, 0);
+}
+
+.navbar-default .navbar-nav > li > a {
+    padding: 15px 20px;
+}
+
+.navbar-default .navbar-nav > li > a:hover {
+    color: #347ABF;
+}
+
+.navbar-default .navbar-nav > li > a:not(.dropdown-toggle):after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 0;
+    height: 4px;
+    background-color: #347ABF;
+    -webkit-transition: width .4s ease;
+    -moz-transition: width .4s ease;
+    -o-transition: width .4s ease;
+    transition: all .4s ease;
+}
+
+.navbar-default .navbar-nav > li > a:hover:after {
+    left: 0;
+    width: 100%;
+}
+
+.navbar-default .navbar-right > li:last-child:not(.dropdown) > a:before {
+    content: "";
+    position: absolute;
+    top: 25%;
+    left: -1px;
+    width: 2px;
+    height: 50%;
+    background-color: #444444;
+}
+
+.navbar-default .navbar-right .dropdown-menu {
+    min-width: 100px;
+}
+
+.navbar-default .navbar-right .dropdown-menu .message:after {
+    content: '';
+    position: absolute;
+    top: 6%;
+    left: 82%;
+    width: 4px;
+    height: 4px;
+    border-radius: 2px;
+    background-color: red;
+}
+
+.navbar-default .navbar-right .dropdown-menu > li > a {
+    padding: 3px 0;
+    text-align: center;
+}
+
+.navbar-default .navbar-right .dropdown-menu > li > a:hover {
+    background-color: rgba(0, 0, 0, 0.17);
+}
