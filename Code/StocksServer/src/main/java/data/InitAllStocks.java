@@ -19,25 +19,27 @@ import java.util.List;
  */
 public class InitAllStocks {
 
-    public static void init(Connection connection){
+    public static boolean init(Connection connection){
 
 
         try {
             if(!TableUtil.isExist(connection, StringUtil.STOCKS_INFO)){
+
                 connection.setAutoCommit(false);
                 String sql = "CREATE TABLE "+StringUtil.STOCKS_INFO+ "(code varchar(8) PRIMARY KEY ,name varchar(20),industry varchar(15),area VARCHAR(10),timeToMarket bigint);";
                 Statement statement = connection.createStatement();
                 statement.executeUpdate(sql);
                 initInfo(connection);
-
+                return false;
             }else {
-
+                return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
             //显示信息
             System.err.println("判断表是否存在失败，定位data.InitAllStocks.init()");
         }
+        return false;
     }
 
     private static void initInfo(Connection connection) throws SQLException {

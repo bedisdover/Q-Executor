@@ -26,7 +26,7 @@ public class DateUtil {
         }
     }
 
-    public static Date getDateByDetail(String format){
+    public static synchronized Date getDateByDetail(String format){
             Date date = new Date();
             try{
                 date = dateFormatDetail.parse(format);
