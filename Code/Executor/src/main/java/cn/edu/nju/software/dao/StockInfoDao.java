@@ -37,17 +37,6 @@ public List<StockInfoPO> filterByTime(List<StockInfoPO> info,Date start,Date end
 	}
 	
 
-public MsgInfo saveStockInfo(List<StockInfoPO> info){
 
-	try {
-        baseDao.save(info);
-    }catch (Exception e){
-        e.printStackTrace();
-        return new MsgInfo(false,"股票数据保存异常");
-    }
-
-    return new MsgInfo(true,"股票保存成功",info.get(0).getStockCode());
-
-}
 	
 }
