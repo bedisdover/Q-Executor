@@ -1,5 +1,7 @@
 package cn.edu.nju.software.po;
 
+import java.util.Date;
+
 public class StockInfoPO {
 	 /**
     * Created by Tianqi on 16/8/1.
@@ -17,7 +19,7 @@ public class StockInfoPO {
     * low:最低价
     */
 	private String stockCode;
-    private String date;
+    private Date date;
     private double close;
     private double open;
     private double volumn;
@@ -28,7 +30,7 @@ public class StockInfoPO {
     private double pb;
     private double high;
 	private double low;
-	public StockInfoPO(String stockCode, String date, double close,
+	public StockInfoPO(String stockCode, Date date, double close,
 			double open, double volumn, double mount, double turnover,
 			double adjPrice, double pe, double pb, double high, double low) {
 		super();
@@ -51,10 +53,10 @@ public class StockInfoPO {
 	public void setStockCode(String stockCode) {
 		this.stockCode = stockCode;
 	}
-	public String getDate() {
+	public Date getDate() {
 		return date;
 	}
-	public void setDate(String date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 	public double getClose() {
