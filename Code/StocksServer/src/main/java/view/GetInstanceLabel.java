@@ -34,6 +34,7 @@ public class GetInstanceLabel extends JLabel implements MouseListener {
         java.util.List<String> codes = InitAllStocks.getStockCodes(connection);
         int numbers = codes.size();
         int counts = numbers/200+1;
+        JOptionPane.showMessageDialog(parent,"开始不断往云端更新实时数据","提示信息",JOptionPane.INFORMATION_MESSAGE);
 
         for (int i = 0; i < counts; i++) {
             ArrayList<String> tempList = new ArrayList<String>();

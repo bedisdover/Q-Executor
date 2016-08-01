@@ -29,6 +29,9 @@ public class InitStocksLabel extends JLabel implements MouseListener{
         boolean isExist = InitAllStocks.init(connection);
         if(isExist){
             JOptionPane.showMessageDialog(parent,"您已经初始化过所有股票列表的信息了","提示信息",JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            JOptionPane.showMessageDialog(parent,"恭喜你完成初始化所有股票列表信息","提示信息",JOptionPane.INFORMATION_MESSAGE);
+
         }
     }
 
