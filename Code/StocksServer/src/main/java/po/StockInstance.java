@@ -37,6 +37,7 @@ public class StockInstance {
 
 
     private Long time;//当前的事件 精确到毫秒 Long类型
+    private String code;//股票的代码
 
     public StockInstance() {
     }
@@ -45,7 +46,7 @@ public class StockInstance {
                          Long dealNumber, Float dealMoney, int buy1Number, Float buy1, int buy2Number,
                          Float buy2, int buy3Number, Float buy3, int buy4Number, Float buy4, int buy5Number,
                          Float buy5, int sell1Number, Float sell1, int sell2Number, Float sell2, int sell3Number,
-                         Float sell3, int sell4Number, Float sell4, int sell5Number, Float sell5, Long time) {
+                         Float sell3, int sell4Number, Float sell4, int sell5Number, Float sell5,Long time,String code) {
         this.open = open;
         this.close = close;
         this.current = current;
@@ -74,6 +75,7 @@ public class StockInstance {
         this.sell5Number = sell5Number;
         this.sell5 = sell5;
         this.time = time;
+        this.code = code;
     }
 
     public Float getOpen() {
@@ -298,5 +300,13 @@ public class StockInstance {
 
     public void setTime(Long time) {
         this.time = time;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

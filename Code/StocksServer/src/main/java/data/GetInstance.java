@@ -3,6 +3,7 @@ package data;
 import po.StockInstance;
 import util.ConnectionFactory;
 import util.DateUtil;
+import util.StringUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,39 +23,7 @@ import java.util.List;
 public class GetInstance {
 
     private static final String urlStr = "http://hq.sinajs.cn/list=";
-//    public static void main(String[] args){
-//        Connection connection= ConnectionFactory.getInstance().makeConnection();
-//        ArrayList<Thread> list = new ArrayList<Thread>();
-//        InitAllStocks.init(connection);
-//        List<String> codes = InitAllStocks.getStockCodes(connection);
-//        int numbers = codes.size();
-//        int counts = numbers/200+1;
-//
-//            for (int i = 0; i < counts; i++) {
-//                ArrayList<String> tempList = new ArrayList<String>();
-//                if (i == counts - 1) {
-//                    for (int j = i * 200; j < codes.size(); j++) {
-//                        tempList.add(codes.get(j));
-//                    }
-//
-//                } else {
-//                    for (int j = i * 200; j < (i + 1) * 200; j++) {
-//                        tempList.add(codes.get(j));
-//                    }
-//                }
-//                list.add(new Thread(new InstanceRunnable(tempList.iterator())));
-//            }
-//
-//            System.err.println("once more");
-//                for (Thread thread : list) {
-//
-//                    thread.start();
-//                }
-//
-//        System.err.print("我走到这里了！！！");
-
-//    }
-
+    private static final int INSTANCE_TABLE_COUNTS = 25;
     public static synchronized String getString(Iterator<String> codes){
         StringBuilder stringBuilder = new StringBuilder();
         while (codes.hasNext()){
@@ -82,8 +51,8 @@ public class GetInstance {
                 int start = msg.indexOf("\"");
                 int end = msg.lastIndexOf("\"");
                 String info = msg.substring(start+1,end);
-                StockInstance stockInstance = getStockInstance(info);
-                StroedInstanceInDB.stored(stockCode,stockInstance,connection);
+                StockInstance stockInstance = getStockInstance(info,stockCode);
+                StroedInstanceInDB.stored(getTableName(stockCode),stockInstance,connection);
                 //查看每次从sina API获取的内容--------
                 System.out.println(msg);
                 //----------------------------------
@@ -106,8 +75,21 @@ public class GetInstance {
         return null;
     }
 
+    public static String getTableName(String code){
+        if(code.length()==8){
+            code = code.substring(2);
+        }
+        String result  =null;
+        try {
+            result = StringUtil.STOCKS_INSTANCE+Integer.parseInt(code)%INSTANCE_TABLE_COUNTS;
+        }catch (Exception e){
+            result = StringUtil.STOCKS_INSTANCE+"0";
+        }
 
-    public static StockInstance getStockInstance(String info){
+        return result;
+    }
+
+    public static StockInstance getStockInstance(String info,String stockCode){
         System.out.println(info);
         if(info==null||info.equals("")){
             return null;
@@ -130,7 +112,8 @@ public class GetInstance {
                     Float.parseFloat(infos[23]),Integer.parseInt(infos[24]),
                     Float.parseFloat(infos[25]),Integer.parseInt(infos[26]),
                     Float.parseFloat(infos[27]),Integer.parseInt(infos[28]),
-                    Float.parseFloat(infos[29]), DateUtil.getDateByDetail(infos[30]+" "+infos[31]).getTime()
+                    Float.parseFloat(infos[29]), DateUtil.getDateByDetail(infos[30]+" "+infos[31]).getTime(),
+                    stockCode
 
             );
             return stockInstance;

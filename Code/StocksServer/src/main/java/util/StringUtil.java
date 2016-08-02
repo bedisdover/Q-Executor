@@ -5,4 +5,5 @@ package util;
  */
 public class StringUtil {
     public static final String STOCKS_INFO = "StocksInfo";
+    public static final String STOCKS_INSTANCE = "StocksInstance";
 }

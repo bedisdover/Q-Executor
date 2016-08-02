@@ -30,11 +30,11 @@ public class StroedInstanceInDB {
                         "buy5Number int,buy5 float,sell1Number int,sell1 float," +
                         "sell2Number int,sell2 float,sell3Number int,sell3 float," +
                         "sell4Number int,sell4 float,sell5Number int,sell5 float," +
-                        "time bigint primary key);";
+                        "time bigint ,code varchar(8),primary key(time,code));";
                 TableUtil.createTable(connection,sql);
             }
             sql = "insert into "+code+" values(?,?,?,?,?,?,?,?,?,?,?,?,?,?," +
-                    "?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+                    "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
             PreparedStatement statement = connection.prepareStatement(sql);
             insertDetails(statement,stockInstance);
             statement.executeUpdate();
@@ -77,5 +77,6 @@ public class StroedInstanceInDB {
         statement.setFloat(27,stockInstance.getSell5());
 
         statement.setLong(28,stockInstance.getTime());
+        statement.setString(29,stockInstance.getCode());
     }
 }
