@@ -14,9 +14,7 @@
         使Spring支持自动检测组件，如注解的Controller
     -->
 
-    <context:component-scan base-package="cn.edu.nju.software.controller"/>
-    <context:component-scan base-package="cn.edu.nju.software.service"/>
-    <context:component-scan base-package="cn.edu.nju.software.dao"/>
+
 
     <!--<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
     <!--<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>-->
