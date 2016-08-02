@@ -18,7 +18,7 @@ public class InstanceRunnable implements Runnable {
             GetInstance.getInstanceBySina(codes);
 
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
