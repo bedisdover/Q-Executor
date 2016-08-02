@@ -1,5 +1,6 @@
 package data;
 
+import main.Main;
 import po.StockInstance;
 import util.ConnectionFactory;
 import util.DateUtil;

@@ -1,8 +1,11 @@
 package util;
 
+import com.sun.javafx.geom.AreaOp;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -11,7 +14,8 @@ import java.util.Date;
 public class DateUtil {
 
     public static DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-    public static DateFormat dateFormatDetail = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    //TMD 老子查了之后才知道SimpleDateFormat HH是24小时 hh是12小时
+    public static DateFormat dateFormatDetail = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public static Date getDate(String format){
         Date date = new Date();
@@ -37,4 +41,60 @@ public class DateUtil {
                 return date;
             }
         }
+
+
+
+    public static Date getAMStart(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,9);
+        calendar.set(Calendar.MINUTE,13);
+        calendar.set(Calendar.SECOND,30);
+        return calendar.getTime();
+    }
+
+    public static Date getAMEnd(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,11);
+        calendar.set(Calendar.MINUTE,31);
+        calendar.set(Calendar.SECOND,30);
+        return calendar.getTime();
+    }
+
+    public static Date getPMStart(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,12);
+        calendar.set(Calendar.MINUTE,58);
+        calendar.set(Calendar.SECOND,30);
+        return calendar.getTime();
+    }
+    public static Date getPMEnd(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,15);
+        calendar.set(Calendar.MINUTE,1);
+        calendar.set(Calendar.SECOND,30);
+        return calendar.getTime();
+    }
+
+    public static boolean isWeekends(){
+        Calendar calendar = Calendar.getInstance();
+        int day =  calendar.get(Calendar.DAY_OF_WEEK);
+        if (day == Calendar.SATURDAY || day == Calendar.SUNDAY){
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isClose(){
+        Date date = new Date();
+        long millis = date.getTime();
+        if(isWeekends()){
+            return true;
+        }
+
+        if ((millis>getAMStart().getTime()&&millis<getAMEnd().getTime())||
+                (millis>getPMStart().getTime()&&millis<getPMEnd().getTime())){
+            return false;
+        }
+        return true;
+    }
 }

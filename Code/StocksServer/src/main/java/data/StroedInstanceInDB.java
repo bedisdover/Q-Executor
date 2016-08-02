@@ -41,8 +41,8 @@ public class StroedInstanceInDB {
             ConnectionFactory.getInstance().close(statement,null);
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.err.println("错误定位:StroedInstanceInDB.stored");
+//            e.printStackTrace();
+            System.err.println("错误定位:StroedInstanceInDB.stored 一般是数据重复不能添加");
         }
     }
 

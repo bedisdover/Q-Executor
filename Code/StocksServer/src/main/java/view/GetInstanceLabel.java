@@ -20,7 +20,7 @@ public class GetInstanceLabel extends JLabel implements MouseListener {
      public GetInstanceLabel(Component parent){
          this.parent = parent;
          this.addMouseListener(this);
-         ImageIcon imageIcon = new ImageIcon(InitStocksLabel.class.getClassLoader().getResource("img/initStocks.png"));
+         ImageIcon imageIcon = new ImageIcon(InitStocksLabel.class.getClassLoader().getResource("img/getInstance.png"));
          this.setIcon(imageIcon);
          this.setSize(imageIcon.getIconWidth(),imageIcon.getIconHeight());
 
