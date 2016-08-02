@@ -41,18 +41,20 @@
   <bean id="local" class="com.mchange.v2.c3p0.ComboPooledDataSource"
         destroy-method="close">
     <property name="driverClass" value="com.mysql.jdbc.Driver"/>
-    <property name="jdbcUrl" value="${mysqldb.url}">
-    </property>
+    <property name="jdbcUrl" value="${mysqldb.url}"/>
+
     <property name="user" value="${mysqldb.user}"/>
     <property name="password" value="${mysqldb.password}"/>
     <property name="maxPoolSize" value="40"/>
     <property name="minPoolSize" value="1"/>
     <property name="initialPoolSize" value="1"/>
     <property name="maxIdleTime" value="20"/>
+
   </bean>
 
   <bean id="sessionFactory"
         class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+
     <property name="dataSource" ref="local"/>
     <!-- 自动扫描注解方式配置的hibernate类文件 -->
     <property name="packagesToScan">
@@ -61,15 +63,20 @@
       </list>
     </property>
     <property name="hibernateProperties">
-      <props>
-        <prop key="hibernate.dialect">
-          org.hibernate.dialect.MySQLDialect
-        </prop>
-        <!--hibernate.hbm2ddl.auto设为create为每次启动清空数据 供测试用,update不清空 -->
-        <prop key="hibernate.hbm2ddl.auto">update</prop>
-        <prop key="hibernate.show_sql">true</prop>
-        <prop key="hibernate.format_sql">true</prop>
-      </props>
+
+      <value>
+        <!-- 设置数据库方言 -->
+        hibernate.dialect=org.hibernate.dialect.MySQLDialect
+        <!-- 设置自动创建|更新|验证数据库表结构 -->
+        hibernate.hbm2ddl.auto=update
+        <!-- 是否在控制台显示sql -->
+        hibernate.show_sql=true
+        <!-- 是否格式化sql，优化显示 -->
+        hibernate.format_sql=true
+
+        <!-- 创建session方式 hibernate4.x 的方式 -->
+        javax.persistence.validation.mode=none
+      </value>
     </property>
   </bean>
 
@@ -82,5 +89,7 @@
   <tx:annotation-driven transaction-manager="transactionManager"/>
   <!-- 需要引入tx的命名空间 -->
 
-
+  <context:component-scan base-package="cn.edu.nju.software.controller"/>
+  <context:component-scan base-package="cn.edu.nju.software.service"/>
+  <context:component-scan base-package="cn.edu.nju.software.dao"/>
 </beans>
