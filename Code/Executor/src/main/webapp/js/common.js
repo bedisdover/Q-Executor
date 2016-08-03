@@ -1,11 +1,17 @@
 /**
  * Created by song on 16-7-31.
  *
- * 导航栏相关操作
+ * 相关共享操作
  */
 
 $(function () {
     isLogin();
+
+    // 初始化背景
+    initBackground();
+
+    // 激活提示工具
+    $('div[data-toggle="tooltip"]').tooltip();
 });
 
 /**
@@ -90,3 +96,29 @@ function afterLogOut() {
 //         $(this).next().slideUp();
 //     }
 // });
+
+/**
+ * 初始化背景
+ */
+function initBackground() {
+    var background = $('#background');
+
+    // 界面宽度，需考虑滚动条的宽度
+    var width = $(document.body).height() >= window.innerHeight
+        ? $(window).width() : window.innerWidth;
+    // 界面高度，需考虑导航栏的高度
+    var height = window.innerHeight - 50;
+
+    // 背景图片自适应
+    background.css({
+        'width': width + 'px',
+        'height': height + 'px'
+    });
+
+    // 固定背景
+    $(document).on('scroll', function () {
+        background.css({
+            'top': window.scrollY + 50 + 'px'
+        });
+    });
+}

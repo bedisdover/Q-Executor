@@ -1,6 +1,18 @@
+@charset "utf-8";
+
+body {
+    margin: 0;
+    padding-top: 70px;
+    font-family: "Arial", "Hiragino Sans GB", "Microsoft YaHei",
+    \5fae\8f6f\96c5\9ed1, "Helvetica", "sans-serif";
+}
+
+nav {
+    font-size: 15px;
+}
 
 .navbar-default {
-    background-color: rgba(0, 0, 0, 0);
+    background-color: rgba(255, 255, 255, 0.7);
     border-color: rgba(0, 0, 0, 0);
 }
 
@@ -10,6 +22,7 @@
 
 .navbar-default .navbar-nav > li > a:hover {
     color: #347ABF;
+    cursor: pointer;
 }
 
 .navbar-default .navbar-nav > li > a:not(.dropdown-toggle):after {
@@ -27,8 +40,8 @@
 }
 
 .navbar-default .navbar-nav > li > a:hover:after {
-    left: 0;
-    width: 100%;
+    left: 15%;
+    width: 70%;
 }
 
 .navbar-default .navbar-right > li:last-child:not(.dropdown) > a:before {
@@ -64,3 +77,12 @@
 .navbar-default .navbar-right .dropdown-menu > li > a:hover {
     background-color: rgba(0, 0, 0, 0.17);
 }
+
+#background {
+    top: 50px;
+    width: 1366px;
+    height: 768px;
+    background: url(../images/background.jpg) no-repeat;
+    position: absolute;
+}
+
