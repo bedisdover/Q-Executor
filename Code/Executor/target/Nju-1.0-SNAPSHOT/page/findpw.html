@@ -11,126 +11,182 @@
 <body>
 <div class="container">
 
-    <div class="row top bottom">
-        <ul id="nav" class="nav nav-tabs">
+    <div class="row top-padding bottom-padding">
+        <ul id="nav" class="nav nav-tabs center-block">
             <li class="active"><a href="#confirm" data-toggle="tab">确认账号</a></li>
-            <li class="disabled"><a href="#verify">安全验证</a></li>
-            <li class="disabled"><a href="#reset">重置密码</a></li>
+            <li class="disabled"><a href="#reset" data-toggle="">重置密码</a></li>
         </ul>
     </div>
 
     <div class="tab-content">
         <div class="tab-pane fade in active" id="confirm">
-            <div class="row top bottom">
+            <div class="row top-padding bottom-padding">
                 <div class="col-xs-8 col-sm-6 col-md-4 col-lg-4">
-                    <input type="email" class="form-control" placeholder="邮箱" id="mail">
+                    <input type="text" class="form-control" placeholder="用户名" id="userName">
                 </div>
             </div>
-            <div class="row top bottom">
+            <div class="row top-padding bottom-padding">
                 <div class="col-xs-8 col-sm-6 col-md-4 col-lg-4">
-                    <button class="btn btn-primary btn-block" id="send-mail">发送重置密码邮件</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="tab-pane fade" id="verify">
-            <div class="row top bottom">
-                <div class="col-xs-8 col-sm-6 col-md-4 col-lg-4">
-                    <input type="text" class="form-control" placeholder="请输入验证码" id="identify">
-                </div>
-            </div>
-            <div class="row top bottom">
-                <div class="col-xs-8 col-sm-6 col-md-4 col-lg-4">
-                    <button class="btn btn-primary btn-block" id="confirm-identify">确定</button>
+                    <button class="btn btn-primary btn-block" id="sendMail">发送重置密码邮件</button>
                 </div>
             </div>
         </div>
 
         <div class="tab-pane fade" id="reset">
-            <div class="row top bottom">
+            <div class="row top-padding bottom-padding">
                 <div class="col-xs-8 col-sm-6 col-md-4 col-lg-4">
                     <input type="password" class="form-control" placeholder="请输入新密码" id="password">
                 </div>
             </div>
-            <div class="row top bottom">
+            <div class="row top-padding bottom-padding">
                 <div class="col-xs-8 col-sm-6 col-md-4 col-lg-4">
                     <input type="password" class="form-control" placeholder="新密码确认" id="confirmPassword">
                 </div>
             </div>
-            <div class="row top bottom">
+            <div class="row top-padding bottom-padding" id="success" style="display: none;">
+                <div class="col-xs-8 col-sm-6 col-md-4 col-lg-4">
+                    <div class="alert alert-success">
+                        <div>
+                            <strong>密码重置成功！&nbsp;&nbsp;</strong>
+                            <strong id="time"></strong>
+                            <a href="login.html" class="pull-right">直接跳转</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row top-padding bottom-padding" id="error" style="display: none;">
+                <div class="col-xs-8 col-sm-6 col-md-4 col-lg-4">
+                    <div class="alert alert-danger">
+                        <a class="close" data-dismiss="alert" href="#" aria-hidden="true">
+                            &times;
+                        </a>
+                        <div>
+                            <strong id="error-info"></strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row top-padding bottom-padding">
                 <div class="col-xs-8 col-sm-6 col-md-4 col-lg-4">
                     <button class="btn btn-primary btn-block" id="reset-password">确定</button>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
-
 
 <script src="../js/jquery.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
+<script src="../js/check.js"></script>
 <script type="text/javascript">
-    $('#send-mail').on('click', function () {
-        if ($('#mail').val().trim() != '') {
-            // TODO 接口不一致
+    $(function () {
+        if (getUrlParam('num') != null) {
+            $('#nav').find('a[href="#confirm"]').attr('data-toggle', '')
+                    .parent().addClass('disabled')
+                    .parent().find('a[href="#reset"]').attr('data-toggle', 'tab').tab('show');
+        }
+    });
+
+    $('#sendMail').on('click', function () {
+        if ($('#confirm').find('.error').length == 0) {
             jQuery.ajax({
                 url: '/findPassword',
                 type: 'post',
                 dataType: 'json',
-                data: 'userName=' + $('#mail').val().trim(),
+                data: 'userName=' + $('#userName').val().trim(),
                 success: function (data) {
                     if (data.state == true) {
-                        $('#nav a[href="#verify"]').attr('data-toggle', 'tab').tab('show');
+                        startTimer();
                     } else {
                         alert(data.info);
                     }
                 }
             });
-
-            $('#mail').removeClass('error');
-        } else {
-            $('#mail').addClass('error');
         }
     });
 
-    $('#confirm-identify').on('click', function () {
-        if ($('#identify').val().trim() != '') {
-            jQuery.ajax({
-                url: '/',
-                type: 'post',
-                dataType: 'json',
-                data: 'identify=' + $('#identify').val().trim(),
-                success: function (data) {
-                    if (data.state) {
-                        $('#nav a[href="#reset"]').attr('data-toggle', 'tab').tab('show');
-                    } else {
-                        alert(data.info);
-                    }
-                }
-            });
+    /**
+     * 开始计时，60秒后重新发送邮件
+     */
+    function startTimer() {
+        var time = 60;
 
-            $('#identify').removeClass('error');
-        } else {
-            $('#identify').addClass('error');
-        }
-    });
+        var id = setInterval(function () {
+            if (time > 0) {
+                $('#sendMail').html(
+                        '<b>' + time + '</b>' + ' s 后重新发送邮件'
+                ).addClass('disabled');
+                time--;
+            } else {
+                clearInterval(id);
+                $('#sendMail').text('发送重置密码邮件').removeClass('disabled');
+            }
+        }, 1000);
+    }
 
     $('#reset-password').on('click', function () {
-        if ($('#password').val().trim() != ''
-                && $('#confirmPassword').val().trim() != ''
-                && $('#password').val().trim() == $('#confirmPassword').val().trim()) {
+        if ($('#reset').find('.error').length == 0) {
             jQuery.ajax({
-                url: '/',
+                url: '/modifyPassword',
                 type: 'post',
                 dataType: 'json',
-                data: 'password=' + $('#password').val().trim(),
-                success: function(data) {
-                    // TODO 接口和实现不一致
+                data: 'num=' + getUrlParam('num') + '&password=' + $('#password').val().trim(),
+                success: function (data) {
+                    if (data.state == true) {
+                        showSuccess();
+                    } else {
+                        showError(data.info);
+                    }
                 }
             });
         }
-    })
+    });
+
+    /**
+     * 显示正确信息
+     */
+    function showSuccess() {
+        var time = 5;
+        $('#success').show();
+        $('#reset-password').addClass('disabled');
+
+        var id = setInterval(function () {
+            if (time > 0) {
+                $('#time').text(
+                        time + ' s 后跳转'
+                );
+                time--;
+            } else {
+                clearInterval(id);
+                top.location = 'login.html';
+            }
+        }, 1000);
+    }
+
+    /**
+     * 显示错误信息
+     */
+    function showError(info) {
+        $('#error').show();
+
+        if (info.indexOf('链接已经失效') != -1) {
+            $('#error-info').html(
+                    '该链接已经失效，请 ' + '<a href="findpw.html">重新生成链接</a>'
+            );
+        } else {
+            $('#error-info').text(info);
+        }
+    }
+
+    /**
+     * 获取url中的参数
+     */
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+        if (r != null) return unescape(r[2]);
+        return null; //返回参数值
+    }
 </script>
 </body>
 </html>
