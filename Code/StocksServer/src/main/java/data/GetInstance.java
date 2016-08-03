@@ -1,5 +1,6 @@
 package data;
 
+import main.Main;
 import po.StockInstance;
 import util.ConnectionFactory;
 import util.DateUtil;
@@ -58,6 +59,7 @@ public class GetInstance {
                 //----------------------------------
             }
             connection.commit();
+            ConnectionFactory.getInstance().close(connection,null);
             return result.toString();
         }catch (IOException e) {
             e.printStackTrace();

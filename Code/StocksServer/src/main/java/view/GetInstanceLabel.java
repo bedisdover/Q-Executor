@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -20,7 +21,7 @@ public class GetInstanceLabel extends JLabel implements MouseListener {
      public GetInstanceLabel(Component parent){
          this.parent = parent;
          this.addMouseListener(this);
-         ImageIcon imageIcon = new ImageIcon(InitStocksLabel.class.getClassLoader().getResource("img/initStocks.png"));
+         ImageIcon imageIcon = new ImageIcon(InitStocksLabel.class.getClassLoader().getResource("img/getInstance.png"));
          this.setIcon(imageIcon);
          this.setSize(imageIcon.getIconWidth(),imageIcon.getIconHeight());
 
@@ -57,6 +58,12 @@ public class GetInstanceLabel extends JLabel implements MouseListener {
             thread.start();
         }
 
+        //关闭连接
+        try {
+            ConnectionFactory.getInstance().close(connection,null);
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
 //        System.err.print("我走到这里了！！！");
     }
 

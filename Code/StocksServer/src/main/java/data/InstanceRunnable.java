@@ -1,5 +1,8 @@
 package data;
 
+import main.Main;
+import util.DateUtil;
+
 import java.util.Iterator;
 
 /**
@@ -14,9 +17,7 @@ public class InstanceRunnable implements Runnable {
 
     public void run() {
             while (true){
-
-            GetInstance.getInstanceBySina(codes);
-
+                    GetInstance.getInstanceBySina(codes);
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
