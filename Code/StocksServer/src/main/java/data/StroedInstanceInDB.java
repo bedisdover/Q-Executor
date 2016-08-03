@@ -38,7 +38,7 @@ public class StroedInstanceInDB {
             PreparedStatement statement = connection.prepareStatement(sql);
             insertDetails(statement,stockInstance);
             statement.executeUpdate();
-            ConnectionFactory.getInstance().close(statement,null);
+
 
         } catch (SQLException e) {
 //            e.printStackTrace();
