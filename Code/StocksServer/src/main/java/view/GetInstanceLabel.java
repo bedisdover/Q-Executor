@@ -35,6 +35,7 @@ public class GetInstanceLabel extends JLabel implements MouseListener {
         java.util.List<String> codes = InitAllStocks.getStockCodes(connection);
         int numbers = codes.size();
         int counts = numbers/200+1;
+        ConnectionFactory.getInstance().makeConnections(counts);//每个线程分配一个connection
         JOptionPane.showMessageDialog(parent,"开始不断往云端更新实时数据","提示信息",JOptionPane.INFORMATION_MESSAGE);
 
         for (int i = 0; i < counts; i++) {
@@ -49,7 +50,7 @@ public class GetInstanceLabel extends JLabel implements MouseListener {
                     tempList.add(codes.get(j));
                 }
             }
-            list.add(new Thread(new InstanceRunnable(tempList.iterator())));
+            list.add(new Thread(new InstanceRunnable(tempList.iterator(),ConnectionFactory.connections.get(i))));
         }
 
 //        System.err.println("once more");
@@ -58,13 +59,6 @@ public class GetInstanceLabel extends JLabel implements MouseListener {
             thread.start();
         }
 
-        //关闭连接
-        try {
-            ConnectionFactory.getInstance().close(connection,null);
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-        }
-//        System.err.print("我走到这里了！！！");
     }
 
     public void mousePressed(MouseEvent e) {

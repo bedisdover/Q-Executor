@@ -18,6 +18,6 @@ public class test2 {
 //        while ((msg=reader.readLine())!=null){
 //            System.out.println(msg);
 //        }
-        GetInstance.getInstanceBySina("sh600000");
+//        GetInstance.getInstanceBySina("sh600000",);
     }
 }

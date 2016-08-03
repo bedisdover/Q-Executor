@@ -13,10 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created by 王栋 on 2016/8/1 0001.
@@ -32,9 +29,12 @@ public class GetInstance {
         }
         return stringBuilder.toString();
     }
-    public static String getInstanceBySina(String code)  {
+
+
+    public static String getInstanceBySina(String code,Connection connection)  {
+
         URL ur = null;
-        Connection connection = ConnectionFactory.getInstance().makeConnection();
+
 
         try {
             //已经是setAutoCommit为false
@@ -55,11 +55,14 @@ public class GetInstance {
                 StockInstance stockInstance = getStockInstance(info,stockCode);
                 StroedInstanceInDB.stored(getTableName(stockCode),stockInstance,connection);
                 //查看每次从sina API获取的内容--------
-                System.out.println(msg);
+//                System.out.println(msg);
                 //----------------------------------
+
             }
             connection.commit();
-            ConnectionFactory.getInstance().close(connection,null);
+            System.out.println("调用了一次commit，当前线程为"+Thread.currentThread().getName());
+            System.err.println("当前时间为"+ new java.util.Date());
+
             return result.toString();
         }catch (IOException e) {
             e.printStackTrace();
@@ -68,7 +71,7 @@ public class GetInstance {
             e.printStackTrace();
             System.err.println("存到数据库里面出现问题回滚提交");
             try {
-                connection.rollback();
+                connection.commit();
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
@@ -92,7 +95,7 @@ public class GetInstance {
     }
 
     public static StockInstance getStockInstance(String info,String stockCode){
-        System.out.println(info);
+//        System.out.println(info);
         if(info==null||info.equals("")){
             return null;
         }

@@ -3,6 +3,8 @@ package util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.Stack;
 
@@ -12,7 +14,8 @@ import java.util.Stack;
 public class ConnectionFactory {
 
     private static final ConnectionFactory factory = new ConnectionFactory();
-    private Connection conn;
+    public static List<Connection> connections = new ArrayList<Connection>();
+    private  Connection conn;
 
     private static String driver;
     private static String dburl;
@@ -48,11 +51,13 @@ public class ConnectionFactory {
     }
 
     public Connection makeConnection(){
+
         try {
             Class.forName(driver);
 
             conn = DriverManager.getConnection(dburl,user,password);
             conn.setAutoCommit(false);
+            connections.add(conn);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -60,6 +65,11 @@ public class ConnectionFactory {
         }
 
         return conn;
+    }
+    public void makeConnections(int num){
+        for(int i = 0 ; i < num ;i++){
+            makeConnection();
+        }
     }
 
     public void close(Connection conn, Statement statement) throws SQLException {
@@ -71,6 +81,11 @@ public class ConnectionFactory {
         }
     }
 
+    public void close(Connection conn) throws SQLException {
+        if (conn!=null){
+            conn.close();
+        }
+    }
     public void close(Connection conn, Statement statement, ResultSet resultSet) throws SQLException {
 
         if (conn!=null){
@@ -90,6 +105,14 @@ public class ConnectionFactory {
         }
         if (resultSet!=null){
         resultSet.close();
+        }
+    }
+
+    public static void close() throws SQLException{
+        System.out.println("共有"+connections.size()+"个connection");
+        for (Connection conn : connections){
+            conn.commit();
+            conn.close();
         }
     }
 }

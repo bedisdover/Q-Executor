@@ -3,6 +3,7 @@ package data;
 import main.Main;
 import util.DateUtil;
 
+import java.sql.Connection;
 import java.util.Iterator;
 
 /**
@@ -10,14 +11,16 @@ import java.util.Iterator;
  */
 public class InstanceRunnable implements Runnable {
     private String codes;
-    public InstanceRunnable(Iterator<String> codes){
+    private Connection connection;
+    public InstanceRunnable(Iterator<String> codes,Connection connection){
         this.codes = GetInstance.getString(codes);
+        this.connection = connection;
     }
 
 
     public void run() {
             while (true){
-                    GetInstance.getInstanceBySina(codes);
+                    GetInstance.getInstanceBySina(codes,connection);
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {

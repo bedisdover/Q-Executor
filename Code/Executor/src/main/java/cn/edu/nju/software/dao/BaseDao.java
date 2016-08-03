@@ -173,6 +173,19 @@ public class BaseDao {
         }
     }
 
+    public Object findByPrimaryKey(Class<?> className, String key) {
+        Session session = getSession();
+        try {
+            Object instance = session.get(className, key);
+            return instance;
+        } catch (Exception re) {
+            re.printStackTrace();
+            return null;
+        } finally {
+            session.close();
+        }
+    }
+
     public List<?> findByExample(Object entity) {
         List<?> list = null;
         Session session = getSession();
