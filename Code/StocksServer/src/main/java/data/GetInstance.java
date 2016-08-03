@@ -59,6 +59,7 @@ public class GetInstance {
                 //----------------------------------
             }
             connection.commit();
+            ConnectionFactory.getInstance().close(connection,null);
             return result.toString();
         }catch (IOException e) {
             e.printStackTrace();

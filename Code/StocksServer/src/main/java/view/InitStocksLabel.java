@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * Created by 王栋 on 2016/8/1 0001.
@@ -32,6 +33,13 @@ public class InitStocksLabel extends JLabel implements MouseListener{
         }else{
             JOptionPane.showMessageDialog(parent,"恭喜你完成初始化所有股票列表信息","提示信息",JOptionPane.INFORMATION_MESSAGE);
 
+        }
+
+        //关闭连接
+        try {
+            ConnectionFactory.getInstance().close(connection,null);
+        } catch (SQLException e1) {
+            e1.printStackTrace();
         }
     }
 
