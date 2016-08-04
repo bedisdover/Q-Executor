@@ -1,8 +1,6 @@
 package data;
 
-import main.Main;
 import po.StockInstance;
-import util.ConnectionFactory;
 import util.DateUtil;
 import util.StringUtil;
 
@@ -13,25 +11,17 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Iterator;
 
 /**
- * Created by 王栋 on 2016/8/1 0001.
+ * Created by 王栋 on 2016/8/4 0004.
  */
 public class GetInstance {
 
     private static final String urlStr = "http://hq.sinajs.cn/list=";
     private static final int INSTANCE_TABLE_COUNTS = 25;
-    public static synchronized String getString(Iterator<String> codes){
-        StringBuilder stringBuilder = new StringBuilder();
-        while (codes.hasNext()){
-            stringBuilder.append(codes.next()+",");
-        }
-        return stringBuilder.toString();
-    }
 
 
-    public static String getInstanceBySina(String code,Connection connection)  {
+    public void getInstanceBySina(String code,Connection connection)  {
 
         URL ur = null;
 
@@ -42,13 +32,13 @@ public class GetInstance {
             HttpURLConnection uc = (HttpURLConnection) ur.openConnection();
             BufferedReader reader = new BufferedReader(new InputStreamReader(ur.openStream(), "GBK"));
             String msg = null;
-            StringBuilder result = new StringBuilder();
+
             while((msg = reader.readLine())!=null){
 
                 String stockCode = msg.split("=")[0];
                 stockCode = stockCode.substring(stockCode.length()-8,stockCode.length());
 
-                result.append(msg+"\n");
+
                 int start = msg.indexOf("\"");
                 int end = msg.lastIndexOf("\"");
                 String info = msg.substring(start+1,end);
@@ -59,15 +49,18 @@ public class GetInstance {
                 //----------------------------------
 
             }
+            //--------是不是这两个没关掉导致内存占用比较大？？
+            reader.close();
+            uc.disconnect();
+            //_____________________________________
             connection.commit();
-            System.out.println("调用了一次commit，当前线程为"+Thread.currentThread().getName());
-            System.err.println("当前时间为"+ new java.util.Date());
+//            System.out.println("调用了一次commit，当前线程为"+Thread.currentThread().getName());
+//            System.err.println("当前时间为"+ new java.util.Date());
 
-            return result.toString();
         }catch (IOException e) {
             e.printStackTrace();
             System.err.println("网络问题或者获取的数据格式出现了问题");
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.err.println("存到数据库里面出现问题回滚提交");
             try {
@@ -77,10 +70,9 @@ public class GetInstance {
             }
         }
 
-        return null;
     }
 
-    public static String getTableName(String code){
+    public String getTableName(String code){
         if(code.length()==8){
             code = code.substring(2);
         }
@@ -94,7 +86,7 @@ public class GetInstance {
         return result;
     }
 
-    public static StockInstance getStockInstance(String info,String stockCode){
+    public StockInstance getStockInstance(String info,String stockCode){
 //        System.out.println(info);
         if(info==null||info.equals("")){
             return null;
@@ -104,13 +96,13 @@ public class GetInstance {
 
         if(infos.length>=32){
             StockInstance stockInstance = new StockInstance(
-                 Float.parseFloat(infos[1]),Float.parseFloat(infos[2]),
-                 Float.parseFloat(infos[3]),Float.parseFloat(infos[4]),
-                 Float.parseFloat(infos[5]),Long.parseLong(infos[8]),
-                 Float.parseFloat(infos[9]),Integer.parseInt(infos[10]),
-                 Float.parseFloat(infos[11]),Integer.parseInt(infos[12]),
-                 Float.parseFloat(infos[13]),Integer.parseInt(infos[14]),
-                 Float.parseFloat(infos[15]),Integer.parseInt(infos[16]),
+                    Float.parseFloat(infos[1]),Float.parseFloat(infos[2]),
+                    Float.parseFloat(infos[3]),Float.parseFloat(infos[4]),
+                    Float.parseFloat(infos[5]),Long.parseLong(infos[8]),
+                    Float.parseFloat(infos[9]),Integer.parseInt(infos[10]),
+                    Float.parseFloat(infos[11]),Integer.parseInt(infos[12]),
+                    Float.parseFloat(infos[13]),Integer.parseInt(infos[14]),
+                    Float.parseFloat(infos[15]),Integer.parseInt(infos[16]),
                     Float.parseFloat(infos[17]),Integer.parseInt(infos[18]),
                     Float.parseFloat(infos[19]),Integer.parseInt(infos[20]),
                     Float.parseFloat(infos[21]),Integer.parseInt(infos[22]),

@@ -1,13 +1,13 @@
 package view;
 
-import data.GetInstance;
-import util.ConnectionFactory;
+
+
+import util.ConnectionUtil;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
@@ -47,7 +47,7 @@ public class MainFrame extends JFrame implements WindowListener{
     public void windowClosing(WindowEvent e) {
         System.out.println("这里是closing");
         try {
-            ConnectionFactory.close();
+            ConnectionUtil.closeAll();
             System.out.println("关闭了所有的connection");
         } catch (SQLException e1) {
             e1.printStackTrace();

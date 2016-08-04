@@ -2,7 +2,6 @@ package data;
 
 import main.Main;
 import po.StockInstance;
-import util.ConnectionFactory;
 import util.TableUtil;
 
 import java.sql.Connection;
@@ -48,7 +47,7 @@ public class StroedInstanceInDB {
         }
     }
 
-    private static void insertDetails(PreparedStatement statement,StockInstance stockInstance) throws SQLException {
+    private static void insertDetails(PreparedStatement statement, StockInstance stockInstance) throws SQLException {
         //=================================
         //查看获取频率
         if(stockInstance.getCode().equals("sh600000")){

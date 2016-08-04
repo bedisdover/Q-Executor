@@ -1,34 +1,51 @@
 package data;
 
-import main.Main;
-import util.DateUtil;
+import util.ConnectionUtil;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Iterator;
 
 /**
- * Created by 王栋 on 2016/8/1 0001.
+ * Created by 王栋 on 2016/8/4 0004.
  */
 public class InstanceRunnable implements Runnable {
-    private String codes;
     private Connection connection;
-    public InstanceRunnable(Iterator<String> codes,Connection connection){
-        this.codes = GetInstance.getString(codes);
-        this.connection = connection;
-    }
+    private String codes;
+    private int index;
 
-
-    public void run() {
-            while (true){
-                    GetInstance.getInstanceBySina(codes,connection);
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+    public InstanceRunnable(Iterator<String> list , Connection connection,int index){
+        codes = "";
+        while (list.hasNext()){
+            this.codes+=(list.next()+",");
 
         }
+        System.out.println(codes);
+
+        this.connection = connection;
+        this.index = index;
+    }
+    public void run() {
+
+        while (true){
+            GetInstance getInstance = new GetInstance();
+            getInstance.getInstanceBySina(codes,connection);
+
+            try {
+                Thread.sleep(8000);
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
 
+            connection = ConnectionUtil.getConnection(index);
+            getInstance = null;
+        }
+
+    }
 }
