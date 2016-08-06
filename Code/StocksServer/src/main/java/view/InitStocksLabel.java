@@ -1,8 +1,7 @@
 package view;
 
 import data.InitAllStocks;
-import org.omg.CORBA.PUBLIC_MEMBER;
-import util.ConnectionFactory;
+import util.JdbcUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,7 +25,7 @@ public class InitStocksLabel extends JLabel implements MouseListener{
 
     public void mouseClicked(MouseEvent e) {
         //实现初始化
-        Connection connection = ConnectionFactory.getInstance().makeConnection();
+        Connection connection = JdbcUtil.getInstance().getConnection();
         boolean isExist = InitAllStocks.init(connection);
         if(isExist){
             JOptionPane.showMessageDialog(parent,"您已经初始化过所有股票列表的信息了","提示信息",JOptionPane.INFORMATION_MESSAGE);
@@ -37,7 +36,7 @@ public class InitStocksLabel extends JLabel implements MouseListener{
 
         //关闭连接
         try {
-            ConnectionFactory.getInstance().close(connection,null);
+            JdbcUtil.getInstance().close(connection);
         } catch (SQLException e1) {
             e1.printStackTrace();
         }

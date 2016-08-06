@@ -20,13 +20,14 @@ public class TableUtil {
             result =  true;
         }
 
-        ConnectionFactory.getInstance().close(statement,resultSet);
+        JdbcUtil.close(statement);
+        JdbcUtil.close(resultSet);
         return result;
     }
 
     public static void createTable(Connection connection,String sql) throws SQLException {
         Statement statement = connection.createStatement();
         statement.executeUpdate(sql);
-        ConnectionFactory.getInstance().close(statement,null);
+        JdbcUtil.close(statement);
     }
 }

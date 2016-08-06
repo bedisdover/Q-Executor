@@ -4,15 +4,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.Properties;
-import java.util.Stack;
 
 /**
- * Created by 王栋 on 2016/7/31 0031.
+ * Created by 王栋 on 2016/8/4 0004.
  */
-public class ConnectionFactory {
+public class JdbcUtil {
 
-    private static final ConnectionFactory factory = new ConnectionFactory();
-    private Connection conn;
+    private static final JdbcUtil jdbcUtil = new JdbcUtil();
 
     private static String driver;
     private static String dburl;
@@ -24,7 +22,7 @@ public class ConnectionFactory {
         try {
 
 
-            InputStream in = ConnectionFactory.class.getClassLoader()
+            InputStream in = JdbcUtil.class.getClassLoader()
                     .getResourceAsStream("db.properties");
             properties.load(in);
         } catch (IOException e) {
@@ -37,22 +35,18 @@ public class ConnectionFactory {
         user = properties.getProperty("user");
         password = properties.getProperty("password");
     }
-
-    private ConnectionFactory(){
-
-    }
-
     //单例模式
-    public static ConnectionFactory getInstance(){
-        return factory;
+    public static JdbcUtil getInstance(){
+        return jdbcUtil;
     }
 
-    public Connection makeConnection(){
+    public Connection getConnection(){
+        Connection conn = null;
         try {
             Class.forName(driver);
 
             conn = DriverManager.getConnection(dburl,user,password);
-            conn.setAutoCommit(false);
+            conn.setAutoCommit(true);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -61,35 +55,22 @@ public class ConnectionFactory {
 
         return conn;
     }
-
-    public void close(Connection conn, Statement statement) throws SQLException {
-        if (conn!=null){
-            conn.close();
-        }
+    public static void close(Statement statement) throws SQLException {
         if(statement!=null){
             statement.close();
         }
     }
 
-    public void close(Connection conn, Statement statement, ResultSet resultSet) throws SQLException {
-
-        if (conn!=null){
-            conn.close();
-        }
-        if(statement!=null){
-            statement.close();
-        }
-        if (resultSet!=null){
+    public static void close(ResultSet resultSet) throws SQLException {
+        if(resultSet!=null){
             resultSet.close();
         }
     }
 
-    public void close(Statement statement,ResultSet resultSet) throws SQLException {
-        if(statement!=null){
-        statement.close();
-        }
-        if (resultSet!=null){
-        resultSet.close();
+    public static void close(Connection connection) throws SQLException {
+        if(connection!=null){
+            connection.close();
         }
     }
+
 }
