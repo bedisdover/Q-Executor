@@ -54,18 +54,22 @@
 <script src="../js/check.js"></script>
 <script type="text/javascript">
     $('#login').on('click', function () {
-        if ($('#form').find('.error').length == 0) {
+        var form = $('#form');
+        if (form.find('.error').length == 0) {
             jQuery.ajax({
                 url: '/login',
                 type: 'post',
                 dataType: 'json',
-                data: $('#form').serialize(),
+                data: form.serialize(),
                 success: function (data) {
                     if (data.state == true) {
                         top.location = '../';
                     } else {
                         alert(data.info);
                     }
+                },
+                error: function (reason) {
+                    console.log(reason);
                 }
             });
         }
