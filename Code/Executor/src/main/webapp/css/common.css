@@ -15,6 +15,8 @@ nav {
     background-color: #F7F7F7;
     opacity: 0.9;
     border-color: rgba(0, 0, 0, 0);
+    padding-left: 5%;
+    padding-right: 5%;
 }
 
 .navbar-default .navbar-nav > li > a {
