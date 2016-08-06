@@ -32,14 +32,16 @@ public class InstanceRunnable implements Runnable {
             getInstance.getInstanceBySina(codes,connection);
 
             try {
-                Thread.sleep(8000);
+                Thread.sleep(10000);
                 try {
                     connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
+                    break;
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                break;
             }
 
 
