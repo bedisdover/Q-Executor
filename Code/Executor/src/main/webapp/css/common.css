@@ -1,0 +1,88 @@
+@charset "utf-8";
+
+body {
+    margin: 0;
+    padding-top: 70px;
+    font-family: "Arial", "Hiragino Sans GB", "Microsoft YaHei",
+    \5fae\8f6f\96c5\9ed1, "Helvetica", "sans-serif";
+}
+
+nav {
+    font-size: 15px;
+}
+
+.navbar-default {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-color: rgba(0, 0, 0, 0);
+}
+
+.navbar-default .navbar-nav > li > a {
+    padding: 15px 20px;
+}
+
+.navbar-default .navbar-nav > li > a:hover {
+    color: #347ABF;
+    cursor: pointer;
+}
+
+.navbar-default .navbar-nav > li > a:not(.dropdown-toggle):after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 0;
+    height: 4px;
+    background-color: #347ABF;
+    -webkit-transition: width .4s ease;
+    -moz-transition: width .4s ease;
+    -o-transition: width .4s ease;
+    transition: all .4s ease;
+}
+
+.navbar-default .navbar-nav > li > a:hover:after {
+    left: 15%;
+    width: 70%;
+}
+
+.navbar-default .navbar-right > li:last-child:not(.dropdown) > a:before {
+    content: "";
+    position: absolute;
+    top: 25%;
+    left: -1px;
+    width: 2px;
+    height: 50%;
+    background-color: #444444;
+}
+
+.navbar-default .navbar-right .dropdown-menu {
+    min-width: 100px;
+}
+
+.navbar-default .navbar-right .dropdown-menu .message:after {
+    content: '';
+    position: absolute;
+    top: 6%;
+    left: 82%;
+    width: 4px;
+    height: 4px;
+    border-radius: 2px;
+    background-color: red;
+}
+
+.navbar-default .navbar-right .dropdown-menu > li > a {
+    padding: 3px 0;
+    text-align: center;
+}
+
+.navbar-default .navbar-right .dropdown-menu > li > a:hover {
+    background-color: rgba(0, 0, 0, 0.17);
+}
+
+#background {
+    top: 50px;
+    width: 1366px;
+    height: 768px;
+    background: url(../images/background.jpg) no-repeat;
+    position: absolute;
+}
+

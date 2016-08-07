@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <title>交易 | Q-Executor</title>
+    <link rel="icon" href="../images/icon.ico">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="row top-padding bottom-padding">
+        <div class="page-header text-center">
+            <h3>交易</h3>
+        </div>
+    </div>
+
+    <div class="row top-padding bottom-padding">
+        <div class="col-sm-5 col-md-4 col-lg-4 col-md-offset-1 col-lg-offset-1">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title text-center">参数输入</h4>
+                </div>
+
+                <div class="panel-body">
+                    <div class="row top-padding bottom-padding">
+                        <input type="text" name="userName" class="form-control" placeholder="股票名称" id="stock">
+                    </div>
+
+                    <div class="row top-padding bottom-padding">
+                        <input type="text" name="userName" class="form-control" placeholder="交易数目" id="total">
+                    </div>
+
+                    <div class="row top-padding bottom-padding">
+                        <input type="text" name="userName" class="form-control" placeholder="交易时间间隔/天" id="time">
+                    </div>
+
+                    <div class="row top-padding bottom-padding">
+                        <button class="btn btn-primary btn-block" id="submit">获得交易策略</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-5 col-md-4 col-lg-4 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
+            <div style="height: 330px; overflow: auto;">
+                <table class="table bottom-padding">
+                    <thead>
+                    <tr>
+                        <th>交易时间</th>
+                        <th>交易数目</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>9:00</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>9:05</td>
+                            <td>2</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+</script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> | Q-Executor</title>
+    <meta name="description" content="Q-Executor 是一个在线量化交易系统"/>
+    <meta name="keyword" content="A股 量化交易 风险 冲击成本"/>
+    <meta name="author" content="nju.miracle"/>
+    <link rel="stylesheet" href="../css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../css/docs.min.css"/>
+    <link rel="stylesheet" href="../css/common.css"/>
+    <link rel="stylesheet" href="../css/stock.css"/>
+    <link rel="icon" href="../images/icon.ico"/>
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="true">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand">Q-Executor</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-left">
+                    <li>
+                        <a href="../index.html">首页</a>
+                    </li>
+                    <li>
+                        <a href="trade.html">量化交易</a>
+                    </li>
+                    <li>
+                        <a href="market.html">大盘</a>
+                    </li>
+                    <li>
+                        <a href="stock.html">股市行情</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="login.html">登录</a>
+                    </li>
+                    <li>
+                        <a href="signup.html">注册</a>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </div>
+</nav>
+
+<div id="background">
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="row" id="current-data">
+                <div class="col-xs-2" id="name-code">
+                    <p id="name">白云机场</p>
+                    <small id="code">(123455)</small>
+                </div>
+                <div class="col-xs-3" id="inc-dec">
+                    <div class="row">
+                        <div class="col-xs-4" id="price" data-toggle="tooltip" title="最新价格">
+                            234
+                        </div>
+                        <div class="col-xs-2">
+                            <img src="../images/increase.png" id="increase-decrease"/>
+                        </div>
+                        <div class="col-xs-6">
+                            <div id="inc-dec-num" data-toggle="tooltip" title="涨跌额(涨跌幅)">32.4
+                                <small id="inc-dec-rate">(4.3%)</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-7" id="data">
+                    <div class="row">
+                        <div class="col-md-3 col-md-offset-1">今开：
+                            <span class="text-left" id="open">20 </span>
+                        </div>
+                        <div class="col-md-3">最高：
+                            <span class="text-left" id="high">30 </span>
+                        </div>
+                        <div class="col-md-5">成交量：
+                            <span class="text-left">2340 </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-md-offset-1">昨收：
+                            <span class="text-left">19 </span>
+                        </div>
+                        <div class="col-md-3">最低：
+                            <span class="text-left">21 </span>
+                        </div>
+                        <div class="col-md-5">成交额：
+                            <span class="text-left">2341341 </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/stock.js"></script>
+</body>
+</html>
