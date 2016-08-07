@@ -25,5 +25,8 @@ hs_err_pid*
 *.classpath
 *.settings
 
-
-
+*.MF
+Code/Executor/target/Nju-1.0-SNAPSHOT/WEB-INF/classes/applicationContext.xml
+Code/Executor/target/Nju-1.0-SNAPSHOT/WEB-INF/logs/app.log
+Code/Executor/target/classes/applicationContext.xml
+Code/Executor/src/main/resources/applicationContext.xml
