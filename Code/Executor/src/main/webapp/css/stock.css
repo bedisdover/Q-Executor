@@ -6,13 +6,15 @@
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;;
+
+    margin-bottom: 10px;
 }
 
 #name-code {
     font-size: 18px;
     height: 80px;
     text-align: center;
-    background: #aaaaaa;
+    background: #A1A7B3;
     -webkit-border-top-left-radius: 4px;
     -moz-border-radius-topleft: 4px;
     border-top-left-radius: 4px;
@@ -27,29 +29,53 @@
 
 #price {
     font-size: 20px;
-    margin-top: 40px;
-    text-align: center;
-    padding-right: 0;
+    margin-left: 15px;
+    margin-right: 40px;
+    display: inline;
 }
 
 #increase-decrease {
-    padding-top: 10px;
-    width: 30px;
-    height: 80px;
+    width: 25px;
+    height: 70px;
+    top: 10px;
+    left: 60px;
+    display: inline;
+    position: absolute;
 }
 
 #inc-dec-num {
     font-size: 18px;
     margin-top: 45px;
     color: red;
+    display: inline-block;
 }
 
 #inc-dec-rate {
-    margin-top: 45px;
     color: red;
+}
+
+.row {
+    margin-left: -10px;
+    margin-right: -10px;
+}
+
+#data {
+    padding-right: 0;
+    border: solid 2px #eeeeee;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
 }
 
 #data .row {
     margin-top: 15px;
 }
 
+#data > .row > .col-md-2, .col-lg-2, .col-md-3, .col-lg-3 {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.charts {
+    margin: 0 -10px;
+}

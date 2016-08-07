@@ -87,7 +87,6 @@
   <tx:annotation-driven transaction-manager="transactionManager"/>
   <!-- 需要引入tx的命名空间 -->
 
-  <context:component-scan base-package="cn.edu.nju.software.controller"/>
-  <context:component-scan base-package="cn.edu.nju.software.service"/>
-  <context:component-scan base-package="cn.edu.nju.software.dao"/>
+
+
 </beans>

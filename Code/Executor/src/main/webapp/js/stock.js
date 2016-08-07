@@ -9,18 +9,10 @@
 var ws = null;
 
 $(function() {
-    // connect();
+    connect();
 
+    initCharts();
 });
-$(window).unload(function(){
-    alert(3)
-})
-window.onunload = function() {
-    alert(0)
-}
-window.onbeforeunload = function() {
-    alert(1);
-};
 
 /**
  * 连接服务器，获取数据
@@ -50,10 +42,31 @@ function connect() {
     };
 }
 
+/**
+ * 断开服务器连接
+ */
 function disconnect() {
     if (ws != null) {
         ws.close();
         ws = null;
     }
+}
+
+/**
+ * 初始化图表
+ */
+function initCharts() {
+    var width = $('#current-data').innerWidth();
+
+    // 减去well的边距(padding: 19px, border: 1px)
+    $('#graphs').find('div').css({
+        'width': width - 40 + 'px',
+        'height': '400px'
+    });
+
+    // $('#radarChart').css({
+    //     'width': width - 30 + 'px',//panel-body padding=15
+    //     'height': '400px'
+    // });
 }
 

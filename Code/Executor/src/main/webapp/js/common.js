@@ -11,7 +11,7 @@ $(function () {
     initBackground();
 
     // 激活提示工具
-    $('div[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="tooltip"]').tooltip();
 });
 
 /**
