@@ -17,7 +17,7 @@ import javax.annotation.Resource;
  * Change everywhere
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("/applicationContext.xml")
+@ContextConfiguration(locations = {"/mvc.xml","/applicationContext.xml"})
 
 public class test  {
 
