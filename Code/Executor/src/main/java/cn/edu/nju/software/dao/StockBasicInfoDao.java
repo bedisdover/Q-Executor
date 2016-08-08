@@ -1,13 +1,12 @@
 package cn.edu.nju.software.dao;
 
 import cn.edu.nju.software.model.StockBasicInfo;
-import cn.edu.nju.software.utils.ColumnName;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by 王栋 on 2016/8/2 0002.
@@ -51,7 +50,11 @@ public class StockBasicInfoDao {
         List<Object[]> lists = baseDao.execSqlQuery("select * from StocksInfo where code like \'%"+partOfCode+"%\'");
         for(Object[] objects : lists){
             StockBasicInfo temp = new StockBasicInfo(objects[0].toString(),objects[1].toString(),objects[2].toString()
-                    ,objects[3].toString(),Long.parseLong(objects[4].toString()));
+                    ,objects[3].toString(),Float.parseFloat(objects[4].toString()),
+                    Float.parseFloat(objects[5].toString()),Float.parseFloat(objects[6].toString()),Float.parseFloat(objects[7].toString()),
+                    Float.parseFloat(objects[8].toString()),Float.parseFloat(objects[9].toString()),Float.parseFloat(objects[10].toString()),
+                    Float.parseFloat(objects[11].toString()),Float.parseFloat(objects[12].toString()),Float.parseFloat(objects[13].toString()),
+                    Float.parseFloat(objects[14].toString()),new Date(((java.sql.Date)objects[15]).getTime()));
             stockBasicInfos.add(temp);
         }
         return stockBasicInfos;
@@ -69,7 +72,11 @@ public class StockBasicInfoDao {
             List<Object[]> lists = baseDao.execSqlQuery("select * from StocksInfo where name like \'%"+partOfName+"%\'");
             for(Object[] objects : lists){
                 StockBasicInfo temp = new StockBasicInfo(objects[0].toString(),objects[1].toString(),objects[2].toString()
-                        ,objects[3].toString(),Long.parseLong(objects[4].toString()));
+                        ,objects[3].toString(),Float.parseFloat(objects[4].toString()),
+                        Float.parseFloat(objects[5].toString()),Float.parseFloat(objects[6].toString()),Float.parseFloat(objects[7].toString()),
+                        Float.parseFloat(objects[8].toString()),Float.parseFloat(objects[9].toString()),Float.parseFloat(objects[10].toString()),
+                        Float.parseFloat(objects[11].toString()),Float.parseFloat(objects[12].toString()),Float.parseFloat(objects[13].toString()),
+                        Float.parseFloat(objects[14].toString()),new Date(((java.sql.Date)objects[15]).getTime()));
                 stockBasicInfos.add(temp);
             }
             return stockBasicInfos;
