@@ -58,7 +58,9 @@
     <!--&lt;!&ndash;<value>.jsp</value>&ndash;&gt;-->
     <!--&lt;!&ndash;</property>&ndash;&gt;-->
     <!--</bean>-->
+
     <context:component-scan base-package="cn.edu.nju.software.controller"/>
     <context:component-scan base-package="cn.edu.nju.software.service"/>
     <context:component-scan base-package="cn.edu.nju.software.dao"/>
+
 </beans>
