@@ -61,7 +61,7 @@ function initCharts() {
     // 减去well的边距(padding: 19px, border: 1px)
     $('#graphs').find('div').css({
         'width': width - 40 + 'px',
-        'height': '400px'
+        'height': width * 0.3 + 'px'
     });
 
     // $('#radarChart').css({

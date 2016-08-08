@@ -104,7 +104,7 @@ function initBackground() {
     var background = $('#background');
 
     // 界面宽度，需考虑滚动条的宽度
-    var width = $(document.body).height() >= window.innerHeight
+    var width = $(document.body).height() + 70 >= window.innerHeight
         ? $(window).width() : window.innerWidth;
     // 界面高度，需考虑导航栏的高度
     var height = window.innerHeight - 50;
