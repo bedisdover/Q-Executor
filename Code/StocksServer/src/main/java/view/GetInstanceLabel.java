@@ -2,7 +2,8 @@ package view;
 
 import data.InitAllStocks;
 import data.InstanceRunnable;
-import util.ConnectionFactory;
+import util.ConnectionUtil;
+import util.JdbcUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
 
 /**
  * Created by 王栋 on 2016/8/1 0001.
@@ -29,13 +30,22 @@ public class GetInstanceLabel extends JLabel implements MouseListener {
 
     public void mouseClicked(MouseEvent e) {
         //实现初始化
-        Connection connection= ConnectionFactory.getInstance().makeConnection();
+        Connection connection= JdbcUtil.getInstance().getConnection();
         ArrayList<Thread> list = new ArrayList<Thread>();
         InitAllStocks.init(connection);
         java.util.List<String> codes = InitAllStocks.getStockCodes(connection);
+        try {
+            JdbcUtil.close(connection);
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
+        //初始化完毕
         int numbers = codes.size();
         int counts = numbers/200+1;
+
+
         JOptionPane.showMessageDialog(parent,"开始不断往云端更新实时数据","提示信息",JOptionPane.INFORMATION_MESSAGE);
+//        ConnectionUtil.makeConnections(counts);//每个线程分配一个connection
 
         for (int i = 0; i < counts; i++) {
             ArrayList<String> tempList = new ArrayList<String>();
@@ -49,22 +59,14 @@ public class GetInstanceLabel extends JLabel implements MouseListener {
                     tempList.add(codes.get(j));
                 }
             }
-            list.add(new Thread(new InstanceRunnable(tempList.iterator())));
+            list.add(new Thread(new InstanceRunnable(tempList.iterator(),ConnectionUtil.getConnection(i),i)));
         }
 
-//        System.err.println("once more");
         for (Thread thread : list) {
 
             thread.start();
         }
 
-        //关闭连接
-        try {
-            ConnectionFactory.getInstance().close(connection,null);
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-        }
-//        System.err.print("我走到这里了！！！");
     }
 
     public void mousePressed(MouseEvent e) {

@@ -2,16 +2,18 @@ package data;
 
 
 import po.StockInfo;
-import util.ConnectionFactory;
 import util.DateUtil;
+import util.JdbcUtil;
 import util.StringUtil;
 import util.TableUtil;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
-
 import java.util.List;
 
 /**
@@ -97,7 +99,8 @@ public class InitAllStocks {
                 counts = resultSet.getInt(1);
             }
 
-            ConnectionFactory.getInstance().close(statement,resultSet);
+            JdbcUtil.close(statement);
+            JdbcUtil.close(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
             System.err.println("读取一共有多少支股票竟然有问题天啦噜");
@@ -126,7 +129,8 @@ public class InitAllStocks {
             }
             list.add(code);
         }
-        ConnectionFactory.getInstance().close(statement,resultSet);
+        JdbcUtil.close(statement);
+        JdbcUtil.close(resultSet);
 
         } catch (SQLException e) {
             e.printStackTrace();

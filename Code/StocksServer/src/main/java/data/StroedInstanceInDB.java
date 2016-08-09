@@ -1,12 +1,13 @@
 package data;
 
+import main.Main;
 import po.StockInstance;
-import util.ConnectionFactory;
 import util.TableUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Date;
 
 /**
  * Created by 王栋 on 2016/8/1 0001.
@@ -42,11 +43,18 @@ public class StroedInstanceInDB {
 
         } catch (SQLException e) {
 //            e.printStackTrace();
-            System.err.println("错误定位:StroedInstanceInDB.stored 一般是数据重复不能添加");
+//            System.err.println("错误定位:StroedInstanceInDB.stored 一般是数据重复不能添加");
         }
     }
 
-    private static void insertDetails(PreparedStatement statement,StockInstance stockInstance) throws SQLException {
+    private static void insertDetails(PreparedStatement statement, StockInstance stockInstance) throws SQLException {
+        //=================================
+        //查看获取频率
+        if(stockInstance.getCode().equals("sh600000")){
+            System.err.println(new Date().getTime()- Main.date.getTime());
+            Main.date = new Date();
+        }
+        //=================================
         statement.setFloat(1,stockInstance.getOpen());
         statement.setFloat(2,stockInstance.getClose());
         statement.setFloat(3,stockInstance.getCurrent());

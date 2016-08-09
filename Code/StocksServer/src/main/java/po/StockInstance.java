@@ -309,4 +309,40 @@ public class StockInstance {
     public void setCode(String code) {
         this.code = code;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("StockInstance{");
+        sb.append("open=").append(open);
+        sb.append(", close=").append(close);
+        sb.append(", current=").append(current);
+        sb.append(", todayMax=").append(todayMax);
+        sb.append(", todayMin=").append(todayMin);
+        sb.append(", dealNumber=").append(dealNumber);
+        sb.append(", dealMoney=").append(dealMoney);
+        sb.append(", buy1Number=").append(buy1Number);
+        sb.append(", buy1=").append(buy1);
+        sb.append(", buy2Number=").append(buy2Number);
+        sb.append(", buy2=").append(buy2);
+        sb.append(", buy3Number=").append(buy3Number);
+        sb.append(", buy3=").append(buy3);
+        sb.append(", buy4Number=").append(buy4Number);
+        sb.append(", buy4=").append(buy4);
+        sb.append(", buy5Number=").append(buy5Number);
+        sb.append(", buy5=").append(buy5);
+        sb.append(", sell1Number=").append(sell1Number);
+        sb.append(", sell1=").append(sell1);
+        sb.append(", sell2Number=").append(sell2Number);
+        sb.append(", sell2=").append(sell2);
+        sb.append(", sell3Number=").append(sell3Number);
+        sb.append(", sell3=").append(sell3);
+        sb.append(", sell4Number=").append(sell4Number);
+        sb.append(", sell4=").append(sell4);
+        sb.append(", sell5Number=").append(sell5Number);
+        sb.append(", sell5=").append(sell5);
+        sb.append(", time=").append(time);
+        sb.append(", code='").append(code).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }
