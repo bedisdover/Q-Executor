@@ -7,9 +7,14 @@ import java.util.List;
 import cn.edu.nju.software.config.MsgInfo;
 import cn.edu.nju.software.model.User;
 import cn.edu.nju.software.po.StockInfoPO;
+import org.springframework.stereotype.Repository;
 
+import javax.annotation.Resource;
+
+@Repository
 public class StockInfoDao {
-BaseDao baseDao;
+	@Resource
+	BaseDao baseDao;
 public List<StockInfoPO> findByCode(String stockCode){
     List<StockInfoPO> stockInfo = ( List<StockInfoPO>)baseDao.findByProperty(StockInfoPO.class,"stockCode",stockCode);
     if(null!=stockInfo&&stockInfo.size()>=1)
