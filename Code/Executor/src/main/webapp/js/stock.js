@@ -4,52 +4,66 @@
  * stock.html相关操作
  */
 
-"use strict";
-
-var ws = null;
-
-$(function() {
-    connect();
-
+$(function () {
     initCharts();
+    // getData();
+    getCurrentData();
 });
 
 /**
- * 连接服务器，获取数据
+ * 获取数据
  */
-function connect() {
-    var target = 'ws://' + 'localhost:8080/stock';
+function getData() {
+    // console.log(record);
+    // jQuery.ajax({
+    //     url: 'http://api.finance.ifeng.com/akweekly/?callback=callback&code=sh600000&type=last',
+    //     type: 'get',
+    //     dataType: 'jsonp',
+    //     jsonp: 'callback',
+        // data: 'callback=callback',
+        // success: function (data) {
+        //     console.log(data);
+        //     console.log(data.record);
+        // }
+    // });
+    jQuery.getJSON('http://api.finance.ifeng.com/akweekly/?code=sh600000&type=last&format=jsonp&callback=?', function(data) {
+        console.log(data);
+    });
+}
 
-    if ('WebSocket' in window) {
-        ws = new WebSocket(target);
-    } else if ('MozWebSocket' in window) {
-        ws = new MozWebSocket(target);
-    } else {
-        alert('您的浏览器版本过低，部分功能无法支持，请更换更高版本的浏览器！！！');
-        return;
-    }
-
-    ws.onopen = function (event) {
-
-    };
-    
-    ws.onmessage = function (event) {
-        console.log(event.data);
-    };
-    
-    ws.onclose = function (event) {
-
-    };
+function callback() {
+    alert(1);
 }
 
 /**
- * 断开服务器连接
+ * 获取当前数据
  */
-function disconnect() {
-    if (ws != null) {
-        ws.close();
-        ws = null;
-    }
+function getCurrentData() {
+    // jQuery.ajax({
+    //     url: 'http://hq.sinajs.cn/list=sh601006',
+    //     type: 'GET',
+    //     dataType: 'script',
+        // dataType: 'JSONP',
+        // jsonp: 'callback',
+        // success: function(data) {
+        //     console.log(data);
+        // }
+    // });
+
+    jQuery.getScript('http://hq.sinajs.cn?list=sh601006', function(data) {
+        console.log(data);
+    });
+    // var s = document.createElement('script');
+    // s.async = true;
+    // s.src = 'http://hq.sinajs.cn/list=sh601006';
+    // var script = '<script src="http://hq.sinajs.cn/list=sh601006" >' +
+        // 'var elements = hq_str_sh601006.split(",");' +
+        // 'console.log(elements);' +
+        // '</script>';
+    // $('body').append($(script));
+
+    var elements = hq_str_sh601006.split(',');
+    console.log(elements);
 }
 
 /**
