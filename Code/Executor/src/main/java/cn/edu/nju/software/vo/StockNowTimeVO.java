@@ -45,4 +45,14 @@ public class StockNowTimeVO {
     public void setAvePrice(double avePrice) {
         this.avePrice = avePrice;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("StockNowTimeVO{");
+        sb.append("timeLine='").append(timeLine).append('\'');
+        sb.append(", price=").append(price);
+        sb.append(", avePrice=").append(avePrice);
+        sb.append('}');
+        return sb.toString();
+    }
 }
