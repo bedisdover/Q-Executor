@@ -247,6 +247,24 @@ public class BaseDao {
         }
     }
 
+    public List<Object> execSingleQuery(String sql) {
+        Session session = getSession();
+        try {
+            session.beginTransaction();
+            List<Object> objects = session.createSQLQuery(sql).list();
+            session.getTransaction().commit();
+            session.clear();
+            return objects;
+        } catch (Exception re) {
+            re.printStackTrace();
+            if (session!=null) {
+                session.getTransaction().rollback();
+            }
+            return null;
+        } finally {
+            session.close();
+        }
+    }
     public int clearTable(String myTable){
         String hql = String.format("delete from %s",myTable);
         Session session = getSession();

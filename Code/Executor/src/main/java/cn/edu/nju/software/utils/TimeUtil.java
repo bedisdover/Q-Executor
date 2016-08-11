@@ -1,5 +1,6 @@
 package cn.edu.nju.software.utils;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -52,4 +53,18 @@ public class TimeUtil {
         return null;
     }
 
+    public static String getDetailTime(Date date){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return dateFormat.format(date);
+    }
+
+    public static Date getDate(String string){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            return dateFormat.parse(string);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return new Date();
+        }
+    }
 }
