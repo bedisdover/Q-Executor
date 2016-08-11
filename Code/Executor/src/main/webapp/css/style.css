@@ -45,3 +45,7 @@ a.light-pointer {
 .no-border {
 	border: none;
 }
+
+.full {
+	width: 100%;
+}
