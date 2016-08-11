@@ -155,4 +155,25 @@ public class StockKLineVO {
     public void setTurnover(double turnover) {
         this.turnover = turnover;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("StockKLineVO{");
+        sb.append("date='").append(date).append('\'');
+        sb.append(", open=").append(open);
+        sb.append(", high=").append(high);
+        sb.append(", low=").append(low);
+        sb.append(", volume=").append(volume);
+        sb.append(", price_change=").append(price_change);
+        sb.append(", p_change=").append(p_change);
+        sb.append(", ma5=").append(ma5);
+        sb.append(", ma10=").append(ma10);
+        sb.append(", ma20=").append(ma20);
+        sb.append(", v_ma5=").append(v_ma5);
+        sb.append(", v_ma10=").append(v_ma10);
+        sb.append(", v_ma20=").append(v_ma20);
+        sb.append(", turnover=").append(turnover);
+        sb.append('}');
+        return sb.toString();
+    }
 }

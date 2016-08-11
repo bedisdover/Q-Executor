@@ -18,7 +18,7 @@ import java.util.Objects;
  * Created by 王栋 on 2016/8/2 0002.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"mvc.xml","/applicationContext.xml"})
+@ContextConfiguration(locations = {"/mvc.xml","/applicationContext.xml"})
 public class StockBasicInfoTest {
     @Resource
     StockBasicInfoDao stockDao;

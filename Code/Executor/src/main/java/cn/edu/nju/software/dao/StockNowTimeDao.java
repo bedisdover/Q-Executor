@@ -6,6 +6,7 @@ import cn.edu.nju.software.vo.StockNowTimeVO;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -50,7 +51,7 @@ public class StockNowTimeDao {
 //            }
 //
             avg_temp = (avg_temp*stockNowTimeVOs.size()+current)/(stockNowTimeVOs.size()+1);
-            stockNowTimeVOs.add(new StockNowTimeVO(TimeUtil.getDetailTime(date),current,avg_temp));
+            stockNowTimeVOs.add(new StockNowTimeVO(TimeUtil.getDetailTime(time),(float)(Math.round(current*100))/100,(float)(Math.round(avg_temp*100))/100));
 
         }
 
