@@ -1,8 +1,10 @@
 package cn.edu.nju.software.service;
 
 import cn.edu.nju.software.config.MsgInfo;
+import cn.edu.nju.software.dao.StockJsonDao;
 import cn.edu.nju.software.dao.StockNowTimeDao;
 import cn.edu.nju.software.utils.TimeUtil;
+import cn.edu.nju.software.vo.StockKLineVO;
 import cn.edu.nju.software.vo.StockNowTimeVO;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,9 @@ import java.util.List;
 public class StockServiceImpl implements StockService {
     @Resource
     StockNowTimeDao stockNowTimeDao;
+
+    @Resource
+    StockJsonDao stockJsonDao;
     @Override
     public MsgInfo getStockNowTime(String Code) {
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -44,5 +49,21 @@ public class StockServiceImpl implements StockService {
             return new MsgInfo(false,"数据获取错误",null) ;
         }
 
+    }
+
+
+    @Override
+    public List<StockKLineVO> getKLineByDay(String Code) {
+        return stockJsonDao.getKLineByDay(Code);
+    }
+
+    @Override
+    public List<StockKLineVO> getKLineByWeek(String Code) {
+        return stockJsonDao.getKLineByDay(Code);
+    }
+
+    @Override
+    public List<StockKLineVO> getKLineByMonth(String Code) {
+        return stockJsonDao.getKLineByDay(Code);
     }
 }
