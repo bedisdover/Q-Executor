@@ -13,9 +13,9 @@ $(function () {
     // id = getUrlParam('id');
     init();
 
-    setInterval(function () {
-        getData();
-    }, 3000);
+    // setInterval(function () {
+    //     getData();
+    // }, 3000);
 });
 
 /**
@@ -26,6 +26,7 @@ function init() {
     $('#code').text('(' + id + ')');
 
     getData();
+    getBasicData();
 
     initCharts();
 }
@@ -42,6 +43,21 @@ function getData() {
             showCurrentData(eval('json_q')[id]);
         }
     });
+}
+
+/**
+ * 获取基本信息
+ */
+function getBasicData() {
+    jQuery.ajax({
+        url: '/nowTime',
+        cache: false,
+        dataType: 'json',
+        data: 'codeNum=' + id,
+        success: function (data) {
+            console.log(data);
+        }
+    })
 }
 
 /**
@@ -73,9 +89,13 @@ function getData() {
  */
 function showCurrentData(data) {
     $('#price').text(data[0]);
+    $('#price-2').text(data[0]);
     $('#close').text(data[1]);
-    $('#inc-dec-num').text(data[2]);
-    $('#inc-dec-rate').text(data[3]);
+    
+    var color_inc = data[2] > 0 ? 'red' : 'green';
+    $('#inc-dec-num').text(data[2]).css('color', color_inc);
+    $('#inc-dec-rate').text(data[3]).css('color', color_inc);
+    
     $('#open').text(data[4]);
     $('#high').text(data[5]);
     $('#low').text(data[6]);
@@ -84,8 +104,36 @@ function showCurrentData(data) {
     $('#amount').text(format_number(data[10]) + '元');
 
     $("#amplitude").html(((data[5] - data[6]) / data[1] * 100).toFixed(2) + "%");
-    jQuery("#turnover_rate").html((data.ltg) ? ((json_q["sz000014"][9]/data.ltg*100).toFixed(2)+"%") :" --");
 
+    $('#buy-1-price').text(data[11]);
+    $('#buy-2-price').text(data[12]);
+    $('#buy-3-price').text(data[13]);
+    $('#buy-4-price').text(data[14]);
+    $('#buy-5-price').text(data[15]);
+    $('#buy-1-amount').text(data[16] / 100);
+    $('#buy-2-amount').text(data[17] / 100);
+    $('#buy-3-amount').text(data[18] / 100);
+    $('#buy-4-amount').text(data[19] / 100);
+    $('#buy-5-amount').text(data[20] / 100);
+    $('#sell-1-price').text(data[21]);
+    $('#sell-2-price').text(data[22]);
+    $('#sell-3-price').text(data[23]);
+    $('#sell-4-price').text(data[24]);
+    $('#sell-5-price').text(data[25]);
+    $('#sell-1-amount').text(data[26] / 100);
+    $('#sell-2-amount').text(data[27] / 100);
+    $('#sell-3-amount').text(data[28] / 100);
+    $('#sell-4-amount').text(data[29] / 100);
+    $('#sell-5-amount').text(data[30] / 100);
+
+    var buy = data[16] + data[17] + data[18] + data[19] + data[20];
+    var sell = data[26] + data[27] + data[28] + data[29] + data[30];
+    var commission = buy - sell;
+    var committee = commission / (buy + sell) * 100;
+
+    var color_committee = commission > 0 ? 'red' : 'green';
+    $('#committee').text(committee.toFixed(2) + '%').css('color', color_committee);
+    $('#commission').text(commission).css('color', color_committee);
 
     var hq_time = new Date(data[34] * 1000);
     $("#time").text(hq_time.getFullYear() + "年" +
