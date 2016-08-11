@@ -1,7 +1,7 @@
 package cn.edu.nju.software.service;
 
 import cn.edu.nju.software.config.MsgInfo;
-import cn.edu.nju.software.vo.StockNowTimeVO;
+import cn.edu.nju.software.vo.StockKLineVO;
 
 import java.util.List;
 
@@ -12,4 +12,10 @@ import java.util.List;
  */
 public interface StockService {
     public MsgInfo getStockNowTime(String Code);
+
+    public List<StockKLineVO> getKLineByDay(String Code);
+
+    public List<StockKLineVO> getKLineByWeek(String Code);
+
+    public List<StockKLineVO> getKLineByMonth(String Code);
 }
