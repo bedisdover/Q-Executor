@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 <body>
+
     <div class="container">
         <div class="row top-padding bottom-padding">
             <div class="col-xs-8 col-sm-6 col-md-4 col-lg-4
@@ -18,11 +19,20 @@
         </div>
 
         <div class="row top-padding bottom-padding">
-            <div class="input-group col-xs-10 col-sm-10 col-md-8 col-lg-6
-             col-xs-offset-1 col-sm-offset-1 col-md-offset-2 col-lg-offset-3">
-                <input type="text" class="form-control " placeholder="股票名称" id="search-text">
-                <div class="input-group-btn">
-                    <button class="btn btn-primary" id="search-btn">搜索</button>
+            <div class="dropdown">
+                <div class="input-group col-xs-10 col-sm-10 col-md-8 col-lg-6
+                 col-xs-offset-1 col-sm-offset-1 col-md-offset-2 col-lg-offset-3">
+                    <input type="text" placeholder="股票名称" class="form-control"
+                           id="search-text" data-toggle="dropdown">
+                    <div class="input-group-btn">
+                        <button class="btn btn-primary" id="search-btn">搜索</button>
+                    </div>
+                    <ul class="dropdown-menu full" id="dropdown-menu">
+                        <li><a href="#">中石化 100000</a></li>
+                        <li><a href="#">中石化 100000</a></li>
+                        <li><a href="#">中石化 100000</a></li>
+                        <li><a href="#">中石化 100000</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -135,5 +145,20 @@
 
     <script src="../js/jquery.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var text_elem = $('#search-text');
+
+            text_elem.dropdown();
+
+            text_elem.on('focus', function () {
+                $('#dropdown-menu').show();
+            });
+
+            text_elem.on('blur', function () {
+                $('#dropdown-menu').hide();
+            });
+        });
+    </script>
 </body>
 </html>
