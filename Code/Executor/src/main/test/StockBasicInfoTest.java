@@ -1,6 +1,9 @@
 import cn.edu.nju.software.dao.StockBasicInfoDao;
+import cn.edu.nju.software.dao.StockNowTimeDao;
 import cn.edu.nju.software.dao.UserDao;
 import cn.edu.nju.software.model.StockBasicInfo;
+import cn.edu.nju.software.utils.TimeUtil;
+import cn.edu.nju.software.vo.StockNowTimeVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -19,6 +22,8 @@ import java.util.Objects;
 public class StockBasicInfoTest {
     @Resource
     StockBasicInfoDao stockDao;
+    @Resource
+    StockNowTimeDao stockNowTimeDao;
     @Test
     public void test(){
         //test获取所有的股票的基本信息的对象
@@ -60,6 +65,15 @@ public class StockBasicInfoTest {
         List<StockBasicInfo> temp = stockDao.getStocksBasicInfoByArea("上海");
         for(StockBasicInfo info : temp){
             System.out.println(info);
+        }
+    }
+
+
+    @Test
+    public void test6(){
+        List<StockNowTimeVO> result = stockNowTimeDao.getNowTime("sh600000", TimeUtil.getDate("2016-08-10"));
+        for (StockNowTimeVO stockNowTimeVO : result){
+            System.out.println(stockNowTimeVO);
         }
     }
 }
