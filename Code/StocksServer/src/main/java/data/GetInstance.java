@@ -60,6 +60,7 @@ public class GetInstance {
         }catch (IOException e) {
             e.printStackTrace();
             System.err.println("网络问题或者获取的数据格式出现了问题");
+            return;
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("存到数据库里面出现问题回滚提交");
@@ -67,6 +68,8 @@ public class GetInstance {
                 connection.commit();
             } catch (SQLException e1) {
                 e1.printStackTrace();
+            }finally {
+                return;
             }
         }
 

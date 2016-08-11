@@ -49,8 +49,10 @@ public class JdbcUtil {
             conn.setAutoCommit(true);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+            return null;
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
 
         return conn;

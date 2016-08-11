@@ -87,6 +87,4 @@
   <tx:annotation-driven transaction-manager="transactionManager"/>
   <!-- 需要引入tx的命名空间 -->
 
-
-
 </beans>

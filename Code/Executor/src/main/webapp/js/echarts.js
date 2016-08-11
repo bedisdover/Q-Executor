@@ -6975,9 +6975,8 @@
 
                 /**
                  * @param {string|Object} key
-                 * @param {*} value
                  */
-                attr: function (key, value) {
+                attr: function (key:String) {
                     if (typeof key === 'string') {
                         this.attrKV(key, value);
                     }
@@ -7887,7 +7886,7 @@
                             // Attr directly if not has property
                             // FIXME, if some property not needed for element ?
                             if (!path) {
-                                this.attr(name, target[name]);
+                                this.attr(name);
                             }
                             else {  // Shape or style
                                 var props = {};
@@ -20541,7 +20540,7 @@
                         polyline.animators[0].during(function () {
                             for (var i = 0; i < updatedDataInfo.length; i++) {
                                 var el = updatedDataInfo[i].el;
-                                el.attr('position', polyline.shape.points[updatedDataInfo[i].ptIdx]);
+                                el.attr('position');
                             }
                         });
                     }
@@ -20617,7 +20616,7 @@
                         var point = data.getItemLayout(newIdx);
                         if (symbolNeedsDraw(data, newIdx, isIgnore)) {
                             var symbolEl = new SymbolCtor(data, newIdx);
-                            symbolEl.attr('position', point);
+                            symbolEl.attr('position');
                             data.setItemGraphicEl(newIdx, symbolEl);
                             group.add(symbolEl);
                         }
@@ -20631,7 +20630,7 @@
                         }
                         if (!symbolEl) {
                             symbolEl = new SymbolCtor(data, newIdx);
-                            symbolEl.attr('position', point);
+                            symbolEl.attr('position');
                         }
                         else {
                             symbolEl.updateData(data, newIdx);
@@ -20661,7 +20660,7 @@
                 if (data) {
                     // Not use animation
                     data.eachItemGraphicEl(function (el, idx) {
-                        el.attr('position', data.getItemLayout(idx));
+                        el.attr('position');
                     });
                 }
             };
@@ -27814,7 +27813,7 @@
                             if (symbolPath) {
                                 symbolPath.__dimIdx = i;
                                 if (oldPoints[i]) {
-                                    symbolPath.attr('position', oldPoints[i]);
+                                    symbolPath.attr('position');
                                     graphic[isInit ? 'initProps' : 'updateProps'](
                                         symbolPath, {
                                             position: newPoints[i]
@@ -27822,7 +27821,7 @@
                                     );
                                 }
                                 else {
-                                    symbolPath.attr('position', newPoints[i]);
+                                    symbolPath.attr('position');
                                 }
                                 symbolGroup.add(symbolPath);
                             }
@@ -27959,11 +27958,11 @@
                         });
 
                         function onEmphasis() {
-                            polygon.attr('ignore', hoverPolygonIgnore);
+                            polygon.attr('ignore');
                         }
 
                         function onNormal() {
-                            polygon.attr('ignore', polygonIgnore);
+                            polygon.attr('ignore');
                         }
 
                         itemGroup.off('mouseover').off('mouseout').off('normal').off('emphasis');
@@ -29843,7 +29842,7 @@
                                 var scale = group.scale;
                                 group.traverse(function (el) {
                                     if (el.type === 'text') {
-                                        el.attr('scale', [1 / scale[0], 1 / scale[1]]);
+                                        el.attr('scale');
                                     }
                                 });
                             }
@@ -35135,7 +35134,7 @@
                     var invScale = [nodeScale, nodeScale];
 
                     data.eachItemGraphicEl(function (el, idx) {
-                        el.attr('scale', invScale);
+                        el.attr('scale');
                     });
                 },
 
@@ -35363,24 +35362,20 @@
                 vector.normalize(d, d);
 
                 if (symbolFrom) {
-                    symbolFrom.attr('position', fromPos);
+                    symbolFrom.attr('position');
                     var tangent = line.tangentAt(0);
-                    symbolFrom.attr('rotation', Math.PI / 2 - Math.atan2(
-                            tangent[1], tangent[0]
-                        ));
-                    symbolFrom.attr('scale', [invScale * percent, invScale * percent]);
+                    symbolFrom.attr('rotation');
+                    symbolFrom.attr('scale');
                 }
                 if (symbolTo) {
-                    symbolTo.attr('position', toPos);
+                    symbolTo.attr('position');
                     var tangent = line.tangentAt(1);
-                    symbolTo.attr('rotation', -Math.PI / 2 - Math.atan2(
-                            tangent[1], tangent[0]
-                        ));
-                    symbolTo.attr('scale', [invScale * percent, invScale * percent]);
+                    symbolTo.attr('rotation');
+                    symbolTo.attr('scale');
                 }
 
                 if (!label.ignore) {
-                    label.attr('position', toPos);
+                    label.attr('position');
 
                     var textPosition;
                     var textAlign;
@@ -35410,7 +35405,7 @@
                         if (toPos[0] < fromPos[0]) {
                             rotation = Math.PI + rotation;
                         }
-                        label.attr('rotation', rotation);
+                        label.attr('rotation');
                     }
                     // Start
                     else {
@@ -41397,7 +41392,7 @@
                 var symbolSize = normalizeSymbolSize(data.getItemVisual(idx, 'symbolSize'));
                 var color = data.getItemVisual(idx, 'color');
 
-                rippleGroup.attr('scale', symbolSize);
+                rippleGroup.attr('scale');
 
                 rippleGroup.traverse(function (ripplePath) {
                     ripplePath.attr({
@@ -41769,12 +41764,12 @@
                 symbol.setStyle('shadowColor', color);
                 symbol.setStyle(effectModel.getItemStyle(['color']));
 
-                symbol.attr('scale', size);
+                symbol.attr('scale');
                 var points = lineData.getItemLayout(idx);
                 setAnimationPoints(symbol, points);
 
                 symbol.setColor(color);
-                symbol.attr('scale', size);
+                symbol.attr('scale');
             };
 
             effectLineProto.updateData = function (lineData, idx) {
@@ -47453,8 +47448,8 @@
                     showOrHide = this._dragging || showOrHide;
 
                     var handleLabels = this._displayables.handleLabels;
-                    handleLabels[0].attr('invisible', !showOrHide);
-                    handleLabels[1].attr('invisible', !showOrHide);
+                    handleLabels[0].attr('invisible');
+                    handleLabels[1].attr('invisible');
                 },
 
                 _onDragMove: function (handleIndex, dx, dy) {
@@ -49820,7 +49815,7 @@
                     }
 
                     indicator.position[1] = pos;
-                    indicator.attr('invisible', false);
+                    indicator.attr('invisible');
                     indicator.setShape('points', createIndicatorPoints(isRange, pos, itemSize[1]));
 
                     var opts = {convertOpacityToAlpha: true};
@@ -49834,7 +49829,7 @@
                     );
 
                     var indicatorLabel = shapes.indicatorLabel;
-                    indicatorLabel.attr('invisible', false);
+                    indicatorLabel.attr('invisible');
                     var align = this._applyTransform('left', shapes.barGroup);
                     var orient = this._orient;
                     indicatorLabel.setStyle({
@@ -49927,8 +49922,8 @@
                  */
                 _hideIndicator: function () {
                     var shapes = this._shapes;
-                    shapes.indicator && shapes.indicator.attr('invisible', true);
-                    shapes.indicatorLabel && shapes.indicatorLabel.attr('invisible', true);
+                    shapes.indicator && shapes.indicator.attr('invisible');
+                    shapes.indicatorLabel && shapes.indicatorLabel.attr('invisible');
                 },
 
                 /**
