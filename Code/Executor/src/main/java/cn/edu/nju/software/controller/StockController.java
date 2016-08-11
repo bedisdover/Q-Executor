@@ -24,7 +24,7 @@ public class StockController {
 
     @RequestMapping("/nowTime")
     @ResponseBody
-    public MsgInfo isLogin(String codeNum) {
+    public MsgInfo getNowTime(String codeNum) {
 
         return stockService.getStockNowTime(codeNum);
     }
