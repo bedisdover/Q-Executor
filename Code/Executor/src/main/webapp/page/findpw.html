@@ -81,9 +81,9 @@
 <script type="text/javascript">
     $(function () {
         if (getUrlParam('num') != null) {
-            $('#nav').find('a[href="#confirm"]').attr('data-toggle', '')
+            $('#nav').find('a[href="#confirm"]').attr('data-toggle')
                     .parent().addClass('disabled')
-                    .parent().find('a[href="#reset"]').attr('data-toggle', 'tab').tab('show');
+                    .parent().find('a[href="#reset"]').attr('data-toggle').tab('show');
         }
     });
 

@@ -7,6 +7,45 @@
 	margin-bottom : 32px;
 }
 
+.top-md-padding {
+	margin-top : 64px;
+}
+
+.bottom-md-padding {
+	margin-bottom: 64px;
+}
+
+.top-lg-padding {
+	margin-top : 128px;
+}
+
+.bottom-lg-padding {
+	margin-bottom : 128px;
+}
+
 .error {
 	border-color: #ff3524;
+}
+
+a.pointer {
+	cursor: pointer;
+	color: #666;
+}
+
+a.light-pointer {
+	cursor: pointer;
+	color: #445577;
+}
+
+.btn-black {
+	background-color: #444477;
+	color: #ffffff;
+}
+
+.no-border {
+	border: none;
+}
+
+.full {
+	width: 100%;
 }

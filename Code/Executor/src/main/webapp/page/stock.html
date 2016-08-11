@@ -61,62 +61,64 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-1">
+        <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-1 col-lg-8 col-lg-offset-1">
             <div class="row" id="current-data">
                 <div class="col-xs-4 col-sm-4 col-md-2 col-lg-2" id="name-code">
-                    <p id="name">白云机场</p>
-                    <small id="code">(123455)</small>
-                    <p><button class="btn btn-xs btn-success">加入自选
-                        <span class="glyphicon glyphicon-plus"></span></button></p>
+                    <p id="name"></p>
+                    <small id="code"></small>
+                    <p>
+                        <button class="btn btn-xs btn-success">加入自选
+                            <span class="glyphicon glyphicon-plus"></span></button>
+                    </p>
                 </div>
                 <div class="col-xs-8 col-sm-6 col-md-3 col-lg-3" id="inc-dec">
-                    <span>
-                        <span id="price" data-toggle="tooltip" title="最新价格">
-                            234
-                        </span>
-                            <img src="../images/increase.png" id="increase-decrease"/>
+                    <div>
+                        <span id="price" data-toggle="tooltip" title="最新价格">34.23</span>
+                        <img src="../images/increase.png" id="increase-decrease"/>
                             <span data-toggle="tooltip" title="涨跌额(涨跌幅)">
-                                <span id="inc-dec-num">32.4</span>
-                                (<span id="inc-dec-rate">4.3%</span>)
+                                <span id="inc-dec-num">23.1</span>
+                                (<span id="inc-dec-rate">34.2%</span>)
                             </span>
-                    </span>
+                    </div>
+                    <div id="time">
+                        2016年6月10日 15:30:30
+                    </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7" id="data">
-                    <div class="row">
-                        <div class="col-xs-4 col-sm-4 col-md-2 col-lg-2 col-lg-offset-1 text-nowrap">今开:
-                            <span class="text-left" id="open">20 </span>
-                        </div>
-                        <div class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-nowrap">最高:
-                            <span class="text-left" id="high">30 </span>
-                        </div>
-                        <div class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-nowrap">市盈率:
-                            <span class="text-left" id="pe_ttm">3.2 </span>
-                        </div>
-                        <div class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-nowrap">周转率:
-                            <span class="text-left" id="turnover">34</span>
-                        </div>
-                        <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3 text-nowrap">成交量:
-                            <span class="text-left" id="volume">2340万手 </span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-4 col-sm-4 col-md-2 col-lg-2 col-lg-offset-1 text-nowrap">昨收:
-                            <span class="text-left" id="close">20 </span>
-                        </div>
-                        <div class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-nowrap">最低:
-                            <span class="text-left" id="low">30 </span>
-                        </div>
-                        <div class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-nowrap">市净率:
-                            <span class="text-left" id="pb">3.2 </span>
-                        </div>
-                        <div class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-nowrap">后复权价:
-                            <span class="text-left" id="adj">34</span>
-                        </div>
-                        <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3 text-nowrap">成交额:
-                            <span class="text-left" id="mount">5783万 </span>
-                        </div>
-                    </div>
-
+                    <table class="table ">
+                        <tbody>
+                        <tr>
+                            <th>今&nbsp;&nbsp;开:</th>
+                            <td id="open">--</td>
+                            <th>最&nbsp;&nbsp;高:</th>
+                            <td id="high">--</td>
+                            <th>换手率:</th>
+                            <td id="turnover">--</td>
+                            <th>成交量:</th>
+                            <td id="volume">--</td>
+                        </tr>
+                        <tr>
+                            <th>昨&nbsp;&nbsp;收:</th>
+                            <td id="close">--</td>
+                            <th>最&nbsp;&nbsp;低:</th>
+                            <td id="low">--</td>
+                            <th>市盈率<sup>TTM</sup>:</th>
+                            <td id="pe_ttm">--</td>
+                            <th>成交额:</th>
+                            <td id="amount">--</td>
+                        </tr>
+                        <tr>
+                            <th>振&nbsp;&nbsp;幅:</th>
+                            <td id="amplitude">--</td>
+                            <th>市净率:</th>
+                            <td id="pb">--</td>
+                            <th>每股收益:</th>
+                            <td id="eps">--</td>
+                            <th>总市值:</th>
+                            <td id="marketValue">--</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="well charts">
@@ -160,23 +162,86 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-2">
-            
+        <div class="col-md-3 col-lg-3">
+            <div class="sidebar">
+                <div class="handicap panel panel-default">
+                    <div class="panel-heading">
+                        五档盘口
+                    </div>
+                    <div class="panel-body">
+                        <span class="small">
+                            <span class="pull-left text-primary">委比 &nbsp;&nbsp;
+                                <span id="committee" >-- </span></span>
+                            <span class="pull-right text-primary">委差 &nbsp;&nbsp;
+                                <span id="commission" >-- </span></span>
+                        </span>
+                        <hr/>
+                        <div>
+                            <div>卖五&nbsp;&nbsp;
+                                <span id="sell-5-price" class="text-success"></span>
+                                <span id="sell-5-amount" class="pull-right"></span>
+                            </div>
+                            <div>卖四&nbsp;&nbsp;
+                                <span id="sell-4-price" class="text-success"></span>
+                                <span id="sell-4-amount" class="pull-right"></span>
+                            </div>
+                            <div>卖三&nbsp;&nbsp;
+                                <span id="sell-3-price" class="text-success"></span>
+                                <span id="sell-3-amount" class="pull-right"></span>
+                            </div>
+                            <div>卖二&nbsp;&nbsp;
+                                <span id="sell-2-price" class="text-success"></span>
+                                <span id="sell-2-amount" class="pull-right"></span>
+                            </div>
+                            <div>卖一&nbsp;&nbsp;
+                                <span id="sell-1-price" class="text-success"></span>
+                                <span id="sell-1-amount" class="pull-right"></span>
+                            </div>
+                            <div>成交&nbsp;&nbsp;
+                                <span id="price-2"></span>
+                                <span></span>
+                            </div>
+                            <div>买一&nbsp;&nbsp;
+                                <span id="buy-1-price" class="text-success"></span>
+                                <span id="buy-1-amount" class="pull-right"></span>
+                            </div>
+                            <div>买二&nbsp;&nbsp;
+                                <span id="buy-2-price" class="text-success"></span>
+                                <span id="buy-2-amount" class="pull-right"></span>
+                            </div>
+                            <div>买三&nbsp;&nbsp;
+                                <span id="buy-3-price" class="text-success"></span>
+                                <span id="buy-3-amount" class="pull-right"></span>
+                            </div>
+                            <div>买四&nbsp;&nbsp;
+                                <span id="buy-4-price" class="text-success"></span>
+                                <span id="buy-4-amount" class="pull-right"></span>
+                            </div>
+                            <div>买五&nbsp;&nbsp;
+                                <span id="buy-5-price" class="text-success"></span>
+                                <span id="buy-5-amount" class="pull-right"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="basicInfo panel panel-default">
+                    <div class="panel-heading">
+                        公司简介
+                    </div>
+                    <div class="panel-body">
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <script src="../js/jquery.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
-<script src="../js/echarts.js"></script>
+<script src="../js/echarts.min.js"></script>
 <script src="../js/stock.js"></script>
 <script src="../js/common.js"></script>
-
-<!--<script src="http://hq.sinajs.cn/list=sh601006" >-->
-//    var elements = hq_str_sh601006.split(',');
-//    console.log(elements);
-    <!--alert(123);-->
-<!--</script>-->
 
 <script>
     var chart = echarts.init($('#'), '');
