@@ -86,7 +86,7 @@ public class StockController {
     }
 
 
-    //大单数据
+    //大单数据(带参数筛选)
     @RequestMapping("/ComStockInfoParam")
     @ResponseBody
     public List<StockInfoByCom> getComStockInfo(String codeNum,double param) {
