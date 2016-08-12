@@ -29,6 +29,7 @@ public class TimeUtil {
         return 0;
     }
 
+
     public static String getNowDate(){
         Date date=new Date();
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
@@ -68,6 +69,11 @@ public class TimeUtil {
             e.printStackTrace();
             return new Date();
         }
+    }
+
+    public static String getDate(Date date){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.format(date);
     }
 
     public static boolean isSameDate(Date date){

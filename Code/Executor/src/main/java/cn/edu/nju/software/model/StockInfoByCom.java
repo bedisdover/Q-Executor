@@ -11,27 +11,27 @@ public class StockInfoByCom {
     //价格
     double price;
     //交易量
-    double turnover;
+    double volume;
     //价格变动
     double change_price;
     //交易总量
     double total_number;
     //前一笔交易价格
     double f_price;
-    //性质 True为买入 False为卖出
-    boolean isBuy;
+    //性质
+    int type;
 
     public StockInfoByCom() {
     }
 
-    public StockInfoByCom(String time, double price, double trunover, double f_price, boolean isBuy) {
+    public StockInfoByCom(String time, double price, double volume, double f_price, int type) {
         this.time = time;
         this.price = price;
-        this.turnover = trunover;
+        this.volume = volume;
         this.f_price = f_price;
-        this.isBuy = isBuy;
+        this.type= type;
         this.change_price = price-f_price;
-        this.total_number=price*trunover;
+        this.total_number=price*volume;
     }
 
 
@@ -51,12 +51,12 @@ public class StockInfoByCom {
         this.price = price;
     }
 
-    public double getTurnover() {
-        return turnover;
+    public double getVolume() {
+        return volume;
     }
 
-    public void setTurnover(double turnover) {
-        this.turnover = turnover;
+    public void setVolume(double volume) {
+        this.volume = volume;
     }
 
     public double getF_price() {
@@ -67,11 +67,25 @@ public class StockInfoByCom {
         this.f_price = f_price;
     }
 
-    public boolean isBuy() {
-        return isBuy;
+    public int getType() {
+        return type;
     }
 
-    public void setBuy(boolean buy) {
-        isBuy = buy;
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("StockInfoByCom{");
+        sb.append("time='").append(time).append('\'');
+        sb.append(", price=").append(price);
+        sb.append(", volume=").append(volume);
+        sb.append(", change_price=").append(change_price);
+        sb.append(", total_number=").append(total_number);
+        sb.append(", f_price=").append(f_price);
+        sb.append(", type=").append(type);
+        sb.append('}');
+        return sb.toString();
     }
 }

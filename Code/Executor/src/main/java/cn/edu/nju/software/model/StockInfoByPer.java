@@ -13,22 +13,22 @@ public class StockInfoByPer {
     //价格变动
     double change_price;
     //成交量
-    double turnover;
+    double volume;
     //成交额
     double totalNum;
-    //性质 True为买入 False为卖出
-    boolean isBuy;
+    //性质 0为买盘 1为卖盘 2为中性盘
+    int type;
 
     public StockInfoByPer() {
     }
 
-    public StockInfoByPer(String time, double price, double change_price, double turnover, double totalNum, boolean isBuy) {
+    public StockInfoByPer(String time, double price, double change_price, double vloume, double totalNum, int type) {
         this.time = time;
         this.price = price;
         this.change_price = change_price;
-        this.turnover = turnover;
+        this.volume = vloume;
         this.totalNum = totalNum;
-        this.isBuy = isBuy;
+        this.type = type;
     }
 
     public String getTime() {
@@ -55,12 +55,12 @@ public class StockInfoByPer {
         this.change_price = change_price;
     }
 
-    public double getTurnover() {
-        return turnover;
+    public double getVolume() {
+        return volume;
     }
 
-    public void setTurnover(double turnover) {
-        this.turnover = turnover;
+    public void setVolume(double volume) {
+        this.volume = volume;
     }
 
     public double getTotalNum() {
@@ -71,11 +71,24 @@ public class StockInfoByPer {
         this.totalNum = totalNum;
     }
 
-    public boolean isBuy() {
-        return isBuy;
+    public int getType() {
+        return type;
     }
 
-    public void setBuy(boolean buy) {
-        isBuy = buy;
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("StockInfoByPer{");
+        sb.append("time='").append(time).append('\'');
+        sb.append(", price=").append(price);
+        sb.append(", change_price=").append(change_price);
+        sb.append(", volume=").append(volume);
+        sb.append(", totalNum=").append(totalNum);
+        sb.append(", type=").append(type);
+        sb.append('}');
+        return sb.toString();
     }
 }
