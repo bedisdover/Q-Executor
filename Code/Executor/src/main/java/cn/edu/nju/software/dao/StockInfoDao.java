@@ -18,6 +18,8 @@ import javax.annotation.Resource;
 public class StockInfoDao {
 	@Resource
 	BaseDao baseDao;
+	@Resource
+	StockBasicInfoDao stockBasicInfoDao;
 public List<StockInfoPO> findByCode(String stockCode){
     List<StockInfoPO> stockInfo = ( List<StockInfoPO>)baseDao.findByProperty(StockInfoPO.class,"stockCode",stockCode);
     if(null!=stockInfo&&stockInfo.size()>=1)
@@ -47,16 +49,20 @@ public List<StockInfoPO> filterByTime(List<StockInfoPO> info,Date start,Date end
 	//---------------------------------------------栋栋写这里-------------------------------------------------------
 
 
-	public List<StockInfoByPer> getPerStockInfo(String codeNum,Date date){
-	return null;
-}
 
+	public List<StockInfoByPer> getPerStockInfo(String codeNum,Date date){
+
+		return null;
+	}
 	public List<StockInfoByCom> getComStockInfo(String codeNum, Date date){
 		return null;
 	}
 
+
+	//根据股票代码返回股票的基本信息
 	public StockBasicInfo getBasicInfo(String codeNum){
-		return null;
+		return stockBasicInfoDao.getStockBasicInfo(codeNum);
+
 	}
 	
 }

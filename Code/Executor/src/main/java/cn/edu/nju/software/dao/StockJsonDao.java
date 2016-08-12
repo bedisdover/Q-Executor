@@ -79,7 +79,8 @@ public class StockJsonDao {
                         Double.parseDouble(data.getString(6).replaceAll(",","")),Double.parseDouble(data.getString(7).replaceAll(",","")),
                         Double.parseDouble(data.getString(8).replaceAll(",","")),Double.parseDouble(data.getString(9).replaceAll(",","")),
                         Double.parseDouble(data.getString(10).replaceAll(",","")),Double.parseDouble(data.getString(11).replaceAll(",","")),
-                        Double.parseDouble(data.getString(12).replaceAll(",","")),Double.parseDouble(data.getString(13).replaceAll(",","")));
+                        Double.parseDouble(data.getString(12).replaceAll(",","")),Double.parseDouble(data.getString(13).replaceAll(",","")),
+                        Double.parseDouble(data.getString(14).replaceAll(",","")));
                 stockKLineVOs.add(vo);
             }
 

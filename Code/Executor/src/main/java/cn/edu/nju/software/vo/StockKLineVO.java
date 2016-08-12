@@ -168,12 +168,14 @@ public class StockKLineVO {
         this.turnover = turnover;
     }
 
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("StockKLineVO{");
         sb.append("date='").append(date).append('\'');
         sb.append(", open=").append(open);
         sb.append(", high=").append(high);
+        sb.append(", close=").append(close);
         sb.append(", low=").append(low);
         sb.append(", volume=").append(volume);
         sb.append(", price_change=").append(price_change);

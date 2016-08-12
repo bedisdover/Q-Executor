@@ -1,5 +1,7 @@
 package cn.edu.nju.software.utils;
 
+import org.springframework.security.access.method.P;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -66,5 +68,28 @@ public class TimeUtil {
             e.printStackTrace();
             return new Date();
         }
+    }
+
+    public static boolean isSameDate(Date date){
+        Calendar calendar = Calendar.getInstance();
+        Calendar calendar1  = Calendar.getInstance();
+        calendar.setTime(date);
+        if(calendar.get(Calendar.YEAR)==calendar1.get(Calendar.YEAR)&&
+                calendar.get(Calendar.MONTH)==calendar1.get(Calendar.MONTH)&&
+                calendar.get(Calendar.DATE)==calendar1.get(Calendar.DATE)){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    public static boolean isOver6PM(Date date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        if (calendar.get(Calendar.HOUR_OF_DAY)>=18){
+            return true;
+        }
+
+        return false;
     }
 }
