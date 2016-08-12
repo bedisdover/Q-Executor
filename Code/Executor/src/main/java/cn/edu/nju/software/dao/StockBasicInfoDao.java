@@ -1,6 +1,7 @@
 package cn.edu.nju.software.dao;
 
 import cn.edu.nju.software.model.StockBasicInfo;
+import cn.edu.nju.software.utils.CodeUtil;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -31,7 +32,7 @@ public class StockBasicInfoDao {
     //完整股票代码有两种形式 sh600000 或者 600000
     public StockBasicInfo getStockBasicInfo(String code){
         //如果没有查询到的话就返回一个null
-        code = getRealCode(code);
+        code = CodeUtil.getCode(code);
         StockBasicInfo stockBasicInfo = null;
         try {
             stockBasicInfo = (StockBasicInfo) baseDao.findByPrimaryKey(StockBasicInfo.class,code);
@@ -99,16 +100,5 @@ public class StockBasicInfoDao {
         }
 
     }
-    private String getRealCode(String code){
-        if(code.length()==6){
-            if(code.charAt(0)=='6'){
-                code = "sh"+code;
-            }else{
-                code = "sz"+code;
-            }
-            return code;
-        }else {
-            return code;
-        }
-    }
+
 }

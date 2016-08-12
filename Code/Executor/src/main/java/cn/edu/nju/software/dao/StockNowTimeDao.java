@@ -1,5 +1,6 @@
 package cn.edu.nju.software.dao;
 
+import cn.edu.nju.software.utils.CodeUtil;
 import cn.edu.nju.software.utils.StringUtil;
 import cn.edu.nju.software.utils.TimeUtil;
 import cn.edu.nju.software.vo.StockNowTimeVO;
@@ -25,7 +26,7 @@ public class StockNowTimeDao {
 
     public List<StockNowTimeVO> getNowTime(String codeNum, Date date){
         List<StockNowTimeVO> stockNowTimeVOs = new ArrayList<StockNowTimeVO>();
-        codeNum = getCode(codeNum);//怕只传进来一个六位数代码 当然8位数最好
+        codeNum = CodeUtil.getCode(codeNum);//怕只传进来一个六位数代码 当然8位数最好
         int hashcode = getHashNum(codeNum.substring(2));
         //
         Calendar calendar = Calendar.getInstance();
@@ -60,20 +61,6 @@ public class StockNowTimeDao {
     }
 
 
-    public String getCode(String code){
-        if(code.length()==8){
-            return code;
-        }
-
-        if (code.length()==6){
-            if (code.charAt(0)=='6'){
-                code="sh"+code;
-            }else {
-                code = "sz"+code;
-            }
-        }
-        return code;
-    }
 
     public int getHashNum(String code){
         int result = Integer.parseInt(code);

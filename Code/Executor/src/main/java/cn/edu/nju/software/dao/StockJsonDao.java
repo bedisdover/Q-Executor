@@ -1,5 +1,6 @@
 package cn.edu.nju.software.dao;
 
+import cn.edu.nju.software.utils.CodeUtil;
 import cn.edu.nju.software.vo.StockKLineVO;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,7 +28,7 @@ public class StockJsonDao {
     private static final String RECORD = "record";
 
     public List<StockKLineVO> getKLineByDay(String stockID){
-        String url = "http://api.finance.ifeng.com/akdaily/?code="+getCode(stockID)+"&type=last";
+        String url = "http://api.finance.ifeng.com/akdaily/?code="+ CodeUtil.getCode(stockID)+"&type=last";
         List<StockKLineVO> stockKLineVOs = new ArrayList<StockKLineVO>();
         String content = getContentFromURL(url);
         if (content==null){
@@ -39,7 +40,7 @@ public class StockJsonDao {
     }
 
     public List<StockKLineVO> getKLineByWeek(String stockID){
-        String url = "http://api.finance.ifeng.com/akweekly/?code="+getCode(stockID)+"&type=last";
+        String url = "http://api.finance.ifeng.com/akweekly/?code="+CodeUtil.getCode(stockID)+"&type=last";
         List<StockKLineVO> stockKLineVOs = new ArrayList<StockKLineVO>();
         String content = getContentFromURL(url);
         if (content==null){
@@ -50,7 +51,7 @@ public class StockJsonDao {
     }
 
     public List<StockKLineVO> getKLineByMonth(String stockID){
-        String url = "http://api.finance.ifeng.com/akmonthly/?code="+getCode(stockID)+"&type=last";
+        String url = "http://api.finance.ifeng.com/akmonthly/?code="+CodeUtil.getCode(stockID)+"&type=last";
         List<StockKLineVO> stockKLineVOs = new ArrayList<StockKLineVO>();
         String content = getContentFromURL(url);
         if (content==null){
@@ -105,18 +106,5 @@ public class StockJsonDao {
         }
     }
 
-    private String getCode(String code){
-        if(code.length()==8){
-            return code;
-        }
 
-        if (code.length()==6){
-            if (code.charAt(0)=='6'){
-                code="sh"+code;
-            }else {
-                code = "sz"+code;
-            }
-        }
-        return code;
-    }
 }

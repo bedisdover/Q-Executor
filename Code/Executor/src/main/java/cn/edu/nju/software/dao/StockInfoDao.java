@@ -64,5 +64,6 @@ public List<StockInfoPO> filterByTime(List<StockInfoPO> info,Date start,Date end
 		return stockBasicInfoDao.getStockBasicInfo(codeNum);
 
 	}
+
 	
 }
