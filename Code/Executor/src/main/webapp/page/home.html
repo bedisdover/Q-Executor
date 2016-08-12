@@ -19,7 +19,7 @@
                     col-xs-offset-1 col-sm-offset-3 col-md-offset-4 col-lg-offset-4">
             <button class="btn btn-black btn-lg btn-block" id="start-btn">开始体验</button>
             <div class="row bottom-padding"></div>
-            <a class="btn btn-black btn-lg btn-block" href="#introduce-pane">简单介绍</a>
+            <a class="btn btn-black btn-lg btn-block" id="introduce-btn">简单介绍</a>
         </div>
 
         <div class="row bottom-lg-padding"></div>
@@ -154,7 +154,11 @@
     <script src="../js/jquery.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <script type="text/javascript">
-
+        $('#introduce-btn').on('click', function() {
+            $('html, body').animate({
+                scrollTop: $('#introduce-pane').offset().top
+            }, 1200);
+        });
     </script>
 </body>
 </html>
