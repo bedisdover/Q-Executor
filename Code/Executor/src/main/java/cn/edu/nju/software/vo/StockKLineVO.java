@@ -9,6 +9,7 @@ public class StockKLineVO {
     String date;
     double open;
     double high;
+    double close;
     double low;
     double volume;
     double price_change;
@@ -24,13 +25,16 @@ public class StockKLineVO {
     public StockKLineVO() {
     }
 
-    public StockKLineVO(String date, double open, double high, double low,
-                        double volume, double price_change, double p_change,
-                        double ma5, double ma10, double ma20, double v_ma5,
-                        double v_ma10, double v_ma20, double turnover) {
+    public StockKLineVO(String date, double open, double high,
+                        double close, double low,
+                        double volume, double price_change,
+                        double p_change, double ma5, double ma10,
+                        double ma20, double v_ma5, double v_ma10,
+                        double v_ma20, double turnover) {
         this.date = date;
         this.open = open;
         this.high = high;
+        this.close = close;
         this.low = low;
         this.volume = volume;
         this.price_change = price_change;
@@ -50,6 +54,14 @@ public class StockKLineVO {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public double getClose() {
+        return close;
+    }
+
+    public void setClose(double close) {
+        this.close = close;
     }
 
     public double getOpen() {

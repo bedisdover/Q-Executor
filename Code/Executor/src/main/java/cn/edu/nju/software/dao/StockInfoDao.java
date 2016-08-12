@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.List;
 
 import cn.edu.nju.software.config.MsgInfo;
+import cn.edu.nju.software.model.StockBasicInfo;
+import cn.edu.nju.software.model.StockInfoByCom;
+import cn.edu.nju.software.model.StockInfoByPer;
 import cn.edu.nju.software.model.User;
 import cn.edu.nju.software.po.StockInfoPO;
 import org.springframework.stereotype.Repository;
@@ -40,8 +43,20 @@ public List<StockInfoPO> filterByTime(List<StockInfoPO> info,Date start,Date end
 		else
 		return null;
 	}
-	
+
+	//---------------------------------------------栋栋写这里-------------------------------------------------------
 
 
+	public List<StockInfoByPer> getPerStockInfo(String codeNum,Date date){
+	return null;
+}
+
+	public List<StockInfoByCom> getComStockInfo(String codeNum, Date date){
+		return null;
+	}
+
+	public StockBasicInfo getBasicInfo(String codeNum){
+		return null;
+	}
 	
 }
