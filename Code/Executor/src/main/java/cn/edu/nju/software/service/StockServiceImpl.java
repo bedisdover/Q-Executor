@@ -83,6 +83,24 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
+    public List<StockInfoByCom> getComStockInfo(String Code, double param) {
+        try {
+            List<StockInfoByPer> list =stockInfoDao.getPerStockInfo(Code,getDate());
+            List<StockInfoByCom> result = new ArrayList<>();
+            for(StockInfoByPer per:list){
+                if(per.getTurnover()>=param){
+                    result.add(new StockInfoByCom(per.getTime(),per.getPrice(),per.getTurnover(),(per.getPrice()+per.getChange_price()),per.isBuy()));
+                }
+            }
+            Collections.reverse(result);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public List<StockInfoByPrice> getStockInfoByPrice(String Code) {
         try{
             double totalTrunover=0;
@@ -119,7 +137,7 @@ public class StockServiceImpl implements StockService {
 
                 result.add(new StockInfoByPrice(entry.getKey(),entry.getValue(),round((entry.getValue()/totalTrunover),3,BigDecimal.ROUND_CEILING)));
             }
-            Collections.reverse(result);
+            Collections.sort(result);
             return  result;
         }catch (Exception e) {
             e.printStackTrace();

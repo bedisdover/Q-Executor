@@ -11,7 +11,11 @@ public class StockInfoByCom {
     //价格
     double price;
     //交易量
-    double trunover;
+    double turnover;
+    //价格变动
+    double change_price;
+    //交易总量
+    double total_number;
     //前一笔交易价格
     double f_price;
     //性质 True为买入 False为卖出
@@ -23,9 +27,11 @@ public class StockInfoByCom {
     public StockInfoByCom(String time, double price, double trunover, double f_price, boolean isBuy) {
         this.time = time;
         this.price = price;
-        this.trunover = trunover;
+        this.turnover = trunover;
         this.f_price = f_price;
         this.isBuy = isBuy;
+        this.change_price = price-f_price;
+        this.total_number=price*trunover;
     }
 
 
@@ -45,12 +51,12 @@ public class StockInfoByCom {
         this.price = price;
     }
 
-    public double getTrunover() {
-        return trunover;
+    public double getTurnover() {
+        return turnover;
     }
 
-    public void setTrunover(double trunover) {
-        this.trunover = trunover;
+    public void setTurnover(double turnover) {
+        this.turnover = turnover;
     }
 
     public double getF_price() {

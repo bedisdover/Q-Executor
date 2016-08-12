@@ -84,6 +84,15 @@ public class StockController {
 
         return stockService.getComStockInfo(codeNum);
     }
+
+
+    //大单数据
+    @RequestMapping("/ComStockInfoParam")
+    @ResponseBody
+    public List<StockInfoByCom> getComStockInfo(String codeNum,double param) {
+
+        return stockService.getComStockInfo(codeNum,param);
+    }
     //逐笔数据
     @RequestMapping("/PerStockInfo")
     @ResponseBody
