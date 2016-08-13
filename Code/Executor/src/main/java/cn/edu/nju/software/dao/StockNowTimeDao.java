@@ -1,13 +1,12 @@
 package cn.edu.nju.software.dao;
 
-import cn.edu.nju.software.utils.CodeUtil;
+import cn.edu.nju.software.utils.StockUtil;
 import cn.edu.nju.software.utils.StringUtil;
 import cn.edu.nju.software.utils.TimeUtil;
 import cn.edu.nju.software.vo.StockNowTimeVO;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,7 +25,7 @@ public class StockNowTimeDao {
 
     public List<StockNowTimeVO> getNowTime(String codeNum, Date date){
         List<StockNowTimeVO> stockNowTimeVOs = new ArrayList<StockNowTimeVO>();
-        codeNum = CodeUtil.getCode(codeNum);//怕只传进来一个六位数代码 当然8位数最好
+        codeNum = StockUtil.getCode(codeNum);//怕只传进来一个六位数代码 当然8位数最好
         int hashcode = getHashNum(codeNum.substring(2));
         //
         Calendar calendar = Calendar.getInstance();

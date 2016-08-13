@@ -28,7 +28,7 @@ public interface StockService {
 
     public List<StockInfoByCom> getComStockInfo(String Code);
 
-    public List<StockInfoByCom> getComStockInfo(String Code,double param );
+    public List<StockInfoByCom> getComStockInfo(String Code,double param);
 
     public List<StockInfoByPrice> getStockInfoByPrice(String Code);
 
