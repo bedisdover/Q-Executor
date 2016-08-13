@@ -77,6 +77,7 @@ public List<StockInfoPO> filterByTime(List<StockInfoPO> info,Date start,Date end
 	}
 
 	private List<StockInfoByPer> getPerDealByURL(String code,String date){
+		//然后我发现原来那个xls文件竟然balabala有问题
 		List<StockInfoByPer> stockInfoByPers = new ArrayList<StockInfoByPer>();
 		String url = "";
 		return null;

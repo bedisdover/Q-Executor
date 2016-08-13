@@ -98,4 +98,17 @@ public class TimeUtil {
 
         return false;
     }
+
+
+    public static long getMillisByHHmmss(String dateStr){
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        try {
+            Date date = dateFormat.parse(dateStr);
+            return date.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0;
+        }
+
+    }
 }
