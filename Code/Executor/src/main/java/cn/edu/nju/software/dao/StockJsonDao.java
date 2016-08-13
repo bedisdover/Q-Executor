@@ -1,6 +1,6 @@
 package cn.edu.nju.software.dao;
 
-import cn.edu.nju.software.utils.CodeUtil;
+import cn.edu.nju.software.utils.StockUtil;
 import cn.edu.nju.software.vo.StockKLineVO;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,9 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +26,7 @@ public class StockJsonDao {
     private static final String RECORD = "record";
 
     public List<StockKLineVO> getKLineByDay(String stockID){
-        String url = "http://api.finance.ifeng.com/akdaily/?code="+ CodeUtil.getCode(stockID)+"&type=last";
+        String url = "http://api.finance.ifeng.com/akdaily/?code="+ StockUtil.getCode(stockID)+"&type=last";
         List<StockKLineVO> stockKLineVOs = new ArrayList<StockKLineVO>();
         String content = getContentFromURL(url);
         if (content==null){
@@ -40,7 +38,7 @@ public class StockJsonDao {
     }
 
     public List<StockKLineVO> getKLineByWeek(String stockID){
-        String url = "http://api.finance.ifeng.com/akweekly/?code="+CodeUtil.getCode(stockID)+"&type=last";
+        String url = "http://api.finance.ifeng.com/akweekly/?code="+ StockUtil.getCode(stockID)+"&type=last";
         List<StockKLineVO> stockKLineVOs = new ArrayList<StockKLineVO>();
         String content = getContentFromURL(url);
         if (content==null){
@@ -51,7 +49,7 @@ public class StockJsonDao {
     }
 
     public List<StockKLineVO> getKLineByMonth(String stockID){
-        String url = "http://api.finance.ifeng.com/akmonthly/?code="+CodeUtil.getCode(stockID)+"&type=last";
+        String url = "http://api.finance.ifeng.com/akmonthly/?code="+ StockUtil.getCode(stockID)+"&type=last";
         List<StockKLineVO> stockKLineVOs = new ArrayList<StockKLineVO>();
         String content = getContentFromURL(url);
         if (content==null){

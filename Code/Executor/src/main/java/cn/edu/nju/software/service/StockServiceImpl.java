@@ -85,15 +85,7 @@ public class StockServiceImpl implements StockService {
     @Override
     public List<StockInfoByCom> getComStockInfo(String Code, double param) {
         try {
-            List<StockInfoByPer> list =stockInfoDao.getPerStockInfo(Code,getDate());
-            List<StockInfoByCom> result = new ArrayList<>();
-            for(StockInfoByPer per:list){
-                if(per.getVolume()>=param){
-                    result.add(new StockInfoByCom(per.getTime(),per.getPrice(),per.getVolume(),(per.getPrice()+per.getChange_price()),per.getType()));
-                }
-            }
-            Collections.reverse(result);
-            return result;
+            return stockInfoDao.getComStockInfo(Code,getDate(),param);
         }catch (Exception e){
             e.printStackTrace();
             return null;
