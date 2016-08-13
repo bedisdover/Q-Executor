@@ -33,3 +33,5 @@ Code/Executor/src/main/resources/applicationContext.xml
 #target#
 */target/
 Code/StocksServer/target/
+Code/Executor/target
+
