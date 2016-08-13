@@ -44,17 +44,24 @@ $(function () {
         dropdown.show();
     }).on('keypress', function (e) {
         if (e.which == 13) { // 回车
-            jumpPage($('#content').find('tr'));
+            jumpPage(getSelected().find('td:nth-child(2)').text());
         }
     }).on('keydown', function (e) {
+        var selected = getSelected();
+        var value = selected.find('td:nth-child(1)').text();
+
         if (e.which == 38) { // ↑
-            getSelected().('active').prev().addClass('active');
+            if (!$(selected).is($('#content').find('tr').first())) {
+                $(selected).removeClass('active').prev().addClass('active');
+                text_elem.val(value);
+            }
         } else if (e.which == 40) { // ↓
-            $('#content').find('tr').filter(function () {
-                return $(this).hasClass('active') && !$(this).is($(this).parent().children().last());
-            }).removeClass('active').next().addClass('active');
+            if (!$(selected).is($('#content').find('tr').last())) {
+                $(selected).removeClass('active').next().addClass('active');
+                text_elem.val(value);
+            }
         }
-    });
+    }).focus();
 
     $(document.body).on('click', function (e) {
         if (!$(e.target).parents('div').is(dropdown) && !$(e.target).is(text_elem)) {
@@ -67,7 +74,7 @@ $(function () {
  * 获得候选列表选中的股票
  */
 function getSelected() {
-    return $('#content').find('tr').filter(function (index) {
+    return $('#content').find('tr').filter(function () {
         return $(this).hasClass('active');
     });
 }
@@ -104,8 +111,6 @@ function search(content) {
     if (content == '') {
         return;
     }
-
-    $('#content').empty();
 
     if (!isNaN(content) || content.substr(0, 2) == 'sh' || content.substr(0, 2) == 'sz') {
         searchCode(content);
@@ -179,6 +184,17 @@ function searchCode(code) {
  * @param stocks
  */
 function appendStocks(stocks) {
+    var content = $('#content');
+    var footer = $('#table-footer');
+
+    content.empty();
+    footer.hide();
+
+    if (stocks.length == 0) {
+        content.append('<tr class="text-center"><td>很抱歉，未找到符合条件的股票。。。</td></tr>');
+        return;
+    }
+
     var number = Math.min(stocks.length, display_num);
 
     for (var i = 0; i < number; i++) {
@@ -186,11 +202,20 @@ function appendStocks(stocks) {
     }
 
     if (stocks.length > display_num) {
-        $('#table-footer').show();
-        $('#display-more').show();
+        footer.show();
+        $('#change').off('click')
+            .on('click', function () {
+                appendStocks(stocks.slice(display_num))
+
+                $('#search-text').focus();
+            }).show();
     }
 
-    $('#content').find('tr').first().addClass('active');
+    content.find('tr').each(function () {
+        $(this).on('click', function () {
+            jumpPage($(this).find('td:nth-child(2)').text());
+        });
+    }).first().addClass('active');
 }
 
 /**
@@ -216,5 +241,6 @@ function appendStock(stock) {
  * @param code 股票代码
  */
 function jumpPage(code) {
-
+    top.location = 'stock.html?id=' + code;
+    console.log(code);
 }

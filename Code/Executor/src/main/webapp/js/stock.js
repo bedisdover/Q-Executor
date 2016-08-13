@@ -8,7 +8,7 @@
 /**
  * 股票ID
  */
-var id = 'sh600000';
+var id = '';
 
 /**
  * 股票基本信息
@@ -51,12 +51,12 @@ var stockBasicInfo = {
 };
 
 $(function () {
-    // id = getUrlParam('id');
+    id = getUrlParam('id');
     init();
 
-    // setInterval(function () {
-    //     getData();
-    // }, 3000);
+    setInterval(function () {
+        getCurrentData();
+    }, 3000);
 });
 
 /**
