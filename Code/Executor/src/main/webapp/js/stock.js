@@ -1,3 +1,4 @@
+// import {echarts} from "./echarts";
 /**
  * Created by song on 16-8-3.
  *
@@ -8,6 +9,46 @@
  * 股票ID
  */
 var id = 'sh600000';
+
+/**
+ * 股票基本信息
+ *
+ * code;//股票代码
+ * name;//股票公司名称
+ * industry;//股票的类型
+ * area;//股票的公司创建地
+ * pe;//市盈率
+ * outstanding;//流通股本
+ * totals;//总股本(万)
+ * totalAssets;//总资产(万)
+ * liquidAssets;//流动资产
+ * fixedAssets;//固定资产
+ * reserved;//公积金
+ * reservedPerShare;//每股公积金
+ * eps;//每股收益
+ * bvps;//每股净资
+ * pb;//市净率
+ * timeToMarket;//股票的上市日期
+ * @type {{name: string, code: string, industry: string, area: string, pe: number, outstanding: number, totals: number, totalAssets: number, liquidAssets: number, fixedAssets: number, reserved: number, reservedPerShare: number, eps: number, bvps: number, pb: number, timeToMarket: number}}
+ */
+var stockBasicInfo = {
+    name: '',
+    code: '',
+    industry: '',
+    area: '',
+    pe: 0,
+    outstanding: 0,
+    totals: 0,
+    totalAssets: 0,
+    liquidAssets: 0,
+    fixedAssets: 0,
+    reserved: 0,
+    reservedPerShare: 0,
+    eps: 0,
+    bvps: 0,
+    pb: 0,
+    timeToMarket: 0
+};
 
 $(function () {
     // id = getUrlParam('id');
@@ -25,16 +66,29 @@ function init() {
     $('#name').text('浦发银行');
     $('#code').text('(' + id + ')');
 
-    getData();
+    getCurrentData();
     getBasicData();
 
     initCharts();
+
+    var kLine_day = drawKLine;
+    kLine_day.type = 'dailyKLine';
+    getKLine('/KLineDay', kLine_day);
+    var kLine_week = drawKLine;
+    kLine_week.type = 'weeklyKLine';
+    getKLine('/KLineWeek', kLine_week);
+    // var kLine_month = drawKLine;
+    // kLine_month.type = 'monthlyKLine';
+    // getKLine('/KLineMonth', kLine_month);
+
+    // 固定侧边栏
+    fix_sidebar($('.sidebar-left'));
 }
 
 /**
- * 获取数据
+ * 获取最新数据
  */
-function getData() {
+function getCurrentData() {
     jQuery.ajax({
         url: 'http://hq.finance.ifeng.com/q.php?l=' + id,
         dataType: 'script',
@@ -50,14 +104,267 @@ function getData() {
  */
 function getBasicData() {
     jQuery.ajax({
-        url: '/nowTime',
+        url: '/BasicComInfo',
         cache: false,
         dataType: 'json',
         data: 'codeNum=' + id,
         success: function (data) {
-            console.log(data);
+            stockBasicInfo = data;
+
+            showBasicData();
         }
     })
+}
+
+/**
+ * 显示基本信息
+ */
+function showBasicData() {
+    $('#name').text(stockBasicInfo.name);
+    $('#type').text(stockBasicInfo.industry);
+    $('#area').text(stockBasicInfo.area);
+    $('#pe_ttm').text(stockBasicInfo.pe);
+    $('#outstanding').text(stockBasicInfo.outstanding);
+    $('#total').text(stockBasicInfo.totals);
+    $('#totalAssets').text(stockBasicInfo.totalAssets);
+    $('#liquidAssets').text(stockBasicInfo.liquidAssets);
+    $('#fixedAssets').text(stockBasicInfo.fixedAssets);
+    $('#reserved').text(stockBasicInfo.reserved);
+    $('#reservedPerShare').text(stockBasicInfo.reservedPerShare);
+    $('#eps').text(stockBasicInfo.eps);
+    $('#eps-2').text(stockBasicInfo.eps);
+    $('#bvps').text(stockBasicInfo.bvps);
+    $('#pb').text(stockBasicInfo.pb);
+    $('#timeToMarket').text(stockBasicInfo.timeToMarket);
+}
+
+/**
+ * 获取K线数据
+ * @param url K线对应的url
+ * @param callback 数据传输成功后的回调函数
+ */
+function getKLine(url, callback) {
+    jQuery.ajax({
+        url: url,
+        dataType: 'json',
+        data: 'codeNum=' + id,
+        success: function (data) {
+            var array = [];
+
+            for (var i = 0; i < data.length; i++) {
+                array.push([data[i].date, data[i].open, data[i].high, data[i].low, data[i].high])
+            }
+
+            callback(callback.type, array);
+        }
+    });
+}
+
+/**
+ * 绘制K线图
+ * @param type K线图类型(day/week/month)
+ * @param data 数据
+ */
+function drawKLine(type, data) {
+    var chart = echarts.init(document.getElementById(type));
+    // 数据意义:开盘(open)，收盘(close)，最低(lowest)，最高(highest)
+    var data0 = splitData(data);
+
+    function splitData(rawData) {
+        var categoryData = [];
+        var values = [];
+        for (var i = 0; i < rawData.length; i++) {
+            categoryData.push(rawData[i].splice(0, 1)[0]);
+            values.push(rawData[i])
+        }
+        return {
+            categoryData: categoryData,
+            values: values
+        };
+    }
+
+    function calculateMA(dayCount) {
+        var result = [];
+        for (var i = 0, len = data0.values.length; i < len; i++) {
+            if (i < dayCount) {
+                result.push('-');
+                continue;
+            }
+            var sum = 0;
+            for (var j = 0; j < dayCount; j++) {
+                sum += data0.values[i - j][1];
+            }
+            result.push((sum / dayCount).toFixed(3));
+        }
+
+        return result;
+    }
+
+    var option = {
+        title: {
+            text: id,
+            left: 0
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'line'
+            }
+        },
+        legend: {
+            data: ['日K', 'MA5', 'MA10', 'MA20', 'MA30']
+        },
+        grid: {
+            left: '10%',
+            right: '10%',
+            bottom: '15%'
+        },
+        xAxis: {
+            type: 'category',
+            data: data0.categoryData,
+            scale: true,
+            boundaryGap: false,
+            axisLine: {onZero: false},
+            splitLine: {show: false},
+            splitNumber: 20,
+            min: 'dataMin',
+            max: 'dataMax'
+        },
+        yAxis: {
+            scale: true,
+            splitArea: {
+                show: true
+            }
+        },
+        dataZoom: [
+            {
+                type: 'inside',
+                start: 50,
+                end: 100
+            },
+            {
+                show: true,
+                type: 'slider',
+                y: '90%',
+                start: 50,
+                end: 100
+            }
+        ],
+        series: [
+            {
+                name: '日K',
+                type: 'candlestick',
+                data: data0.values,
+                markPoint: {
+                    label: {
+                        normal: {
+                            formatter: function (param) {
+                                return param != null ? Math.round(param.value) : '';
+                            }
+                        }
+                    },
+                    data: [
+                        {
+                            name: 'highest value',
+                            type: 'max',
+                            valueDim: 'highest'
+                        },
+                        {
+                            name: 'lowest value',
+                            type: 'min',
+                            valueDim: 'lowest'
+                        },
+                        {
+                            name: 'average value on close',
+                            type: 'average',
+                            valueDim: 'close'
+                        }
+                    ],
+                    tooltip: {
+                        formatter: function (param) {
+                            return param.name + '<br>' + (param.data.coord || '');
+                        }
+                    }
+                },
+                markLine: {
+                    symbol: ['none', 'none'],
+                    data: [
+                        [
+                            {
+                                name: 'from lowest to highest',
+                                type: 'min',
+                                valueDim: 'lowest',
+                                symbol: 'circle',
+                                symbolSize: 10,
+                                label: {
+                                    normal: {show: false},
+                                    emphasis: {show: false}
+                                }
+                            },
+                            {
+                                type: 'max',
+                                valueDim: 'highest',
+                                symbol: 'circle',
+                                symbolSize: 10,
+                                label: {
+                                    normal: {show: false},
+                                    emphasis: {show: false}
+                                }
+                            }
+                        ],
+                        {
+                            name: 'min line on close',
+                            type: 'min',
+                            valueDim: 'close'
+                        },
+                        {
+                            name: 'max line on close',
+                            type: 'max',
+                            valueDim: 'close'
+                        }
+                    ]
+                }
+            },
+            {
+                name: 'MA5',
+                type: 'line',
+                data: calculateMA(5),
+                smooth: true,
+                lineStyle: {
+                    normal: {opacity: 0.5}
+                }
+            },
+            {
+                name: 'MA10',
+                type: 'line',
+                data: calculateMA(10),
+                smooth: true,
+                lineStyle: {
+                    normal: {opacity: 0.5}
+                }
+            },
+            {
+                name: 'MA20',
+                type: 'line',
+                data: calculateMA(20),
+                smooth: true,
+                lineStyle: {
+                    normal: {opacity: 0.5}
+                }
+            },
+            {
+                name: 'MA30',
+                type: 'line',
+                data: calculateMA(30),
+                smooth: true,
+                lineStyle: {
+                    normal: {opacity: 0.5}
+                }
+            }
+        ]
+    };
+
+    chart.setOption(option);
 }
 
 /**
@@ -91,11 +398,11 @@ function showCurrentData(data) {
     $('#price').text(data[0]);
     $('#price-2').text(data[0]);
     $('#close').text(data[1]);
-    
+
     var color_inc = data[2] > 0 ? 'red' : 'green';
     $('#inc-dec-num').text(data[2]).css('color', color_inc);
-    $('#inc-dec-rate').text(data[3]).css('color', color_inc);
-    
+    $('#inc-dec-rate').text(data[3] + '%').css('color', color_inc);
+
     $('#open').text(data[4]);
     $('#high').text(data[5]);
     $('#low').text(data[6]);
@@ -103,7 +410,10 @@ function showCurrentData(data) {
     $('#volume').text(format_number(data[9] / 100) + '手');
     $('#amount').text(format_number(data[10]) + '元');
 
-    $("#amplitude").html(((data[5] - data[6]) / data[1] * 100).toFixed(2) + "%");
+    $("#amplitude").text(((data[5] - data[6]) / data[1] * 100).toFixed(2) + "%");
+
+    $("#turnover").text((stockBasicInfo.outstanding) ?
+        ((data[9] / stockBasicInfo.outstanding * 100).toFixed(2) + "%") : " --");
 
     $('#buy-1-price').text(data[11]);
     $('#buy-2-price').text(data[12]);
@@ -137,11 +447,11 @@ function showCurrentData(data) {
 
     var hq_time = new Date(data[34] * 1000);
     $("#time").text(hq_time.getFullYear() + "年" +
-        this.format_time(hq_time.getMonth() + 1) + "月" +
-        this.format_time(hq_time.getDate()) + "日 " +
-        this.format_time(hq_time.getHours()) + ":" +
-        this.format_time(hq_time.getMinutes()) + ":" +
-        this.format_time(hq_time.getSeconds()));
+        format_time(hq_time.getMonth() + 1) + "月" +
+        format_time(hq_time.getDate()) + "日 " +
+        format_time(hq_time.getHours()) + ":" +
+        format_time(hq_time.getMinutes()) + ":" +
+        format_time(hq_time.getSeconds()));
 }
 /**
  * 初始化图表
@@ -152,13 +462,8 @@ function initCharts() {
     // 减去well的边距(padding: 19px, border: 1px)
     $('#graphs').find('div').css({
         'width': width - 40 + 'px',
-        'height': width * 0.3 + 'px'
+        'height': width * 0.5 + 'px'
     });
-
-    // $('#radarChart').css({
-    //     'width': width - 30 + 'px',//panel-body padding=15
-    //     'height': '400px'
-    // });
 }
 
 /**

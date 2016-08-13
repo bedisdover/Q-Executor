@@ -11,7 +11,7 @@ $(function () {
     initBackground();
 
     // 激活提示工具
-    $('span[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="tooltip"]').tooltip();
 });
 
 /**
@@ -131,4 +131,22 @@ function getUrlParam(name) {
     var r = window.location.search.substr(1).match(reg);  //匹配目标参数
     if (r != null) return unescape(r[2]);
     return null; //返回参数值
+}
+
+/**
+ * 固定侧边栏
+ * @param sidebar
+ */
+function fix_sidebar(sidebar) {
+    var jWindow = $(window);
+    
+    jWindow.scroll(function () {
+        //noinspection JSValidateTypes
+        var scrollHeight = jWindow.scrollTop();
+
+        $(sidebar).css({
+            position: "relative",
+            top: scrollHeight + "px"
+        });
+    });
 }
