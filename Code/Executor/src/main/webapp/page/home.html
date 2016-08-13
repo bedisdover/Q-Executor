@@ -19,7 +19,7 @@
                     col-xs-offset-1 col-sm-offset-3 col-md-offset-4 col-lg-offset-4">
             <button class="btn btn-black btn-lg btn-block" id="start-btn">开始体验</button>
             <div class="row bottom-padding"></div>
-            <a class="btn btn-black btn-lg btn-block" href="#introduce-pane">简单介绍</a>
+            <a class="btn btn-black btn-lg btn-block" id="introduce-btn">简单介绍</a>
         </div>
 
         <div class="row bottom-lg-padding"></div>
@@ -76,10 +76,89 @@
         </div>
     </div>
 
+    <div class="container">
+        <div class="row top-lg-padding">
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <h1 class="text-center top-md-padding">订单拆分</h1>
+                <h4 class="text-center top-md-padding">降低成本</h4>
+            </div>
+
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="thumbnail no-border">
+                    <img class="img img-responsive" src="../images/background.jpg" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row top-lg-padding">
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="thumbnail no-border">
+                    <img class="img img-responsive" src="../images/background.jpg" alt="">
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <h1 class="text-center top-md-padding">行情预测</h1>
+                <h4 class="text-center top-md-padding">把握行情变化趋势</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row top-lg-padding">
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <h1 class="text-center top-md-padding">股票数据</h1>
+                <h4 class="text-center top-md-padding">实时、准确、全面</h4>
+            </div>
+
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="thumbnail no-border">
+                    <img class="img img-responsive" src="../images/background.jpg" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row top-lg-padding">
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="thumbnail no-border">
+                    <img class="img img-responsive" src="../images/background.jpg" alt="">
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <h1 class="text-center top-md-padding">热门股推荐</h1>
+                <h4 class="text-center top-md-padding">了解热门股票，机会不错过</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row top-lg-padding">
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <h1 class="text-center top-md-padding">自选股管理</h1>
+                <h4 class="text-center top-md-padding">专注所持股票，方便管理</h4>
+            </div>
+
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="thumbnail no-border">
+                    <img class="img img-responsive" src="../images/background.jpg" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="../js/jquery.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <script type="text/javascript">
-
+        $('#introduce-btn').on('click', function() {
+            $('html, body').animate({
+                scrollTop: $('#introduce-pane').offset().top
+            }, 1200);
+        });
     </script>
 </body>
 </html>
