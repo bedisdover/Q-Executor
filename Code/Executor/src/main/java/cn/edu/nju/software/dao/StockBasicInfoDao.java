@@ -1,7 +1,6 @@
 package cn.edu.nju.software.dao;
 
 import cn.edu.nju.software.model.StockBasicInfo;
-import cn.edu.nju.software.utils.StockUtil;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;

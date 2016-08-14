@@ -14,7 +14,6 @@ import cn.edu.nju.software.model.StockBasicInfo;
 import cn.edu.nju.software.model.StockInfoByCom;
 import cn.edu.nju.software.model.StockInfoByPer;
 import cn.edu.nju.software.po.StockInfoPO;
-import cn.edu.nju.software.utils.StockUtil;
 import cn.edu.nju.software.utils.TimeUtil;
 
 import org.jsoup.Jsoup;

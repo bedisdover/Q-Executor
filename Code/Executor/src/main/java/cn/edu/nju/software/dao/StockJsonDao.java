@@ -1,6 +1,5 @@
 package cn.edu.nju.software.dao;
 
-import cn.edu.nju.software.utils.StockUtil;
 import cn.edu.nju.software.vo.StockKLineVO;
 import org.json.JSONArray;
 import org.json.JSONException;
