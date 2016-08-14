@@ -6,7 +6,7 @@ package cn.edu.nju.software.vo;
  * Mail:wujiayi@lgdreamer.com
  * Change everywhere
  */
-public class NowTimeStockInfoPO {
+public class NowTimeSelectedStockInfoVO {
     private String gid;/*股票编号*/
     private double increPer;   /*涨跌百分比*/
     private double increase ;/*涨跌额*/
@@ -21,8 +21,8 @@ public class NowTimeStockInfoPO {
     private double traNumber;/*成交量*/
     private double traAmount;/*成交金额*/
 
-    public NowTimeStockInfoPO(String gid, double increPer, double increase, String name, double todayStartPri, double yestodEndPri, double nowPri,
-                              double todayMax, double todayMin, String date, String time, double traNumber, double traAmount) {
+    public NowTimeSelectedStockInfoVO(String gid, double increPer, double increase, String name, double todayStartPri, double yestodEndPri, double nowPri,
+                                      double todayMax, double todayMin, String date, String time, double traNumber, double traAmount) {
         this.gid = gid;
         this.increPer = increPer;
         this.increase = increase;

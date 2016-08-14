@@ -18,6 +18,8 @@ public class User {
     private String nickName;
     private String password;
     private String mail;
+    //存放股票代码字段
+    private String select_stockNum;
 
     public User() {
     }
@@ -69,5 +71,13 @@ public class User {
 
     public void setMail(String mail) {
         this.mail = mail;
+    }
+
+    public String getSelect_stockNum() {
+        return select_stockNum;
+    }
+
+    public void setSelect_stockNum(String select_stockNum) {
+        this.select_stockNum = select_stockNum;
     }
 }
