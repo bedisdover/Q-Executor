@@ -48,17 +48,16 @@ $(function () {
         }
     }).on('keydown', function (e) {
         var selected = getSelected();
-        var value = selected.find('td:nth-child(1)').text();
 
         if (e.which == 38) { // ↑
             if (!$(selected).is($('#content').find('tr').first())) {
                 $(selected).removeClass('active').prev().addClass('active');
-                text_elem.val(value);
+                text_elem.val(selected.prev().find('td').first().text());
             }
         } else if (e.which == 40) { // ↓
             if (!$(selected).is($('#content').find('tr').last())) {
                 $(selected).removeClass('active').next().addClass('active');
-                text_elem.val(value);
+                text_elem.val(selected.next().find('td').first().text());
             }
         }
     }).focus();

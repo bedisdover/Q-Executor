@@ -7,6 +7,18 @@
     <link rel="icon" href="../images/icon.ico">
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css/style.css">
+
+    <style>
+        .table > tbody#content > tr {
+            cursor: pointer;
+        }
+        .table > tbody#content > tr:hover > td{
+            background: #cccccc;
+        }
+        .table > tbody#content >tr.active > td {
+            background-color: #999999;
+        }
+    </style>
 </head>
 <body>
 
@@ -46,8 +58,8 @@
                                     <td></td>
                                     <td>
                                         <a class="pull-right" id="change"
-                                           style="display: none; cursor: pointer;">换一批&nbsp;
-                                            <span class="glyphicon glyphicon-refresh"></span>
+                                           style="display: none; cursor: pointer;">换一批
+                                            <span class="glyphicon glyphicon-repeat"></span>
                                         </a>
                                     </td>
                                 </tr>
