@@ -3,6 +3,7 @@ package cn.edu.nju.software.dao;
 import cn.edu.nju.software.config.State;
 import cn.edu.nju.software.config.StringMessage;
 import cn.edu.nju.software.utils.JsonDataUtil;
+import cn.edu.nju.software.utils.StockUtil;
 import cn.edu.nju.software.vo.NowTimeSelectedStockInfoVO;
 import cn.edu.nju.software.vo.StockKLineVO;
 import org.json.JSONArray;

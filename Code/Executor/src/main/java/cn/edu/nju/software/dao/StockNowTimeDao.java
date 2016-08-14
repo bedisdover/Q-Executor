@@ -1,5 +1,6 @@
 package cn.edu.nju.software.dao;
 
+import cn.edu.nju.software.utils.StockUtil;
 import cn.edu.nju.software.utils.StringUtil;
 import cn.edu.nju.software.utils.TimeUtil;
 import cn.edu.nju.software.vo.StockNowTimeVO;
