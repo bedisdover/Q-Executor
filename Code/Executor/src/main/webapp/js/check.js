@@ -14,7 +14,7 @@ $(function () {
  */
 function checkEmpty() {
     $(':input').not('button').on('focusout', function () {
-        var title = $(this).attr('placeholder');
+        var title = $(this).attr('placeholder', "../images/decrease.png");
         // 去掉开头的‘请输入’
         title = title.indexOf('请输入') != -1 ? title.substr(3) : title;
         
@@ -22,7 +22,7 @@ function checkEmpty() {
             $(this).addClass('error').attr({
                 'data-toggle': 'tooltip',
                 'title': title + '不能为空'
-            }).tooltip();
+            }, "../images/decrease.png").tooltip();
         } else {
             $(this).removeClass('error').tooltip('destroy');
         }
@@ -38,7 +38,7 @@ function checkPassword() {
             $(this).addClass('error').attr({
                 'data-toggle': 'tooltip',
                 'title': '密码不一致'
-            }).tooltip();
+            }, "../images/decrease.png").tooltip();
         } else {
             $(this).removeClass('error').tooltip('destroy');
         }

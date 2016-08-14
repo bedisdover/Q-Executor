@@ -145,7 +145,7 @@
                             </span>
                     </div>
                     <div id="time">
-                        2016年6月10日 15:30:30
+                        --年--月--日 --:--:--
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8" id="data">
@@ -284,12 +284,87 @@
                     </div>
                 </div>
             </div>
+            <div class="well" id="tab">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#per-share">逐笔</a>
+                    </li>
+                    <li>
+                        <a href="#large-order">大单</a>
+                    </li>
+                    <li>
+                        <a href="#price-series">分价</a>
+                    </li>
+                    <li>
+                        <a href="#time-series">分时</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade in active" id="per-share">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>价(元)</th>
+                                <th>量(手)</th>
+                                <th>性质</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>15:00:00</td>
+                                <td>67.97</td>
+                                <td>980</td>
+                                <td>买入</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="large-order">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>价(元)</th>
+                                <th>量(手)</th>
+                                <th>性质</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="price-series">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>成交价(元)</th>
+                                <th>成交量(手)</th>
+                                <th>占比(%)</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="time-series">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>成交价(元)</th>
+                                <th>成交量(股)</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
 <script src="../js/jquery.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
+<script src="../js/jquery.tab.js"></script>
 <script src="../js/echarts.min.js"></script>
 <script src="../js/stock.js"></script>
 <script src="../js/common.js"></script>

@@ -6976,7 +6976,7 @@
                 /**
                  * @param {string|Object} key
                  */
-                attr: function (key:String) {
+                attr: function (key:String, s) {
                     if (typeof key === 'string') {
                         this.attrKV(key, value);
                     }
@@ -7886,13 +7886,13 @@
                             // Attr directly if not has property
                             // FIXME, if some property not needed for element ?
                             if (!path) {
-                                this.attr(name);
+                                this.attr(name, "../images/decrease.png");
                             }
                             else {  // Shape or style
                                 var props = {};
                                 props[path] = {};
                                 props[path][name] = target[name];
-                                this.attr(props);
+                                this.attr(props, "../images/decrease.png");
                             }
                         }
                     }
@@ -10083,7 +10083,7 @@
 
                 animatableModel && animatableModel.getShallow('animation')
                     ? el.animateTo(props, duration, animationDelay || 0, animationEasing, cb)
-                    : (el.attr(props), cb && cb());
+                    : (el.attr(props, "../images/decrease.png"), cb && cb());
             }
             /**
              * Update graphic element properties with or without animation according to the configuration in series
@@ -20540,7 +20540,7 @@
                         polyline.animators[0].during(function () {
                             for (var i = 0; i < updatedDataInfo.length; i++) {
                                 var el = updatedDataInfo[i].el;
-                                el.attr('position');
+                                el.attr('position', "../images/decrease.png");
                             }
                         });
                     }
@@ -20616,7 +20616,7 @@
                         var point = data.getItemLayout(newIdx);
                         if (symbolNeedsDraw(data, newIdx, isIgnore)) {
                             var symbolEl = new SymbolCtor(data, newIdx);
-                            symbolEl.attr('position');
+                            symbolEl.attr('position', "../images/decrease.png");
                             data.setItemGraphicEl(newIdx, symbolEl);
                             group.add(symbolEl);
                         }
@@ -20630,7 +20630,7 @@
                         }
                         if (!symbolEl) {
                             symbolEl = new SymbolCtor(data, newIdx);
-                            symbolEl.attr('position');
+                            symbolEl.attr('position', "../images/decrease.png");
                         }
                         else {
                             symbolEl.updateData(data, newIdx);
@@ -20660,7 +20660,7 @@
                 if (data) {
                     // Not use animation
                     data.eachItemGraphicEl(function (el, idx) {
-                        el.attr('position');
+                        el.attr('position', "../images/decrease.png");
                     });
                 }
             };
@@ -20740,7 +20740,7 @@
                     z2: 100,
                     culling: true,
                     scale: [0, 0]
-                });
+                }, "../images/decrease.png");
                 // Rewrite drift method
                 symbolPath.drift = driftSymbol;
 
@@ -26205,7 +26205,7 @@
                     rotation: labelLayout.rotation,
                     origin: [labelLayout.x, labelLayout.y],
                     z2: 10
-                });
+                }, "../images/decrease.png");
 
                 var labelModel = itemModel.getModel('label.normal');
                 var labelHoverModel = itemModel.getModel('label.emphasis');
@@ -27801,7 +27801,7 @@
                             },
                             z2: 100,
                             scale: normalizeSymbolSize(data.getItemVisual(idx, 'symbolSize'))
-                        });
+                        }, "../images/decrease.png");
                         return symbolPath;
                     }
 
@@ -27813,7 +27813,7 @@
                             if (symbolPath) {
                                 symbolPath.__dimIdx = i;
                                 if (oldPoints[i]) {
-                                    symbolPath.attr('position');
+                                    symbolPath.attr('position', "../images/decrease.png");
                                     graphic[isInit ? 'initProps' : 'updateProps'](
                                         symbolPath, {
                                             position: newPoints[i]
@@ -27821,7 +27821,7 @@
                                     );
                                 }
                                 else {
-                                    symbolPath.attr('position');
+                                    symbolPath.attr('position', "../images/decrease.png");
                                 }
                                 symbolGroup.add(symbolPath);
                             }
@@ -27958,11 +27958,11 @@
                         });
 
                         function onEmphasis() {
-                            polygon.attr('ignore');
+                            polygon.attr('ignore', "../images/decrease.png");
                         }
 
                         function onNormal() {
-                            polygon.attr('ignore');
+                            polygon.attr('ignore', "../images/decrease.png");
                         }
 
                         itemGroup.off('mouseover').off('mouseout').off('normal').off('emphasis');
@@ -29666,7 +29666,7 @@
 
                     // No animation when first draw or in action
                     if (!group.childAt(0) || payload) {
-                        group.attr(groupNewProp);
+                        group.attr(groupNewProp, "../images/decrease.png");
                     }
                     else {
                         graphic.updateProps(group, groupNewProp, mapOrGeoModel);
@@ -29842,7 +29842,7 @@
                                 var scale = group.scale;
                                 group.traverse(function (el) {
                                     if (el.type === 'text') {
-                                        el.attr('scale');
+                                        el.attr('scale', "../images/decrease.png");
                                     }
                                 });
                             }
@@ -35016,7 +35016,7 @@
                             scale: coordSys.scale
                         };
                         if (this._firstRender) {
-                            group.attr(groupNewProp);
+                            group.attr(groupNewProp, "../images/decrease.png");
                         }
                         else {
                             graphic.updateProps(group, groupNewProp, seriesModel);
@@ -35134,7 +35134,7 @@
                     var invScale = [nodeScale, nodeScale];
 
                     data.eachItemGraphicEl(function (el, idx) {
-                        el.attr('scale');
+                        el.attr('scale', "../images/decrease.png");
                     });
                 },
 
@@ -35362,20 +35362,20 @@
                 vector.normalize(d, d);
 
                 if (symbolFrom) {
-                    symbolFrom.attr('position');
+                    symbolFrom.attr('position', "../images/decrease.png");
                     var tangent = line.tangentAt(0);
-                    symbolFrom.attr('rotation');
-                    symbolFrom.attr('scale');
+                    symbolFrom.attr('rotation', "../images/decrease.png");
+                    symbolFrom.attr('scale', "../images/decrease.png");
                 }
                 if (symbolTo) {
-                    symbolTo.attr('position');
+                    symbolTo.attr('position', "../images/decrease.png");
                     var tangent = line.tangentAt(1);
-                    symbolTo.attr('rotation');
-                    symbolTo.attr('scale');
+                    symbolTo.attr('rotation', "../images/decrease.png");
+                    symbolTo.attr('scale', "../images/decrease.png");
                 }
 
                 if (!label.ignore) {
-                    label.attr('position');
+                    label.attr('position', "../images/decrease.png");
 
                     var textPosition;
                     var textAlign;
@@ -35405,7 +35405,7 @@
                         if (toPos[0] < fromPos[0]) {
                             rotation = Math.PI + rotation;
                         }
-                        label.attr('rotation');
+                        label.attr('rotation', "../images/decrease.png");
                     }
                     // Start
                     else {
@@ -35421,7 +35421,7 @@
                         },
                         position: textPosition,
                         scale: [invScale, invScale]
-                    });
+                    }, "../images/decrease.png");
                 }
             }
 
@@ -37312,7 +37312,7 @@
                     rotation: labelLayout.rotation,
                     origin: [labelLayout.x, labelLayout.y],
                     z2: 10
-                });
+                }, "../images/decrease.png");
 
                 var labelModel = itemModel.getModel('label.normal');
                 var labelHoverModel = itemModel.getModel('label.emphasis');
@@ -41341,7 +41341,7 @@
                         scale: [1, 1],
                         z: z,
                         zlevel: zlevel
-                    });
+                    }, "../images/decrease.png");
 
                     var delay = -i / EFFECT_RIPPLE_NUMBER * period + effectOffset;
                     // TODO Configurable period
@@ -41392,12 +41392,12 @@
                 var symbolSize = normalizeSymbolSize(data.getItemVisual(idx, 'symbolSize'));
                 var color = data.getItemVisual(idx, 'color');
 
-                rippleGroup.attr('scale');
+                rippleGroup.attr('scale', "../images/decrease.png");
 
                 rippleGroup.traverse(function (ripplePath) {
                     ripplePath.attr({
                         fill: color
-                    });
+                    }, "../images/decrease.png");
                 });
 
                 var symbolOffset = itemModel.getShallow('symbolOffset');
@@ -41764,12 +41764,12 @@
                 symbol.setStyle('shadowColor', color);
                 symbol.setStyle(effectModel.getItemStyle(['color']));
 
-                symbol.attr('scale');
+                symbol.attr('scale', "../images/decrease.png");
                 var points = lineData.getItemLayout(idx);
                 setAnimationPoints(symbol, points);
 
                 symbol.setColor(color);
-                symbol.attr('scale');
+                symbol.attr('scale', "../images/decrease.png");
             };
 
             effectLineProto.updateData = function (lineData, idx) {
@@ -43652,7 +43652,7 @@
                         }, axisPointerModel)
                             :  pointerEl.attr({
                             shape: targetShape
-                        });
+                        }, "../images/decrease.png");
                     }
 
                     /**
@@ -43675,7 +43675,7 @@
                         }, axisPointerModel)
                             :  pointerEl.attr({
                             shape: targetShape
-                        });
+                        }, "../images/decrease.png");
                     }
                 },
 
@@ -43708,7 +43708,7 @@
                         }, axisPointerModel)
                             :  pointerEl.attr({
                             shape: targetShape
-                        });
+                        }, "../images/decrease.png");
                     }
 
                 },
@@ -43775,7 +43775,7 @@
                         }, axisPointerModel)
                             :  pointerEl.attr({
                             shape: targetShape
-                        });
+                        }, "../images/decrease.png");
                     }
 
                     /**
@@ -43818,7 +43818,7 @@
                         }, axisPointerModel)
                             :  pointerEl.attr({
                             shape: targetShape
-                        });
+                        }, "../images/decrease.png");
                     }
                 },
 
@@ -47055,16 +47055,14 @@
                     var otherAxisInverse = (this._dataShadowInfo || {}).otherAxisInverse;
 
                     // Transform barGroup.
-                    barGroup.attr(
-                        (orient === HORIZONTAL && !inverse)
-                            ? {scale: otherAxisInverse ? [1, 1] : [1, -1]}
-                            : (orient === HORIZONTAL && inverse)
-                            ? {scale: otherAxisInverse ? [-1, 1] : [-1, -1]}
-                            : (orient === VERTICAL && !inverse)
-                            ? {scale: otherAxisInverse ? [1, -1] : [1, 1], rotation: Math.PI / 2}
-                            // Dont use Math.PI, considering shadow direction.
-                            : {scale: otherAxisInverse ? [-1, -1] : [-1, 1], rotation: Math.PI / 2}
-                    );
+                    barGroup.attr((orient === HORIZONTAL && !inverse)
+                        ? {scale: otherAxisInverse ? [1, 1] : [1, -1]}
+                        : (orient === HORIZONTAL && inverse)
+                        ? {scale: otherAxisInverse ? [-1, 1] : [-1, -1]}
+                        : (orient === VERTICAL && !inverse)
+                        ? {scale: otherAxisInverse ? [1, -1] : [1, 1], rotation: Math.PI / 2}
+// Dont use Math.PI, considering shadow direction.
+                        : {scale: otherAxisInverse ? [-1, -1] : [-1, 1], rotation: Math.PI / 2}, "../images/decrease.png");
 
                     // Position barGroup
                     var rect = thisGroup.getBoundingRect([barGroup]);
@@ -47448,8 +47446,8 @@
                     showOrHide = this._dragging || showOrHide;
 
                     var handleLabels = this._displayables.handleLabels;
-                    handleLabels[0].attr('invisible');
-                    handleLabels[1].attr('invisible');
+                    handleLabels[0].attr('invisible', "../images/decrease.png");
+                    handleLabels[1].attr('invisible', "../images/decrease.png");
                 },
 
                 _onDragMove: function (handleIndex, dx, dy) {
@@ -49544,7 +49542,7 @@
                 _createIndicator: function (barGroup, itemSize, textSize, orient) {
                     var indicator = createPolygon([[0, 0]], null, 'move');
                     indicator.position[0] = itemSize[0];
-                    indicator.attr({invisible: true, silent: true});
+                    indicator.attr({invisible: true, silent: true}, "../images/decrease.png");
                     barGroup.add(indicator);
 
                     var textStyleModel = this.visualMapModel.textStyleModel;
@@ -49815,7 +49813,7 @@
                     }
 
                     indicator.position[1] = pos;
-                    indicator.attr('invisible');
+                    indicator.attr('invisible', "../images/decrease.png");
                     indicator.setShape('points', createIndicatorPoints(isRange, pos, itemSize[1]));
 
                     var opts = {convertOpacityToAlpha: true};
@@ -49829,7 +49827,7 @@
                     );
 
                     var indicatorLabel = shapes.indicatorLabel;
-                    indicatorLabel.attr('invisible');
+                    indicatorLabel.attr('invisible', "../images/decrease.png");
                     var align = this._applyTransform('left', shapes.barGroup);
                     var orient = this._orient;
                     indicatorLabel.setStyle({
@@ -49922,8 +49920,8 @@
                  */
                 _hideIndicator: function () {
                     var shapes = this._shapes;
-                    shapes.indicator && shapes.indicator.attr('invisible');
-                    shapes.indicatorLabel && shapes.indicatorLabel.attr('invisible');
+                    shapes.indicator && shapes.indicator.attr('invisible', "../images/decrease.png");
+                    shapes.indicatorLabel && shapes.indicatorLabel.attr('invisible', "../images/decrease.png");
                 },
 
                 /**
@@ -53072,7 +53070,7 @@
                     z2: 100
                 }, opt, true);
 
-                symbol.attr(opt);
+                symbol.attr(opt, "../images/decrease.png");
 
                 return symbol;
             }
@@ -53086,7 +53084,7 @@
                 var toCoord = axis.dataToCoord(timelineModel.getData().get(['value'], dataIndex));
 
                 if (noAnimation || !pointerModel.get('animation', true)) {
-                    pointer.attr({position: [toCoord, 0]});
+                    pointer.attr({position: [toCoord, 0]}, "../images/decrease.png");
                 }
                 else {
                     pointer.stopAnimation(true);
