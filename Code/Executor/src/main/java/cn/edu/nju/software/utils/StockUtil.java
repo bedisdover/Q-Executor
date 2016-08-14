@@ -1,9 +1,7 @@
 package cn.edu.nju.software.utils;
 
 /**
- * Created by 王栋 on 8/14/16.
- * Modify By JiayiWu
- * Reason:Recover File
+ * Created by 王栋 on 2016/8/12 0012.
  */
 public class StockUtil {
     public static String getCode(String code){
@@ -21,4 +19,19 @@ public class StockUtil {
         return code;
     }
 
+    public static int getType(String type){
+        if(type.equals("买盘"))
+            return 0;
+        if (type.equals("卖盘"))
+            return 1;
+        else
+            return 2;
+    }
+
+    public static double getChangePrice(String changePrice){
+        if(changePrice.equals("--")){
+            return 0.0;
+        }
+        else return Double.parseDouble(changePrice);
+    }
 }

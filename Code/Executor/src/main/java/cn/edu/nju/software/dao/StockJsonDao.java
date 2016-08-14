@@ -1,6 +1,10 @@
 package cn.edu.nju.software.dao;
 
+import cn.edu.nju.software.config.State;
+import cn.edu.nju.software.config.StringMessage;
+import cn.edu.nju.software.utils.JsonDataUtil;
 import cn.edu.nju.software.utils.StockUtil;
+import cn.edu.nju.software.vo.NowTimeSelectedStockInfoVO;
 import cn.edu.nju.software.vo.StockKLineVO;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -104,5 +108,21 @@ public class StockJsonDao {
         }
     }
 
+
+    public  NowTimeSelectedStockInfoVO getNowTimeStockInfo(String codeNum) {
+        StringMessage stringMessage= JsonDataUtil.getNowTimeStockResult(codeNum);
+        if(stringMessage.getResult()== State.OK){
+            net.sf.json.JSONArray jsonArray= net.sf.json.JSONArray.fromObject(stringMessage.getData());
+            net.sf.json.JSONObject jsonObject1=jsonArray.getJSONObject(0);
+            net.sf.json.JSONObject jsonObject2=jsonObject1.getJSONObject("data");
+            NowTimeSelectedStockInfoVO po=new NowTimeSelectedStockInfoVO(jsonObject2.getString("gid"),jsonObject2.getDouble("increPer"),jsonObject2.getDouble("increase"),
+                    jsonObject2.getString("name"),jsonObject2.getDouble("todayStartPri"),jsonObject2.getDouble("yestodEndPri"),jsonObject2.getDouble("nowPri"),
+                    jsonObject2.getDouble("todayMax"),jsonObject2.getDouble("todayMin"),jsonObject2.getString("date"),jsonObject2.getString("time"),
+                    jsonObject2.getDouble("traNumber"),jsonObject2.getDouble("traAmount"));
+            return  po;
+
+        }
+        return null;
+    }
 
 }
