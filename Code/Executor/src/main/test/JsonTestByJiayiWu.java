@@ -1,10 +1,13 @@
 import cn.edu.nju.software.config.State;
 import cn.edu.nju.software.config.StringMessage;
 import cn.edu.nju.software.utils.JsonDataUtil;
+import cn.edu.nju.software.utils.StringHashUtil;
 import cn.edu.nju.software.vo.NowTimeSelectedStockInfoVO;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.junit.Test;
+
+import java.util.HashMap;
 
 /**
  * Created by Jiayiwu on 8/14/16.
@@ -12,12 +15,20 @@ import org.junit.Test;
  * Change everywhere
  */
 public class JsonTestByJiayiWu {
-@Test
-public NowTimeSelectedStockInfoVO test(){
-    NowTimeSelectedStockInfoVO test = getNowTimeStockInfo("sh601998");
-    System.out.println(test.getDate());
-    return null;
-}
+        @Test
+        public void test(){
+            NowTimeSelectedStockInfoVO test = getNowTimeStockInfo("sh601998");
+            System.out.println(test.getDate());
+
+            HashMap<String,String> hashMap = new HashMap<>();
+
+            hashMap.put("sh601998","sh601998");
+            hashMap.put("sh601991","sh601991");
+            hashMap.put("sh601992","sh601992");
+
+            System.out.println(StringHashUtil.hash2string(hashMap));
+
+        }
 
     public static NowTimeSelectedStockInfoVO getNowTimeStockInfo(String codeNum) {
         StringMessage stringMessage=JsonDataUtil.getNowTimeStockResult(codeNum);

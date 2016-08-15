@@ -41,13 +41,15 @@ public class StringHashUtil {
         while (iter.hasNext()){
             Map.Entry<String,String> entry = (Map.Entry<String,String>) iter.next();
             if(entry.getValue() != null){
-                result+=entry.getValue();
+                result+=entry.getValue()+" ";
             }
 
         }
 
         if(result.equals(""))
             return null;
+
+        result = result.substring(0,result.length()-1);
 
         return result;
     }
