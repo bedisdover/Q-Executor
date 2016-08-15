@@ -99,24 +99,28 @@
     margin-left: 20px;
 }
 
-.sidebar-right .well {
+.tab {
     padding: 0;
 }
 
-.sidebar-right .nav {
+.tab .nav {
     width: 100%;
 }
 
-.sidebar-right .nav > li {
+.tab#tab-1 .nav > li {
+    width: 33.3%;
+}
+
+.tab#tab-2 .nav > li {
     width: 25%;
 }
 
-.sidebar-right .nav > li > a {
+.tab .nav > li > a {
     padding: 10px 0;
     text-align: center;
 }
 
-.sidebar-right .table > thead > tr > th, .table > tbody > tr > td {
+.tab .table > thead > tr > th, .table > tbody > tr > td {
     font-weight: 100;
     font-size: 0.8em;
     text-align: center;

@@ -12,9 +12,17 @@
 <input type="text" name="test" id="test">
 <script src="js/jquery.min.js"></script>
 <script>
-    var test = [1, 2, 3];
-    console.log(test.slice(2))
-    $('#test').focus();
+    var temp = $.ajax({
+        url: 'js/basicInfo.json',
+        dataType: 'json',
+        success: function(data) {
+            console.log('done');
+        }
+    });
+
+    temp.done(function() {
+        alert(1);
+    })
 </script>
 </body>
 </html>

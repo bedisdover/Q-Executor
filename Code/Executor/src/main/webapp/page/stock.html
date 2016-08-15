@@ -122,6 +122,60 @@
                     </div>
                 </div>
             </div>
+            <div class="well tab" id="tab-1">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a>自选股</a>
+                    </li>
+                    <li>
+                        <a>最近浏览</a>
+                    </li>
+                    <li>
+                        <a>热门股票</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade in active" id="portfolio">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>股票</th>
+                                <th>价格</th>
+                                <th>涨跌额</th>
+                                <th>涨跌幅</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="browser">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>股票</th>
+                                <th>价格</th>
+                                <th>涨跌额</th>
+                                <th>涨跌幅</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="hot">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>股票</th>
+                                <th>价格</th>
+                                <th>涨跌额</th>
+                                <th>涨跌幅</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-7 col-md-offset-0 col-lg-7 col-lg-offset-0">
             <div id="name-code">
@@ -204,19 +258,18 @@
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="分时图">
                             <div class="chart" id="timeSeriesChart">
-                                分时图
                             </div>
                         </div>
                         <div class="tab-pane fade" id="月K线">
-                            <div class="chart" id="monthlyKLine">
+                            <div class="chart" id="KLineMonth">
                             </div>
                         </div>
                         <div class="tab-pane fade" id="周K线">
-                            <div class="chart" id="weeklyKLine">
+                            <div class="chart" id="KLineWeek">
                             </div>
                         </div>
                         <div class="tab-pane fade" id="日K线">
-                            <div class="chart" id="dailyKLine">
+                            <div class="chart" id="KLineDay">
                             </div>
                         </div>
                     </div>
@@ -284,7 +337,7 @@
                     </div>
                 </div>
             </div>
-            <div class="well" id="tab">
+            <div class="well tab" id="tab-2">
                 <ul class="nav nav-tabs">
                     <li class="active">
                         <a href="#per-share">逐笔</a>
@@ -311,12 +364,6 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>15:00:00</td>
-                                <td>67.97</td>
-                                <td>980</td>
-                                <td>买入</td>
-                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -363,10 +410,13 @@
     </div>
 </div>
 <script src="../js/jquery.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
+<!--<script src="../js/bootstrap.min.js"></script>-->
+<script src="../js/bootstrap.min.3.3.5.js"></script>
 <script src="../js/jquery.tab.js"></script>
 <script src="../js/echarts.min.js"></script>
 <script src="../js/stock.js"></script>
+<script src="../js/myCharts.js"></script>
+<script src="../js/order.js"></script>
 <script src="../js/common.js"></script>
 
 </body>

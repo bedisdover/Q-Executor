@@ -22,28 +22,16 @@ $(function () {
  * 初始化
  */
 function init() {
-    $('#name').text('浦发银行');
     $('#code').text('(' + id + ')');
 
-    currentData.getCurrentData();
     basicData.getBasicData();
-
-    initCharts();
-
-    var kLine_day = kLine.drawKLine;
-    kLine_day.type = 'dailyKLine';
-    kLine.getKLine('/KLineDay', kLine_day);
-    var kLine_week = kLine.drawKLine;
-    kLine_week.type = 'weeklyKLine';
-    kLine.getKLine('/KLineWeek', kLine_week);
-    // var kLine_month = drawKLine;
-    // kLine_month.type = 'monthlyKLine';
-    // getKLine('/KLineMonth', kLine_month);
+    currentData.getCurrentData();
 
     // 固定侧边栏
     fix_sidebar($('.sidebar-left'));
-    
-    $('#tab').tab();
+
+    $('#tab-1').tab();
+    $('#tab-2').tab();
 }
 
 /**
@@ -112,7 +100,7 @@ var currentData = {
         $("#amplitude").text(((data[5] - data[6]) / data[1] * 100).toFixed(2) + "%");
 
         $("#turnover").text((basicData.stockBasicInfo.outstanding) ?
-            ((data[9] / basicData.stockBasicInfo.outstanding * 100).toFixed(2) + "%") : " --");
+            (((data[9] / basicData.stockBasicInfo.outstanding) * 100).toFixed(2) + "%") : " --");
 
         $('#buy-1-price').text(data[11]);
         $('#buy-2-price').text(data[12]);
@@ -205,7 +193,7 @@ var basicData = {
             dataType: 'json',
             data: 'codeNum=' + id,
             success: function (data) {
-                this.stockBasicInfo = data;
+                basicData.stockBasicInfo = data;
 
                 basicData.show();
             }
@@ -213,12 +201,14 @@ var basicData = {
     },
     show: function () { // 显示基本信息
         $('#name').text(this.stockBasicInfo.name);
+        $('#name-2').text(this.stockBasicInfo.name);
         $('#type').text(this.stockBasicInfo.industry);
         $('#area').text(this.stockBasicInfo.area);
         $('#pe_ttm').text(this.stockBasicInfo.pe);
         $('#outstanding').text(this.stockBasicInfo.outstanding);
         $('#total').text(this.stockBasicInfo.totals);
         $('#totalAssets').text(this.stockBasicInfo.totalAssets);
+        $('#marketValue').text(this.stockBasicInfo.totalAssets);
         $('#liquidAssets').text(this.stockBasicInfo.liquidAssets);
         $('#fixedAssets').text(this.stockBasicInfo.fixedAssets);
         $('#reserved').text(this.stockBasicInfo.reserved);
@@ -227,7 +217,16 @@ var basicData = {
         $('#eps-2').text(this.stockBasicInfo.eps);
         $('#bvps').text(this.stockBasicInfo.bvps);
         $('#pb').text(this.stockBasicInfo.pb);
-        $('#timeToMarket').text(this.stockBasicInfo.timeToMarket);
+        $('#timeToMarket').text(basicData.formatTime(this.stockBasicInfo.timeToMarket));
+    },
+    /**
+     * 格式化时间，将long型转换为'yy年MM月dd日'格式
+     * @param time
+     */
+    formatTime: function (time) {
+        var date = new Date(time);
+
+        return date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日';
     }
 };
 
@@ -270,250 +269,6 @@ var order = {
 
     }
 };
-
-var kLine = {
-    /**
-     * 获取K线数据
-     * @param url K线对应的url
-     * @param callback 数据传输成功后的回调函数
-     */
-    getKLine: function (url, callback) {
-        jQuery.ajax({
-            url: url,
-            dataType: 'json',
-            data: 'codeNum=' + id,
-            success: function (data) {
-                var array = [];
-
-                for (var i = 0; i < data.length; i++) {
-                    array.push([data[i].date, data[i].open, data[i].high, data[i].low, data[i].high])
-                }
-
-                callback(callback.type, array);
-            }
-        });
-    },
-
-    /**
-     * 绘制K线图
-     * @param type K线图类型(day/week/month)
-     * @param data 数据
-     */
-    drawKLine: function (type, data) {
-        var chart = echarts.init(document.getElementById(type));
-        // 数据意义:开盘(open)，收盘(close)，最低(lowest)，最高(highest)
-        var data0 = splitData(data);
-
-        function splitData(rawData) {
-            var categoryData = [];
-            var values = [];
-            for (var i = 0; i < rawData.length; i++) {
-                categoryData.push(rawData[i].splice(0, 1)[0]);
-                values.push(rawData[i])
-            }
-            return {
-                categoryData: categoryData,
-                values: values
-            };
-        }
-
-        function calculateMA(dayCount) {
-            var result = [];
-            for (var i = 0, len = data0.values.length; i < len; i++) {
-                if (i < dayCount) {
-                    result.push('-');
-                    continue;
-                }
-                var sum = 0;
-                for (var j = 0; j < dayCount; j++) {
-                    sum += data0.values[i - j][1];
-                }
-                result.push((sum / dayCount).toFixed(3));
-            }
-
-            return result;
-        }
-
-        var option = {
-            title: {
-                text: id,
-                left: 0
-            },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'line'
-                }
-            },
-            legend: {
-                data: ['日K', 'MA5', 'MA10', 'MA20', 'MA30']
-            },
-            grid: {
-                left: '10%',
-                right: '10%',
-                bottom: '15%'
-            },
-            xAxis: {
-                type: 'category',
-                data: data0.categoryData,
-                scale: true,
-                boundaryGap: false,
-                axisLine: {onZero: false},
-                splitLine: {show: false},
-                splitNumber: 20,
-                min: 'dataMin',
-                max: 'dataMax'
-            },
-            yAxis: {
-                scale: true,
-                splitArea: {
-                    show: true
-                }
-            },
-            dataZoom: [
-                {
-                    type: 'inside',
-                    start: 50,
-                    end: 100
-                },
-                {
-                    show: true,
-                    type: 'slider',
-                    y: '90%',
-                    start: 50,
-                    end: 100
-                }
-            ],
-            series: [
-                {
-                    name: '日K',
-                    type: 'candlestick',
-                    data: data0.values,
-                    markPoint: {
-                        label: {
-                            normal: {
-                                formatter: function (param) {
-                                    return param != null ? Math.round(param.value) : '';
-                                }
-                            }
-                        },
-                        data: [
-                            {
-                                name: 'highest value',
-                                type: 'max',
-                                valueDim: 'highest'
-                            },
-                            {
-                                name: 'lowest value',
-                                type: 'min',
-                                valueDim: 'lowest'
-                            },
-                            {
-                                name: 'average value on close',
-                                type: 'average',
-                                valueDim: 'close'
-                            }
-                        ],
-                        tooltip: {
-                            formatter: function (param) {
-                                return param.name + '<br>' + (param.data.coord || '');
-                            }
-                        }
-                    },
-                    markLine: {
-                        symbol: ['none', 'none'],
-                        data: [
-                            [
-                                {
-                                    name: 'from lowest to highest',
-                                    type: 'min',
-                                    valueDim: 'lowest',
-                                    symbol: 'circle',
-                                    symbolSize: 10,
-                                    label: {
-                                        normal: {show: false},
-                                        emphasis: {show: false}
-                                    }
-                                },
-                                {
-                                    type: 'max',
-                                    valueDim: 'highest',
-                                    symbol: 'circle',
-                                    symbolSize: 10,
-                                    label: {
-                                        normal: {show: false},
-                                        emphasis: {show: false}
-                                    }
-                                }
-                            ],
-                            {
-                                name: 'min line on close',
-                                type: 'min',
-                                valueDim: 'close'
-                            },
-                            {
-                                name: 'max line on close',
-                                type: 'max',
-                                valueDim: 'close'
-                            }
-                        ]
-                    }
-                },
-                {
-                    name: 'MA5',
-                    type: 'line',
-                    data: calculateMA(5),
-                    smooth: true,
-                    lineStyle: {
-                        normal: {opacity: 0.5}
-                    }
-                },
-                {
-                    name: 'MA10',
-                    type: 'line',
-                    data: calculateMA(10),
-                    smooth: true,
-                    lineStyle: {
-                        normal: {opacity: 0.5}
-                    }
-                },
-                {
-                    name: 'MA20',
-                    type: 'line',
-                    data: calculateMA(20),
-                    smooth: true,
-                    lineStyle: {
-                        normal: {opacity: 0.5}
-                    }
-                },
-                {
-                    name: 'MA30',
-                    type: 'line',
-                    data: calculateMA(30),
-                    smooth: true,
-                    lineStyle: {
-                        normal: {opacity: 0.5}
-                    }
-                }
-            ]
-        };
-
-        chart.setOption(option);
-    }
-};
-
-/**
- * 初始化图表
- */
-function initCharts() {
-    var width = $('#current-data').innerWidth();
-
-    // 减去well的边距(padding: 19px, border: 1px)
-    $('#graphs').find('div').css({
-        'width': width - 40 + 'px',
-        'height': width * 0.5 + 'px'
-    });
-}
 
 /**
  * 格式化对象
