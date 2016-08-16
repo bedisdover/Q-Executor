@@ -2,6 +2,7 @@ package cn.edu.nju.software.service;
 
 import cn.edu.nju.software.po.StockForMLPO;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
@@ -13,8 +14,8 @@ public interface StockMLService {
     /*
        @param:股票代码,数据条目数,第几个时间片
        @goal:获取代码为stockID的股票最近n个的高频数据（暂定numOfStock=200，强调是“n个”而不是“n天”，n天可能因为股票停牌而导致数据太少）
-       @return:股票高频数据的迭代器
+       @return:股票高频数据的list
      */
 
-    public Iterator<StockForMLPO> getStockDataML(String stockID,int numOfStock,int currentTime);
+    public ArrayList<StockForMLPO> getStockDataML(String stockID, int numOfStock, int currentTime);
 }
