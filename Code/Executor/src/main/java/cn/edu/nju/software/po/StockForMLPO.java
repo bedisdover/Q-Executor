@@ -7,6 +7,7 @@ package cn.edu.nju.software.po;
 public class StockForMLPO {
 
 
+    private double avg;    //高频时间段内的均价
     private double open;   //初始价（元）,价格统一保留两位小数
     private double close; //终止价（元）
     private double high;//最高价（元）
@@ -20,6 +21,10 @@ public class StockForMLPO {
         this.low=low;
         this.vol=vol;
     }
+
+    public double getAvg(){return avg;}
+
+    public void setAvg(double avg){this.avg=avg;}
 
     public double getOpen() {
         return open;
