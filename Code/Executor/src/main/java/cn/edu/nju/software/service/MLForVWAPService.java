@@ -1,5 +1,7 @@
 package cn.edu.nju.software.service;
 
+import cn.edu.nju.software.vo.MLForVWAPPriceVO;
+
 import java.util.ArrayList;
 
 /**
@@ -8,8 +10,8 @@ import java.util.ArrayList;
  */
 public interface MLForVWAPService {
 
-    //返回最新数据下动态预测的均价，数目不定
-    public ArrayList<Double>    getDynamicPrice(String stockID);
+    //返回最新数据下动态预测的均价
+    public MLForVWAPPriceVO getDynamicPrice(String stockID);
 
     //返回最新数据下静态预测的48个成交量
     public ArrayList<Integer>   getStaticVol(String stockID);
