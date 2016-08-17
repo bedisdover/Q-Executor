@@ -5,12 +5,27 @@
  */
 
 $(function () {
+    getData();
+    
+    setInterval(function() {
+        getData();
+    }, 3000);
+});
+
+/**
+ * 获取订单相关数据
+ */
+function getData() {
     perShare.getData();
     largeOrder.getData();
     // timeSeries.getData();
     priceSeries.getData();
-});
+}
 
+/**
+ * 交易性质
+ * @type {string[]}
+ */
 var type = ['买盘', '卖盘', '中性盘'];
 
 var perShare = {
@@ -35,13 +50,18 @@ var perShare = {
      */
     showLatest: function (data) {
         var content = $('#per-share').find('tbody');
+
+        content.empty();
         for (var i = 0; i < 5; i++) {
-            content.append('<tr>' +
-                '<td>' + data[i].time + '</td>' +
-                '<td>' + data[i].price + '</td>' +
-                '<td>' + data[i].volume + '</td>' +
-                '<td>' + type[data[i].type] + '</td>' +
-                '</tr>');
+            if (data[i].time !== undefined) {
+                // TODO 买盘颜色
+                content.append('<tr>' +
+                    '<td>' + data[i].time + '</td>' +
+                    '<td>' + data[i].price + '</td>' +
+                    '<td>' + data[i].volume + '</td>' +
+                    '<td>' + type[data[i].type] + '</td>' +
+                    '</tr>');
+            }
         }
     }, 
     showAll: function(data) {
@@ -69,13 +89,17 @@ var largeOrder = {
      */
     showLatest: function(data) {
         var content = $('#large-order').find('tbody');
+
+        content.empty();
         for (var i = 0; i < 5; i++) {
-            content.append('<tr>' +
-                '<td>' + data[i].time + '</td>' +
-                '<td>' + data[i].price + '</td>' +
-                '<td>' + data[i].volume + '</td>' +
-                '<td>' + type[data[i].type] + '</td>' +
-                '</tr>');
+            if (data[i].time !== undefined) {
+                content.append('<tr>' +
+                    '<td>' + data[i].time + '</td>' +
+                    '<td>' + data[i].price + '</td>' +
+                    '<td>' + data[i].volume + '</td>' +
+                    '<td>' + type[data[i].type] + '</td>' +
+                    '</tr>');
+            }
         }
     }
 };
@@ -97,13 +121,15 @@ var priceSeries = {
      * trunover : 304
      */
     showLatest: function(data) {
-        var content = $('#price-series').find('tbody');
+        var content = $('#price-series').find('tbody').empty();
         for (var i = 0; i < 5; i++) {
-            content.append('<tr>' +
-                '<td>' + data[i].price + '</td>' +
-                '<td>' + data[i].trunover + '</td>' +
-                '<td>' + data[i].percent + '</td>' +
-                '</tr>');
+            if (data[i].price !== undefined) {
+                content.append('<tr>' +
+                    '<td>' + data[i].price + '</td>' +
+                    '<td>' + data[i].trunover + '</td>' +
+                    '<td>' + (data[i].percent * 100).toFixed(2) + '</td>' +
+                    '</tr>');
+            }
         }
     }
 };
@@ -120,13 +146,15 @@ var timeSeries = {
         })
     },
     showLatest: function(data) {
-        var content = $('#time-series').find('tbody');
+        var content = $('#time-series').find('tbody').empty();
         
         for (var i = 0; i < 5; i++) {
-            content.append('<tr>'+ 
-            '<td>' + data[i].time + '</td>' +
-            '<td>' + data[i].price + '</td>' + 
-            '</tr>');
+            if (data[i].time !== undefined) {
+                content.append('<tr>' +
+                    '<td>' + data[i].time + '</td>' +
+                    '<td>' + data[i].price + '</td>' +
+                    '</tr>');
+            }
         }
     }
 };

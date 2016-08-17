@@ -125,23 +125,35 @@
             <div class="well tab" id="tab-1">
                 <ul class="nav nav-tabs">
                     <li class="active">
+                        <a>热门股票</a>
+                    </li>
+                    <li>
                         <a>自选股</a>
                     </li>
                     <li>
                         <a>最近浏览</a>
                     </li>
-                    <li>
-                        <a>热门股票</a>
-                    </li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane fade in active" id="portfolio">
+                    <div class="tab-pane fade" id="hot">
                         <table class="table">
                             <thead>
                             <tr>
                                 <th>股票</th>
                                 <th>价格</th>
                                 <th>涨跌额</th>
+                                <th>涨跌幅</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade in active" id="portfolio">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>股票</th>
+                                <th>价格</th>
                                 <th>涨跌幅</th>
                             </tr>
                             </thead>
@@ -149,19 +161,6 @@
                         </table>
                     </div>
                     <div class="tab-pane fade" id="browser">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>股票</th>
-                                <th>价格</th>
-                                <th>涨跌额</th>
-                                <th>涨跌幅</th>
-                            </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                    <div class="tab-pane fade" id="hot">
                         <table class="table">
                             <thead>
                             <tr>
@@ -184,8 +183,10 @@
                     <small id="code"></small>
                 </span>
                 <span class="pull-right">
-                    <button class="btn btn-sm btn-success">加入自选
+                    <button class="btn btn-sm btn-success" id="add-portfolio">加入自选
                         <span class="glyphicon glyphicon-plus"></span></button>
+                    <button class="btn btn-sm btn-danger" id="remove-portfolio" style="display: none;">取消自选
+                        <span class="glyphicon glyphicon-minus"></span></button>
                 </span>
             </div>
             <div class="row" id="current-data">
@@ -340,10 +341,10 @@
             <div class="well tab" id="tab-2">
                 <ul class="nav nav-tabs">
                     <li class="active">
-                        <a href="#per-share">逐笔</a>
+                        <a href="#large-order">大单</a>
                     </li>
                     <li>
-                        <a href="#large-order">大单</a>
+                        <a href="#per-share">逐笔</a>
                     </li>
                     <li>
                         <a href="#price-series">分价</a>
@@ -353,6 +354,19 @@
                     </li>
                 </ul>
                 <div class="tab-content">
+                    <div class="tab-pane fade" id="large-order">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>价(元)</th>
+                                <th>量(手)</th>
+                                <th>性质</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                     <div class="tab-pane fade in active" id="per-share">
                         <table class="table">
                             <thead>
@@ -365,19 +379,6 @@
                             </thead>
                             <tbody>
                             </tbody>
-                        </table>
-                    </div>
-                    <div class="tab-pane fade" id="large-order">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>时间</th>
-                                <th>价(元)</th>
-                                <th>量(手)</th>
-                                <th>性质</th>
-                            </tr>
-                            </thead>
-                            <tbody></tbody>
                         </table>
                     </div>
                     <div class="tab-pane fade" id="price-series">

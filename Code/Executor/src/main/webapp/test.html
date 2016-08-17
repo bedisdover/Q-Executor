@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>测试</title>
+    <title>测试专用</title>
     <meta name="description" content="Q-Executor 是一个在线量化交易系统"/>
     <meta name="keyword" content="A股 量化交易 风险 冲击成本"/>
     <meta name="author" content="nju.miracle"/>
@@ -10,19 +10,14 @@
 <body>
 <input type="text" name="test-1" id="test-1">
 <input type="text" name="test" id="test">
+<a href="page/login.html">登录</a>
 <script src="js/jquery.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
 <script>
-    var temp = $.ajax({
-        url: 'js/basicInfo.json',
-        dataType: 'json',
-        success: function(data) {
-            console.log('done');
-        }
-    });
-
-    temp.done(function() {
-        alert(1);
-    })
+    var test = [1, 2, 3];
+    $.cookie('test', test, {'path': '/'});
+    console.log($.cookie('test'));
+    console.log($.cookie('test').split(','));
 </script>
 </body>
 </html>

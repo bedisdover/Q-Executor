@@ -43,7 +43,7 @@ function afterLogin(userName) {
         '<li><a href="../page/history.html">交易历史</a></li>' +
         '<li><a href="../page/message.html">我的消息</a></li>' +
         '<li class="divider"></li>' +
-        '<li><a id="log-out">登出</a></li>' +
+        '<li><a id="log-out" style="cursor: pointer;">登出</a></li>' +
         '</ul></li>'
     );
 

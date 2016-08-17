@@ -1,7 +1,7 @@
 /**
  * Created by song on 16-8-3.
  *
- * stock.html相关操作
+ * stock相关操作，包含当前数据，基本数据，自选股、最近浏览等
  */
 
 /**
@@ -9,8 +9,18 @@
  */
 var id = '';
 
+/**
+ * 默认显示记录数量
+ * @type {number}
+ */
+var display_num = 5;
+
 $(function () {
     id = getUrlParam('id');
+    if (id == null) {
+        top.location = '404.html';
+    }
+
     init();
 
     setInterval(function () {
@@ -26,9 +36,7 @@ function init() {
 
     basicData.getBasicData();
     currentData.getCurrentData();
-
-    // 固定侧边栏
-    fix_sidebar($('.sidebar-left'));
+    portfolio.init();
 
     $('#tab-1').tab();
     $('#tab-2').tab();
@@ -100,7 +108,7 @@ var currentData = {
         $("#amplitude").text(((data[5] - data[6]) / data[1] * 100).toFixed(2) + "%");
 
         $("#turnover").text((basicData.stockBasicInfo.outstanding) ?
-            (((data[9] / basicData.stockBasicInfo.outstanding) * 100).toFixed(2) + "%") : " --");
+            (((data[9] / basicData.stockBasicInfo.outstanding / 1e4) * 100).toFixed(2) + "%") : " --");
 
         $('#buy-1-price').text(data[11]);
         $('#buy-2-price').text(data[12]);
@@ -155,13 +163,13 @@ var basicData = {
      * industry;//股票的类型
      * area;//股票的公司创建地
      * pe;//市盈率
-     * outstanding;//流通股本
+     * outstanding;//流通股本(万)
      * totals;//总股本(万)
      * totalAssets;//总资产(万)
-     * liquidAssets;//流动资产
-     * fixedAssets;//固定资产
-     * reserved;//公积金
-     * reservedPerShare;//每股公积金
+     * liquidAssets;//流动资产(万)
+     * fixedAssets;//固定资产(万)
+     * reserved;//公积金(万)
+     * reservedPerShare;//每股公积金(元)
      * eps;//每股收益
      * bvps;//每股净资
      * pb;//市净率
@@ -205,17 +213,17 @@ var basicData = {
         $('#type').text(this.stockBasicInfo.industry);
         $('#area').text(this.stockBasicInfo.area);
         $('#pe_ttm').text(this.stockBasicInfo.pe);
-        $('#outstanding').text(this.stockBasicInfo.outstanding);
-        $('#total').text(this.stockBasicInfo.totals);
-        $('#totalAssets').text(this.stockBasicInfo.totalAssets);
-        $('#marketValue').text(this.stockBasicInfo.totalAssets);
-        $('#liquidAssets').text(this.stockBasicInfo.liquidAssets);
-        $('#fixedAssets').text(this.stockBasicInfo.fixedAssets);
-        $('#reserved').text(this.stockBasicInfo.reserved);
-        $('#reservedPerShare').text(this.stockBasicInfo.reservedPerShare);
-        $('#eps').text(this.stockBasicInfo.eps);
-        $('#eps-2').text(this.stockBasicInfo.eps);
-        $('#bvps').text(this.stockBasicInfo.bvps);
+        $('#outstanding').text(format.format_number(this.stockBasicInfo.outstanding * 1e4) + '元');
+        $('#total').text(format.format_number(this.stockBasicInfo.totals * 1e4) + '元');
+        $('#totalAssets').text(format.format_number(this.stockBasicInfo.totalAssets * 1e4) + '元');
+        $('#marketValue').text(format.format_number(this.stockBasicInfo.totalAssets * 1e4) + '元');
+        $('#liquidAssets').text(format.format_number(this.stockBasicInfo.liquidAssets * 1e4) + '元');
+        $('#fixedAssets').text(format.format_number(this.stockBasicInfo.fixedAssets * 1e4) + '元');
+        $('#reserved').text(format.format_number(this.stockBasicInfo.reserved * 1e4) + '元');
+        $('#reservedPerShare').text(this.stockBasicInfo.reservedPerShare + '元');
+        $('#eps').text(this.stockBasicInfo.eps + '元');
+        $('#eps-2').text(this.stockBasicInfo.eps + '元');
+        $('#bvps').text(this.stockBasicInfo.bvps + '元');
         $('#pb').text(this.stockBasicInfo.pb);
         $('#timeToMarket').text(basicData.formatTime(this.stockBasicInfo.timeToMarket));
     },
@@ -231,42 +239,97 @@ var basicData = {
 };
 
 /**
- * 订单对象，包含
- *      逐笔数据、大单数据、分价数据、分时数据
- * @type {{getPerShareData: order.getPerShareData, getLargeOrderData: order.getLargeOrderData, getPriceSeriesData: order.getPriceSeriesData, getTimeSeriesData: order.getTimeSeriesData, showPerShareData: order.showPerShareData, showLargeOrderData: order.showLargeOrderData, showPriceSeriesData: order.showPriceSeriesData, showTimeSeriesData: order.showTimeSeriesData}}
+ * 自选股对象
+ * @type {{getData: portfolio.getData, show: portfolio.show, needLogin: portfolio.needLogin, add: portfolio.add, remove: portfolio.remove}}
  */
-var order = {
-    getPerShareData: function () { // 获取逐笔数据
+var portfolio = {
+    init: function () {
+        portfolio.getData();
+        portfolio.add_portfolio();
+        portfolio.remove_portfolio();
+    },
+    getData: function () {
         jQuery.ajax({
-            url: '/PerStockInfo',
-            type: 'post',
-            data: 'codeNum=' + id,
-            dataType: 'json',
+            url: '/getUserSelectedStock',
             success: function (data) {
+                if (data.info == '用户未登录') {
+                    portfolio.needLogin();
+                } else {
+                    if (portfolio.isPortfolio(data.object)) {
+                        $('#add-portfolio').hide();
+                        $('#remove-portfolio').show();
+                    }
 
+                    portfolio.show(data.object);
+                }
             }
+        })
+    },
+    show: function (data) {
+        if (data == null) {
+            return;
+        }
+        var content = $('#portfolio').find('tbody');
+        var text_color;
+        for (var i = 0; i < display_num; i++) {
+            text_color = data[i].increase > 0 ? 'text-danger' : 'text-success';
+            content.append('<tr>' +
+                '<td><a href="stock.html?id=' + data[i].gid + '>' + data[i].name + '</a></td>' +
+                '<td>' + data[i].nowPri + '</td>' +
+                '<td class=text_color>' + data[i].increPer + '</td>' +
+                '</tr>');
+        }
+    },
+    needLogin: function () {
+        $('#portfolio').find('table').hide()
+            .end().append('<p/><p class="text-center">尚未登录，请先<a href="login.html">登录</a></p><p/>');
+    },
+    add_portfolio: function () {
+        $('#add-portfolio').on('click', function () {
+            alert(1);
+            jQuery.ajax({
+                url: '/addUserSelectedStock',
+                data: 'codeNum=' + id,
+                success: function (data) {
+                    if (data.info == '用户未登录') {
+                        top.location = 'login.html';
+                    } else {
+                        $('#add-portfolio').hide();
+                        $('#remove-portfolio').show();
+                    }
+                }
+            });
         });
     },
-    getLargeOrderData: function () { // 获取大单数据
-
+    remove_portfolio: function () {
+        $('#remove-portfolio').on('click', function () {
+            jQuery.ajax({
+                url: '/deleteUserSelectedStock',
+                data: 'codeNum=' + id,
+                success: function (data) {
+                    if (data.state == true) {
+                        $('#remove-portfolio').hide();
+                        $('#add-portfolio').show();
+                    }
+                }
+            })
+        })
     },
-    getPriceSeriesData: function () { // 获取分价数据
+    /**
+     * 判断当前页面股票是否是自选股
+     */
+    isPortfolio: function (data) {
+        if (data == null) {
+            return false;
+        }
 
-    },
-    getTimeSeriesData: function () { // 获取分时数据
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].gid == id) {
+                return true;
+            }
+        }
 
-    },
-    showPerShareData: function (data) { // 显示逐笔数据
-
-    },
-    showLargeOrderData: function (data) { // 显示大单数据
-
-    },
-    showPriceSeriesData: function (data) { // 显示分价数据
-
-    },
-    showTimeSeriesData: function (data) { // 显示分时数据
-
+        return false;
     }
 };
 
