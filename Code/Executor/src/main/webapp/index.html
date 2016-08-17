@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/docs.min.css"/>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css"/>
     <link rel="stylesheet" href="css/common.css"/>
     <link rel="icon" href="images/icon.ico">
 </head>
-<body>
+<body style="padding-top: 50px">
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="container-fluid">
@@ -53,147 +53,153 @@
         </div><!-- /.container-fluid -->
     </div>
 </nav>
-    <div class="container-fluid" style="background-image: url(images/background.jpg);">
-        <div class="row top-lg-padding bottom-lg-padding">
-            <div class="h1 text-center">Q-Executor</div>
-        </div>
-
-        <div class="row col-xs-10 col-sm-6 col-md-4 col-md-4
-                    col-xs-offset-1 col-sm-offset-3 col-md-offset-4 col-lg-offset-4">
-            <button class="btn btn-black btn-lg btn-block" id="start-btn">开始体验</button>
-            <div class="row bottom-padding"></div>
-            <a class="btn btn-black btn-lg btn-block" id="introduce-btn">简单介绍</a>
-        </div>
-
-        <div class="row bottom-lg-padding"></div>
-    </div>
-
-    <div class="container" id="introduce-pane">
-        <div class="h1 text-center top-md-padding bottom-md-padding">简介</div>
-        <div class="row">
-            <div class="h4 col-md-8 col-lg-8 col-md-offset-2 col-lg-offset-2">
-                A股订单优化执行系统是XXX公司（我们公司名）独立自主研发，支持沪深两市A股市场在线交易，可以帮助用户合理安排大额股票交易。系统集自身之独创与众家之所长为一身，软件小巧，功能强大，技术分析专业、精妙，是投资者纵横股市的必备工具。
+<div class="container-fluid" style="background: url(images/temp/bg.jpg) no-repeat;background-size: 100%;">
+    <div class="row top-lg-padding">
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <div class="row top-padding col-sm-8 col-md-8 col-lg-8
+                            col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
+                <button class="btn btn-main btn-lg btn-block" id="start-btn">开始体验</button>
+                <div class="row bottom-padding"></div>
+                <a class="btn btn-main btn-lg btn-block" id="introduce-btn">简单介绍</a>
             </div>
         </div>
-    </div>
 
-    <div class="container">
-        <div class="h1 text-center top-md-padding bottom-md-padding">模块</div>
-
-        <div class="row top-md-padding bottom-md-padding">
-            <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
-                <div class="thumbnail no-border">
-                    <img src="images/trade.png" alt="">
-                    <div class="caption">
-                        <a href="#" class="light-pointer"><div class="h4 text-center">量化交易</div></a>
-                    </div>
-                </div>
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <div class="row top-md-padding bottom-padding col-xs-offset-3
+                col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
+                <h1 class="title">Q-Executor</h1>
             </div>
 
-            <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
-                <div class="thumbnail no-border">
-                    <img src="images/stock.png" alt="">
-                    <div class="caption">
-                        <a href="#" class="light-pointer"><div class="h4 text-center">股市行情</div></a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
-                <div class="thumbnail no-border">
-                    <img src="images/login.png" alt="">
-                    <div class="caption">
-                        <a href="#" class="light-pointer"><div class="h4 text-center">登录</div></a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
-                <div class="thumbnail no-border">
-                    <img src="images/signup.png" alt="">
-                    <div class="caption">
-                        <a href="#" class="light-pointer"><div class="h4 text-center">注册</div></a>
-                    </div>
+            <div class="row">
+                <div class="h4 col-md-8 col-lg-8 title">
+                    <p class="top-sm-padding">A股订单优化执行系统由XXX公司（我们公司名）独立自主研发，支持沪深两市A股市场在线交易，可以帮助用户合理安排大额股票交易</p>
+                    <p class="top-sm-padding">系统集自身之独创与众家之所长为一身，软件小巧，功能强大，技术分析专业、精妙，是投资者纵横股市的必备工具</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="container">
-        <div class="row top-lg-padding">
-            <div class="col-sm-6 col-md-6 col-lg-6">
-                <h1 class="text-center top-md-padding">订单拆分</h1>
-                <h4 class="text-center top-md-padding">降低成本</h4>
-            </div>
+    <div class="row bottom-lg-padding"></div>
+</div>
 
-            <div class="col-sm-6 col-md-6 col-lg-6">
-                <div class="thumbnail no-border">
-                    <img class="img img-responsive" src="images/background.jpg" alt="">
+
+
+<div class="container" id="introduce-pane">
+    <div class="h1 text-center top-md-padding bottom-md-padding">模块</div>
+
+    <div class="row top-md-padding bottom-md-padding">
+        <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
+            <div class="thumbnail no-border">
+                <img src="images/trade.png" alt="">
+                <div class="caption">
+                    <a href="#" class="light-pointer"><div class="h4 text-center">量化交易</div></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
+            <div class="thumbnail no-border">
+                <img src="images/stock.png" alt="">
+                <div class="caption">
+                    <a href="#" class="light-pointer"><div class="h4 text-center">股市行情</div></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
+            <div class="thumbnail no-border">
+                <img src="images/login.png" alt="">
+                <div class="caption">
+                    <a href="#" class="light-pointer"><div class="h4 text-center">登录</div></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
+            <div class="thumbnail no-border">
+                <img src="images/signup.png" alt="">
+                <div class="caption">
+                    <a href="#" class="light-pointer"><div class="h4 text-center">注册</div></a>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="container">
-        <div class="row top-lg-padding">
-            <div class="col-sm-6 col-md-6 col-lg-6">
-                <div class="thumbnail no-border">
-                    <img class="img img-responsive" src="images/background.jpg" alt="">
-                </div>
-            </div>
+<div class="container">
+    <div class="row top-lg-padding">
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <h1 class="text-center top-md-padding">订单拆分</h1>
+            <h4 class="text-center top-md-padding">降低成本</h4>
+        </div>
 
-            <div class="col-sm-6 col-md-6 col-lg-6">
-                <h1 class="text-center top-md-padding">行情预测</h1>
-                <h4 class="text-center top-md-padding">把握行情变化趋势</h4>
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <div class="thumbnail no-border">
+                <img class="img img-responsive" src="images/temp/1.jpg" alt="">
             </div>
         </div>
     </div>
+</div>
 
-    <div class="container">
-        <div class="row top-lg-padding">
-            <div class="col-sm-6 col-md-6 col-lg-6">
-                <h1 class="text-center top-md-padding">股票数据</h1>
-                <h4 class="text-center top-md-padding">实时、准确、全面</h4>
+<div class="container">
+    <div class="row top-lg-padding">
+        <div class="col-sm-7 col-md-7 col-lg-7">
+            <div class="thumbnail no-border">
+                <img class="img img-responsive" src="images/prediction.png" alt="">
             </div>
+        </div>
 
-            <div class="col-sm-6 col-md-6 col-lg-6">
-                <div class="thumbnail no-border">
-                    <img class="img img-responsive" src="images/background.jpg" alt="">
-                </div>
+        <div class="col-sm-5 col-md-5 col-lg-5">
+            <h1 class="text-center top-md-padding">行情预测</h1>
+            <h4 class="text-center top-md-padding">把握行情变化趋势</h4>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row top-lg-padding">
+        <div class="col-sm-5 col-md-5 col-lg-5">
+            <h1 class="text-center top-md-padding">股票数据</h1>
+            <h4 class="text-center top-md-padding">实时、准确、全面</h4>
+        </div>
+
+        <div class="col-sm-7 col-md-7 col-lg-7">
+            <div class="thumbnail no-border">
+                <img class="img img-responsive" src="images/temp/3.png" alt="">
             </div>
         </div>
     </div>
+</div>
 
-    <div class="container">
-        <div class="row top-lg-padding">
-            <div class="col-sm-6 col-md-6 col-lg-6">
-                <div class="thumbnail no-border">
-                    <img class="img img-responsive" src="images/background.jpg" alt="">
-                </div>
+<div class="container">
+    <div class="row top-lg-padding">
+        <div class="col-sm-7 col-md-7 col-lg-7">
+            <div class="thumbnail no-border">
+                <img class="img img-responsive" src="images/temp/4.jpg" alt="">
             </div>
+        </div>
 
-            <div class="col-sm-6 col-md-6 col-lg-6">
-                <h1 class="text-center top-md-padding">热门股推荐</h1>
-                <h4 class="text-center top-md-padding">了解热门股票，机会不错过</h4>
+        <div class="col-sm-5 col-md-5 col-lg-5">
+            <h1 class="text-center top-md-padding">热门股推荐</h1>
+            <h4 class="text-center top-md-padding">了解热门股票，机会不错过</h4>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row top-lg-padding">
+        <div class="col-sm-7 col-md-7 col-lg-7">
+            <h1 class="text-center top-md-padding">自选股管理</h1>
+            <h4 class="text-center top-md-padding">专注所持股票，方便管理</h4>
+        </div>
+
+        <div class="col-sm-5 col-md-5 col-lg-5">
+            <div class="thumbnail no-border">
+                <img class="img img-responsive" src="images/temp/5.png" alt="">
             </div>
         </div>
     </div>
-
-    <div class="container">
-        <div class="row top-lg-padding">
-            <div class="col-sm-6 col-md-6 col-lg-6">
-                <h1 class="text-center top-md-padding">自选股管理</h1>
-                <h4 class="text-center top-md-padding">专注所持股票，方便管理</h4>
-            </div>
-
-            <div class="col-sm-6 col-md-6 col-lg-6">
-                <div class="thumbnail no-border">
-                    <img class="img img-responsive" src="images/background.jpg" alt="">
-                </div>
-            </div>
-        </div>
-    </div>
-
+</div>
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/common.js"></script>
