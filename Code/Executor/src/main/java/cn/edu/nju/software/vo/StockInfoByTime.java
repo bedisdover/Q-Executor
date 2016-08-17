@@ -42,4 +42,14 @@ public class StockInfoByTime {
     public void setVolume(double volume) {
         this.volume = volume;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("StockInfoByTime{");
+        sb.append("time='").append(time).append('\'');
+        sb.append(", price=").append(price);
+        sb.append(", volume=").append(volume);
+        sb.append('}');
+        return sb.toString();
+    }
 }

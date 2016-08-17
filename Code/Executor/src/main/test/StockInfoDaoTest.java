@@ -35,7 +35,10 @@ public class StockInfoDaoTest {
         //TODO
         // 测试过18点之后的
         // 还没测试当前交易日18点之前的(即爬取网页获取数据的方式)
-        List<StockInfoByPer> stockInfoByPers = stockInfoDao.getPerStockInfo("sh600000",TimeUtil.getDate("2016-08-11"));
+        List<StockInfoByPer> stockInfoByPers = stockInfoDao.getPerStockInfo("sh600000",TimeUtil.getDate("2016-08-17"));
+        for(StockInfoByPer stockInfoByPer : stockInfoByPers){
+            System.out.println(stockInfoByPer);
+        }
 
     }
 

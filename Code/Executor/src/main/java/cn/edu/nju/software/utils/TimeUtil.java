@@ -111,4 +111,11 @@ public class TimeUtil {
         }
 
     }
+
+    public static String getDateHHmmss(long millis){
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        Date date = new Date(millis);
+        return dateFormat.format(date);
+
+    }
 }

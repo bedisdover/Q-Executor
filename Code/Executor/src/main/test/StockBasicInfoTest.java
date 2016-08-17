@@ -71,7 +71,7 @@ public class StockBasicInfoTest {
 
     @Test
     public void test6(){
-        List<StockNowTimeVO> result = stockNowTimeDao.getNowTime("sh600000", TimeUtil.getDate("2016-08-10"));
+        List<StockNowTimeVO> result = stockNowTimeDao.getNowTime("sh600000", TimeUtil.getDate("2016-08-16"));
         for (StockNowTimeVO stockNowTimeVO : result){
             System.out.println(stockNowTimeVO);
         }
