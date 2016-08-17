@@ -1,3 +1,5 @@
+import cn.edu.nju.software.po.StockForMLPO;
+import cn.edu.nju.software.service.StockMLService;
 import cn.edu.nju.software.service.StockService;
 import cn.edu.nju.software.vo.StockInfoByTime;
 import org.junit.Test;
@@ -16,12 +18,22 @@ import java.util.List;
 public class StockInfoByTimeTest {
     @Resource
     StockService stockService;
+    @Resource
+    StockMLService stockMLService;
 
     @Test
     public void test1(){
         List<StockInfoByTime> stockInfoByTimes = stockService.getStockInfoByTime("sh600000");
         for(StockInfoByTime stockInfoByTime : stockInfoByTimes){
             System.out.println(stockInfoByTime);
+        }
+    }
+
+    @Test
+    public void test2(){
+        List<StockForMLPO> stockForMLPOs = stockMLService.getStockDataML("sh600000",200,1);
+        for (StockForMLPO po : stockForMLPOs){
+            System.out.println(po.toString());
         }
     }
 }

@@ -12,14 +12,18 @@ public class StockForMLPO {
     private double close; //终止价（元）
     private double high;//最高价（元）
     private double low;//最低价（元）
-    private int    vol;//成交量（笔）
+    private double  vol;//成交量（笔）
 
-    public StockForMLPO(double open,double close,double high,double low,int vol) {
-        this.open=open;
-        this.close=close;
-        this.high=high;
-        this.low=low;
-        this.vol=vol;
+    public StockForMLPO(double avg, double open, double close, double high, double low, double vol) {
+        this.avg = avg;
+        this.open = open;
+        this.close = close;
+        this.high = high;
+        this.low = low;
+        this.vol = vol;
+    }
+
+    public StockForMLPO() {
     }
 
     public double getAvg(){return avg;}
@@ -58,12 +62,24 @@ public class StockForMLPO {
         this.low = low;
     }
 
-    public int getVol() {
+    public double getVol() {
         return vol;
     }
 
-    public void setVol(int vol) {
+    public void setVol(double vol) {
         this.vol = vol;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("StockForMLPO{");
+        sb.append("avg=").append(avg);
+        sb.append(", open=").append(open);
+        sb.append(", close=").append(close);
+        sb.append(", high=").append(high);
+        sb.append(", low=").append(low);
+        sb.append(", vol=").append(vol);
+        sb.append('}');
+        return sb.toString();
+    }
 }
