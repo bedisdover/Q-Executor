@@ -7,6 +7,10 @@
 	margin-bottom : 32px;
 }
 
+.top-sm-padding {
+	margin-top: 16px;
+}
+
 .top-md-padding {
 	margin-top : 64px;
 }
@@ -37,9 +41,9 @@ a.light-pointer {
 	color: #445577;
 }
 
-.btn-black {
-	background-color: #444477;
-	color: #ffffff;
+.btn-main {
+	background-color: #555;
+	color: #fff;
 }
 
 .no-border {
@@ -48,4 +52,8 @@ a.light-pointer {
 
 .full {
 	width: 100%;
+}
+
+.title {
+	color: #fff;
 }
