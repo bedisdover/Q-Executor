@@ -42,16 +42,16 @@ public class StockNowTimeDao {
             return getNowTime(codeNum,calendar.getTime());
         }
 
-        float avg_temp = new Float(0.0);
+        double avg_temp = 0.0;
         for (Object[] object : datas){
-            float current = Float.parseFloat(object[0].toString());
+            double current = Double.parseDouble(object[0].toString());
             Date time = new Date(Long.parseLong(object[1].toString()));
 //            if(stockNowTimeVOs.size()==0){
 //                avg_temp = current;
 //            }
 //
             avg_temp = (avg_temp*stockNowTimeVOs.size()+current)/(stockNowTimeVOs.size()+1);
-            stockNowTimeVOs.add(new StockNowTimeVO(TimeUtil.getDetailTime(time),(float)(Math.round(current*100))/100,(float)(Math.round(avg_temp*100))/100));
+            stockNowTimeVOs.add(new StockNowTimeVO(TimeUtil.getDetailTime(time),(double) (Math.round(current*100))/100,(double) (Math.round(avg_temp*100))/100));
 
         }
 
