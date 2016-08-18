@@ -41,7 +41,7 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
     }
 
     //获取指定股票指定时间片下的训练集和预测数据
-    private void initData(String stockID,int currentTime){
+    private void initStaticData(String stockID, int currentTime, Type type){
         ArrayList<StockForMLPO> poList=stockService.getStockDataML(stockID,200,currentTime);
         trainingData=new svm_node[poList.size()-5][ numOfAttr];
         labels=new double[poList.size()-5];
@@ -103,7 +103,14 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
 
             //标记
             if(i>4){
-                labels[i-5]=poList.get(i).getAvg();
+                switch (type){
+                    case VOL:
+                        labels[i-5]=poList.get(i).getVol();
+                        break;
+                    case PRICE:
+                        labels[i-5]=poList.get(i).getAvg();
+                        break;
+                }
             }
         }
 
@@ -115,7 +122,7 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
         ArrayList<Integer> list=new ArrayList<>();
 
         for(int i=0;i<48;i++){
-           initData(stockID,i);
+           initStaticData(stockID,i,Type.VOL);
            initSVM();
            Integer predictValue=(int) (svm.svm_predict(model,predict));
             list.add(predictValue);
@@ -132,6 +139,11 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
         int currentTime=1;
         MLForVWAPPriceVO vo=new MLForVWAPPriceVO(list,currentTime);
         return  vo;
+    }
+
+
+    public enum Type{
+            VOL,PRICE
     }
 
 }
