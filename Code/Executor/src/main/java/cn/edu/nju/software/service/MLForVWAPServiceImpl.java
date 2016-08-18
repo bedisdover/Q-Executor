@@ -13,14 +13,20 @@ import java.util.ArrayList;
 public class MLForVWAPServiceImpl implements MLForVWAPService {
 
     private StockMLService stockService;
-    private svm_problem problem;     //定义svm_problem对象
-    private svm_parameter param  ;    //svm参数
-    private svm_model model;       //训练的svm模型
-    private svm_node[][] trainingData; //训练集数据
-    private svm_node[] predict;        //预测数据
-    private double[] labels;          //对应的标记
-    private int numOfStaticAttr =30;
-    private int numOfDynamicAttr=36;
+    private svm_problem problem;          //定义svm_problem对象
+    private svm_parameter param  ;        //svm参数
+    private svm_model model;              //训练的svm模型
+    private svm_node[][] trainingData;   //训练集数据
+    private svm_node[] predict;          //预测数据
+    private double[] labels;            //对应的标记
+    private int numOfStaticAttr;
+    private int numOfDynamicAttr;
+
+    public MLForVWAPServiceImpl( ) {
+        stockService=new StockMLServiceImpl();
+        this.numOfDynamicAttr=36;
+        this.numOfStaticAttr=30;
+    }
 
     //svm相关数据初始化
     private void initSVM(){
@@ -118,9 +124,130 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
 
     }
 
-    //获取指定股票指定时间片下用于动态模型的训练集
+    //获取指定股票指定时间片下用于动态模型的训练集和预测数据
     private void initDynamicData(String stockID, int currentTime){
         ArrayList<InforForMLPO> poList=  stockService.getDynamicInforML( stockID, 200 , currentTime+1);
+
+        trainingData=new svm_node[poList.size()][numOfDynamicAttr];
+        labels=new double[poList.size()];
+        predict=new svm_node[numOfDynamicAttr];
+
+        InforForMLPO thisInforPO;
+        for(int i=0;i<poList.size();i++){
+            thisInforPO=poList.get(i);
+
+            //标记
+            labels[i]=thisInforPO.getCurrentTime().getAvg();
+
+            //训练属性
+            StockForMLPO[] sevenArray  =new StockForMLPO[6];
+            sevenArray[0]=thisInforPO.getFirstDay();
+            sevenArray[1]=thisInforPO.getSecondDay();
+            sevenArray[2]=thisInforPO.getThirdDay();
+            sevenArray[3]=thisInforPO.getFirstTime();
+            sevenArray[4]=thisInforPO.getSecondDay();
+            sevenArray[5]=thisInforPO.getThirdTime();
+
+            svm_node thisNode1;
+            svm_node thisNode2;
+            svm_node thisNode3;
+            svm_node thisNode4;
+            svm_node thisNode5;
+            svm_node thisNode6;
+
+            StockForMLPO   oneOfArray;
+            for(int k=0;k<sevenArray.length;k++){
+                oneOfArray=sevenArray[k];
+
+                thisNode1=new svm_node();
+                thisNode1.index=k*6+1;
+                thisNode1.value=oneOfArray.getOpen();
+
+                thisNode2=new svm_node();
+                thisNode2.index=k*6+2;
+                thisNode2.value=oneOfArray.getClose();
+
+                thisNode3=new svm_node();
+                thisNode3.index=k*6+3;
+                thisNode3.value=oneOfArray.getLow();
+
+                thisNode4=new svm_node();
+                thisNode4.index=k*6+4;
+                thisNode4.value=oneOfArray.getHigh();
+
+                thisNode5=new svm_node();
+                thisNode5.index=k*6+5;
+                thisNode5.value=oneOfArray.getVol();
+
+                thisNode6=new svm_node();
+                thisNode6.index=k*6+6;
+                thisNode6.value=oneOfArray.getAvg();
+
+                trainingData[i][k*6]=thisNode1;
+                trainingData[i][k*6+1]=thisNode2;
+                trainingData[i][k*6+2]=thisNode3;
+                trainingData[i][k*6+3]=thisNode4;
+                trainingData[i][k*6+4]=thisNode5;
+                trainingData[i][k*6+5]=thisNode6;
+            }
+        }
+
+        //获取预测数据
+
+        //前三天数据
+        ArrayList<StockForMLPO> threeDayList=stockService.getStockDataML(stockID,3,currentTime);
+        //前三个时间片数据
+        ArrayList<StockForMLPO> todayList=stockService.getTodayInforML(stockID);
+
+        StockForMLPO[] predictData=new StockForMLPO[6];
+        predictData[0]=todayList.get(0);
+        predictData[1]=todayList.get(1);
+        predictData[2]=todayList.get(2);
+        predictData[3]=todayList.get(currentTime-3);
+        predictData[4]=todayList.get(currentTime-2);
+        predictData[5]=todayList.get(currentTime-1);
+
+        svm_node thisNode1;
+        svm_node thisNode2;
+        svm_node thisNode3;
+        svm_node thisNode4;
+        svm_node thisNode5;
+        svm_node thisNode6;
+        StockForMLPO onePO;
+        for(int i=0;i<predictData.length;i++){
+            onePO=threeDayList.get(i);
+
+            thisNode1=new svm_node();
+            thisNode1.index=i*6+1;
+            thisNode1.value=onePO.getOpen();
+
+            thisNode2=new svm_node();
+            thisNode2.index=i*6+2;
+            thisNode2.value=onePO.getClose();
+
+            thisNode3=new svm_node();
+            thisNode3.index=i*6+3;
+            thisNode3.value=onePO.getLow();
+
+            thisNode4=new svm_node();
+            thisNode4.index=i*6+4;
+            thisNode4.value=onePO.getHigh();
+
+            thisNode5=new svm_node();
+            thisNode5.index=i*6+5;
+            thisNode5.value=onePO.getVol();
+
+            thisNode6=new svm_node();
+            thisNode6.index=i*6+6;
+            thisNode6.value=onePO.getAvg();
+
+            predict[i*6]=thisNode1;
+            predict[i*6+1]=thisNode2;
+            predict[i*6+2]=thisNode3;
+            predict[i*6+3]=thisNode4;
+            predict[i*6+4]=thisNode5;
+            predict[i*6+5]=thisNode6;
+        }
 
 
     }
@@ -157,8 +284,6 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
     }
 
 
-
-
     //返回最新数据下动态预测的均价
     public MLForVWAPPriceVO getDynamicPrice(String stockID){
         MLForVWAPPriceVO vo = null;
@@ -182,12 +307,21 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
             //处于股市交易进行中:list包含3个部分，1.真实已产生的价格数据；2.动态预测的价格数据；3.静态预测的价格数据
             StockForMLPO thisPO;
             list=new ArrayList<>();
+            //第一部分
             for(int i=0;i<currentTime;i++){
                 thisPO=todayList.get(i);
                 list.add(thisPO.getAvg());
             }
-
-
+            //第二部分
+            initDynamicData(stockID,currentTime);
+            initSVM();
+            Double predictValue=svm.svm_predict(model,predict);
+            list.add(predictValue);
+            //第三部分
+            ArrayList<Double> staticList=this.getStaticPrice(stockID);
+            for(int k=currentTime+1;currentTime<staticList.size();k++){
+                list.add(staticList.get(k));
+            }
         }
 
         vo=new MLForVWAPPriceVO(list,currentTime);
@@ -195,6 +329,7 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
     }
 
 
+    //枚举类：价格和成交量两种类型
     public enum Type{
             VOL,PRICE
     }
