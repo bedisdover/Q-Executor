@@ -6,20 +6,28 @@ package cn.edu.nju.software.po;
  */
 public class InforForMLPO {
 
-    private StockForMLPO firstDay;     //前三天的时间片
+    /*
+    就不把当前时间片作为这个类的成员变量了
+    所有出现这个类的地方，必然会调用StockMLService的getDynamicInforML(String stockID,int numOfStock,int currentTime)
+    此方法包换了时间片信息
+     */
+
+    private StockForMLPO firstDay;   //前三天的时间片
     private StockForMLPO secondDay; //前两天的时间片
-    private StockForMLPO thirdDay; //前一天的时间片
+    private StockForMLPO thirdDay;  //前一天的时间片
     private StockForMLPO firstTime; //同一天的前三个时间片
     private StockForMLPO secondTime;//同一天的前二个时间片
-    private StockForMLPO thirdTime;//同一天的前一个时间片
+    private StockForMLPO thirdTime; //同一天的前一个时间片
+    private StockForMLPO currentTime;//当前时间片数据
 
-    public InforForMLPO(StockForMLPO firstDay, StockForMLPO secondDay, StockForMLPO thirdDay, StockForMLPO firstTime, StockForMLPO secondTime, StockForMLPO thirdTime) {
+    public InforForMLPO(StockForMLPO firstDay, StockForMLPO secondDay, StockForMLPO thirdDay, StockForMLPO firstTime, StockForMLPO secondTime, StockForMLPO thirdTime, StockForMLPO currentTime) {
         this.firstDay = firstDay;
         this.secondDay = secondDay;
         this.thirdDay = thirdDay;
         this.firstTime = firstTime;
         this.secondTime = secondTime;
         this.thirdTime = thirdTime;
+        this.currentTime=currentTime;
     }
 
     public StockForMLPO getFirstDay() {
@@ -68,5 +76,13 @@ public class InforForMLPO {
 
     public void setThirdTime(StockForMLPO thirdTime) {
         this.thirdTime = thirdTime;
+    }
+
+    public void setCurrentTime(StockForMLPO currentTime) {
+        this.currentTime = currentTime;
+    }
+
+    public StockForMLPO getCurrentTime() {
+        return currentTime;
     }
 }
