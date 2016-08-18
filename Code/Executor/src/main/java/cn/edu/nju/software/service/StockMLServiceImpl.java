@@ -1,6 +1,7 @@
 package cn.edu.nju.software.service;
 
 import cn.edu.nju.software.dao.BaseDao;
+import cn.edu.nju.software.po.InforForMLPO;
 import cn.edu.nju.software.po.StockForMLPO;
 import cn.edu.nju.software.utils.JdbcUtil;
 import cn.edu.nju.software.utils.StockUtil;
@@ -79,4 +80,22 @@ public class StockMLServiceImpl implements StockMLService{
         bd = null;
         return d;
     }
+
+
+    /*
+    新增的两个接口
+    @auther：LiuXing
+     */
+    public ArrayList<StockForMLPO> getTodayInforML(String stockID){
+        ArrayList<StockForMLPO> array=new ArrayList<>();
+
+        return array;
+    }
+
+    public ArrayList<InforForMLPO> getDynamicInforML(String stockID, int numOfStock, int currentTime){
+        ArrayList<InforForMLPO> array=new ArrayList<>();
+        return array;
+    }
+
+
 }
