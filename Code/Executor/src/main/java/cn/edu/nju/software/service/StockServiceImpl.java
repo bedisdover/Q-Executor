@@ -143,8 +143,37 @@ public class StockServiceImpl implements StockService {
     }
 //---------------------------------------栋栋写这里-----------------------------------------------------------------------
     @Override
-    public List<StockInfoByTime> getStockInfoByTime(String Code) {
-        return null;
+    public List<StockInfoByTime> getStockInfoByTime(String code) {
+        List<StockInfoByTime> stockInfoByTimes = new ArrayList<StockInfoByTime>();
+        //有疑问 date参数是不是作为传入参数
+        //1.获取每笔交易
+        List<StockInfoByPer> stockInfoByPers = stockInfoDao.getPerStockInfo(code,new Date());
+        //当日的一分钟线
+        long compare = TimeUtil.getMillisByHHmmss(stockInfoByPers.get(0).getTime())/(1000*60) *60000;
+        String temp = TimeUtil.getDateHHmmss(compare);
+        double volume = 0.0;
+        double amount = 0.0;
+        for (StockInfoByPer stockInfoByPer : stockInfoByPers){
+            long millis = TimeUtil.getMillisByHHmmss(stockInfoByPer.getTime());
+            if(millis>compare)
+                continue;
+            else if (millis<=compare&&millis>compare-60000){
+                amount+=stockInfoByPer.getTotalNum();
+                volume+=round(stockInfoByPer.getTotalNum()/stockInfoByPer.getPrice(),2,BigDecimal.ROUND_HALF_UP);
+            }else {
+
+                double price = 0.0;
+                if (volume !=0.0){
+                    price = round(amount/volume,2,BigDecimal.ROUND_HALF_UP);
+                }
+                stockInfoByTimes.add(new StockInfoByTime(temp,price,volume));
+                compare-=60000;
+                temp = TimeUtil.getDateHHmmss(compare);
+                volume = 0.0;
+                amount = 0.0;
+            }
+        }
+        return stockInfoByTimes;
     }
 //---------------------------------------分割线-----------------------------------------------------------------------
 
