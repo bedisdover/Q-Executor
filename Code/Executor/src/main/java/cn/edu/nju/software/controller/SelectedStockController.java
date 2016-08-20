@@ -26,7 +26,7 @@ public class SelectedStockController {
     public MsgInfo getUserSelectedStock(HttpSession session){
         User user = (User) session.getAttribute("user");
         if(null == user)
-            return new MsgInfo(false,"用户未登陆");
+            return new MsgInfo(false,"用户未登录");
 
         return userSelectedStock.getUserSelectedStock(user.getUserName());
     }
@@ -36,7 +36,7 @@ public class SelectedStockController {
     public MsgInfo addUserSelectedStock(HttpSession session,String codeNum){
         User user = (User) session.getAttribute("user");
         if(null == user)
-            return new MsgInfo(false,"用户未登陆");
+            return new MsgInfo(false,"用户未登录");
 
         return userSelectedStock.addUserSelectedStock(user.getUserName(),codeNum);
     }
@@ -46,7 +46,7 @@ public class SelectedStockController {
     public MsgInfo deleteUserSelectedStock(HttpSession session,String codeNum){
         User user = (User) session.getAttribute("user");
         if(null == user)
-            return new MsgInfo(false,"用户未登陆");
+            return new MsgInfo(false,"用户未登录");
 
         return userSelectedStock.deleteUserSelectedStock(user.getUserName(),codeNum);
     }

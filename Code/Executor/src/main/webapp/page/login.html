@@ -63,7 +63,11 @@
                 data: form.serialize(),
                 success: function (data) {
                     if (data.state == true) {
-                        top.location = '../';
+                        if (document.referrer == '') {
+                            top.location = '../';
+                        } else {
+                            top.location = document.referrer;
+                        }
                     } else {
                         alert(data.info);
                     }

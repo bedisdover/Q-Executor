@@ -6,10 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/docs.min.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
     <link rel="stylesheet" href="css/common.css"/>
     <link rel="icon" href="images/icon.ico">
 </head>
-<body>
+<style>
+    .btn:not(a) {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.1);
+        border: solid #fff 2px;
+        margin-right: 40px;
+        margin-top: 100px;
+    }
+    
+    a.btn {
+        color: #fff;
+        margin-top: 100px;
+        border: solid #fff 2px;
+        background: #347ABF;
+    }
+    
+    .btn:hover {
+        color: #fff;
+        background: #347ABF;
+    }
+</style>
+<body style="padding-top: 50px">
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="container-fluid">
@@ -37,7 +59,7 @@
                         <a href="page/market.html">大盘走势</a>
                     </li>
                     <li>
-                        <a href="page/stock.html">股市行情</a>
+                        <a href="page/search.html">股市行情</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -52,9 +74,122 @@
         </div><!-- /.container-fluid -->
     </div>
 </nav>
+<div class="container-fluid" style="background: url(images/temp/bg.jpg) no-repeat;background-size: 100%;">
+    <div class="row top-lg-padding">
+        <h1 class="title text-center">Q-Executor</h1>
+        <div class="text-center">
+            <button class="btn btn-lg" id="start-btn">开始体验</button>
+            <a class="btn btn-lg" id="introduce-btn">简单介绍</a>
+        </div>
+    </div>
+
+    <div class="row bottom-lg-padding"></div>
+</div>
+
+<div class="container" id="introduce-pane">
+    <div class="h1 text-center top-md-padding bottom-md-padding">简介</div>
+    <div class="h4 text-center">
+        <p>A股订单优化执行系统由Miracle团队独立自主研发</p>
+        <p>支持沪深两市A股市场在线交易，可以帮助用户合理安排大额股票交易</p>
+        <p>系统集自身之独创与众家之所长为一身，软件小巧，功能强大</p>
+        <p>技术分析专业、精妙，是投资者纵横股市的必备工具</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row top-lg-padding">
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <h1 class="text-center top-md-padding">订单拆分</h1>
+            <h4 class="text-center top-md-padding">降低成本</h4>
+        </div>
+
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <div class="thumbnail no-border">
+                <img class="img img-responsive" src="images/temp/1.png" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row top-lg-padding">
+        <div class="col-sm-7 col-md-7 col-lg-7">
+            <div class="thumbnail no-border">
+                <img class="img img-responsive" src="images/temp/2.gif" alt="" style="width: 400px; height: 300px;">
+            </div>
+        </div>
+
+        <div class="col-sm-5 col-md-5 col-lg-5">
+            <h1 class="text-center top-md-padding">行情预测</h1>
+            <h4 class="text-center top-md-padding">把握行情变化趋势</h4>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row top-lg-padding">
+        <div class="col-sm-5 col-md-5 col-lg-5">
+            <h1 class="text-center top-md-padding">股票数据</h1>
+            <h4 class="text-center top-md-padding">实时、准确、全面</h4>
+        </div>
+
+        <div class="col-sm-7 col-md-7 col-lg-7">
+            <div class="thumbnail no-border">
+                <img class="img img-responsive" src="images/temp/3.png" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row top-lg-padding">
+        <div class="col-sm-7 col-md-7 col-lg-7">
+            <div class="thumbnail no-border">
+                <img class="img img-responsive" src="images/temp/4.png" alt="">
+            </div>
+        </div>
+
+        <div class="col-sm-5 col-md-5 col-lg-5">
+            <h1 class="text-center top-md-padding">热门股推荐</h1>
+            <h4 class="text-center top-md-padding">了解热门股票，机会不错过</h4>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row top-lg-padding">
+        <div class="col-sm-7 col-md-7 col-lg-7">
+            <h1 class="text-center top-md-padding">自选股管理</h1>
+            <h4 class="text-center top-md-padding">专注所持股票，方便管理</h4>
+        </div>
+
+        <div class="col-sm-5 col-md-5 col-lg-5">
+            <div class="thumbnail no-border">
+                <img class="img img-responsive" src="./images/temp/5.png" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+</footer>
+<footer class="footer" role="contentinfo">
+    <div class=container>
+        <p class="text-center">
+            Copyright &copy; Miracle 2016
+        </p>
+    </div>
+</footer>
 
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/common.js"></script>
+<script type="text/javascript">
+    $('#introduce-btn').on('click', function () {
+        $('html, body').animate({
+            scrollTop: $('#introduce-pane').offset().top
+        }, 1200);
+    });
+</script>
 </body>
 </html>
