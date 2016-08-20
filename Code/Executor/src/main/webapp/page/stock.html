@@ -135,7 +135,7 @@
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane fade" id="hot">
+                    <div class="tab-pane fade in active" id="hot">
                         <table class="table">
                             <thead>
                             <tr>
@@ -148,7 +148,7 @@
                             <tbody></tbody>
                         </table>
                     </div>
-                    <div class="tab-pane fade in active" id="portfolio">
+                    <div class="tab-pane fade" id="portfolio">
                         <table class="table">
                             <thead>
                             <tr>
@@ -166,7 +166,6 @@
                             <tr>
                                 <th>股票</th>
                                 <th>价格</th>
-                                <th>涨跌额</th>
                                 <th>涨跌幅</th>
                             </tr>
                             </thead>
@@ -340,16 +339,16 @@
             </div>
             <div class="well tab" id="tab-2">
                 <ul class="nav nav-tabs">
-                    <li class="active">
+                    <li class="active" data-toggle="tooltip" title="点击查看更多">
                         <a href="#large-order">大单</a>
                     </li>
-                    <li>
+                    <li data-toggle="tooltip" title="点击查看更多">
                         <a href="#per-share">逐笔</a>
                     </li>
-                    <li>
+                    <li data-toggle="tooltip" title="点击查看更多">
                         <a href="#price-series">分价</a>
                     </li>
-                    <li>
+                    <li data-toggle="tooltip" title="点击查看更多">
                         <a href="#time-series">分时</a>
                     </li>
                 </ul>
@@ -412,7 +411,7 @@
 </div>
 <script src="../js/jquery.min.js"></script>
 <!--<script src="../js/bootstrap.min.js"></script>-->
-<script src="../js/bootstrap.min.3.3.5.js"></script>
+<script src="../js/bootstrap.min.js"></script>
 <script src="../js/jquery.tab.js"></script>
 <script src="../js/echarts.min.js"></script>
 <script src="../js/stock.js"></script>

@@ -84,19 +84,6 @@ function afterLogOut() {
     );
 }
 
-// TODO 优化交互
-// $('.dropdown-toggle').hover(function () {
-//     $(this).next().slideDown();
-// }).on('mouseout', function() {
-//     // $(':focus').css({
-//     //     'backgroundColor': 'red',
-//     //     'color': 'red'
-//     // });
-//     if (!$(this).next().is(':focus')) {
-//         $(this).next().slideUp();
-//     }
-// });
-
 /**
  * 初始化背景
  */
@@ -149,4 +136,18 @@ function fix_sidebar(sidebar) {
             top: scrollHeight + "px"
         });
     });
+}
+
+/**
+ * 获取文本颜色，用于判断 涨/跌 等
+ * @param num
+ */
+function get_color(num) {
+    if (num > 0) {
+        return 'red';
+    } else if (num < 0) {
+        return 'green';
+    } else {
+        return 'black';
+    }
 }

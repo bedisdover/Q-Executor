@@ -14,9 +14,9 @@
 <script src="js/jquery.min.js"></script>
 <script src="js/jquery.cookie.js"></script>
 <script>
-    var test = [1, 2, 3];
-    $.cookie('test', test, {'path': '/'});
-    console.log($.cookie('test'));
+    var arr = [1, 2];
+    console.log($.cookie('search_history'));
+    $.cookie('test', arr, {'path': '/'});
     console.log($.cookie('test').split(','));
 </script>
 </body>

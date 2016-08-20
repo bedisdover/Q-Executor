@@ -240,7 +240,7 @@ var basicData = {
 
 /**
  * 自选股对象
- * @type {{getData: portfolio.getData, show: portfolio.show, needLogin: portfolio.needLogin, add: portfolio.add, remove: portfolio.remove}}
+ * @type {{init: portfolio.init, getData: portfolio.getData, show: portfolio.show, needLogin: portfolio.needLogin, add_portfolio: portfolio.add_portfolio, remove_portfolio: portfolio.remove_portfolio, isPortfolio: portfolio.isPortfolio}}
  */
 var portfolio = {
     init: function () {
@@ -333,6 +333,38 @@ var portfolio = {
     }
 };
 
+var brower_history = {
+    getData: function() {
+        var codeList = $.cookie('search_history').split(',');
+
+        jQuery.ajax({
+            url: 'http://hq.finance.ifeng.com/q.php?l=' + $.cookie('search_history'),
+            dataType: 'script',
+            cache: true,
+            success: function() {
+                var array = [];
+                var json_q = eval('json_q');
+                
+                for (var i = 0 ; i < codeList.length; i++) {
+                    array.push(json_q[codeList[i]]);
+                }
+                
+                show(array);
+            }
+        });
+    },
+    show: function(data) {
+        var content = $('#browser').find('tbody');
+        
+        for (var i = 0; i < data.length; i++) {
+            content.append('<tr>' +
+                '<td><a href="stock.html?id=' + data[i].gid + '>' + data[i].name + '</a></td>' +
+                '<td>' + data[i].nowPri + '</td>' +
+                '<td class=text_color>' + data[i].increPer + '</td>' +
+                '</tr>');
+        }
+    }
+};
 /**
  * 格式化对象
  * @type {{format_time: format.format_time, format_number: format.format_number}}

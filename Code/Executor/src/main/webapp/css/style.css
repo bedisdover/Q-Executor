@@ -57,3 +57,7 @@ a.light-pointer {
 .title {
 	color: #fff;
 }
+
+h1.title {
+	margin-bottom: 80px;
+}

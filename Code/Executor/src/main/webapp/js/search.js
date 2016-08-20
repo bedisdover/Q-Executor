@@ -5,7 +5,7 @@
  */
 
 /**
- * 股票列表
+ * u所有股票列表
  * @type {Array}
  */
 var stockList = [];
@@ -23,7 +23,11 @@ var search_history;
 var display_num = 5;
 
 $(function () {
-    search_history = $.cookie('search_history') == null ? [] : eval($.cookie('search_history'));
+    if ($.cookie('search_history') == undefined || $.cookie('search_history') == 'null') {
+        search_history = [];
+    } else {
+        search_history = $.cookie('search_history').split(',');
+    }
 
     initData();
 
@@ -40,7 +44,7 @@ $(function () {
             dropdown.show();
         }
     }).on('input propertychange', function () {
-        search(text_elem.val());
+        searchStock.search(text_elem.val());
         dropdown.show();
     }).on('keypress', function (e) {
         if (e.which == 13) { // 回车
@@ -103,82 +107,6 @@ function showHistory() {
 }
 
 /**
- * 搜索股票
- * @param content
- */
-function search(content) {
-    if (content == '') {
-        return;
-    }
-
-    if (!isNaN(content) || content.substr(0, 2) == 'sh' || content.substr(0, 2) == 'sz') {
-        searchCode(content);
-    } else {
-        searchName(content);
-    }
-}
-
-/**
- * 按名称搜索股票
- * @param name
- */
-function searchName(name) {
-    var temp = [];
-    for (var i = 0; i < stockList.length; i++) {
-        if (contains(stockList[i].name, name)) {
-            temp.push(stockList[i]);
-        }
-    }
-
-    appendStocks(temp);
-
-    /**
-     * 判断一个字符串是否完全包含另一个字符串，字符可以不连续，但相互顺序需保持一致
-     *  如：  中国石油 （中油） ----> 返回true
-     *       中国石油 （油中） ----> 返回false
-     * @param stockName
-     * @param content
-     * @returns {boolean}
-     */
-    function contains(stockName, content) {
-        var last = -1;
-        for (var i = 0; i < content.length; i++) {
-            for (var j = last + 1; j < stockName.length; j++) {
-                if (stockName[j] == content[i]) {
-                    last = j;
-                    break;
-                }
-            }
-
-            if (j == stockName.length) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-}
-
-/**
- * 按代码搜索股票
- * @param code
- */
-function searchCode(code) {
-    if (code == '') {
-        return;
-    }
-
-    var temp = [];
-    for (var i = 0; i < stockList.length; i++) {
-        if (stockList[i].code.indexOf(code) != -1) {
-            temp.push(stockList[i]);
-        }
-    }
-
-    appendStocks(temp);
-}
-
-/**
  * 向提示列表中添加多只股票
  * @param stocks
  */
@@ -194,9 +122,7 @@ function appendStocks(stocks) {
         return;
     }
 
-    var number = Math.min(stocks.length, display_num);
-
-    for (var i = 0; i < number; i++) {
+    for (var i = 0; i < display_num; i++) {
         appendStock(stocks[i]);
     }
 
@@ -204,9 +130,9 @@ function appendStocks(stocks) {
         footer.show();
         $('#change').off('click')
             .on('click', function () {
-                appendStocks(stocks.slice(display_num))
+                appendStocks(stocks.slice(display_num));
 
-                $('#search-text').focus();
+                $('#searchStock-text').focus();
             }).show();
     }
 
@@ -215,31 +141,124 @@ function appendStocks(stocks) {
             jumpPage($(this).find('td:nth-child(2)').text());
         });
     }).first().addClass('active');
+
+
+    /**
+     * 向提示列表中添加单只股票
+     * @param stock
+     */
+    function appendStock(stock) {
+        if (stock == null) {
+            return;
+        }
+
+        $('#content').append(
+            '<tr>' +
+            '<td>' + stock.name + '</td>' +
+            '<td>' + stock.code + '</td>' +
+            '<td>' + stock.industry + '</td>' +
+            '</tr>'
+        );
+    }
 }
 
 /**
- * 向提示列表中添加单只股票
- * @param stock
+ * 搜索股票对象
+ * @type {{search: searchStock.search, searchCode: searchStock.searchCode, searchName: searchStock.searchName, getStockByCode: searchStock.getStockByCode, getStockByName: searchStock.getStockByName}}
  */
-function appendStock(stock) {
-    if (stock == null) {
-        return;
-    }
+var searchStock = {
+    /**
+     * 搜索股票
+     * @param content
+     */
+    search: function (content) {
+        if (content == '') {
+            return;
+        }
 
-    $('#content').append(
-        '<tr>' +
-        '<td>' + stock.name + '</td>' +
-        '<td>' + stock.code + '</td>' +
-        '<td>' + stock.industry + '</td>' +
-        '</tr>'
-    );
-}
+        if (!isNaN(content) || content.substr(0, 2) == 'sh' || content.substr(0, 2) == 'sz') {
+            searchStock.searchCode(content);
+        } else {
+            searchStock.searchName(content);
+        }
+    },
+    /**
+     * 按代码搜索股票
+     * @param code
+     */
+    searchCode: function (code) {
+        if (code == '') {
+            return;
+        }
+
+        appendStocks(searchStock.getStockByCode(code));
+    },
+    /**
+     * 按名称搜索股票
+     * @param name
+     */
+    searchName: function (name) {
+        if (name == '') {
+            return;
+        }
+
+        appendStocks(searchStock.getStockByName(name));
+    },
+    getStockByCode: function (code) {
+        var temp = [];
+        for (var i = 0; i < stockList.length; i++) {
+            if (stockList[i].code.indexOf(code) != -1) {
+                temp.push(stockList[i]);
+            }
+        }
+
+        return temp;
+    },
+    getStockByName: function (name) {
+        var temp = [];
+        for (var i = 0; i < stockList.length; i++) {
+            if (contains(stockList[i].name, name)) {
+                temp.push(stockList[i]);
+            }
+        }
+
+        return temp;
+
+        /**
+         * 判断一个字符串是否完全包含另一个字符串，字符可以不连续，但相互顺序需保持一致
+         *  如：  中国石油 （中油） ----> 返回true
+         *       中国石油 （油中） ----> 返回false
+         * @param stockName
+         * @param content
+         * @returns {boolean}
+         */
+        function contains(stockName, content) {
+            var last = -1;
+            for (var i = 0; i < content.length; i++) {
+                for (var j = last + 1; j < stockName.length; j++) {
+                    if (stockName[j] == content[i]) {
+                        last = j;
+                        break;
+                    }
+                }
+
+                if (j == stockName.length) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
+};
 
 /**
  * 跳转界面
  * @param code 股票代码
  */
 function jumpPage(code) {
+    search_history.push(code);
+    $.cookie('search_history', search_history, {'path': '/'});
+    
     top.location = 'stock.html?id=' + code;
-    console.log(code);
 }

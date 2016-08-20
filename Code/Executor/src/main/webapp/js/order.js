@@ -27,6 +27,11 @@ function getData() {
  * @type {string[]}
  */
 var type = ['买盘', '卖盘', '中性盘'];
+/**
+ * 交易对应字体颜色
+ * @type {string[]}
+ */
+var color = ['red', 'green', 'black'];
 
 var perShare = {
     getData: function () {
@@ -53,13 +58,12 @@ var perShare = {
 
         content.empty();
         for (var i = 0; i < 5; i++) {
-            if (data[i].time !== undefined) {
-                // TODO 买盘颜色
+            if (data[i] !== undefined) {
                 content.append('<tr>' +
                     '<td>' + data[i].time + '</td>' +
                     '<td>' + data[i].price + '</td>' +
                     '<td>' + data[i].volume + '</td>' +
-                    '<td>' + type[data[i].type] + '</td>' +
+                    '<td style="color: ' + color[data[i].type] + ';">' + type[data[i].type] + '</td>' +
                     '</tr>');
             }
         }
@@ -92,12 +96,12 @@ var largeOrder = {
 
         content.empty();
         for (var i = 0; i < 5; i++) {
-            if (data[i].time !== undefined) {
+            if (data[i] !== undefined) {
                 content.append('<tr>' +
                     '<td>' + data[i].time + '</td>' +
                     '<td>' + data[i].price + '</td>' +
                     '<td>' + data[i].volume + '</td>' +
-                    '<td>' + type[data[i].type] + '</td>' +
+                    '<td style="color: ' + color[data[i].type] + ';">' + type[data[i].type] + '</td>' +
                     '</tr>');
             }
         }
@@ -123,7 +127,7 @@ var priceSeries = {
     showLatest: function(data) {
         var content = $('#price-series').find('tbody').empty();
         for (var i = 0; i < 5; i++) {
-            if (data[i].price !== undefined) {
+            if (data[i] !== undefined) {
                 content.append('<tr>' +
                     '<td>' + data[i].price + '</td>' +
                     '<td>' + data[i].trunover + '</td>' +
@@ -149,7 +153,7 @@ var timeSeries = {
         var content = $('#time-series').find('tbody').empty();
         
         for (var i = 0; i < 5; i++) {
-            if (data[i].time !== undefined) {
+            if (data[i] !== undefined) {
                 content.append('<tr>' +
                     '<td>' + data[i].time + '</td>' +
                     '<td>' + data[i].price + '</td>' +
