@@ -7,6 +7,18 @@
     <link rel="icon" href="../images/icon.ico">
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css/style.css">
+
+    <style>
+        .table > tbody#content > tr {
+            cursor: pointer;
+        }
+        .table > tbody#content > tr:hover > td{
+            background: #cccccc;
+        }
+        .table > tbody#content >tr.active > td {
+            background-color: #999999;
+        }
+    </style>
 </head>
 <body>
 
@@ -45,11 +57,17 @@
                                     </td>
                                     <td></td>
                                     <td>
-                                        <a class="pull-right light-pointer" id="change" style="display: none;">换一批 &</a>
+                                        <a class="pull-right" id="change"
+                                           style="display: none; cursor: pointer;">换一批
+                                            <span class="glyphicon glyphicon-repeat"></span>
+                                        </a>
                                     </td>
                                 </tr>
                             </tfoot>
                         </table>
+                        <div class="alert-warning" id="no-result" style="display: none;">
+                            <strong>很抱歉，未找到符合条件的股票</strong>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -2,16 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>测试</title>
+    <title>测试专用</title>
     <meta name="description" content="Q-Executor 是一个在线量化交易系统"/>
     <meta name="keyword" content="A股 量化交易 风险 冲击成本"/>
     <meta name="author" content="nju.miracle"/>
 </head>
 <body>
-<script src="js/search.js"></script>
+<input type="text" name="test-1" id="test-1">
+<input type="text" name="test" id="test">
+<a href="page/login.html">登录</a>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
 <script>
-    var test = '123';
-    console.log(test.length);
+    var arr = [1, 2];
+    console.log($.cookie('search_history'));
+    $.cookie('test', arr, {'path': '/'});
+    console.log($.cookie('test').split(','));
 </script>
 </body>
 </html>

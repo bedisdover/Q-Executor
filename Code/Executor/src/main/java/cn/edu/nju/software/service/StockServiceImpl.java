@@ -53,12 +53,12 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public List<StockKLineVO> getKLineByWeek(String Code) {
-        return stockJsonDao.getKLineByDay(Code);
+        return stockJsonDao.getKLineByWeek(Code);
     }
 
     @Override
     public List<StockKLineVO> getKLineByMonth(String Code) {
-        return stockJsonDao.getKLineByDay(Code);
+        return stockJsonDao.getKLineByMonth(Code);
     }
 
 

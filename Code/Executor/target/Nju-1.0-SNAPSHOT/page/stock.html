@@ -68,7 +68,110 @@
                     公司简介
                 </div>
                 <div class="panel-body">
-
+                    <div>
+                        <span class="">公司名称</span>
+                        <span class="pull-right" id="name-2">--</span>
+                    </div>
+                    <div>
+                        <span class="">股票类型</span>
+                        <span class="pull-right" id="type">--</span>
+                    </div>
+                    <div>
+                        <span class="">公司创建地</span>
+                        <span class="pull-right" id="area">--</span>
+                    </div>
+                    <div>
+                        <span class="">流通股本</span>
+                        <span class="pull-right" id="outstanding">--</span>
+                    </div>
+                    <div>
+                        <span class="">总股本</span>
+                        <span class="pull-right" id="total">--</span>
+                    </div>
+                    <div>
+                        <span class="">总资产</span>
+                        <span class="pull-right" id="totalAssets">--</span>
+                    </div>
+                    <div>
+                        <span class="">流动资产</span>
+                        <span class="pull-right" id="liquidAssets">--</span>
+                    </div>
+                    <div>
+                        <span class="">固定资产</span>
+                        <span class="pull-right" id="fixedAssets">--</span>
+                    </div>
+                    <div>
+                        <span class="">公积金</span>
+                        <span class="pull-right" id="reserved">--</span>
+                    </div>
+                    <div>
+                        <span class="">每股公积金</span>
+                        <span class="pull-right" id="reservedPerShare">--</span>
+                    </div>
+                    <div>
+                        <span class="">每股收益</span>
+                        <span class="pull-right" id="eps-2">--</span>
+                    </div>
+                    <div>
+                        <span class="">每股净资</span>
+                        <span class="pull-right" id="bvps">--</span>
+                    </div>
+                    <div>
+                        <span class="">上市时间</span>
+                        <span class="pull-right" id="timeToMarket">--</span>
+                    </div>
+                </div>
+            </div>
+            <div class="well tab" id="tab-1">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a>热门股票</a>
+                    </li>
+                    <li>
+                        <a>自选股</a>
+                    </li>
+                    <li>
+                        <a>最近浏览</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade in active" id="hot">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>股票</th>
+                                <th>价格</th>
+                                <th>涨跌额</th>
+                                <th>涨跌幅</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="portfolio">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>股票</th>
+                                <th>价格</th>
+                                <th>涨跌幅</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="browser">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>股票</th>
+                                <th>价格</th>
+                                <th>涨跌幅</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -79,8 +182,10 @@
                     <small id="code"></small>
                 </span>
                 <span class="pull-right">
-                    <button class="btn btn-sm btn-success">加入自选
+                    <button class="btn btn-sm btn-success" id="add-portfolio">加入自选
                         <span class="glyphicon glyphicon-plus"></span></button>
+                    <button class="btn btn-sm btn-danger" id="remove-portfolio" style="display: none;">取消自选
+                        <span class="glyphicon glyphicon-minus"></span></button>
                 </span>
             </div>
             <div class="row" id="current-data">
@@ -94,7 +199,7 @@
                             </span>
                     </div>
                     <div id="time">
-                        2016年6月10日 15:30:30
+                        --年--月--日 --:--:--
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8" id="data">
@@ -153,19 +258,18 @@
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="分时图">
                             <div class="chart" id="timeSeriesChart">
-                                分时图
                             </div>
                         </div>
                         <div class="tab-pane fade" id="月K线">
-                            <div class="chart" id="monthlyKLine">
+                            <div class="chart" id="KLineMonth">
                             </div>
                         </div>
                         <div class="tab-pane fade" id="周K线">
-                            <div class="chart" id="weeklyKLine">
+                            <div class="chart" id="KLineWeek">
                             </div>
                         </div>
                         <div class="tab-pane fade" id="日K线">
-                            <div class="chart" id="dailyKLine">
+                            <div class="chart" id="KLineDay">
                             </div>
                         </div>
                     </div>
@@ -233,14 +337,86 @@
                     </div>
                 </div>
             </div>
+            <div class="well tab" id="tab-2">
+                <ul class="nav nav-tabs">
+                    <li class="active" data-toggle="tooltip" title="点击查看更多">
+                        <a href="#large-order">大单</a>
+                    </li>
+                    <li data-toggle="tooltip" title="点击查看更多">
+                        <a href="#per-share">逐笔</a>
+                    </li>
+                    <li data-toggle="tooltip" title="点击查看更多">
+                        <a href="#price-series">分价</a>
+                    </li>
+                    <li data-toggle="tooltip" title="点击查看更多">
+                        <a href="#time-series">分时</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade" id="large-order">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>价(元)</th>
+                                <th>量(手)</th>
+                                <th>性质</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade in active" id="per-share">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>价(元)</th>
+                                <th>量(手)</th>
+                                <th>性质</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="price-series">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>成交价(元)</th>
+                                <th>成交量(手)</th>
+                                <th>占比(%)</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="time-series">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>成交价(元)</th>
+                                <th>成交量(股)</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
-<script src="../js/jquery-3.1.0.min.js"></script>
+<script src="../js/jquery.min.js"></script>
+<!--<script src="../js/bootstrap.min.js"></script>-->
 <script src="../js/bootstrap.min.js"></script>
+<script src="../js/jquery.tab.js"></script>
 <script src="../js/echarts.min.js"></script>
 <script src="../js/stock.js"></script>
+<script src="../js/myCharts.js"></script>
+<script src="../js/order.js"></script>
 <script src="../js/common.js"></script>
 
 </body>

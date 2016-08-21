@@ -98,3 +98,30 @@
     margin-right: 20px;
     margin-left: 20px;
 }
+
+.tab {
+    padding: 0;
+}
+
+.tab .nav {
+    width: 100%;
+}
+
+.tab#tab-1 .nav > li {
+    width: 33.3%;
+}
+
+.tab#tab-2 .nav > li {
+    width: 25%;
+}
+
+.tab .nav > li > a {
+    padding: 10px 0;
+    text-align: center;
+}
+
+.tab .table > thead > tr > th, .table > tbody > tr > td {
+    font-weight: 100;
+    font-size: 0.8em;
+    text-align: center;
+}
