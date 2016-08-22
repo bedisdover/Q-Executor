@@ -16,7 +16,8 @@ public class MLForVWAPServiceTest {
     public void testStaticService(){
 
 //        StockMLService service=new StockMLServiceImpl();
-//        ArrayList<StockForMLPO> list =service.getStockDataML("600000",200,1);
+//        ArrayList<StockForMLPO> list =service.getStockDataML("600000",200,48);
+//        System.out.println("size: " + list.size());
 //        StockForMLPO thisPO;
 //        for(int i=0;i<list.size();i++){
 //            thisPO=list.get(i);

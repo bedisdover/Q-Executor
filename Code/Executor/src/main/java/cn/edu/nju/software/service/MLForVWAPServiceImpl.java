@@ -40,18 +40,9 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
         param = new svm_parameter();
         param.svm_type = svm_parameter.EPSILON_SVR;
         param.kernel_type = svm_parameter.LINEAR;
-        param.cache_size = 200;
-        param.eps = 0.00001;
+        param.cache_size = 195;
+        param.eps = 0.01;
         param.C = 1.9;
-
-//        for(int i=0;i<trainingData.length ;i++){
-//            System.out.print("num:"+(i+1)+" ");
-//          for(int j=0;j<trainingData[i].length;j++){
-//              System.out.print(trainingData[i][j].value+",");
-//          }
-//            System.out.print(labels[i]);
-//            System.out.println();
-//        }
 
         //训练模型
         model = svm.svm_train(problem, param);
@@ -95,7 +86,7 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
 
                 thisNode5=new svm_node();
                 thisNode5.index=k*6+5;
-                thisNode5.value=thisPO.getVol();
+                thisNode5.value=thisPO.getVol()/100000.0;
 
                 thisNode6=new svm_node();
                 thisNode6.index=k*6+6;
@@ -122,7 +113,7 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
             if(i>4){
                 switch (type){
                     case VOL:
-                        labels[i-5]=poList.get(i).getVol();
+                        labels[i-5]=poList.get(i).getVol()/100000.0;
                         break;
                     case PRICE:
                         labels[i-5]=poList.get(i).getAvg();
@@ -270,7 +261,7 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
         for(int i=1;i<49;i++){
             initStaticData(stockID,i,Type.VOL);
             initSVM();
-            Double predictValue= svm.svm_predict(model,predict);
+            Double predictValue= svm.svm_predict(model,predict)*1000000;
             list.add(predictValue);
        }
 
