@@ -254,15 +254,16 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
 
 
     //返回最新数据下静态预测的48个成交量
-    public ArrayList<Double>   getStaticVol(String stockID){
+    public ArrayList<Integer>   getStaticVol(String stockID){
 
-        ArrayList<Double> list=new ArrayList<>();
+        ArrayList<Integer> list=new ArrayList<>();
 
         for(int i=1;i<49;i++){
             initStaticData(stockID,i,Type.VOL);
             initSVM();
             Double predictValue= svm.svm_predict(model,predict)*1000000;
-            list.add(predictValue);
+            int value_int=predictValue.intValue();
+            list.add( value_int);
        }
 
         return list;

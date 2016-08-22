@@ -26,7 +26,7 @@ public class MLForVWAPServiceTest {
 //        }
 
         MLForVWAPService ml_service=new MLForVWAPServiceImpl();
-        ArrayList<Double> list= ml_service.getStaticVol("600000");
+        ArrayList<Integer> list= ml_service.getStaticVol("600000");
         for(int i=0;i<list.size();i++){
             System.out.println("index:"+(i+1)+" "+list.get(i));
         }
