@@ -177,7 +177,7 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
 
                 thisNode5=new svm_node();
                 thisNode5.index=k*6+5;
-                thisNode5.value=oneOfArray.getVol();
+                thisNode5.value=oneOfArray.getVol()/100000.0;
 
                 thisNode6=new svm_node();
                 thisNode6.index=k*6+6;
@@ -235,7 +235,7 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
 
             thisNode5=new svm_node();
             thisNode5.index=i*6+5;
-            thisNode5.value=onePO.getVol();
+            thisNode5.value=onePO.getVol()/100000.0;
 
             thisNode6=new svm_node();
             thisNode6.index=i*6+6;
@@ -292,7 +292,7 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
 
         ArrayList<StockForMLPO> todayList=stockService.getTodayInforML(stockID);
         currentTime=todayList.size();
-        if(currentTime < 3){
+        if(currentTime <= 3){
             //未到达动态预测条件，返回静态预测结果
             list=this.getStaticPrice(stockID);
         }else if(currentTime == 48){
