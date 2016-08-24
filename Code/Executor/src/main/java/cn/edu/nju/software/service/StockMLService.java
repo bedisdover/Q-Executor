@@ -24,7 +24,7 @@ public interface StockMLService {
     @param:同上
     @goal:获取代码为stockID的股票以InforForMLPO类为基础的高频数据
     @return:股票高频数据的list
-    @limit：currentTime>=3，因为InforForMLPO类的限制
+    @limit：currentTime>3，因为InforForMLPO类的限制
      */
     public ArrayList<InforForMLPO> getDynamicInforML(String stockID,int numOfStock,int currentTime);
 

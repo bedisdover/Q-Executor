@@ -40,8 +40,8 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
         param = new svm_parameter();
         param.svm_type = svm_parameter.EPSILON_SVR;
         param.kernel_type = svm_parameter.LINEAR;
-        param.cache_size = 100;
-        param.eps = 0.00001;
+        param.cache_size = 195;
+        param.eps = 0.01;
         param.C = 1.9;
 
         //训练模型
@@ -55,13 +55,13 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
         labels=new double[poList.size()-5];
         predict=new svm_node[numOfStaticAttr];
 
-        for(int i=0;i<poList.size();i++){
-            svm_node thisNode1;
-            svm_node thisNode2;
-            svm_node thisNode3;
-            svm_node thisNode4;
-            svm_node thisNode5;
-            svm_node thisNode6;
+        for(int i=0;i<poList.size()-4;i++){
+            svm_node thisNode1=null;
+            svm_node thisNode2=null;
+            svm_node thisNode3=null;
+            svm_node thisNode4=null;
+            svm_node thisNode5=null;
+            svm_node thisNode6=null;
             StockForMLPO thisPO;
 
             //连续5天的6个指标作为训练集的一条数据
@@ -86,26 +86,26 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
 
                 thisNode5=new svm_node();
                 thisNode5.index=k*6+5;
-                thisNode5.value=thisPO.getVol();
+                thisNode5.value=thisPO.getVol()/100000.0;
 
                 thisNode6=new svm_node();
                 thisNode6.index=k*6+6;
                 thisNode6.value=thisPO.getAvg();
 
-                if(i<poList.size()-5){
-                    trainingData[i][k*6]=thisNode1;
-                    trainingData[i][k*6+1]=thisNode2;
-                    trainingData[i][k*6+2]=thisNode3;
-                    trainingData[i][k*6+3]=thisNode4;
-                    trainingData[i][k*6+4]=thisNode5;
-                    trainingData[i][k*6+5]=thisNode6;
-                }else{
+                if(i == poList.size()-5){
                     predict[k*6]=thisNode1;
                     predict[k*6+1]=thisNode2;
                     predict[k*6+2]=thisNode3;
                     predict[k*6+3]=thisNode4;
                     predict[k*6+4]=thisNode5;
                     predict[k*6+5]=thisNode6;
+                }else{
+                    trainingData[i][k*6]=thisNode1;
+                    trainingData[i][k*6+1]=thisNode2;
+                    trainingData[i][k*6+2]=thisNode3;
+                    trainingData[i][k*6+3]=thisNode4;
+                    trainingData[i][k*6+4]=thisNode5;
+                    trainingData[i][k*6+5]=thisNode6;
                 }
             }
 
@@ -113,7 +113,7 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
             if(i>4){
                 switch (type){
                     case VOL:
-                        labels[i-5]=poList.get(i).getVol();
+                        labels[i-5]=poList.get(i).getVol()/100000.0;
                         break;
                     case PRICE:
                         labels[i-5]=poList.get(i).getAvg();
@@ -177,7 +177,7 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
 
                 thisNode5=new svm_node();
                 thisNode5.index=k*6+5;
-                thisNode5.value=oneOfArray.getVol();
+                thisNode5.value=oneOfArray.getVol()/100000.0;
 
                 thisNode6=new svm_node();
                 thisNode6.index=k*6+6;
@@ -235,7 +235,7 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
 
             thisNode5=new svm_node();
             thisNode5.index=i*6+5;
-            thisNode5.value=onePO.getVol();
+            thisNode5.value=onePO.getVol()/100000.0;
 
             thisNode6=new svm_node();
             thisNode6.index=i*6+6;
@@ -254,15 +254,16 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
 
 
     //返回最新数据下静态预测的48个成交量
-    public ArrayList<Double>   getStaticVol(String stockID){
+    public ArrayList<Integer>   getStaticVol(String stockID){
 
-        ArrayList<Double> list=new ArrayList<>();
+        ArrayList<Integer> list=new ArrayList<>();
 
-        for(int i=0;i<48;i++){
+        for(int i=1;i<49;i++){
             initStaticData(stockID,i,Type.VOL);
             initSVM();
-            Double predictValue= svm.svm_predict(model,predict);
-            list.add(predictValue);
+            Double predictValue= svm.svm_predict(model,predict)*1000000;
+            int value_int=predictValue.intValue();
+            list.add( value_int);
        }
 
         return list;
@@ -292,7 +293,7 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
 
         ArrayList<StockForMLPO> todayList=stockService.getTodayInforML(stockID);
         currentTime=todayList.size();
-        if(currentTime < 3){
+        if(currentTime <= 3){
             //未到达动态预测条件，返回静态预测结果
             list=this.getStaticPrice(stockID);
         }else if(currentTime == 48){
