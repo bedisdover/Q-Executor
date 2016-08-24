@@ -35,3 +35,6 @@ Code/Executor/src/main/resources/applicationContext.xml
 Code/StocksServer/target/
 Code/Executor/target
 
+Code/Client/target
+Code/Client/.idea
+
