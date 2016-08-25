@@ -27,7 +27,7 @@ public class NavPanel extends JPanel{
 
     private static final int PANEL_W = 120;
 
-    private static final int PANEL_H = 600;
+    public static final int PANEL_H = 600;
 
     private static final int PADDING = 6;
 
