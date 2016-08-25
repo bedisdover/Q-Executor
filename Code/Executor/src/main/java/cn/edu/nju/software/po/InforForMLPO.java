@@ -85,4 +85,18 @@ public class InforForMLPO {
     public StockForMLPO getCurrentTime() {
         return currentTime;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("InforForMLPO{");
+        sb.append("firstDay=").append(firstDay);
+        sb.append(", secondDay=").append(secondDay);
+        sb.append(", thirdDay=").append(thirdDay);
+        sb.append(", firstTime=").append(firstTime);
+        sb.append(", secondTime=").append(secondTime);
+        sb.append(", thirdTime=").append(thirdTime);
+        sb.append(", currentTime=").append(currentTime);
+        sb.append('}');
+        return sb.toString();
+    }
 }

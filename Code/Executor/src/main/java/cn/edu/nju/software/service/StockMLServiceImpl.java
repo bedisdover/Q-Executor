@@ -6,18 +6,14 @@ import cn.edu.nju.software.po.StockForMLPO;
 import cn.edu.nju.software.utils.JdbcUtil;
 import cn.edu.nju.software.utils.StockUtil;
 import cn.edu.nju.software.utils.StringUtil;
+import cn.edu.nju.software.utils.TimeUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.sql.*;
+import java.util.*;
+import java.util.Date;
 
 /**
  * Created by 王栋 on 2016/8/17 0017.
@@ -39,29 +35,15 @@ public class StockMLServiceImpl implements StockMLService{
         stockID =  StockUtil.getCode(stockID);
         int num = Integer.parseInt(stockID.substring(2))%20;
         ArrayList<StockForMLPO> stockForMLPOs = new ArrayList<StockForMLPO>();
-        String sql = "SELECT open,high,low,close,volume,dealMoney FROM "+ StringUtil.HISTORY_5MIN_DATA+num+" WHERE CODE = \""+stockID+"\" AND DATE_FORMAT(DATE,\"%H:%i:%s\") = \""+timeFormat[currentTime-1]+"\" ORDER BY DATE DESC limit 0,"+numOfStock;
-//        List<Object[]> objectsList = baseDao.execSqlQuery(sql);
-//        for(Object[] objects:objectsList){
-//            double volume = Double.parseDouble(objects[4].toString());
-//            double dealMoney = Double.parseDouble(objects[5].toString());
-//            double avg = 0.0;
-//            if (volume!=0){
-//                avg = round(dealMoney/volume,2,BigDecimal.ROUND_HALF_UP);
-//            }
+        String sql = "SELECT open,high,low,close,volume,dealMoney FROM "+ StringUtil.HISTORY_5MIN_DATA+num+" WHERE CODE = \""+stockID+"\" AND DATE_FORMAT(DATE,\"%H:%i:%s\") = \""+timeFormat[currentTime-1]+"\" ORDER BY DATE DESC limit "+numOfStock;
+
         try {
             Connection connection = JdbcUtil.getInstance().getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                double volume = resultSet.getDouble(5);
-                double dealMoney = resultSet.getDouble(6);
-                double avg = 0.0;
-                if (volume!=0){
-                avg = round(dealMoney/volume,2,BigDecimal.ROUND_HALF_UP);
-                }
-                stockForMLPOs.add(new StockForMLPO(avg,resultSet.getDouble(1),
-                        resultSet.getDouble(4),resultSet.getDouble(2),
-                        resultSet.getDouble(3), volume));
+
+                stockForMLPOs.add(getStockForMLPO(resultSet));
             }
 
         }catch (SQLException e){
@@ -86,16 +68,82 @@ public class StockMLServiceImpl implements StockMLService{
     新增的两个接口
     @auther：LiuXing
      */
+
+    /**
+     * 获取该只股票的当日的五分钟的信息 如果没有就算了 返回一个size为0的list 如果有 有多少给多少
+     * @param stockID 股票代码
+     * @return 该只股票的当日截止到目前为止所有的五分钟线
+     */
     public ArrayList<StockForMLPO> getTodayInforML(String stockID){
-        ArrayList<StockForMLPO> array=new ArrayList<>();
+        ArrayList<StockForMLPO> array=new ArrayList<StockForMLPO>();
+        stockID =  StockUtil.getCode(stockID);
+        int num = Integer.parseInt(stockID.substring(2))%20;
+        String today = TimeUtil.getDate(new Date());
 
+        String sql = "SELECT open,high,low,close,volume,dealMoney FROM "+ StringUtil.HISTORY_5MIN_DATA+num+" WHERE CODE = \""+stockID+"\" AND DATE >= ?;";
+        try {
+            Connection connection = JdbcUtil.getInstance().getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setTimestamp(1,Timestamp.valueOf(today+" 00:00:00"));
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+
+                array.add(getStockForMLPO(resultSet));
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+            return array;
+        }
         return array;
     }
 
+    /**
+     * 保证 currentTime >= 4 ??
+     * @param stockID
+     * @param numOfStock
+     * @param currentTime
+     * @return
+     */
     public ArrayList<InforForMLPO> getDynamicInforML(String stockID, int numOfStock, int currentTime){
-        ArrayList<InforForMLPO> array=new ArrayList<>();
+        ArrayList<InforForMLPO> array=new ArrayList<InforForMLPO>();
+        ArrayList<StockForMLPO> currentTimes = getStockDataML(stockID,numOfStock+3,currentTime);
+        ArrayList<StockForMLPO> currentTimeLast1 = getStockDataML(stockID,numOfStock,currentTime-1);
+        ArrayList<StockForMLPO> currentTimeLast2 = getStockDataML(stockID,numOfStock,currentTime-2);
+        ArrayList<StockForMLPO> currentTimeLast3 = getStockDataML(stockID,numOfStock,currentTime-3);
+        int currentTimesNums = currentTimes.size();
+        int currentTimeLast1Nums = currentTimeLast1.size();
+        int currentTimeLast2Nums = currentTimeLast2.size();
+        int currentTimeLast3Nums = currentTimeLast3.size();
+        try {
+
+            for (int i = 1; i <= currentTimesNums - 3; i++) {
+                InforForMLPO po = new InforForMLPO(currentTimes.get(currentTimesNums - i - 1), currentTimes.get(currentTimesNums - i - 2), currentTimes.get(currentTimesNums - i - 3),
+                        currentTimeLast1.get(currentTimeLast1Nums - i), currentTimeLast2.get(currentTimeLast2Nums - i), currentTimeLast3.get(currentTimeLast3Nums - i), currentTimes.get(currentTimesNums - i));
+                array.add(po);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            Collections.reverse(array);
+            return array;
+        }
+        Collections.reverse(array);
         return array;
     }
 
 
+
+
+    private StockForMLPO getStockForMLPO(ResultSet resultSet) throws SQLException {
+        double volume = resultSet.getDouble(5);
+        double dealMoney = resultSet.getDouble(6);
+        double avg = 0.0;
+        if (volume!=0){
+            avg = round(dealMoney/volume,2,BigDecimal.ROUND_HALF_UP);
+        }
+        StockForMLPO stockForMLPO = new StockForMLPO(avg,resultSet.getDouble(1),
+                resultSet.getDouble(4),resultSet.getDouble(2),
+                resultSet.getDouble(3), volume);
+        return  stockForMLPO;
+    }
 }
