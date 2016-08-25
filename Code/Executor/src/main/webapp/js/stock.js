@@ -365,6 +365,13 @@ var brower_history = {
         }
     }
 };
+
+var industry = {
+    industry_list : {
+        '生物制药': 'swzy'
+    },
+};
+
 /**
  * 格式化对象
  * @type {{format_time: format.format_time, format_number: format.format_number}}
