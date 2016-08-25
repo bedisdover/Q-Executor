@@ -8,6 +8,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
+
+
 public class JiaoyiPanel extends JFrame{
  
 	
@@ -230,6 +232,7 @@ public class JiaoyiPanel extends JFrame{
 		line3.setLayout(new BoxLayout(line3, BoxLayout.X_AXIS)); 
 		
 		JPanel box11=new JPanel();
+		box11.setLayout(new BoxLayout(box11, BoxLayout.X_AXIS)); 
 		box11.setPreferredSize(new Dimension(300,150));
 		box11.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.black));
 		
@@ -271,7 +274,8 @@ public class JiaoyiPanel extends JFrame{
 	deliveryInputTable2.setDefaultRenderer(Object.class,render);  
 	deliveryInputTable2.setRowHeight(30);
 	JTableHeader headerr = deliveryInputTable2.getTableHeader();//获取头部   
-	headerr.setPreferredSize(new Dimension(30, 26));
+	
+	headerr.setPreferredSize(new Dimension(30, 26));   
 
 	deliveryInputTable2.setPreferredScrollableViewportSize(new Dimension(280,400));
 	deliveryInputTable2.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -289,6 +293,7 @@ public class JiaoyiPanel extends JFrame{
 	
 		JPanel box33=new JPanel();
 		box33.setPreferredSize(new Dimension(500,150));
+		box33.setLayout(new BoxLayout(box33, BoxLayout.X_AXIS)); 
 		JScrollPane scrollPane2 = new JScrollPane();
 		Vector<String> vColumns2 = new Vector<String>();
 //		scrollPane.setBorder(BorderFactory.createRaisedBevelBorder());
@@ -340,7 +345,8 @@ public class JiaoyiPanel extends JFrame{
 	deliveryInputTable.setDefaultRenderer(Object.class,render);  
 	deliveryInputTable.setRowHeight(30);
 	JTableHeader headerr2 = deliveryInputTable.getTableHeader();//获取头部   
-	headerr2.setPreferredSize(new Dimension(30, 26));
+	
+	headerr2.setPreferredSize(new Dimension(30, 26));   
 
 	deliveryInputTable.setPreferredScrollableViewportSize(new Dimension(500,400));
 	deliveryInputTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -348,7 +354,7 @@ public class JiaoyiPanel extends JFrame{
 	deliveryInputTable.setShowHorizontalLines(true);
 	scrollPane2.getViewport().add(deliveryInputTable);
 	deliveryInputTable.setFillsViewportHeight(true);
-	deliveryInputTable.setFont(new Font("微软雅黑", 0,  9));
+	deliveryInputTable.setFont(new Font("微软雅黑", 0,  10));
 	deliveryInputTable.setOpaque(false);
 	scrollPane2.setOpaque(false);
 	scrollPane2.getViewport().setOpaque(false);	
