@@ -1,3 +1,5 @@
+package present.panel.trade;
+
 import java.awt.*;
 import java.util.Vector;
 
@@ -5,8 +7,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-
-import UI.DIY.XContorlUtil;
 
 public class JiaoyiPanel extends JFrame{
  
@@ -271,8 +271,7 @@ public class JiaoyiPanel extends JFrame{
 	deliveryInputTable2.setDefaultRenderer(Object.class,render);  
 	deliveryInputTable2.setRowHeight(30);
 	JTableHeader headerr = deliveryInputTable2.getTableHeader();//获取头部   
-	headerr.setForeground(XContorlUtil.DEFAULT_PAGE_TEXT_COLOR);
-	headerr.setPreferredSize(new Dimension(30, 26));   
+	headerr.setPreferredSize(new Dimension(30, 26));
 
 	deliveryInputTable2.setPreferredScrollableViewportSize(new Dimension(280,400));
 	deliveryInputTable2.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -341,8 +340,7 @@ public class JiaoyiPanel extends JFrame{
 	deliveryInputTable.setDefaultRenderer(Object.class,render);  
 	deliveryInputTable.setRowHeight(30);
 	JTableHeader headerr2 = deliveryInputTable.getTableHeader();//获取头部   
-	headerr2.setForeground(XContorlUtil.DEFAULT_PAGE_TEXT_COLOR);
-	headerr2.setPreferredSize(new Dimension(30, 26));   
+	headerr2.setPreferredSize(new Dimension(30, 26));
 
 	deliveryInputTable.setPreferredScrollableViewportSize(new Dimension(500,400));
 	deliveryInputTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
