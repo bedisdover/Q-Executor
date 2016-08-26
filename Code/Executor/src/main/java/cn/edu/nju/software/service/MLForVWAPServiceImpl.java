@@ -326,7 +326,9 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
             initDynamicData(stockID,currentTime+1);
             initSVM();
             Double predictValue=svm.svm_predict(model,predict);
-            list.add(predictValue);
+            DecimalFormat df=new DecimalFormat("0.00");
+            String twobit= df.format(predictValue);
+            list.add(Double.parseDouble(twobit));
 
             //第三部分
             if(currentTime !=47) {
