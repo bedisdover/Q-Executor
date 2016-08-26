@@ -1,3 +1,4 @@
+import cn.edu.nju.software.po.InforForMLPO;
 import cn.edu.nju.software.po.StockForMLPO;
 import cn.edu.nju.software.service.StockMLService;
 import cn.edu.nju.software.service.StockService;
@@ -34,6 +35,23 @@ public class StockInfoByTimeTest {
         List<StockForMLPO> stockForMLPOs = stockMLService.getStockDataML("sh600000",200,1);
         for (StockForMLPO po : stockForMLPOs){
             System.out.println(po.toString());
+        }
+    }
+
+    @Test
+    public void test3(){
+        List<StockForMLPO> stockForMLPOs = stockMLService.getTodayInforML("sh600000");
+        for (StockForMLPO po : stockForMLPOs){
+            System.out.println(po.toString());
+        }
+    }
+
+    @Test
+    public void test4(){
+        List<InforForMLPO> inforForMLPOs = stockMLService.getDynamicInforML("sh600000",200,4);
+        System.out.println(inforForMLPOs.size());
+        for (InforForMLPO po : inforForMLPOs){
+            System.out.println(po);
         }
     }
 }
