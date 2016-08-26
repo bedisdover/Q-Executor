@@ -32,6 +32,18 @@
             <artifactId>jfreechart</artifactId>
             <version>1.0.13</version>
         </dependency>
+
+        <dependency>
+            <groupId>beautyeye</groupId>
+            <artifactId>beautyeye</artifactId>
+            <version>3.7</version>
+            <scope>system</scope>
+            <!--本地jar的路径,相对或者绝对都可以-->
+            <systemPath>${project.basedir}/lib/beautyeye_lnf.jar</systemPath>
+        </dependency>
+
+
+
     </dependencies>
 
 </project>
