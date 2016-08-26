@@ -202,12 +202,13 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
         ArrayList<StockForMLPO> todayList=stockService.getTodayInforML(stockID);
 
         StockForMLPO[] predictData=new StockForMLPO[6];
-        predictData[0]=todayList.get(0);
-        predictData[1]=todayList.get(1);
-        predictData[2]=todayList.get(2);
-        predictData[3]=todayList.get(currentTime-3);
-        predictData[4]=todayList.get(currentTime-2);
-        predictData[5]=todayList.get(currentTime-1);
+        predictData[0]=threeDayList.get(0);
+        predictData[1]=threeDayList.get(1);
+        predictData[2]=threeDayList.get(2);
+        int size=todayList.size();
+        predictData[3]=todayList.get(size-3);
+        predictData[4]=todayList.get(size-2);
+        predictData[5]=todayList.get(size-1);
 
         svm_node thisNode1;
         svm_node thisNode2;
@@ -325,13 +326,15 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
             initDynamicData(stockID,currentTime+1);
             initSVM();
             Double predictValue=svm.svm_predict(model,predict);
-            list.add(predictValue);
+            DecimalFormat df=new DecimalFormat("0.00");
+            String twobit= df.format(predictValue);
+            list.add(Double.parseDouble(twobit));
 
             //第三部分
             if(currentTime !=47) {
+                System.out.println("part 3");
                 ArrayList<Double> staticList = this.getStaticPrice(stockID);
-                for (int k = currentTime + 1; currentTime < staticList.size(); k++) {
-                    System.out.println("part 3");
+                for (int k = currentTime + 1; k < staticList.size(); k++) {
                     list.add(staticList.get(k));
                 }
             }

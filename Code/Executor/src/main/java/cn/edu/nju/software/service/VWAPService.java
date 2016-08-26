@@ -12,5 +12,5 @@ public interface VWAPService {
      * @return 预测的各时间段的交易量
      * @throws Exception
      */
-    public List<Double> predictVn(VWAP_Param param) throws Exception;
+    public List<Integer> predictVn(VWAP_Param param) throws Exception;
 }

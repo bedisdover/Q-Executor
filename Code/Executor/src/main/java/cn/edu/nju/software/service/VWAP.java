@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class VWAP {
+public class VWAP implements  VWAPService{
 
 	
 	Map<String,List<Double>> stockPnMap ;
@@ -20,7 +20,7 @@ public class VWAP {
 		
 	}
 
-	public List<Double> predictVn(VWAP_Param param) throws Exception{
+	public List<Integer> predictVn(VWAP_Param param) throws Exception{
 		//交易量概率密度
 		List<Double> Pn;
         MLForVWAPService ml = new MLForVWAPServiceImpl();
@@ -55,9 +55,10 @@ public class VWAP {
             }
 
 		}
-		List<Double> Vn = new ArrayList<Double>();
+		List<Integer> Vn = new ArrayList<Integer>();
 		for(int i=0;i<Pn.size();i++){
-			double vi=param.getUserVol()*Pn.get(i);
+			int vi=Double.valueOf(param.getUserVol()*Pn.get(i)).intValue();
+			Vn.add(vi);
 		}
 		return Vn;
 	}
