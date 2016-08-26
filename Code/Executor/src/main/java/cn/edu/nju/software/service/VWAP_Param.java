@@ -14,10 +14,21 @@ public class VWAP_Param {
 	
 	//
 	private double delta;
-	
+
 	//当前时间段
 	private int timeNode;
-	
+
+	public VWAP_Param(long userVol, String stockid, double delta, int timeNode, int timeSliceNum) {
+		this.userVol = userVol;
+		this.stockid = stockid;
+		this.delta = delta;
+		this.timeNode = timeNode;
+		this.timeSliceNum = timeSliceNum;
+	}
+
+	public VWAP_Param() {
+	}
+
 	//总时间段数量
 	private int timeSliceNum;
 
