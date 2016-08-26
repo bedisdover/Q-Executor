@@ -316,11 +316,13 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
 
             //第一部分
             for(int i=0;i<currentTime;i++){
+                System.out.println("index:"+(i+1)+" part 1");
                 thisPO=todayList.get(i);
                 list.add(thisPO.getAvg());
             }
 
             //第二部分
+            System.out.println("part 2");
             initDynamicData(stockID,currentTime+1);
             initSVM();
             Double predictValue=svm.svm_predict(model,predict);
@@ -328,8 +330,9 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
 
             //第三部分
             if(currentTime !=47) {
+                System.out.println("part 3");
                 ArrayList<Double> staticList = this.getStaticPrice(stockID);
-                for (int k = currentTime + 1; currentTime < staticList.size(); k++) {
+                for (int k = currentTime + 1; k < staticList.size(); k++) {
                     list.add(staticList.get(k));
                 }
             }
