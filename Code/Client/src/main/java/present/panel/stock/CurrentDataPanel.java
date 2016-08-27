@@ -24,9 +24,9 @@ class CurrentDataPanel extends JPanel {
      */
     private void init() {
         SwingUtilities.invokeLater(() -> {
-            panel.setBackground(Color.GRAY);
-            panel.setLayout(new BorderLayout());
-            panel.setPreferredSize(new Dimension(800, 300));
+            panel.setBackground(new Color(0xeeeeee));
+            panel.setLayout(new BorderLayout(0, 5));
+            panel.setPreferredSize(new Dimension(1, 780));
 
             panel.revalidate();
         });
@@ -37,35 +37,24 @@ class CurrentDataPanel extends JPanel {
      */
     private void createUIComponents() {
         SwingUtilities.invokeLater(() -> {
-            NamePanel namePanel = new NamePanel();
-            panel.add(namePanel, BorderLayout.WEST);
+            PricePanel pricePanel = new PricePanel();
+            panel.add(pricePanel, BorderLayout.NORTH);
+
+            {
+                Box centerBox = Box.createVerticalBox();
+
+                DataPanel dataPanel = new DataPanel();
+                centerBox.add(dataPanel);
+                HandicapPanel handicapPanel = new HandicapPanel();
+                centerBox.add(handicapPanel);
+
+                panel.add(centerBox, BorderLayout.CENTER);
+            }
+
+            BasicInfoPanel basicInfoPanel = new BasicInfoPanel();
+            panel.add(basicInfoPanel, BorderLayout.SOUTH);
 
             panel.revalidate();
         });
-    }
-
-    /**
-     * 名称面板
-     */
-    private class NamePanel extends JPanel {
-        private JLabel price, inc_dec, incNum, incRate, time;
-
-        NamePanel() {
-
-        }
-
-        /**
-         * 初始化
-         */
-        private void init() {
-
-        }
-
-        /**
-         * 初始化组件
-         */
-        private void createUIComponents() {
-
-        }
     }
 }

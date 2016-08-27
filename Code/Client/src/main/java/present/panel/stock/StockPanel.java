@@ -1,5 +1,7 @@
 package present.panel.stock;
 
+import sun.plugin.javascript.JSClassLoader;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -10,8 +12,11 @@ import java.awt.*;
  */
 public class StockPanel extends JPanel {
 
+    private JPanel panel;
 
     public StockPanel() {
+        panel = this;
+
         init();
         createUIComponents();
     }
@@ -20,8 +25,6 @@ public class StockPanel extends JPanel {
      * 初始化panel
      */
     private void init() {
-        JPanel panel = this;
-
         SwingUtilities.invokeLater(() -> {
             panel.setBackground(Color.LIGHT_GRAY);
             panel.setLayout(new BorderLayout());
@@ -32,14 +35,26 @@ public class StockPanel extends JPanel {
      * 创建组件
      */
     private void createUIComponents() {
-        JPanel panel = this;
-
         SwingUtilities.invokeLater(() -> {
-            CurrentDataPanel currentDataPanel = new CurrentDataPanel();
+            NamePanel namePanel = new NamePanel();
+            panel.add(namePanel, BorderLayout.NORTH);
 
-            panel.add(currentDataPanel, BorderLayout.NORTH);
+            {
+//                JPanel sidePanel = new JPanel();
+//                sidePanel.setLayout(new BorderLayout());
+//                sidePanel.setPreferredSize(new Dimension(200, 1));
+//                sidePanel.setBackground(new Color(0x333333));
+
+                CurrentDataPanel currentDataPanel = new CurrentDataPanel();
+                JScrollPane scrollPane = new JScrollPane(currentDataPanel);
+                scrollPane.setPreferredSize(new Dimension(200, 1));
+//                sidePanel.add(currentDataPanel, BorderLayout.NORTH);
+
+                panel.add(scrollPane, BorderLayout.WEST);
+            }
+
+
         });
     }
-
 }
 
