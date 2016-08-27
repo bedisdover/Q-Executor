@@ -1,9 +1,8 @@
 package service;
 
-import  po.InforForMLPO;
+import po.InforForMLPO;
 import po.StockForMLPO;
-import  vo.MLForVWAPPriceVO;
-import libsvm.*;
+import vo.MLForVWAPPriceVO;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

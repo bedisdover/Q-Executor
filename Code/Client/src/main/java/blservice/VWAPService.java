@@ -1,4 +1,4 @@
-package cn.edu.nju.software.service;
+package blservice;
 
 import java.util.List;
 

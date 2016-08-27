@@ -39,7 +39,7 @@ public class NavPanel extends JPanel{
 
     public NavPanel(PanelSwitcher switcher) {
         this.switcher = switcher;
-        this.initCollpasePanels();
+        this.initCollapsePanels();
         Box box = Box.createVerticalBox();
         this.initButtonBox(box);
         this.setLayout(new BorderLayout());
@@ -62,7 +62,7 @@ public class NavPanel extends JPanel{
 //        box.add(panel);
     }
 
-    private void initCollpasePanels() {
+    private void initCollapsePanels() {
         //交易
         trade = new CollapsePanel(new SuperButton("交易"), BUTTON_W, BUTTON_H,
                 () -> switcher.jump(new TradePanel()));

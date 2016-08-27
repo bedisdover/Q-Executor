@@ -1,6 +1,5 @@
 package present;
 
-import present.panel.home.NavPanel;
 import present.panel.home.TitlePanel;
 
 import javax.swing.*;
@@ -40,9 +39,9 @@ public class MainFrame extends JFrame{
         container.add(current);
         PanelSwitcher switcher = new PanelSwitcher(container, current);
         TitlePanel title = new TitlePanel(switcher);
-        NavPanel nav = new NavPanel(switcher);
+//        NavPanel nav = new NavPanel(switcher);
         this.add(title, BorderLayout.NORTH);
-        this.add(nav, BorderLayout.WEST);
+//        this.add(nav, BorderLayout.WEST);
         this.add(container, BorderLayout.CENTER);
     }
 
