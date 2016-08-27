@@ -11,26 +11,11 @@ import java.awt.*;
  * 大单面板
  */
 public class GeneralPanel extends StockPanel {
-    private JPanel panel;
 
-    public GeneralPanel() {
-        panel = this;
-
-        init();
-        createUIComponents();
-    }
-
-    private void init() {
+    @Override
+    void createCenterPanel() {
         SwingUtilities.invokeLater(() -> {
-
-        });
-
-    }
-
-    private void createUIComponents() {
-        SwingUtilities.invokeLater(() -> {
-            CenterPanel centerPanel = new CenterPanel();
-
+            centerPanel = new CenterPanel();
             panel.add(centerPanel, BorderLayout.CENTER);
         });
     }

@@ -1,5 +1,7 @@
 package present.panel.stock;
 
+import present.charts.KLine;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -10,13 +12,16 @@ import java.awt.*;
  */
 public class StockPanel extends JPanel {
 
-    private JPanel panel;
+    JPanel panel;
+
+    JPanel centerPanel;
 
     public StockPanel() {
         panel = this;
 
         init();
         createUIComponents();
+        createCenterPanel();
     }
 
     /**
@@ -24,8 +29,9 @@ public class StockPanel extends JPanel {
      */
     private void init() {
         SwingUtilities.invokeLater(() -> {
-            panel.setBackground(Color.LIGHT_GRAY);
             panel.setLayout(new BorderLayout());
+
+            panel.revalidate();
         });
     }
 
@@ -44,6 +50,16 @@ public class StockPanel extends JPanel {
 
                 panel.add(scrollPane, BorderLayout.WEST);
             }
+        });
+    }
+
+    /**
+     * 创建中部面板
+     */
+    void createCenterPanel() {
+        SwingUtilities.invokeLater(() -> {
+            panel.add(new KLine().getKLine("sh600000"), BorderLayout.CENTER);
+            panel.revalidate();
         });
     }
 }

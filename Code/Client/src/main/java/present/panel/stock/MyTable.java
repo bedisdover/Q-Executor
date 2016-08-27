@@ -30,20 +30,21 @@ class MyTable extends JTable {
     private void init() {
         //行高
         setRowHeight(30);
-        getTableHeader().setFont(new Font("微软雅黑", Font.PLAIN, 20));
+        getTableHeader().setPreferredSize(new Dimension(getTableHeader().getWidth(), 40));
         //无法修改表头大小
         getTableHeader().setResizingAllowed(true);
         //无法拖动表头
         getTableHeader().setReorderingAllowed(false);
-        //取消自动调整大小
         //设置每列的宽度
         setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         {
             //设置table表头居中
+            DefaultTableCellRenderer thr = new DefaultTableCellRenderer();
+            thr.setHorizontalAlignment(SwingConstants.CENTER);
+            getTableHeader().setDefaultRenderer(thr);
+            //设置table内容居中
             DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
             tcr.setHorizontalAlignment(SwingConstants.CENTER);
-            getTableHeader().setDefaultRenderer(tcr);
-            //设置table内容居中
             setDefaultRenderer(Object.class, tcr);
         }
         //设置table内容不可编辑

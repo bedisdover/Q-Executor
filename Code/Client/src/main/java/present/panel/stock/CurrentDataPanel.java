@@ -26,8 +26,7 @@ class CurrentDataPanel extends JPanel {
      */
     private void init() {
         SwingUtilities.invokeLater(() -> {
-            panel.setBackground(new Color(0xeeeeee));
-            panel.setLayout(new BorderLayout(0, 5));
+            panel.setLayout(new BorderLayout(0, 20));
             panel.setPreferredSize(new Dimension(1, 780));
 
             panel.revalidate();
@@ -83,7 +82,7 @@ class CurrentDataPanel extends JPanel {
          */
         private void init() {
             SwingUtilities.invokeLater(() -> {
-                panel.setBackground(new Color(182, 187, 187));
+                panel.setBackground(new Color(0xeeeeee));
                 panel.setPreferredSize(new Dimension(1, 80));
                 panel.setLayout(new BorderLayout());
 
@@ -99,7 +98,7 @@ class CurrentDataPanel extends JPanel {
                 {
                     JPanel northPanel = new JPanel();
 
-                    northPanel.setBackground(new Color(182, 187, 187));
+                    northPanel.setBackground(new Color(0xeeeeee));
                     northPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
                     price = new JLabel("23");
@@ -124,7 +123,7 @@ class CurrentDataPanel extends JPanel {
                 {
                     JPanel southPanel = new JPanel();
 
-                    southPanel.setBackground(new Color(182, 187, 187));
+                    southPanel.setBackground(new Color(0xeeeeee));
                     southPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
                     time = new JLabel("2016年08月26日 14:03:21");
@@ -166,7 +165,7 @@ class CurrentDataPanel extends JPanel {
 
         private void init() {
             SwingUtilities.invokeLater(() -> {
-                panel.setBackground(new Color(0xcccccc));
+                panel.setBackground(new Color(0xeeeeee));
                 panel.setPreferredSize(new Dimension(1, 320));
                 panel.setLayout(new BorderLayout());
 

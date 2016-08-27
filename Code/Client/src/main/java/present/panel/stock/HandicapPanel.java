@@ -67,7 +67,7 @@ class CenterPanel extends JPanel {
 
     private void init() {
         SwingUtilities.invokeLater(() -> {
-            panel.setBackground(new Color(0xccccccc));
+            panel.setBackground(new Color(0xeeeeee));
             panel.setLayout(new BorderLayout(10, 0));
 
             panel.revalidate();
@@ -124,7 +124,7 @@ class SouthPanel extends JPanel {
     private void init() {
         SwingUtilities.invokeLater(() -> {
             panel.setLayout(new BorderLayout(20, 0));
-            panel.setBackground(new Color(0xcccccc));
+            panel.setBackground(new Color(0xeeeeee));
 
             panel.revalidate();
         });
