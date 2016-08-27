@@ -27,6 +27,13 @@ class CollapsePanel extends JPanel {
 
     private static final int PADDING = 6;
 
+    /**
+     *
+     * @param parent 折叠面板所在父容器
+     * @param btnW 折叠面板中的按钮宽度
+     * @param btnH 折叠面板中的按钮高度
+     * @param handler 折叠父按钮的点击事件处理器
+     */
     CollapsePanel(JButton parent, int btnW, int btnH, IActionHandler handler) {
         this.parent = parent;
         this.parent.setPreferredSize(new Dimension(btnW, btnH));

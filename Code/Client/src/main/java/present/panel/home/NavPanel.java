@@ -79,7 +79,7 @@ public class NavPanel extends JPanel{
         SubButton single = new SubButton("逐笔");
         single.addActionListener((e) -> switcher.jump(new SinglePanel()));
         stock.addSubButton(single);
-        
+
         SubButton price = new SubButton("分价");
         price.addActionListener((e) -> switcher.jump(new PriceSharePanel()));
         stock.addSubButton(price);
