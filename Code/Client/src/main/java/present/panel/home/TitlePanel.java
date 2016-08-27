@@ -50,6 +50,7 @@ public class TitlePanel extends JPanel{
 
     private void initButton(JButton btn) {
         btn.setPreferredSize(new Dimension(BUTTON_W, BUTTON_H));
+        btn.setContentAreaFilled(false);
     }
 
     private void setButtonHandler() {
