@@ -67,14 +67,14 @@ public List<StockInfoPO> filterByTime(List<StockInfoPO> info,Date start,Date end
      * @return date下的所有股票交易信息
      */
 	public List<StockInfoByPer> getPerStockInfo(String codeNum,Date date){
-//		if(TimeUtil.isSameDate(date)&&!TimeUtil.isOver6PM(date)){
-			//没有超过当日的18点从网页上爬取
+		if(TimeUtil.isSameDate(date)&&!TimeUtil.isOver6PM(date)){
+//			没有超过当日的18点从网页上爬取
 			return getPerDealByHTML(codeNum,TimeUtil.getDate(date));
-//		}
-//		else {
-//			//超过当日18点或者是历史数据直接读取URL里面的xls文件获取
-//			return getPerDealByURL(codeNum,TimeUtil.getDate(date));
-//		}
+		}
+		else {
+			//超过当日18点或者是历史数据直接读取URL里面的xls文件获取
+			return getPerDealByURL(codeNum,TimeUtil.getDate(date));
+		}
 	}
 
 	/**
