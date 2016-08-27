@@ -1,16 +1,19 @@
-package cn.edu.nju.software.service;
+package bl;
 /**
  * @author ZhangYF
  *
  */
-import cn.edu.nju.software.vo.MLForVWAPPriceVO;
+import blservice.VWAPService;
+import service.MLForVWAPService;
+import service.MLForVWAPServiceImpl;
+import vo.MLForVWAPPriceVO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class VWAP implements  VWAPService{
+public class VWAP implements VWAPService {
 
 	
 	Map<String,List<Double>> stockPnMap ;
