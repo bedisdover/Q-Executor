@@ -28,7 +28,7 @@ class BasicInfoPanel extends JPanel {
 
     private void init() {
         SwingUtilities.invokeLater(() -> {
-            panel.setBackground(new Color(0xcccccc));
+            panel.setBackground(new Color(0xeeeeee));
             panel.setLayout(new BorderLayout());
 
             panel.revalidate();
