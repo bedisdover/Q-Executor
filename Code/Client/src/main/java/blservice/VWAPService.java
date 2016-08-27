@@ -1,5 +1,7 @@
 package blservice;
 
+import bl.VWAP_Param;
+
 import java.util.List;
 
 /**
