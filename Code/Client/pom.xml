@@ -42,7 +42,14 @@
             <systemPath>${project.basedir}/lib/beautyeye_lnf.jar</systemPath>
         </dependency>
 
-
+        <dependency>
+            <groupId>libsvm</groupId>
+            <artifactId>libsvm</artifactId>
+            <!-- 不知道版本，随便配一个 -->
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/libsvm.jar</systemPath>
+        </dependency>
 
     </dependencies>
 

@@ -147,7 +147,11 @@ public class StockServiceImpl implements StockService {
         List<StockInfoByTime> stockInfoByTimes = new ArrayList<StockInfoByTime>();
         //有疑问 date参数是不是作为传入参数
         //1.获取每笔交易
-        List<StockInfoByPer> stockInfoByPers = stockInfoDao.getPerStockInfo(code,new Date());
+        Calendar calendar = Calendar.getInstance();
+        while (calendar.get(Calendar.DAY_OF_WEEK)==Calendar.SATURDAY||calendar.get(Calendar.DAY_OF_WEEK)==Calendar.SUNDAY){
+            calendar.add(Calendar.DATE,-1);
+        }
+        List<StockInfoByPer> stockInfoByPers = stockInfoDao.getPerStockInfo(code,calendar.getTime());
         //当日的一分钟线
         long compare = TimeUtil.getMillisByHHmmss(stockInfoByPers.get(0).getTime())/(1000*60) *60000;
         String temp = TimeUtil.getDateHHmmss(compare);

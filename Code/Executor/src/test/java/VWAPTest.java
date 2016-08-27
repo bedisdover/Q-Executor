@@ -20,9 +20,10 @@ public class VWAPTest {
         long userVol = 100000;
         String stockid = "sh600000";
         double delta = 1.0;
-        int currentTime = 10;
+        int currentTime = 20;
         int tiemNum = 48;
 
+        long startTime = System.currentTimeMillis();
         VWAP_Param param = new VWAP_Param(userVol ,stockid,delta,currentTime,tiemNum);
 
         List<Integer> preVn = vwap.predictVn(param);
@@ -34,7 +35,15 @@ public class VWAPTest {
 //            errorValue.add(err);
 //        }
 
+        long sum = 0;
+        for (int i:preVn){
+            sum+=i;
+        }
+        System.out.println(sum);
         System.out.println(preVn);
+        long endTime = System.currentTimeMillis();
+        long time = (endTime - startTime)/1000;
+        System.out.println("测试用时："+time+"s");
 //        System.out.println(actualVn);
 //        System.out.println(errorValue);
 
