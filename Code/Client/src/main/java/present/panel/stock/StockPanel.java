@@ -1,7 +1,5 @@
 package present.panel.stock;
 
-import sun.plugin.javascript.JSClassLoader;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -40,21 +38,12 @@ public class StockPanel extends JPanel {
             panel.add(namePanel, BorderLayout.NORTH);
 
             {
-//                JPanel sidePanel = new JPanel();
-//                sidePanel.setLayout(new BorderLayout());
-//                sidePanel.setPreferredSize(new Dimension(200, 1));
-//                sidePanel.setBackground(new Color(0x333333));
-
                 CurrentDataPanel currentDataPanel = new CurrentDataPanel();
                 JScrollPane scrollPane = new JScrollPane(currentDataPanel);
                 scrollPane.setPreferredSize(new Dimension(200, 1));
-//                sidePanel.add(currentDataPanel, BorderLayout.NORTH);
 
                 panel.add(scrollPane, BorderLayout.WEST);
             }
-
-
         });
     }
 }
-

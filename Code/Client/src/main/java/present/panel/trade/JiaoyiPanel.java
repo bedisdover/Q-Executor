@@ -2,6 +2,9 @@ package present.panel.trade;
 
 import java.awt.*;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Vector;
 
 import javax.swing.*;
@@ -12,22 +15,23 @@ import javax.swing.table.JTableHeader;
 
 
 
-public class JiaoyiPanel extends JFrame{
+
+public class JiaoyiPanel extends JPanel{
  
-	
+	//private JPanel jypanel;	
 	
 	public  JiaoyiPanel(){
 		init();
-		this.setSize(900,700);
+		//this.setSize(900,700);
         this.setVisible(true);
      
 	}
 	public void init(){
 		Font font=new Font("微软雅黑", Font.PLAIN, 11);
-		JPanel jypanel=new JPanel();//交易界面
-		 BoxLayout layout=new BoxLayout(jypanel, BoxLayout.Y_AXIS); 
-		 jypanel.setLayout(layout);
-		 jypanel.setBorder(BorderFactory.createLineBorder(Color.black));
+		
+		 BoxLayout layout=new BoxLayout(this, BoxLayout.Y_AXIS); 
+		 this.setLayout(layout);
+		 this.setBorder(BorderFactory.createLineBorder(Color.black));
 		JPanel header=new JPanel();//搜索栏
 		 header.setLayout(new BoxLayout(header, BoxLayout.X_AXIS)); 
 		header.setPreferredSize(new Dimension(850,25));
@@ -55,7 +59,7 @@ public class JiaoyiPanel extends JFrame{
 		zc.setFont(new Font("微软雅黑", Font.PLAIN, 14));
 		zc.setPreferredSize(new Dimension(80,25));
 		header.add(zc);
-		jypanel.add(header);
+		this.add(header);
 		JPanel show=new JPanel();//展示
 		show.setPreferredSize(new Dimension(850,500));
 		 show.setLayout(new BoxLayout(show, BoxLayout.Y_AXIS));  
@@ -99,7 +103,6 @@ public class JiaoyiPanel extends JFrame{
 		zqdm.setFont(font);
 		zqdm.setPreferredSize(new Dimension(70,25));
 		JTextField zqdm2=new JTextField();
-		zqdm2.setFocusable(false);
 		zqdm2.setPreferredSize(new Dimension(70,25));
 		JLabel zqmc=new JLabel("  证券名称");
 		zqmc.setFont(font);
@@ -212,21 +215,35 @@ public class JiaoyiPanel extends JFrame{
 		JLabel hcks=new JLabel("  回测开始");
 		hcks.setFont(new Font("微软雅黑", Font.PLAIN, 11));
 		hcks.setPreferredSize(new Dimension(60,25));
-		JComboBox hcks2=new JComboBox();
-		hcks2.setFont(font);
-		hcks2.setFocusable(false);
-		hcks2.setPreferredSize(new Dimension(80,25));
+		
+		Chooser ser1 = Chooser.getInstance();
+        JTextField text1 = new JTextField();
+        text1.setBounds(10, 10, 200, 30);
+        
+        Date day=new Date();   
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");  
+        String[] now=df.format(day).split("-");
+        text1.setText(now[0]+"-"+now[1]+"-"+now[2]);
+      ser1.register(text1);
+        
+      Chooser ser2 = Chooser.getInstance();
+      JTextField text2 = new JTextField();
+      text2.setBounds(10, 10, 200, 30);
+      text2.setText(now[0]+"-"+now[1]+"-"+now[2]);
+      ser2.register(text2);
+      
+      
 		JLabel hcjs=new JLabel("  回测结束");
 		hcjs.setFont(new Font("微软雅黑", Font.PLAIN, 11));
 		hcjs.setPreferredSize(new Dimension(60,25));
-		JComboBox hcjs2=new JComboBox();
-		hcjs2.setFont(font);
-		hcjs2.setFocusable(false);
-		hcjs2.setPreferredSize(new Dimension(80,25));
+		
+		
+		
+		
 		p7.add(hcks);
-		p7.add(hcks2);
+		p7.add(text1);
 		p7.add(hcjs);
-		p7.add(hcjs2);
+		p7.add(text2);
 		box2.add(p7);
 		
 		JPanel p8=new JPanel();
@@ -412,13 +429,14 @@ public class JiaoyiPanel extends JFrame{
 		show.add(line3);
 		
 		
-		jypanel.add(show);
-		this.add(jypanel);
+		this.add(show);
+	//	this.add(jypanel);
 		
 	}
 	
 	
 	public static void main(String[] args){
+		
 		try
 	    {
 	        org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
@@ -427,6 +445,11 @@ public class JiaoyiPanel extends JFrame{
 	    {
 	        //TODO exception
 	    }
+		
 		JiaoyiPanel demo=new JiaoyiPanel();
+		JFrame f=new JFrame();
+		f.setVisible(true);
+		f.setSize(900, 750);
+		f.add(demo);
 	}
 }
