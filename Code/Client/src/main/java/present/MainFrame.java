@@ -18,7 +18,7 @@ import java.awt.*;
  */
 public class MainFrame extends JFrame{
 
-    private static final int PANEL_W = 900;
+    private static final int PANEL_W = 1000;
 
     private static final int PANEL_H = 600;
 

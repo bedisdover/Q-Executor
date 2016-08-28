@@ -10,15 +10,11 @@ import java.util.Vector;
  *
  * 交易面板的监控面板
  */
-public class MonitorPanel extends JPanel {
+class MonitorPanel extends JPanel {
+
+    private static final Font font = new Font("宋体", Font.PLAIN, 11);
 
     MonitorPanel(int width, int height) {
-//        superMonitor.setFont(new Font("微软雅黑", 0, 10));
-//        superMonitor.setFocusPainted(false);
-//        subMonitor.setFont(new Font("微软雅黑", 0, 10));
-//        subMonitor.setFocusPainted(false);
-//        keepStock.setFont(new Font("微软雅黑", 0, 10));
-//        keepStock.setFocusPainted(false);
 
         //标签页，用按钮模拟
         JButton superMonitor = new JButton("母单监控");
@@ -69,6 +65,7 @@ public class MonitorPanel extends JPanel {
                 return false;
             }
         };
+        table.getTableHeader().setFont(font);
         //添加表格到滚动面板
         JScrollPane pane = new JScrollPane();
         pane.setViewportView(table);
@@ -78,28 +75,5 @@ public class MonitorPanel extends JPanel {
         this.setPreferredSize(new Dimension(width, height));
         this.add(bar, BorderLayout.NORTH);
         this.add(pane, BorderLayout.CENTER);
-//        pane.setOpaque(false);//将中间的viewport设置为透明
-//        pane.setColumnHeaderView(table.getTableHeader());
-//
-//        table.getTableHeader().setFont(new Font("微软雅黑", 0, 8));
-//
-//
-//        pane.getColumnHeader().setOpaque(false);//再取出头部，并设置为透明
-//
-//        table.setDefaultRenderer(Object.class, render);
-//        table.setRowHeight(30);
-//        JTableHeader headerr2 = table.getTableHeader();//获取头部
-//        headerr2.setPreferredSize(new Dimension(30, 26));
-//
-//        table.setPreferredScrollableViewportSize(new Dimension(500, 400));
-//        table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//        table.setShowVerticalLines(true);
-//        table.setShowHorizontalLines(true);
-//        pane.getViewport().add(table);
-//        table.setFillsViewportHeight(true);
-//        table.setFont(new Font("微软雅黑", 0, 10));
-//        table.setOpaque(false);
-//        pane.setOpaque(false);
-//        pane.getViewport().setOpaque(false);
     }
 }
