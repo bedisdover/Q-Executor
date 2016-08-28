@@ -11,7 +11,9 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import vo.StockBasicInfoVO;
 import vo.StockKLineVO;
+import vo.StockNowTimeVO;
 import blservice.GetKLineDataService;
 
 /**
@@ -70,6 +72,5 @@ public class GetKLineDataServiceImpl implements GetKLineDataService{
 		}
 		return stockList;
 	}
-
 
 }
