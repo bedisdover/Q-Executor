@@ -1,6 +1,9 @@
 package present.panel.stock;
 
+import bl.GetStockDataServiceImpl;
+import blservice.GetStockDataService;
 import present.charts.KLine;
+import vo.StockBasicInfoVO;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,10 +19,14 @@ public class StockPanel extends JPanel {
 
     JPanel centerPanel;
 
-    public StockPanel() {
+    String stockCode;
+
+    public StockPanel(String stockCode) {
         panel = this;
+        this.stockCode = stockCode;
 
         init();
+        getData();
         createUIComponents();
         createCenterPanel();
     }
@@ -40,7 +47,7 @@ public class StockPanel extends JPanel {
      */
     private void createUIComponents() {
         SwingUtilities.invokeLater(() -> {
-            NamePanel namePanel = new NamePanel();
+            NamePanel namePanel = new NamePanel(stockCode);
             panel.add(namePanel, BorderLayout.NORTH);
 
             {
@@ -61,5 +68,28 @@ public class StockPanel extends JPanel {
             panel.add(new KLine().getKLine("sh600000"), BorderLayout.CENTER);
             panel.revalidate();
         });
+    }
+
+    private void getData() {
+        SwingWorker worker = new SwingWorker() {
+            @Override
+            protected Object doInBackground() throws Exception {
+                GetStockDataService getStockData = new GetStockDataServiceImpl();
+
+                return getStockData.getBasicInfo("sh600008");
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    StockBasicInfoVO stockBasicInfoVO = (StockBasicInfoVO) get();
+                    System.out.println(stockBasicInfoVO);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        worker.execute();
     }
 }

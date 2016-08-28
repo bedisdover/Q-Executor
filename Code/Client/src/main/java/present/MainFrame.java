@@ -85,7 +85,7 @@ public class MainFrame extends JFrame{
         stock.addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {
-                switcher.jump(new StockPanel());
+                switcher.jump(new StockPanel("sh600000"));
             }
 
             @Override
@@ -96,17 +96,17 @@ public class MainFrame extends JFrame{
         });
         //大单菜单项
         JMenuItem general = this.createMenuItem(
-                "大单", (e) -> switcher.jump(new GeneralPanel())
+                "大单", (e) -> switcher.jump(new GeneralPanel("sh600000"))
         );
         stock.add(general);
         //逐笔菜单项
         JMenuItem single = this.createMenuItem(
-                "逐笔", (e) -> switcher.jump(new SinglePanel())
+                "逐笔", (e) -> switcher.jump(new SinglePanel("sh600000"))
         );
         stock.add(single);
         //分价菜单项
         JMenuItem price = this.createMenuItem(
-                "分价", (e) -> switcher.jump(new PriceSharePanel())
+                "分价", (e) -> switcher.jump(new PriceSharePanel("sh600000"))
         );
         stock.add(price);
         bar.add(stock);

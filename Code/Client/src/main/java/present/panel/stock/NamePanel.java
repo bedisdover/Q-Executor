@@ -14,12 +14,15 @@ class NamePanel extends JPanel {
 
     private JPanel panel;
 
-    private JLabel name, code;
+    private JLabel labelName, labelCode;
 
     private JButton portrait;
 
-    NamePanel() {
+    private String stockCode;
+
+    NamePanel(String stockCode) {
         panel = this;
+        this.stockCode = stockCode;
 
         init();
         createUIComponents();
@@ -49,14 +52,14 @@ class NamePanel extends JPanel {
                 westPanel.setBackground(new Color(0xeeeeee));
                 westPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 15));
 
-                name = new JLabel("浦发银行");
-                name.setFont(new Font("微软雅黑", Font.PLAIN, 20));
+                labelName = new JLabel("浦发银行");
+                labelName.setFont(new Font("微软雅黑", Font.PLAIN, 20));
 
-                code = new JLabel("(sh600000)");
-                code.setFont(new Font("微软雅黑", Font.PLAIN, 16));
+                labelCode = new JLabel("(" + stockCode + ")");
+                labelCode.setFont(new Font("微软雅黑", Font.PLAIN, 16));
 
-                westPanel.add(name);
-                westPanel.add(code);
+                westPanel.add(labelName);
+                westPanel.add(labelCode);
 
                 panel.add(westPanel, BorderLayout.WEST);
             }
@@ -77,5 +80,9 @@ class NamePanel extends JPanel {
                 panel.revalidate();
             }
         });
+    }
+
+    public void setName(String name) {
+        SwingUtilities.invokeLater(() -> labelName.setText(name));
     }
 }
