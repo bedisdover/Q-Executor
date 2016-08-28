@@ -1,5 +1,7 @@
 package blservice;
 
+import java.util.List;
+
 import vo.StockBasicInfoVO;
 import vo.StockNowTimeVO;
 
@@ -42,7 +44,7 @@ public interface GetStockDataService {
      * 35:1470881276
      * 36:19.71
      */
-    StockNowTimeVO getNowTimeData(String... codeNum);
+    List<StockNowTimeVO> getNowTimeData(String... codeNum);
 
     /**
      * 获取股票基本信息

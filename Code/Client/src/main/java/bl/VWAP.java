@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class VWAP implements  VWAPService{
+public class VWAP implements VWAPService {
 
 	
 	Map<String,List<Double>> stockPnMap ;

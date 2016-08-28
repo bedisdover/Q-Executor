@@ -12,6 +12,10 @@ import java.awt.*;
  */
 public class GeneralPanel extends StockPanel {
 
+    public GeneralPanel(String stockCode) {
+        super(stockCode);
+    }
+
     @Override
     void createCenterPanel() {
         SwingUtilities.invokeLater(() -> {

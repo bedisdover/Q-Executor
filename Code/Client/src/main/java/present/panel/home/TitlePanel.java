@@ -66,13 +66,13 @@ public class TitlePanel extends JPanel{
 
         //股票导航菜单
         JMenuBar bar = new JMenuBar();
-        stock.add(initMenuItem("大单", (e) -> switcher.jump(new GeneralPanel())));
-        stock.add(initMenuItem("逐笔", (e) -> switcher.jump(new SinglePanel())));
-        stock.add(initMenuItem("分价", (e) -> switcher.jump(new PriceSharePanel())));
+        stock.add(initMenuItem("大单", (e) -> switcher.jump(new GeneralPanel("sh600000"))));
+        stock.add(initMenuItem("逐笔", (e) -> switcher.jump(new SinglePanel("sh600000"))));
+        stock.add(initMenuItem("分价", (e) -> switcher.jump(new PriceSharePanel("sh600000"))));
         stock.addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {
-                switcher.jump(new StockPanel());
+                switcher.jump(new StockPanel("sh600000"));
             }
 
             @Override

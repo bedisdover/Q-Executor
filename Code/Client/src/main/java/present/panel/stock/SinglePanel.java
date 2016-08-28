@@ -7,4 +7,7 @@ package present.panel.stock;
  */
 public class SinglePanel extends StockPanel {
 
+    public SinglePanel(String stockCode) {
+        super(stockCode);
+    }
 }

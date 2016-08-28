@@ -8,6 +8,10 @@ import java.util.Date;
  * 股票实时数据对象
  */
 public class StockNowTimeVO {
+	/**
+     * 股票代码
+     */
+    private String code;
     /**
      * 当前价格
      */
@@ -64,7 +68,7 @@ public class StockNowTimeVO {
 
     }
 
-    public StockNowTimeVO(double price, double close, double incNum, double incRate,
+    public StockNowTimeVO(String code, double price, double close, double incNum, double incRate,
                           double open, double amount, double volume, double buy1price,
                           double buy2Price, double buy3Price, double buy4Price,
                           double buy5Price, double buy1amount, double buy2amount,
@@ -103,7 +107,16 @@ public class StockNowTimeVO {
         this.time = time;
     }
 
-    public double getPrice() {
+    
+    public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public double getPrice() {
         return price;
     }
 

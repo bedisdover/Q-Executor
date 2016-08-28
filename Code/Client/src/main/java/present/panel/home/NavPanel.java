@@ -70,18 +70,18 @@ public class NavPanel extends JPanel{
 
         //股票
         stock = new CollapsePanel(new SuperButton("股票"), BUTTON_W, BUTTON_H,
-                (e) -> switcher.jump(new StockPanel()));
+                (e) -> switcher.jump(new StockPanel("sh600000")));
 
         SubButton general = new SubButton("大单");
-        general.addActionListener((e) -> switcher.jump(new GeneralPanel()));
+        general.addActionListener((e) -> switcher.jump(new GeneralPanel("sh600000")));
         stock.addSubButton(general);
 
         SubButton single = new SubButton("逐笔");
-        single.addActionListener((e) -> switcher.jump(new SinglePanel()));
+        single.addActionListener((e) -> switcher.jump(new SinglePanel("sh600000")));
         stock.addSubButton(single);
 
         SubButton price = new SubButton("分价");
-        price.addActionListener((e) -> switcher.jump(new PriceSharePanel()));
+        price.addActionListener((e) -> switcher.jump(new PriceSharePanel("sh600000")));
         stock.addSubButton(price);
 
         stock.setPreferredSize(new Dimension(BUTTON_W, BUTTON_H));
