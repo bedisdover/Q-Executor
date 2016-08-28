@@ -8,7 +8,7 @@ import java.awt.*;
  *
  * 交易面板的实时监控面板（曲线图）
  */
-public class RealTimePanel extends JPanel {
+class RealTimePanel extends JPanel {
 
     RealTimePanel(int width, int height) {
         this.setPreferredSize(new Dimension(width, height));
