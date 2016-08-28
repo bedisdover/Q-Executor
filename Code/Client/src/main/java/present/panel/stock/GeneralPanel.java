@@ -4,6 +4,8 @@ import present.charts.GeneralPie;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by Y481L on 2016/8/27.
@@ -18,9 +20,9 @@ public class GeneralPanel extends JPanel {
 
     private JRadioButton radio400, radio600, radio800, radio1000;
 
+    private ButtonGroup buttonGroup;
+
     public GeneralPanel(String stockCode) {
-
-
         panel = this;
 
         init();
@@ -48,7 +50,7 @@ public class GeneralPanel extends JPanel {
                 radio800 = new JRadioButton("800手");
                 radio1000 = new JRadioButton("1000手");
 
-                ButtonGroup buttonGroup = new ButtonGroup();
+                buttonGroup = new ButtonGroup();
 
                 northPanel.add(label);
                 northPanel.add(radio400);
@@ -93,7 +95,31 @@ public class GeneralPanel extends JPanel {
 
                 panel.add(southPanel, BorderLayout.SOUTH);
             }
+
+            addListeners();
         });
+    }
+
+    private void addListeners() {
+        radio400.addActionListener(e -> {
+            System.out.println("GeneralPanel.actionPerformed");
+        });
+
+        radio600.addActionListener(e -> {
+            System.out.println(600);
+        });
+
+        radio800.addActionListener(e -> {
+            System.out.println(800);
+        });
+
+        radio1000.addActionListener(e -> {
+            System.out.println(1000);
+        });
+    }
+
+    private void getData() {
+
     }
 
     private JScrollPane createTable() {
