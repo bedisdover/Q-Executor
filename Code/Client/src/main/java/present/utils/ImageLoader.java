@@ -13,13 +13,10 @@ public class ImageLoader {
      */
     public static ImageIcon increase, decrease, dull;
 
-    public static ImageIcon logo;
-
     static {
         increase = new ImageIcon("images/increase.png");
         System.out.println("ImageLoader.static initializer");
         decrease = new ImageIcon("images/decrease.png");
         dull = new ImageIcon("images/dull.png");
-        logo = new ImageIcon("images/logo.ico");
     }
 }
