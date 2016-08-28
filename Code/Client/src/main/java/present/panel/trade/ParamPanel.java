@@ -26,7 +26,6 @@ class ParamPanel extends JPanel {
         this.componentW = ((width >> 1) - 3 * H_GAP) >> 1;
         this.componentH = (int)(this.componentW * 0.4);
 
-
         //面板西边的组件
         Box west = Box.createVerticalBox();
         //资金账户

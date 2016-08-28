@@ -3,7 +3,7 @@ package present;
 import present.panel.account.LoginPanel;
 import present.panel.account.RegisterPanel;
 import present.panel.introduce.IntroPanel;
-import present.panel.stock.StockPanel;
+import present.panel.stock.SearchPanel;
 import present.panel.trade.TradePanel;
 
 import javax.swing.*;
@@ -18,9 +18,9 @@ import java.awt.*;
  */
 public class MainFrame extends JFrame{
 
-    private static final int PANEL_W = 1000;
+    public static final int PANEL_W = 1000;
 
-    private static final int PANEL_H = 600;
+    public static final int PANEL_H = 600;
 
     private static final int MENU_W = 100;
 
@@ -81,7 +81,7 @@ public class MainFrame extends JFrame{
         stock.addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {
-                switcher.jump(new StockPanel("sh600000"));
+                switcher.jump(new SearchPanel(switcher));
             }
 
             @Override

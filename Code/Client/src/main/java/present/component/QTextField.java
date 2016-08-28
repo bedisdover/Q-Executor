@@ -33,6 +33,7 @@ public class QTextField extends JTextField {
                     setText("");
                     setForeground(Color.BLACK);
                 }
+                requestFocus();
             }
 
         });
