@@ -9,6 +9,7 @@ import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.xy.StandardXYBarPainter;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.TextAnchor;
 
@@ -46,6 +47,7 @@ public class PriceSharePlot {
         BarRenderer renderer = new BarRenderer();
         renderer.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
         renderer.setBaseItemLabelsVisible(true);
+        renderer.setShadowVisible(false);//设置没有阴影
 
         //默认的数字显示在柱子中，通过如下两句可调整数字的显示
         //注意：此句很关键，若无此句，那数字的显示会被覆盖，给人数字没有显示出来的问题
@@ -57,10 +59,6 @@ public class PriceSharePlot {
         return chart;
     }
 
-    private void setChartProperties() {
-
-    }
-
     private DefaultCategoryDataset getDataSet(String codeNum) {
         DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
 
@@ -70,6 +68,10 @@ public class PriceSharePlot {
         dataSet.addValue(580, "中国", "山东");
         dataSet.addValue(320, "中国", "山西");
         dataSet.addValue(410, "中国", "陕西");
+        dataSet.addValue(410, "中国", "陕西1");
+        dataSet.addValue(410, "中国", "陕西2");
+        dataSet.addValue(410, "中国", "陕西3");
+        dataSet.addValue(410, "中国", "陕西4");
 
         return dataSet;
     }
