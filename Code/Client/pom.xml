@@ -56,6 +56,15 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/libsvm.jar</systemPath>
         </dependency>
+
+        <dependency>
+            <groupId>json</groupId>
+            <artifactId>json</artifactId>
+            <!-- 不知道版本，随便配一个 -->
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/json-20160212.jar</systemPath>
+        </dependency>
     </dependencies>
 
 </project>

@@ -22,7 +22,7 @@ public class LoginPanel extends JPanel {
 
     private JButton register = new JButton("注册");
 
-    private JButton findpw = new JButton("找回密码");
+    private JButton findPW = new JButton("找回密码");
 
     private static final int COMPONENT_NUM = 5;
 
@@ -30,7 +30,7 @@ public class LoginPanel extends JPanel {
 
     private static final int HEIGHT = 56;
 
-    private static final int PADDING = 10;
+    private static final int PADDING = 20;
 
     public LoginPanel() {
         this.addComponents();
@@ -38,7 +38,13 @@ public class LoginPanel extends JPanel {
 
     private void addComponents() {
         Box box = Box.createVerticalBox();
-        box.add(Box.createVerticalStrut(PADDING));
+        box.add(Box.createVerticalStrut(PADDING << 1));
+        JLabel title = new JLabel("登录");
+        title.setFont(new Font("宋体", Font.PLAIN, 30));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panel.add(title);
+        box.add(panel);
+        box.add(Box.createVerticalStrut(PADDING << 1));
         box.add(this.wrapComponent(name));
         box.add(Box.createVerticalStrut(PADDING));
         box.add(this.wrapComponent(password));
@@ -47,7 +53,7 @@ public class LoginPanel extends JPanel {
         box.add(Box.createVerticalStrut(PADDING));
         box.add(this.wrapComponent(register));
         box.add(Box.createVerticalStrut(PADDING));
-        box.add(this.wrapComponent(findpw));
+        box.add(this.wrapComponent(findPW));
         box.add(Box.createVerticalStrut(
                 NavPanel.PANEL_H - (HEIGHT + PADDING) * COMPONENT_NUM
         ));
@@ -57,6 +63,7 @@ public class LoginPanel extends JPanel {
 
     private JPanel wrapComponent(JComponent c) {
         c.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        c.setFont(new Font("宋体", Font.PLAIN, 22));
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER));
         panel.add(c);
