@@ -3,9 +3,6 @@ package present;
 import present.panel.account.LoginPanel;
 import present.panel.account.RegisterPanel;
 import present.panel.introduce.IntroPanel;
-import present.panel.stock.GeneralPanel;
-import present.panel.stock.PriceSharePanel;
-import present.panel.stock.SinglePanel;
 import present.panel.stock.StockPanel;
 import present.panel.trade.TradePanel;
 
@@ -13,7 +10,6 @@ import javax.swing.*;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import java.awt.*;
-import java.awt.event.ActionListener;
 
 /**
  * Created by Y481L on 2016/8/25.
@@ -94,21 +90,21 @@ public class MainFrame extends JFrame{
             @Override
             public void menuCanceled(MenuEvent e) {}
         });
-        //大单菜单项
-        JMenuItem general = this.createMenuItem(
-                "大单", (e) -> switcher.jump(new GeneralPanel())
-        );
-        stock.add(general);
-        //逐笔菜单项
-        JMenuItem single = this.createMenuItem(
-                "逐笔", (e) -> switcher.jump(new SinglePanel())
-        );
-        stock.add(single);
-        //分价菜单项
-        JMenuItem price = this.createMenuItem(
-                "分价", (e) -> switcher.jump(new PriceSharePanel())
-        );
-        stock.add(price);
+//        //大单菜单项
+//        JMenuItem general = this.createMenuItem(
+//                "大单", (e) -> switcher.jump(new GeneralPanel())
+//        );
+//        stock.add(general);
+//        //逐笔菜单项
+//        JMenuItem single = this.createMenuItem(
+//                "逐笔", (e) -> switcher.jump(new SinglePanel())
+//        );
+//        stock.add(single);
+//        //分价菜单项
+//        JMenuItem price = this.createMenuItem(
+//                "分价", (e) -> switcher.jump(new PriceSharePanel())
+//        );
+//        stock.add(price);
         bar.add(stock);
 
         //简介菜单
@@ -174,12 +170,12 @@ public class MainFrame extends JFrame{
         return menu;
     }
 
-    private JMenuItem createMenuItem(String name, ActionListener listener) {
-        JMenuItem item = new JMenuItem(name);
-        item.setPreferredSize(new Dimension(MENU_W, MENU_H));
-        item.addActionListener(listener);
-        return item;
-    }
+//    private JMenuItem createMenuItem(String name, ActionListener listener) {
+//        JMenuItem item = new JMenuItem(name);
+//        item.setPreferredSize(new Dimension(MENU_W, MENU_H));
+//        item.addActionListener(listener);
+//        return item;
+//    }
 
     private void setFrameAtCenter() {
         Toolkit tk = Toolkit.getDefaultToolkit();

@@ -32,7 +32,7 @@ public class RegisterPanel extends JPanel{
 
     private static final int HEIGHT = 56;
 
-    private static final int PADDING = 10;
+    private static final int PADDING = 20;
 
     public RegisterPanel() {
         this.addComponents();
@@ -40,7 +40,13 @@ public class RegisterPanel extends JPanel{
 
     private void addComponents() {
         Box box = Box.createVerticalBox();
-        box.add(Box.createVerticalStrut(PADDING));
+        box.add(Box.createVerticalStrut(PADDING << 1));
+        JLabel title = new JLabel("注册");
+        title.setFont(new Font("宋体", Font.PLAIN, 30));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panel.add(title);
+        box.add(panel);
+        box.add(Box.createVerticalStrut(PADDING << 1));
         box.add(this.wrapComponents(email));
         box.add(Box.createVerticalStrut(PADDING));
         box.add(this.wrapComponents(name));
@@ -61,6 +67,7 @@ public class RegisterPanel extends JPanel{
 
     private JPanel wrapComponents(JComponent c) {
         c.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        c.setFont(new Font("宋体", Font.PLAIN, 22));
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panel.add(c);
         return panel;
