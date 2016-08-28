@@ -90,18 +90,11 @@ public class KLine {
      * @return jfreeChart
      */
     private JFreeChart createChart(String stockCode) {
-        double highValue = Double.MIN_VALUE;//设置K线数据当中的最大值
-        double minValue = Double.MAX_VALUE;//设置K线数据当中的最小值
-        double high2Value = Double.MIN_VALUE;//设置成交量的最大值
-        double min2Value = Double.MAX_VALUE;//设置成交量的最低值
-
-        OHLCSeries series = getOHLCData(stockCode);//高开低收数据序列，股票K线图的四个数据，依次是开，高，低，收
-        final OHLCSeriesCollection seriesCollection = new OHLCSeriesCollection();//保留K线数据的数据集，必须申明为final，后面要在匿名内部类里面用到
-        seriesCollection.addSeries(series);
-
-        TimeSeries series2 = getAmountData(stockCode);//对应时间成交量数据
-        TimeSeriesCollection timeSeriesCollection = new TimeSeriesCollection();//保留成交量数据的集合
-        timeSeriesCollection.addSeries(series2);
+        KLineVO kLineVO = new KLineVO(stockCode);
+        //保留K线数据的数据集，必须申明为final，后面要在匿名内部类里面用到
+        final OHLCSeriesCollection seriesCollection = kLineVO.getOhlcSeriesCollection();
+        //保留成交量数据的集合
+        TimeSeriesCollection timeSeriesCollection = kLineVO.getTimeSeriesCollection();
 
         final CandlestickRenderer candlestickRender = new CandlestickRenderer();//设置K线图的画图器，必须申明为final，后面要在匿名内部类里面用到
         candlestickRender.setUseOutlinePaint(true); //设置是否使用自定义的边框线，程序自带的边框线的颜色不符合中国股票市场的习惯
@@ -130,8 +123,8 @@ public class KLine {
         //设置k线图y轴参数
         NumberAxis y1Axis = new NumberAxis();//设置Y轴，为数值,后面的设置，参考上面的y轴设置
         y1Axis.setAutoRange(false);//不使用自动设定范围
-        y1Axis.setRange(minValue * 0.9, highValue * 1.1);//设定y轴值的范围，比最低值要低一些，比最大值要大一些，这样图形看起来会美观些
-        y1Axis.setTickUnit(new NumberTickUnit((highValue * 1.1 - minValue * 0.9) / 10));//设置刻度显示的密度
+        y1Axis.setRange(kLineVO.getLow() * 0.9, kLineVO.getHigh() * 1.1);//设定y轴值的范围，比最低值要低一些，比最大值要大一些，这样图形看起来会美观些
+        y1Axis.setTickUnit(new NumberTickUnit((kLineVO.getHigh() * 1.1 - kLineVO.getLow() * 0.9) / 10));//设置刻度显示的密度
 
         // TODO 设置均线图画图器
         XYLineAndShapeRenderer lineAndShapeRenderer = new XYLineAndShapeRenderer();
@@ -168,8 +161,8 @@ public class KLine {
 
         NumberAxis y2Axis = new NumberAxis();//设置Y轴，为数值,后面的设置，参考上面的y轴设置
         y2Axis.setAutoRange(false);
-        y2Axis.setRange(min2Value * 0.9, high2Value * 1.1);
-        y2Axis.setTickUnit(new NumberTickUnit((high2Value * 1.1 - min2Value * 0.9) / 4));
+        y2Axis.setRange(kLineVO.getLow_amount() * 0.9, kLineVO.getHigh_amount() * 1.1);
+        y2Axis.setTickUnit(new NumberTickUnit((kLineVO.getLow_amount() * 1.1 - kLineVO.getHigh_amount() * 0.9) / 4));
         XYPlot plot2 = new XYPlot(timeSeriesCollection, null, y2Axis, xyBarRender);//建立第二个画图区域对象，主要此时的x轴设为了null值，因为要与第一个画图区域对象共享x轴
         plot2.setBackgroundPaint(Color.BLACK);
         plot2.setRangeGridlinePaint(Color.BLACK);// 设置横轴参考线颜色
@@ -189,11 +182,18 @@ public class KLine {
 class KLineVO {
     private OHLCSeries ohlcSeries;
 
+    private OHLCSeriesCollection ohlcSeriesCollection;
+
     private TimeSeries timeSeries;
+    private TimeSeriesCollection timeSeriesCollection;
 
     private double high, low, high_amount, low_amount;
+    double highValue = Double.MIN_VALUE;//设置K线数据当中的最大值
+    double minValue = Double.MAX_VALUE;//设置K线数据当中的最小值
+    double high2Value = Double.MIN_VALUE;//设置成交量的最大值
+    double min2Value = Double.MAX_VALUE;//设置成交量的最低值
 
-    public OHLCSeries getOhlcSeries() {
+    KLineVO(String stockCode) {
         ohlcSeries = new OHLCSeries("");
         ohlcSeries.add(new Day(28, 9, 2007), 9.2, 9.58, 9.16, 9.34);
         ohlcSeries.add(new Day(27, 9, 2007), 8.9, 9.06, 8.83, 8.96);
@@ -226,14 +226,9 @@ class KLineVO {
         ohlcSeries.add(new Day(21, 8, 2007), 7.10, 7.15, 7.02, 7.07);
         ohlcSeries.add(new Day(20, 8, 2007), 7.02, 7.19, 6.94, 7.14);
 
-        return ohlcSeries;
-    }
+        ohlcSeriesCollection = new OHLCSeriesCollection();
+        ohlcSeriesCollection.addSeries(ohlcSeries);
 
-    public void setOhlcSeries(OHLCSeries ohlcSeries) {
-        this.ohlcSeries = ohlcSeries;
-    }
-
-    public TimeSeries getTimeSeries() {
         timeSeries = new TimeSeries("");
         timeSeries.add(new Day(28, 9, 2007), 260659400 / 100);
         timeSeries.add(new Day(27, 9, 2007), 119701900 / 100);
@@ -266,6 +261,59 @@ class KLineVO {
         timeSeries.add(new Day(21, 8, 2007), 215693200 / 100);
         timeSeries.add(new Day(20, 8, 2007), 200287500 / 100);
 
+        timeSeriesCollection = new TimeSeriesCollection();
+        timeSeriesCollection.addSeries(timeSeries);
+
+        calculate();
+    }
+
+    private void calculate() {
+        //获取K线数据的最高值和最低值
+        int count = ohlcSeriesCollection.getSeriesCount();//一共有多少个序列，目前为一个
+        for (int i = 0; i < count; i++) {
+            int itemCount = ohlcSeriesCollection.getItemCount(i);//每一个序列有多少个数据项
+            for (int j = 0; j < itemCount; j++) {
+                if (high < ohlcSeriesCollection.getHighValue(i, j)) {//取第i个序列中的第j个数据项的最大值
+                    high = ohlcSeriesCollection.getHighValue(i, j);
+                }
+                if (low > ohlcSeriesCollection.getLowValue(i, j)) {//取第i个序列中的第j个数据项的最小值
+                    low = ohlcSeriesCollection.getLowValue(i, j);
+                }
+            }
+
+        }
+        //获取最高值和最低值
+        int seriesCount2 = timeSeriesCollection.getSeriesCount();//一共有多少个序列，目前为一个
+        for (int i = 0; i < seriesCount2; i++) {
+            int itemCount = timeSeriesCollection.getItemCount(i);//每一个序列有多少个数据项
+            for (int j = 0; j < itemCount; j++) {
+                if (high_amount < timeSeriesCollection.getYValue(i, j)) {//取第i个序列中的第j个数据项的值
+                    high_amount = timeSeriesCollection.getYValue(i, j);
+                }
+                if (low_amount > timeSeriesCollection.getYValue(i, j)) {//取第i个序列中的第j个数据项的值
+                    low_amount = timeSeriesCollection.getYValue(i, j);
+                }
+            }
+        }
+    }
+
+    public OHLCSeriesCollection getOhlcSeriesCollection() {
+        return ohlcSeriesCollection;
+    }
+
+    public TimeSeriesCollection getTimeSeriesCollection() {
+        return timeSeriesCollection;
+    }
+
+    public OHLCSeries getOhlcSeries() {
+        return ohlcSeries;
+    }
+
+    public void setOhlcSeries(OHLCSeries ohlcSeries) {
+        this.ohlcSeries = ohlcSeries;
+    }
+
+    public TimeSeries getTimeSeries() {
         return timeSeries;
     }
 
