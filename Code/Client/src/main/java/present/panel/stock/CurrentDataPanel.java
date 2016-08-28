@@ -1,6 +1,7 @@
 package present.panel.stock;
 
 import present.utils.ImageLoader;
+import vo.StockBasicInfoVO;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +14,8 @@ import java.awt.*;
 class CurrentDataPanel extends JPanel {
 
     private JPanel panel;
+
+    private BasicInfoPanel basicInfoPanel;
 
     CurrentDataPanel() {
         panel = this;
@@ -52,12 +55,28 @@ class CurrentDataPanel extends JPanel {
                 panel.add(centerBox, BorderLayout.CENTER);
             }
 
-            BasicInfoPanel basicInfoPanel = new BasicInfoPanel();
+            basicInfoPanel = new BasicInfoPanel();
             panel.add(basicInfoPanel, BorderLayout.SOUTH);
 
             panel.revalidate();
         });
     }
+
+    /**
+     * 设置基本信息
+     *
+     * @param stockBasicInfoVO 基本信息
+     */
+    void setBasicInfo(StockBasicInfoVO stockBasicInfoVO) {
+        SwingUtilities.invokeLater(() -> {
+            basicInfoPanel.setBasicInfo(stockBasicInfoVO);
+        });
+    }
+
+    public void setCurrentData() {
+
+    }
+
 
     /**
      * Created by song on 16-8-26.

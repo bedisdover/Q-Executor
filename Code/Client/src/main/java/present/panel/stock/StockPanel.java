@@ -20,14 +20,18 @@ public class StockPanel extends JPanel {
 
     private JPanel panel;
 
+    private NamePanel namePanel;
+
+    private CurrentDataPanel currentDataPanel;
+
     /**
      * 中部面板
      */
     private JComponent centerPanel;
 
-    private JScrollPane kLinePanel;
+    private JTabbedPane kLinePanel;
 
-    private JPanel generalPanel, singlePanel, priceSharePanel;
+    private JPanel timeSeriesPanel, generalPanel, singlePanel, priceSharePanel;
 
     private String stockCode;
 
@@ -56,18 +60,18 @@ public class StockPanel extends JPanel {
      */
     private void createUIComponents() {
         SwingUtilities.invokeLater(() -> {
-            NamePanel namePanel = new NamePanel();
+            namePanel = new NamePanel();
             panel.add(namePanel, BorderLayout.NORTH);
 
             {
-                CurrentDataPanel currentDataPanel = new CurrentDataPanel();
+                currentDataPanel = new CurrentDataPanel();
                 JScrollPane scrollPane = new JScrollPane(currentDataPanel);
                 scrollPane.setPreferredSize(new Dimension(200, 1));
 
                 panel.add(scrollPane, BorderLayout.WEST);
             }
 
-            centerPanel = new KLine().getKLine(stockCode);
+            centerPanel = kLinePanel = new KLine().getKLine(stockCode);
             panel.add(centerPanel, BorderLayout.CENTER);
         });
     }
@@ -80,6 +84,16 @@ public class StockPanel extends JPanel {
             panel.remove(centerPanel);
 
             switch (panelType) {
+                case "KLinePanel":
+                    centerPanel = kLinePanel;
+                    break;
+                case "TimeSeriesPanel":
+                    if (timeSeriesPanel == null) {
+                        timeSeriesPanel = new TimeSeriesPanel(stockCode);
+                    }
+
+                    centerPanel = timeSeriesPanel;
+                    break;
                 case "GeneralPanel":
                     if (generalPanel == null) {
                         generalPanel = new GeneralPanel(stockCode);
@@ -119,14 +133,16 @@ public class StockPanel extends JPanel {
             protected Object doInBackground() throws Exception {
                 GetStockDataService getStockData = new GetStockDataServiceImpl();
 
-                return getStockData.getBasicInfo("sh600008");
+                return getStockData.getBasicInfo(stockCode);
             }
 
             @Override
             protected void done() {
                 try {
                     StockBasicInfoVO stockBasicInfoVO = (StockBasicInfoVO) get();
-                    System.out.println(stockBasicInfoVO);
+
+                    namePanel.setName(stockBasicInfoVO.getName());
+                    currentDataPanel.setBasicInfo(stockBasicInfoVO);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -148,7 +164,7 @@ public class StockPanel extends JPanel {
 
         private JLabel labelName, labelCode;
 
-        private JButton btn_general, btn_single, btn_priceShare;
+        private JButton btn_kLine, btn_TimeSeries, btn_general, btn_single, btn_priceShare;
 
         private JButton portrait;
 
@@ -200,6 +216,8 @@ public class StockPanel extends JPanel {
                     eastPanel.setBackground(new Color(0xeeeeee));
                     eastPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
 
+                    btn_kLine = new JButton("K 线");
+                    btn_TimeSeries = new JButton("分时");
                     btn_general = new JButton("大单");
                     btn_single = new JButton("逐笔");
                     btn_priceShare = new JButton("分价");
@@ -208,6 +226,8 @@ public class StockPanel extends JPanel {
                     portrait.setPreferredSize(new Dimension(80, 30));
                     portrait.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.green));
 
+                    eastPanel.add(btn_kLine);
+                    eastPanel.add(btn_TimeSeries);
                     eastPanel.add(btn_general);
                     eastPanel.add(btn_single);
                     eastPanel.add(btn_priceShare);
@@ -226,6 +246,20 @@ public class StockPanel extends JPanel {
          * 添加事件监听
          */
         private void addListeners() {
+            btn_kLine.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    createCenterPanel("KLinePanel");
+                }
+            });
+
+            btn_TimeSeries.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    createCenterPanel("TimeSeriesPanel");
+                }
+            });
+
             btn_general.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {

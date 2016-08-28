@@ -1,5 +1,8 @@
 package present.panel.stock;
 
+import vo.StockBasicInfoVO;
+import vo.StockKLineVO;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -104,6 +107,32 @@ class BasicInfoPanel extends JPanel {
 
                 panel.add(eastBox, BorderLayout.EAST);
             }
+        });
+    }
+
+    /**
+     * 设置基本信息
+     *
+     * @param stockBasicInfoVO 基本信息对象
+     */
+    void setBasicInfo(StockBasicInfoVO stockBasicInfoVO) {
+        SwingUtilities.invokeLater(() -> {
+            name.setText(stockBasicInfoVO.getName());
+            industry.setText(stockBasicInfoVO.getIndustry());
+            area.setText(stockBasicInfoVO.getArea());
+            liquid.setText(stockBasicInfoVO.getOutstanding() + "");
+            total.setText(stockBasicInfoVO.getTotals() + "");
+            totalAssets.setText(stockBasicInfoVO.getTotalAssets() + "");
+            liquidAssets.setText(stockBasicInfoVO.getLiquidAssets() + "");
+            fixedAssets.setText(stockBasicInfoVO.getFixedAssets() + "");
+            reserved.setText(stockBasicInfoVO.getReserved() + "");
+            reservedPerShare.setText(stockBasicInfoVO.getReservedPerShare() + "");
+            eps.setText(stockBasicInfoVO.getEps() + "");
+            bvps.setText(stockBasicInfoVO.getBvps() + "");
+            timeToMarket.setText(stockBasicInfoVO.getTimeToMarket() + "");
+
+            panel.revalidate();
+            panel.repaint();
         });
     }
 }
