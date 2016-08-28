@@ -65,12 +65,12 @@ public class NavPanel extends JPanel{
     private void initCollapsePanels() {
         //交易
         trade = new CollapsePanel(new SuperButton("交易"), BUTTON_W, BUTTON_H,
-                () -> switcher.jump(new TradePanel()));
+                (e) -> switcher.jump(new TradePanel()));
         trade.setPreferredSize(new Dimension(BUTTON_W, BUTTON_H));
 
         //股票
         stock = new CollapsePanel(new SuperButton("股票"), BUTTON_W, BUTTON_H,
-                () -> switcher.jump(new StockPanel()));
+                (e) -> switcher.jump(new StockPanel()));
 
         SubButton general = new SubButton("大单");
         general.addActionListener((e) -> switcher.jump(new GeneralPanel()));
@@ -88,7 +88,7 @@ public class NavPanel extends JPanel{
 
         //简介
         introduce = new CollapsePanel(new SuperButton("简介"), BUTTON_W, BUTTON_H,
-                () -> switcher.jump(new IntroPanel()));
+                (e) -> switcher.jump(new IntroPanel()));
         introduce.setPreferredSize(new Dimension(BUTTON_W, BUTTON_H));
     }
 

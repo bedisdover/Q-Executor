@@ -14,6 +14,7 @@ import javax.swing.*;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 /**
  * Created by Y481L on 2016/8/25.
@@ -65,9 +66,9 @@ public class TitlePanel extends JPanel{
 
         //股票导航菜单
         JMenuBar bar = new JMenuBar();
-        stock.add(initMenuItem("大单", () -> switcher.jump(new GeneralPanel())));
-        stock.add(initMenuItem("逐笔", () -> switcher.jump(new SinglePanel())));
-        stock.add(initMenuItem("分价", () -> switcher.jump(new PriceSharePanel())));
+        stock.add(initMenuItem("大单", (e) -> switcher.jump(new GeneralPanel())));
+        stock.add(initMenuItem("逐笔", (e) -> switcher.jump(new SinglePanel())));
+        stock.add(initMenuItem("分价", (e) -> switcher.jump(new PriceSharePanel())));
         stock.addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {
@@ -112,10 +113,10 @@ public class TitlePanel extends JPanel{
         btn.setContentAreaFilled(false);
     }
 
-    private JMenuItem initMenuItem(String text, IActionHandler handler) {
+    private JMenuItem initMenuItem(String text, ActionListener listener) {
         JMenuItem item = new JMenuItem(text);
         item.setPreferredSize(new Dimension(BUTTON_W, BUTTON_H));
-        item.addActionListener((e) -> handler.handle());
+        item.addActionListener(listener);
         return item;
     }
 

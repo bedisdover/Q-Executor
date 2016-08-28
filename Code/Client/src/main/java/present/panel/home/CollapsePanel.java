@@ -2,6 +2,7 @@ package present.panel.home;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.Vector;
 
 /**
@@ -32,15 +33,15 @@ class CollapsePanel extends JPanel {
      * @param parent 折叠面板所在父容器
      * @param btnW 折叠面板中的按钮宽度
      * @param btnH 折叠面板中的按钮高度
-     * @param handler 折叠父按钮的点击事件处理器
+     * @param listener 折叠父按钮的点击事件处理器
      */
-    CollapsePanel(JButton parent, int btnW, int btnH, IActionHandler handler) {
+    CollapsePanel(JButton parent, int btnW, int btnH, ActionListener listener) {
         this.parent = parent;
         this.parent.setPreferredSize(new Dimension(btnW, btnH));
         this.btnW = btnW;
         this.btnH = btnH;
         this.parent.addActionListener((e) -> {
-            handler.handle();
+            listener.actionPerformed(e);
             toggle();
         });
         this.addComponents();
