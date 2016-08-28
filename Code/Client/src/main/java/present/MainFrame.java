@@ -12,6 +12,10 @@ import java.awt.*;
  */
 public class MainFrame extends JFrame{
 
+    private static final int PANEL_W = 900;
+
+    private static final int PANEL_H = 600;
+
     public MainFrame() {
 
         try {
@@ -34,6 +38,7 @@ public class MainFrame extends JFrame{
 
     private void addComponents() {
         JPanel container = new JPanel();
+        container.setPreferredSize(new Dimension(PANEL_W, PANEL_H));
         container.setLayout(new BorderLayout());
         JPanel current = new JPanel();
         container.add(current);

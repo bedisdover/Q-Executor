@@ -25,6 +25,8 @@ public class PanelSwitcher {
     }
 
     public void jump(JPanel to) {
+        if(current.getClass() == to.getClass()) return;
+
         container.remove(current);
         container.add(to);
         current = to;
