@@ -98,7 +98,14 @@ public class UserSelectedStockImpl implements UserSelectedStock {
     }
 
     private  List<NowTimeSelectedStockInfoVO> hash2list(HashMap<String,String> param){
+
+
         List<NowTimeSelectedStockInfoVO> list = new ArrayList<>();
+
+        if(null == param){
+            return list;
+        }
+
         Iterator iter = param.entrySet().iterator();
         while (iter.hasNext()){
             Map.Entry<String,String> entry = (Map.Entry<String,String>) iter.next();
