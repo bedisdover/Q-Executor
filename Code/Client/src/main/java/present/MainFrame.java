@@ -14,6 +14,14 @@ import java.awt.*;
 public class MainFrame extends JFrame{
 
     public MainFrame() {
+
+        try {
+            org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
+        }
+        catch (Exception e) {
+            System.out.println("Look and feel Exception!");
+        }
+
         this.addComponents();
         this.setAttributes();
     }

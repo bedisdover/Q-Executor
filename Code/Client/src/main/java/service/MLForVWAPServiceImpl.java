@@ -1,8 +1,8 @@
-package cn.edu.nju.software.service;
+package service;
 
-import cn.edu.nju.software.po.InforForMLPO;
-import cn.edu.nju.software.po.StockForMLPO;
-import cn.edu.nju.software.vo.MLForVWAPPriceVO;
+import  po.InforForMLPO;
+import po.StockForMLPO;
+import  vo.MLForVWAPPriceVO;
 import libsvm.*;
 
 import java.text.DecimalFormat;
