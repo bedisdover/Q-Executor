@@ -11,9 +11,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import vo.StockBasicInfoVO;
-import vo.StockKLineVO;
-import vo.StockNowTimeVO;
+import vo.*;
 import blservice.GetStockDataService;
 
 public class GetStockDataServiceImpl implements GetStockDataService{
@@ -102,6 +100,26 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 		}
 		
 		return stockBasicInfoVO;
+	}
+
+	@Override
+	public List<StockInfoByPrice> getStockInfoByPrice(String codeNum) {
+		return null;
+	}
+
+	@Override
+	public List<StockInfoByCom> getComStockInfo(String codeNum) {
+		return null;
+	}
+
+	@Override
+	public List<StockInfoByCom> getComStockInfo(String codeNum, double param) {
+		return null;
+	}
+
+	@Override
+	public List<StockInfoByPer> getPerStockInfo(String codeNum) {
+		return null;
 	}
 
 }
