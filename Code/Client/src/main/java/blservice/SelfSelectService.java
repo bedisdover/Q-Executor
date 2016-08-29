@@ -13,18 +13,21 @@ public interface SelfSelectService {
     /**
      * 获取用户的自选股列表
      * url: /getUserSelectedStock
+     * @throws Exception 
      */
-    List<String> getUserSelectedStock();
+    List<String> getUserSelectedStock() throws Exception;
 
     /**
      * 添加自选
      * url: /addUserSelectedStock
+     * @throws Exception 
      */
-    MsgInfo addUserSelectedStock(String codeNum);
+    MsgInfo addUserSelectedStock(String codeNum) throws Exception;
 
     /**
      * 取消自选
      * url: /deleteUserSelectedStock
+     * @throws Exception 
      */
-    MsgInfo deleteUserSelectedStock(String codeNum);
+    MsgInfo deleteUserSelectedStock(String codeNum) throws Exception;
 }

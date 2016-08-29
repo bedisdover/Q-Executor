@@ -1,5 +1,6 @@
 package blservice;
 
+import java.net.MalformedURLException;
 import java.util.List;
 
 import vo.*;
@@ -43,8 +44,9 @@ public interface GetStockDataService {
      * 34:1470881274        当前时间
      * 35:1470881276
      * 36:19.71
+     * @throws MalformedURLException 
      */
-    List<StockNowTimeVO> getNowTimeData(String... codeNum);
+    List<StockNowTimeVO> getNowTimeData(String... codeNum) throws Exception;
 
     /**
      * 获取股票基本信息
@@ -52,30 +54,35 @@ public interface GetStockDataService {
      *
      * @param codeNum 股票代码
      * @return 基本信息
+     * @throws Exception 
      */
-    StockBasicInfoVO getBasicInfo(String codeNum);
+    StockBasicInfoVO getBasicInfo(String codeNum) throws Exception;
 
     /**
      * 分价数据
      * url: /StockInfoByPrice
+     * @throws Exception 
      */
-    List<StockInfoByPrice> getStockInfoByPrice(String codeNum);
+    List<StockInfoByPrice> getStockInfoByPrice(String codeNum) throws Exception;
 
     /**
      * 大单数据
      * url: /ComStockInfo
+     * @throws Exception 
      */
-    List<StockInfoByCom> getComStockInfo(String codeNum);
+    List<StockInfoByCom> getComStockInfo(String codeNum) throws Exception;
 
     /**
      * 大单数据(带参数筛选)
      * url: /ComStockInfoParam"
+     * @throws Exception 
      */
-    List<StockInfoByCom> getComStockInfo(String codeNum, double param);
+    List<StockInfoByCom> getComStockInfo(String codeNum, double param) throws Exception;
 
     /**
      * 逐笔数据
      * url: /PerStockInfo"
+     * @throws Exception 
      */
-    List<StockInfoByPer> getPerStockInfo(String codeNum);
+    List<StockInfoByPer> getPerStockInfo(String codeNum) throws Exception;
 }

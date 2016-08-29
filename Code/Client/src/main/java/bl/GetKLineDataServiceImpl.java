@@ -23,24 +23,23 @@ import blservice.GetKLineDataService;
  */
 public class GetKLineDataServiceImpl implements GetKLineDataService{
 
-	public List<StockKLineVO> getKLineDay(String stockCode) {
+	public List<StockKLineVO> getKLineDay(String stockCode) throws Exception {
 		String url="http://121.42.143.164/KLineDay?codeNum="+stockCode;
 		return getDate(url);
 	}
 
-	public List<StockKLineVO> getKLineWeek(String stockCode) {
+	public List<StockKLineVO> getKLineWeek(String stockCode) throws Exception {
 		String url="http://121.42.143.164/KLineWeek?codeNum="+stockCode;
 		return getDate(url);
 	}
 
-	public List<StockKLineVO> getKLineMonth(String stockCode) {
+	public List<StockKLineVO> getKLineMonth(String stockCode) throws Exception {
 		String url="http://121.42.143.164/KLineMonth?codeNum="+stockCode;
 		return getDate(url);
 	}
 	
-	public List<StockKLineVO> getDate(String url){
+	public List<StockKLineVO> getDate(String url) throws Exception{
 		List<StockKLineVO> stockList=new ArrayList<StockKLineVO>();
-		try {
 			URL ur=new URL(url);
 			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
 			String line=reader.readLine();
@@ -66,10 +65,6 @@ public class GetKLineDataServiceImpl implements GetKLineDataService{
 				stockKLineVO.setTurnover((Double) jsonObj.get("turnover"));
 				stockList.add(stockKLineVO);
 			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return stockList;
 	}
 
