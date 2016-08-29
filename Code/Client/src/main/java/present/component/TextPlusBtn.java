@@ -21,7 +21,9 @@ public class TextPlusBtn extends JPanel {
 
     private JButton search;
 
-    private Vector<String> mappedStrs = new Vector<>();
+    private Vector<String> mappedStrings = new Vector<>();
+
+    private JPopupMenu tips = new JPopupMenu();
 
     /**
      * 默认字符串匹配器
@@ -82,6 +84,7 @@ public class TextPlusBtn extends JPanel {
         AbstractAction action = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                tips.setVisible(false);
                 listener.actionPerformed(e);
             }
         };
@@ -101,7 +104,14 @@ public class TextPlusBtn extends JPanel {
         this.text.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                mappedStrs = matcher.getMatchString(text.getText());
+                int code = e.getKeyCode();
+                boolean isUp = code == KeyEvent.VK_UP;
+                boolean isDown = code == KeyEvent.VK_DOWN;
+                boolean isLeft = code == KeyEvent.VK_LEFT;
+                boolean isRight = code == KeyEvent.VK_RIGHT;
+                if(isUp || isDown || isLeft || isRight) return;
+
+                mappedStrings = matcher.getMatchString(text.getText());
                 showTipList();
                 text.requestFocus();
             }
@@ -109,27 +119,27 @@ public class TextPlusBtn extends JPanel {
     }
 
     private void showTipList() {
-        if(mappedStrs == null) return;
+        if(mappedStrings == null) return;
 
         //创建下拉提示菜单
-        JPopupMenu tips = new JPopupMenu();
+        tips = new JPopupMenu();
         //按钮面板
         JPanel p = new JPanel(new FlowLayout(
                 FlowLayout.CENTER, PADDING, PADDING >> 1
         ));
         //添加菜单项
-        int num = mappedStrs.size();
+        int num = mappedStrings.size();
         if (currentItem + ITEM_NUM >= num && currentItem > 0) { //到达菜单项尾页
             tips.setPreferredSize(new Dimension(textW, textH * (num - currentItem + 1)));
             for(int i = currentItem; i < num; ++i) {
-                tips.add(createItem(mappedStrs.get(i)));
+                tips.add(createItem(mappedStrings.get(i)));
             }
             p.add(createJumpBtn("上一页", getPreListener()));
             tips.add(p);
         } else if(currentItem > 0){ //菜单中间
             tips.setPreferredSize(new Dimension(textW, textH * (ITEM_NUM + 1)));
             for(int i = currentItem; i < currentItem + ITEM_NUM; ++i) {
-                tips.add(createItem(mappedStrs.get(i)));
+                tips.add(createItem(mappedStrings.get(i)));
             }
             p.add(createJumpBtn("上一页", getPreListener()));
             p.add(createJumpBtn("下一页", getNextListener()));
@@ -138,12 +148,12 @@ public class TextPlusBtn extends JPanel {
             if (currentItem + ITEM_NUM >= num) {
                 tips.setPreferredSize(new Dimension(textW, textH * (num - currentItem)));
                 for(int i = currentItem; i < currentItem + ITEM_NUM; ++i) {
-                    tips.add(createItem(mappedStrs.get(i)));
+                    tips.add(createItem(mappedStrings.get(i)));
                 }
             }else {
                 tips.setPreferredSize(new Dimension(textW, textH * (ITEM_NUM + 1)));
                 for(int i = currentItem; i < currentItem + ITEM_NUM; ++i) {
-                    tips.add(createItem(mappedStrs.get(i)));
+                    tips.add(createItem(mappedStrings.get(i)));
                 }
                 p.add(createJumpBtn("下一页", getNextListener()));
                 tips.add(p);
