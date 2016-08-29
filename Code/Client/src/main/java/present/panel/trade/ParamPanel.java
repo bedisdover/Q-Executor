@@ -57,7 +57,7 @@ class ParamPanel extends JPanel {
 
     private VWAPService vwap = new VWAP();
 
-    ParamPanel(int width, int height) {
+    ParamPanel(int width, int height, TradePanel parent) {
         this.componentW = ((width >> 1) - 3 * H_GAP) >> 1;
         this.componentH = (int)(this.componentW * 0.4);
 
@@ -199,15 +199,16 @@ class ParamPanel extends JPanel {
         trigger.setPreferredSize(new Dimension(componentW, componentH));
         line7.add(trigger);
         trigger.addActionListener((e) -> {
-            int tradeNum = Integer.parseInt(quanVal.getText());
-            String code = codeText.getText();
-            try {
-                vwap.predictVn(new VWAP_Param(
-                       tradeNum, code, 0, 0, 0
-                ));
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
+//            int tradeNum = Integer.parseInt(quanVal.getText());
+//            String code = codeText.getText();
+//            try {
+//                vwap.predictVn(new VWAP_Param(
+//                       tradeNum, code, 0, 0, 0
+//                ));
+//            } catch (Exception e1) {
+//                e1.printStackTrace();
+//            }
+            parent.updateMsgPanel();
         });
 
         box.add(line7);
