@@ -28,15 +28,9 @@ public class TextPlusBtn extends JPanel {
     /**
      * 默认字符串匹配器
      */
-    private Matcher matcher = new Matcher() {
-        @Override
-        public Vector<String> getMatchString(String key) {
-            return new Vector<>();
-        }
+    private Matcher matcher = (key) -> new Vector<>();
 
-        @Override
-        public void handleItemClicked(String text) {}
-    };
+    private ListHandler handler = (text) -> {};
 
     private int textW;
 
@@ -56,27 +50,35 @@ public class TextPlusBtn extends JPanel {
 
     /**
      * 字符串匹配器，用于产生与文本框中关键字相匹配的字符串
-     * 以及提供用户点下拉击提示框时所响应的操作
      */
+    @FunctionalInterface
     public interface Matcher {
         Vector<String> getMatchString(String key);
+    }
 
+    /**
+     * 下拉列表事件处理器
+     */
+    @FunctionalInterface
+    public interface ListHandler {
         void handleItemClicked(String text);
     }
 
     public TextPlusBtn(String placeholder, int width, int height) {
-        text = new QTextField(placeholder);
-        search = new JButton("搜索");
-        search.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.blue));
         //搜索框长度：按钮长度 = 4 : 1
         textW = (int) (width * 0.8);
         textH = height;
-        int searchW = width - textW;
+        text = new QTextField(placeholder);
         text.setPreferredSize(new Dimension(textW, height));
+        this.setTextListener();
+
+        search = new JButton("搜索");
+        search.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.blue));
+        int searchW = width - textW;
         search.setPreferredSize(new Dimension(searchW, height));
+
         this.add(text);
         this.add(search);
-        this.setListeners();
     }
 
     public void setBtnListener(ActionListener listener) {
@@ -96,20 +98,28 @@ public class TextPlusBtn extends JPanel {
         this.matcher = matcher;
     }
 
+    public void setListHandler(ListHandler handler) {
+        this.handler = (t) -> {
+            text.setText(t);
+            handler.handleItemClicked(t);
+        };
+    }
+
     public String getText() {
         return text.getText();
     }
 
-    private void setListeners() {
+    private void setTextListener() {
         this.text.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
                 int code = e.getKeyCode();
+                boolean isShift = code == KeyEvent.VK_SHIFT;
                 boolean isUp = code == KeyEvent.VK_UP;
                 boolean isDown = code == KeyEvent.VK_DOWN;
                 boolean isLeft = code == KeyEvent.VK_LEFT;
                 boolean isRight = code == KeyEvent.VK_RIGHT;
-                if(isUp || isDown || isLeft || isRight) return;
+                if(isUp || isDown || isLeft || isRight || isShift) return;
 
                 mappedStrings = matcher.getMatchString(text.getText());
                 showTipList();
@@ -147,7 +157,7 @@ public class TextPlusBtn extends JPanel {
         } else {    //菜单首页
             if (currentItem + ITEM_NUM >= num) {
                 tips.setPreferredSize(new Dimension(textW, textH * (num - currentItem)));
-                for(int i = currentItem; i < currentItem + ITEM_NUM; ++i) {
+                for(int i = currentItem; i < num; ++i) {
                     tips.add(createItem(mappedStrings.get(i)));
                 }
             }else {
@@ -187,7 +197,7 @@ public class TextPlusBtn extends JPanel {
     private JMenuItem createItem(String text) {
         JMenuItem item = new JMenuItem(text);
         item.setPreferredSize(new Dimension(textW, textH));
-        item.addActionListener((e) -> matcher.handleItemClicked(text));
+        item.addActionListener((e) -> handler.handleItemClicked(text));
         return item;
     }
 

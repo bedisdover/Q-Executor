@@ -1,12 +1,17 @@
 package present.panel.stock;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import present.MainFrame;
 import present.PanelSwitcher;
 import present.component.TextPlusBtn;
+import util.JsonUtil;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -22,29 +27,54 @@ public class SearchPanel extends JPanel {
 
     private static final int TABLE_H = MainFrame.PANEL_H - SEARCH_H - (PADDING << 1);
 
+    private static final String JSON_PATH = "src/main/resources/file/basicInfo.json";
+
+    private static final List<String> JSON_KEYS = new ArrayList<>();
+
+    private static final String KEY_CODE = "code";
+
+    private static final String KEY_NAME = "name";
+
+    private static final String KEY_INDUSTRY = "industry";
+
+    static {
+        JSON_KEYS.add(KEY_CODE);
+        JSON_KEYS.add(KEY_NAME);
+        JSON_KEYS.add(KEY_INDUSTRY);
+    }
+
     public SearchPanel(PanelSwitcher switcher) {
 
         //搜索
         TextPlusBtn search = new TextPlusBtn(
                 "输入股票名称或股票代码", MainFrame.PANEL_W >> 1, SEARCH_H
         );
-        TextPlusBtn.Matcher matcher = new TextPlusBtn.Matcher() {
-            @Override
-            public Vector<String> getMatchString(String key) {
-                Vector<String> v = new Vector<>();
-                for(int i = 0; i < 15; ++i) {
-                    v.addElement("test" + i);
+        //设置字符串匹配规则
+        search.setMatcher((key) -> {
+            Vector<String> v = new Vector<>();
+            List<JSONObject> list = JsonUtil.contains(JSON_KEYS, JSON_PATH, key);
+            for (JSONObject obj : list) {
+                try {
+                    v.addElement(obj.getString(KEY_CODE) + "  " + obj.getString(KEY_NAME));
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                return v;
             }
-
-            @Override
-            public void handleItemClicked(String text) {
-                switcher.jump(new StockPanel("sh600008"));
+            return v;
+        });
+        //设置下拉提示列表监听
+        search.setListHandler((text) -> switcher.jump(new StockPanel(text)));
+        //设置确定按钮监听
+        search.setBtnListener((e) -> {
+            try {
+                StockPanel p = new StockPanel(search.getText());
+                switcher.jump(p);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(
+                        this, "名为 " + search.getText() + " " + "股票信息不存在"
+                );
             }
-        };
-        search.setMatcher(matcher);
-        search.setBtnListener((e) -> switcher.jump(new StockPanel("sh600008")));
+        });
         JPanel p = new JPanel(new FlowLayout(FlowLayout.CENTER));
         p.add(search);
 

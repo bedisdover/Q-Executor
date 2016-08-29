@@ -7,9 +7,9 @@ import java.awt.*;
 
 public class TradePanel extends JPanel {
 
-    private static final int PARAM_PANEL_W = 360;
+    private static final int PARAM_PANEL_W = 380;
 
-    private static final int PARAM_PANEL_H = 360;
+    private static final int PARAM_PANEL_H = 380;
 
     private static final int RT_PANEL_W = MainFrame.PANEL_W - PARAM_PANEL_W;
 
