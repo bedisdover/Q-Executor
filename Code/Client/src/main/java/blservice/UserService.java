@@ -4,6 +4,7 @@ import config.MsgInfo;
 
 /**
  * Created by song on 16-8-26.
+ * Modify by JiayiWu on 16-8-29
  * <p>
  * 用户账户相关接口, 包括登录、注册、找回密码
  */
@@ -47,5 +48,20 @@ public interface UserService {
      * 其中state表示用户是否登录,info返回状态信息,Object表示用户账号的详情的信息
      * @throws Exception 
      */
+
     MsgInfo isLogin(String userName) throws Exception;
+
+
+    /**
+     * 注册，对应url：http:121.42.143.164/findPassword
+     *
+     * @param userName 用户名
+     * @return MsgInfo
+     *         MsgInfo 返回格式为Json格式,其结构为private boolean state;
+     *                                          private String info;
+     *                                         private Object object = null;
+     *         其中state表示本次找回密码是否成功,info表示邮件发送失败的信息
+     */
+    MsgInfo findPassword(String userName)throws Exception;
+
 }
