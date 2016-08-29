@@ -62,7 +62,7 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 			}
 		return stockList;
 	}
-	
+
 	public StockBasicInfoVO getBasicInfo(String codeNum) throws Exception {
 		String url="http://121.42.143.164/BasicComInfo?codeNum=sh600000";
 		StockBasicInfoVO stockBasicInfoVO=new StockBasicInfoVO();
