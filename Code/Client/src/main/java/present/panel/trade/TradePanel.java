@@ -27,14 +27,14 @@ public class TradePanel extends JPanel {
         ParamPanel param = new ParamPanel(PARAM_PANEL_W, PARAM_PANEL_H);
         RealTimePanel rt = new RealTimePanel(RT_PANEL_W, RT_PANEL_H);
         MessagePanel msg = new MessagePanel(MSG_PANEL_W, MSG_PANEL_H);
-        MonitorPanel monitor = new MonitorPanel(MONITOR_PANEL_W, MONITOR_PANEL_H);
+//        MonitorPanel monitor = new MonitorPanel(MONITOR_PANEL_W, MONITOR_PANEL_H);
 
         Box up = Box.createHorizontalBox();
         up.add(param);
         up.add(rt);
         Box bottom = Box.createHorizontalBox();
         bottom.add(msg);
-        bottom.add(monitor);
+//        bottom.add(monitor);
 
         this.setLayout(new BorderLayout());
         this.add(up, BorderLayout.NORTH);

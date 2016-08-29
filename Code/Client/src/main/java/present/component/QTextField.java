@@ -23,6 +23,10 @@ public class QTextField extends JTextField {
         this.setHandler();
     }
 
+    QTextField() {
+        this("");
+    }
+
     private void setHandler() {
         this.addMouseListener(new MouseAdapter() {
 
