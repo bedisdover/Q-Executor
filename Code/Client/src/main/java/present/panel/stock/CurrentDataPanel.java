@@ -1,10 +1,17 @@
 package present.panel.stock;
 
+import bl.GetStockDataServiceImpl;
+import blservice.GetStockDataService;
 import present.utils.ImageLoader;
+import util.NumberUtil;
 import vo.StockBasicInfoVO;
+import vo.StockNowTimeVO;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by song on 16-8-26.
@@ -15,12 +22,22 @@ class CurrentDataPanel extends JPanel {
 
     private JPanel panel;
 
+    private String stockCode;
+
+    private PricePanel pricePanel;
+
+    private DataPanel dataPanel;
+
     private BasicInfoPanel basicInfoPanel;
 
-    CurrentDataPanel() {
+    private HandicapPanel handicapPanel;
+
+    CurrentDataPanel(String stockCode) {
         panel = this;
+        this.stockCode = stockCode;
 
         init();
+        getData();
         createUIComponents();
     }
 
@@ -41,15 +58,15 @@ class CurrentDataPanel extends JPanel {
      */
     private void createUIComponents() {
         SwingUtilities.invokeLater(() -> {
-            PricePanel pricePanel = new PricePanel();
+            pricePanel = new PricePanel();
             panel.add(pricePanel, BorderLayout.NORTH);
 
             {
                 Box centerBox = Box.createVerticalBox();
 
-                DataPanel dataPanel = new DataPanel();
+                dataPanel = new DataPanel();
                 centerBox.add(dataPanel);
-                HandicapPanel handicapPanel = new HandicapPanel();
+                handicapPanel = new HandicapPanel();
                 centerBox.add(handicapPanel);
 
                 panel.add(centerBox, BorderLayout.CENTER);
@@ -62,19 +79,45 @@ class CurrentDataPanel extends JPanel {
         });
     }
 
+    private void getData() {
+        SwingWorker worker = new SwingWorker() {
+            @Override
+            protected Object doInBackground() throws Exception {
+                GetStockDataService stockDataService = new GetStockDataServiceImpl();
+
+                return stockDataService.getNowTimeData(stockCode);
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    List stockNowTimeVOList = (List) get();
+
+                    setCurrentData((StockNowTimeVO) stockNowTimeVOList.get(0));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        worker.execute();
+    }
+
     /**
      * 设置基本信息
      *
      * @param stockBasicInfoVO 基本信息
      */
     void setBasicInfo(StockBasicInfoVO stockBasicInfoVO) {
-        SwingUtilities.invokeLater(() -> {
-            basicInfoPanel.setBasicInfo(stockBasicInfoVO);
-        });
+        SwingUtilities.invokeLater(() -> basicInfoPanel.setBasicInfo(stockBasicInfoVO));
     }
 
-    public void setCurrentData() {
-
+    /**
+     * 设置当前数据
+     */
+    private void setCurrentData(StockNowTimeVO stockNowTimeVO) {
+        pricePanel.setData(stockNowTimeVO);
+        dataPanel.setData(stockNowTimeVO);
     }
 
 
@@ -154,6 +197,19 @@ class CurrentDataPanel extends JPanel {
 
                 panel.revalidate();
             });
+        }
+
+        void setData(StockNowTimeVO stockNowTimeVO) {
+            price.setText(NumberUtil.transferUnit(stockNowTimeVO.getPrice()));
+            incNum.setText(stockNowTimeVO.getIncNum() + "");
+            incRate.setText(stockNowTimeVO.getIncRate() + "");
+            time.setText(getDate(stockNowTimeVO.getTime()));
+        }
+
+        private String getDate(Date date) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 hh:mm:ss");
+
+            return dateFormat.format(date);
         }
     }
 
@@ -250,6 +306,10 @@ class CurrentDataPanel extends JPanel {
                     panel.add(eastPanel, BorderLayout.EAST);
                 }
             });
+        }
+
+        void setData(StockNowTimeVO stockNowTimeVO) {
+            open.setText(stockNowTimeVO.getOpen() + "");
         }
     }
 }

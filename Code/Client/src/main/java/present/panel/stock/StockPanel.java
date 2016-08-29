@@ -64,7 +64,7 @@ public class StockPanel extends JPanel {
             panel.add(namePanel, BorderLayout.NORTH);
 
             {
-                currentDataPanel = new CurrentDataPanel();
+                currentDataPanel = new CurrentDataPanel(stockCode);
                 JScrollPane scrollPane = new JScrollPane(currentDataPanel);
                 scrollPane.setPreferredSize(new Dimension(200, 1));
 
@@ -125,15 +125,15 @@ public class StockPanel extends JPanel {
     }
 
     /**
-     * 获取数据
+     * 获取基本数据，用于设置namePanel及currentDataPanel中的BasicInfoPanel
      */
     private void getData() {
         SwingWorker worker = new SwingWorker() {
             @Override
             protected Object doInBackground() throws Exception {
-                GetStockDataService getStockData = new GetStockDataServiceImpl();
+                GetStockDataService stockDataService = new GetStockDataServiceImpl();
 
-                return getStockData.getBasicInfo(stockCode);
+                return stockDataService.getBasicInfo(stockCode);
             }
 
             @Override

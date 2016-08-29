@@ -1,10 +1,14 @@
 package present.panel.stock;
 
+import util.NumberUtil;
+import util.TimeUtil;
 import vo.StockBasicInfoVO;
 import vo.StockKLineVO;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by song on 16-8-26.
@@ -105,7 +109,7 @@ class BasicInfoPanel extends JPanel {
                 eastBox.add(bvps);
                 eastBox.add(timeToMarket);
 
-                panel.add(eastBox, BorderLayout.EAST);
+                panel.add(eastBox, BorderLayout.CENTER);
             }
         });
     }
@@ -120,19 +124,29 @@ class BasicInfoPanel extends JPanel {
             name.setText(stockBasicInfoVO.getName());
             industry.setText(stockBasicInfoVO.getIndustry());
             area.setText(stockBasicInfoVO.getArea());
-            liquid.setText(stockBasicInfoVO.getOutstanding() + "");
-            total.setText(stockBasicInfoVO.getTotals() + "");
-            totalAssets.setText(stockBasicInfoVO.getTotalAssets() + "");
-            liquidAssets.setText(stockBasicInfoVO.getLiquidAssets() + "");
-            fixedAssets.setText(stockBasicInfoVO.getFixedAssets() + "");
-            reserved.setText(stockBasicInfoVO.getReserved() + "");
-            reservedPerShare.setText(stockBasicInfoVO.getReservedPerShare() + "");
-            eps.setText(stockBasicInfoVO.getEps() + "");
-            bvps.setText(stockBasicInfoVO.getBvps() + "");
-            timeToMarket.setText(stockBasicInfoVO.getTimeToMarket() + "");
+            liquid.setText(NumberUtil.transferUnit(stockBasicInfoVO.getOutstanding()));
+            total.setText(NumberUtil.transferUnit(stockBasicInfoVO.getTotals()));
+            totalAssets.setText(NumberUtil.transferUnit(stockBasicInfoVO.getTotalAssets()));
+            liquidAssets.setText(NumberUtil.transferUnit(stockBasicInfoVO.getLiquidAssets()));
+            fixedAssets.setText(NumberUtil.transferUnit(stockBasicInfoVO.getFixedAssets()));
+            reserved.setText(NumberUtil.transferUnit(stockBasicInfoVO.getReserved()));
+            reservedPerShare.setText(NumberUtil.transferUnit(stockBasicInfoVO.getReservedPerShare()));
+            eps.setText(NumberUtil.transferUnit(stockBasicInfoVO.getEps()));
+            bvps.setText(NumberUtil.transferUnit(stockBasicInfoVO.getBvps()));
+            timeToMarket.setText(getDate(stockBasicInfoVO.getTimeToMarket()));
 
             panel.revalidate();
             panel.repaint();
         });
+    }
+
+    /**
+     * 转换时间
+     * @return 日期格式： yyyy/MM/dd
+     */
+    private String getDate(Date date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+
+        return dateFormat.format(date);
     }
 }

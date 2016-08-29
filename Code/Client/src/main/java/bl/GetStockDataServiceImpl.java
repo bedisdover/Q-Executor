@@ -69,7 +69,7 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 	}
 	
 	public StockBasicInfoVO getBasicInfo(String codeNum) {
-		String url="http://121.42.143.164/BasicComInfo?codeNum=sh600000";
+		String url="http://121.42.143.164/BasicComInfo?codeNum=" + codeNum;
 		StockBasicInfoVO stockBasicInfoVO=new StockBasicInfoVO();
 		try {
 			URL ur=new URL(url);
