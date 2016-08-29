@@ -14,8 +14,11 @@ public class PriceSharePanel extends JPanel {
 
     private JPanel panel;
 
+    private String stockCode;
+
     public PriceSharePanel(String stockCode) {
         panel = this;
+        this.stockCode = stockCode;
 
         init();
         createUIComponents();
@@ -31,7 +34,7 @@ public class PriceSharePanel extends JPanel {
 
     private void createUIComponents() {
         SwingUtilities.invokeLater(() -> {
-            panel.add(new PriceSharePlot().getPlotChart("sh600000"), BorderLayout.CENTER);
+            panel.add(new PriceSharePlot().getPlotChart(stockCode), BorderLayout.CENTER);
 
             JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
             southPanel.setPreferredSize(new Dimension(1, 200));

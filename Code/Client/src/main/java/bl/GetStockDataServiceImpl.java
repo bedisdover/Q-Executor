@@ -11,9 +11,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import vo.StockBasicInfoVO;
-import vo.StockKLineVO;
-import vo.StockNowTimeVO;
+import vo.*;
 import blservice.GetStockDataService;
 
 public class GetStockDataServiceImpl implements GetStockDataService{
@@ -71,7 +69,7 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 	}
 	
 	public StockBasicInfoVO getBasicInfo(String codeNum) {
-		String url="http://121.42.143.164/BasicComInfo?codeNum=sh600000";
+		String url="http://121.42.143.164/BasicComInfo?codeNum=" + codeNum;
 		StockBasicInfoVO stockBasicInfoVO=new StockBasicInfoVO();
 		try {
 			URL ur=new URL(url);
@@ -82,17 +80,17 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 			stockBasicInfoVO.setName((String) jsonArray.get("name"));
 			stockBasicInfoVO.setIndustry((String) jsonArray.get("industry"));
 			stockBasicInfoVO.setArea((String) jsonArray.get("area"));
-			stockBasicInfoVO.setPe( (Float) jsonArray.get("pe"));
-			stockBasicInfoVO.setOutstanding( (Float) jsonArray.get("outstanding"));
-			stockBasicInfoVO.setTotals( (Float) jsonArray.get("totals"));
-			stockBasicInfoVO.setTotalAssets( (Float) jsonArray.get("totalAssets"));
-			stockBasicInfoVO.setLiquidAssets( (Float) jsonArray.get("liquidAssets"));
-			stockBasicInfoVO.setFixedAssets( (Float) jsonArray.get("fixedAssets"));
-			stockBasicInfoVO.setReserved( (Float) jsonArray.get("reserved"));
-			stockBasicInfoVO.setReservedPerShare( (Float) jsonArray.get("reservedPerShare"));
-			stockBasicInfoVO.setEps( (Float) jsonArray.get("eps"));
-			stockBasicInfoVO.setBvps( (Float) jsonArray.get("bvps"));
-			stockBasicInfoVO.setPb( (Float) jsonArray.get("pb"));
+			stockBasicInfoVO.setPe( (Double) jsonArray.get("pe"));
+			stockBasicInfoVO.setOutstanding( (Double) jsonArray.get("outstanding"));
+			stockBasicInfoVO.setTotals( (Double) jsonArray.get("totals"));
+			stockBasicInfoVO.setTotalAssets( (Double) jsonArray.get("totalAssets"));
+			stockBasicInfoVO.setLiquidAssets( (Double) jsonArray.get("liquidAssets"));
+			stockBasicInfoVO.setFixedAssets( (Double) jsonArray.get("fixedAssets"));
+			stockBasicInfoVO.setReserved( (Double) jsonArray.get("reserved"));
+			stockBasicInfoVO.setReservedPerShare( (Double) jsonArray.get("reservedPerShare"));
+			stockBasicInfoVO.setEps( (Double) jsonArray.get("eps"));
+			stockBasicInfoVO.setBvps( (Double) jsonArray.get("bvps"));
+			stockBasicInfoVO.setPb( (Double) jsonArray.get("pb"));
 			Date dt = new Date((Long) jsonArray.get("timeToMarket"));
 			stockBasicInfoVO.setTimeToMarket(dt);
 		
@@ -104,19 +102,24 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 		return stockBasicInfoVO;
 	}
 
-	public static void main(String args[]){
-		String url="http://hq.finance.ifeng.com/q.php?l=sh600000,sh600001";
-		try {
-			URL ur=new URL(url);
-			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
-			String line=reader.readLine();
-			JSONObject jsonArray=new JSONObject(line.substring(11));
-			JSONArray a=(JSONArray)jsonArray.get("sh600000");
-			System.out.println(a.get(2));
-			System.out.println(line);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	@Override
+	public List<StockInfoByPrice> getStockInfoByPrice(String codeNum) {
+		return null;
 	}
+
+	@Override
+	public List<StockInfoByCom> getComStockInfo(String codeNum) {
+		return null;
+	}
+
+	@Override
+	public List<StockInfoByCom> getComStockInfo(String codeNum, double param) {
+		return null;
+	}
+
+	@Override
+	public List<StockInfoByPer> getPerStockInfo(String codeNum) {
+		return null;
+	}
+
 }

@@ -2,22 +2,22 @@ package blservice;
 
 import java.util.List;
 
-import vo.StockBasicInfoVO;
-import vo.StockNowTimeVO;
+import vo.*;
 
 /**
  * Created by song on 16-8-26.
- *
+ * <p>
  * 获取股票数据，包含实时数据、基本信息
  */
 public interface GetStockDataService {
 
     /**
      * 获取实时数据, 可同时获得多只股票数据
-     *  单只股票对应url：
-     *      http://hq.finance.ifeng.com/q.php?l=sh600000
-     *  多只股票：
-     *      http://hq.finance.ifeng.com/q.php?l=sh600000,sh600001
+     * 单只股票对应url：
+     * http://hq.finance.ifeng.com/q.php?l=sh600000
+     * 多只股票：
+     * http://hq.finance.ifeng.com/q.php?l=sh600000,sh600001
+     *
      * @param codeNum 股票代码
      * @return 实时数据，数据含义如下
      * 0:19.71                当前价格
@@ -48,9 +48,34 @@ public interface GetStockDataService {
 
     /**
      * 获取股票基本信息
-     *  对应url：http://121.42.143.164/BasicComInfo?codeNum=sh600000
+     * 对应url：http://121.42.143.164/BasicComInfo?codeNum=sh600000
+     *
      * @param codeNum 股票代码
      * @return 基本信息
      */
     StockBasicInfoVO getBasicInfo(String codeNum);
+
+    /**
+     * 分价数据
+     * url: /StockInfoByPrice
+     */
+    List<StockInfoByPrice> getStockInfoByPrice(String codeNum);
+
+    /**
+     * 大单数据
+     * url: /ComStockInfo
+     */
+    List<StockInfoByCom> getComStockInfo(String codeNum);
+
+    /**
+     * 大单数据(带参数筛选)
+     * url: /ComStockInfoParam"
+     */
+    List<StockInfoByCom> getComStockInfo(String codeNum, double param);
+
+    /**
+     * 逐笔数据
+     * url: /PerStockInfo"
+     */
+    List<StockInfoByPer> getPerStockInfo(String codeNum);
 }
