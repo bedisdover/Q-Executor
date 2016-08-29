@@ -15,22 +15,25 @@ public interface GetKLineDataService {
      *
      * @param stockCode 股票代码
      * @return 股票K线数据
+     * @throws Exception 
      */
-    List<StockKLineVO> getKLineDay(String stockCode);
+    List<StockKLineVO> getKLineDay(String stockCode) throws Exception;
 
     /**
      * 获取周K线数据
      *
      * @param stockCode 股票代码
      * @return 股票K线数据
+     * @throws Exception 
      */
-    List<StockKLineVO> getKLineWeek(String stockCode);
+    List<StockKLineVO> getKLineWeek(String stockCode) throws Exception;
 
     /**
      * 获取月K线数据
      *
      * @param stockCode 股票代码
      * @return 股票K线数据
+     * @throws Exception 
      */
-    List<StockKLineVO> getKLineMonth(String stockCode);
+    List<StockKLineVO> getKLineMonth(String stockCode) throws Exception;
 }
