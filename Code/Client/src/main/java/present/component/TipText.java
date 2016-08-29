@@ -64,6 +64,7 @@ public class TipText extends QTextField {
         super(placeholder);
         this.textW = width;
         this.textH = height;
+        this.setPreferredSize(new Dimension(width, height));
         this.setTextListener();
     }
 

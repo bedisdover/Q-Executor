@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import present.MainFrame;
 import present.PanelSwitcher;
 import present.component.TextPlusBtn;
+import present.utils.StockJsonInfo;
 import util.JsonUtil;
 
 import javax.swing.*;
@@ -27,21 +28,7 @@ public class SearchPanel extends JPanel {
 
     private static final int TABLE_H = MainFrame.PANEL_H - SEARCH_H - (PADDING << 1);
 
-    private static final String JSON_PATH = "src/main/resources/file/basicInfo.json";
 
-    private static final List<String> JSON_KEYS = new ArrayList<>();
-
-    private static final String KEY_CODE = "code";
-
-    private static final String KEY_NAME = "name";
-
-    private static final String KEY_INDUSTRY = "industry";
-
-    static {
-        JSON_KEYS.add(KEY_CODE);
-        JSON_KEYS.add(KEY_NAME);
-        JSON_KEYS.add(KEY_INDUSTRY);
-    }
 
     public SearchPanel(PanelSwitcher switcher) {
 
@@ -52,10 +39,16 @@ public class SearchPanel extends JPanel {
         //设置字符串匹配规则
         search.setMatcher((key) -> {
             Vector<String> v = new Vector<>();
-            List<JSONObject> list = JsonUtil.contains(JSON_KEYS, JSON_PATH, key);
+            List<JSONObject> list = JsonUtil.contains(
+                    StockJsonInfo.JSON_KEYS, StockJsonInfo.JSON_PATH, key
+            );
             for (JSONObject obj : list) {
                 try {
-                    v.addElement(obj.getString(KEY_CODE) + "  " + obj.getString(KEY_NAME));
+                    v.addElement(
+                        obj.getString(StockJsonInfo.KEY_CODE) + "  "
+                        + obj.getString(StockJsonInfo.KEY_NAME) + "  "
+                        + obj.getString(StockJsonInfo.KEY_INDUSTRY)
+                    );
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -63,7 +56,7 @@ public class SearchPanel extends JPanel {
             return v;
         });
         //设置下拉提示列表监听
-        search.setListHandler((text) -> switcher.jump(new StockPanel(text)));
+        search.setListHandler((text) -> switcher.jump(new StockPanel(text.split("  ")[0])));
         //设置确定按钮监听
         search.setBtnListener((e) -> {
             try {

@@ -19,9 +19,9 @@ public class TradePanel extends JPanel {
 
     private static final int MSG_PANEL_H = MainFrame.PANEL_H - PARAM_PANEL_H;
 
-    private static final int MONITOR_PANEL_W = RT_PANEL_W;
-
-    private static final int MONITOR_PANEL_H = MSG_PANEL_H;
+//    private static final int MONITOR_PANEL_W = RT_PANEL_W;
+//
+//    private static final int MONITOR_PANEL_H = MSG_PANEL_H;
 
     public TradePanel() {
         ParamPanel param = new ParamPanel(PARAM_PANEL_W, PARAM_PANEL_H);
