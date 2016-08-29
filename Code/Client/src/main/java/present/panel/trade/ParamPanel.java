@@ -11,6 +11,8 @@ import util.JsonUtil;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.*;
 import java.util.List;
 
@@ -175,14 +177,12 @@ class ParamPanel extends JPanel {
         box.add(createTimePanel("开始时间"));
         box.add(createTimePanel("结束时间"));
 
-        Box line7 = Box.createHorizontalBox();
+        JPanel line7 = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, V_GAP));
 
-        line7.add(Box.createHorizontalStrut(H_GAP));
         JLabel mode = new JLabel("启动模式");
         mode.setPreferredSize(new Dimension(componentW, componentH));
         line7.add(mode);
 
-        line7.add(Box.createHorizontalStrut(H_GAP));
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, V_GAP));
         JRadioButton trade = new JRadioButton("交易");
         trade.setPreferredSize(new Dimension(componentW, componentH));
@@ -197,8 +197,10 @@ class ParamPanel extends JPanel {
 
         JButton trigger = new JButton("启动");
         trigger.setPreferredSize(new Dimension(componentW, componentH));
-        line7.add(trigger);
-        trigger.addActionListener((e) -> {
+        trigger.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
 //            int tradeNum = Integer.parseInt(quanVal.getText());
 //            String code = codeText.getText();
 //            try {
@@ -208,9 +210,10 @@ class ParamPanel extends JPanel {
 //            } catch (Exception e1) {
 //                e1.printStackTrace();
 //            }
-            parent.updateMsgPanel();
+                parent.updateMsgPanel();
+            }
         });
-
+        line7.add(trigger);
         box.add(line7);
 
         this.setLayout(new BorderLayout());

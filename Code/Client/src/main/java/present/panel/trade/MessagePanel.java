@@ -53,6 +53,6 @@ class MessagePanel extends JScrollPane {
 
     public void update() {
         vData.clear();
-        table.revalidate();
+        tableModel.fireTableDataChanged();
     }
 }

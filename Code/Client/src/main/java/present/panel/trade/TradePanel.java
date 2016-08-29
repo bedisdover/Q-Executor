@@ -40,6 +40,7 @@ public class TradePanel extends JPanel {
         this.setLayout(new BorderLayout());
         this.add(up, BorderLayout.NORTH);
         this.add(bottom, BorderLayout.CENTER);
+        param.requestFocus();
     }
 
     public void updateMsgPanel() {
