@@ -70,9 +70,9 @@ class HandicapPanel extends JPanel {
 class CenterPanel extends JPanel {
     private JPanel panel;
 
-    private JLabel labelCommittee, labelCommission;
+    private JLabel labelDepth, labelCommittee, labelCommission;
 
-    private JLabel committee, commission;
+    private JLabel depth, committee, commission;
 
     CenterPanel() {
         panel = this;
@@ -95,9 +95,11 @@ class CenterPanel extends JPanel {
             {
                 Box westPanel = Box.createVerticalBox();
 
+                labelDepth = new MyLabel("深度");
                 labelCommittee = new MyLabel("委比");
                 labelCommission = new MyLabel("委差");
 
+                westPanel.add(labelDepth);
                 westPanel.add(labelCommittee);
                 westPanel.add(labelCommission);
 
@@ -107,9 +109,11 @@ class CenterPanel extends JPanel {
             {
                 Box eastPanel = Box.createVerticalBox();
 
-                commission = new MyLabel("35462");
-                committee = new MyLabel("57.81%");
+                depth = new MyLabel(" -- ");
+                commission = new MyLabel(" -- ");
+                committee = new MyLabel(" -- ");
 
+                eastPanel.add(depth);
                 eastPanel.add(commission);
                 eastPanel.add(committee);
 
@@ -123,6 +127,7 @@ class CenterPanel extends JPanel {
             double temp = stockNowTimeVO.getCommission();
             Color color = temp >= 0 ? Color.RED : Color.GREEN;
 
+            depth.setText(stockNowTimeVO.getDepth());
             committee.setText(stockNowTimeVO.getCommittee());
             commission.setText(stockNowTimeVO.getCommission() + "");
             committee.setForeground(color);

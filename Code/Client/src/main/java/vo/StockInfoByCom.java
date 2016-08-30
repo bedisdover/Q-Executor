@@ -7,33 +7,21 @@ package vo;
  */
 public class StockInfoByCom {
     //时间
-    String time;
+    private String time;
     //价格
-    double price;
+    private double price;
     //交易量
-    double volume;
+    private double volume;
     //价格变动
-    double change_price;
+    private double change_price;
     //交易总量
-    double total_number;
+    private double total_number;
     //前一笔交易价格
-    double f_price;
+    private double f_price;
     //性质
-    int type;
-
-    public StockInfoByCom() {
-    }
-
-    public StockInfoByCom(String time, double price, double volume, double f_price, int type) {
-        this.time = time;
-        this.price = price;
-        this.volume = volume;
-        this.f_price = f_price;
-        this.type= type;
-        this.change_price = price-f_price;
-        this.total_number=price*volume;
-    }
-
+    private int type;
+    // 性质映射关系
+    private String mapping[] = new String[]{"买盘", "卖盘", "中性盘"};
 
     public String getTime() {
         return time;
@@ -67,12 +55,20 @@ public class StockInfoByCom {
         this.f_price = f_price;
     }
 
-    public int getType() {
-        return type;
+    public String getType() {
+        return mapping[type];
     }
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public double getChange_price() {
+        return price - f_price;
+    }
+
+    public double getTotal_number() {
+        return total_number;
     }
 
     @Override

@@ -71,7 +71,11 @@ public class StockPanel extends JPanel {
                 panel.add(scrollPane, BorderLayout.WEST);
             }
 
-            centerPanel = kLinePanel = new KLine().getKLine(stockCode);
+            try {
+                centerPanel = kLinePanel = new KLine().getKLine(stockCode);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             panel.add(centerPanel, BorderLayout.CENTER);
         });
     }
