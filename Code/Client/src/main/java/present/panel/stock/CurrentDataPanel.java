@@ -3,7 +3,6 @@ package present.panel.stock;
 import bl.GetStockDataServiceImpl;
 import blservice.GetStockDataService;
 import present.utils.ImageLoader;
-import sun.security.ssl.HandshakeInStream;
 import util.NumberUtil;
 import vo.StockBasicInfoVO;
 import vo.StockNowTimeVO;
@@ -35,6 +34,8 @@ class CurrentDataPanel extends JPanel {
 
     private StockBasicInfoVO stockBasicInfoVO;
 
+    private StockNowTimeVO stockNowTimeVO;
+
     CurrentDataPanel(String stockCode) {
         panel = this;
         this.stockCode = stockCode;
@@ -50,7 +51,7 @@ class CurrentDataPanel extends JPanel {
     private void init() {
         SwingUtilities.invokeLater(() -> {
             panel.setLayout(new BorderLayout(0, 5));
-            panel.setPreferredSize(new Dimension(1, 710));
+            panel.setPreferredSize(new Dimension(1, 725));
 
             panel.revalidate();
         });
@@ -96,7 +97,9 @@ class CurrentDataPanel extends JPanel {
                 try {
                     List stockNowTimeVOList = (List) get();
 
-                    setCurrentData((StockNowTimeVO) stockNowTimeVOList.get(0));
+                    stockNowTimeVO = (StockNowTimeVO) stockNowTimeVOList.get(0);
+
+                    setCurrentData(stockNowTimeVO);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -128,6 +131,21 @@ class CurrentDataPanel extends JPanel {
         handicapPanel.setData(stockNowTimeVO);
     }
 
+    /**
+     * @see GeneralPanel
+     * @return 成交量
+     */
+    double getAmount() {
+        return stockNowTimeVO.getAmount();
+    }
+
+    /**
+     * @see GeneralPanel
+     * @return 成交额
+     */
+    double getVolume() {
+        return stockNowTimeVO.getVolume();
+    }
 
     /**
      * Created by song on 16-8-26.
