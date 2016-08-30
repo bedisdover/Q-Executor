@@ -15,7 +15,7 @@ public class TimeUtil {
      * @param timeNum 时间片数量
      * @return 当前为第几个时间片，如果不在交易时间段，返回-1
      */
-    public int getCurrentIime(int timeNum){
+    public static int getCurrentIime(int timeNum){
         Calendar calendar = Calendar.getInstance();
 
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -45,7 +45,7 @@ public class TimeUtil {
      * @param timeNum 时间片数量
      * @return 时间片长度
      */
-    private int timeNumTOLength(int timeNum){
+    private static int timeNumTOLength(int timeNum){
         return 240/timeNum;
     }
 
@@ -55,7 +55,7 @@ public class TimeUtil {
      * @param timeNum 时间片数量
      * @return yyyy-MM-dd HH:mm:ss格式时间
      */
-    public String timeNodeToDate(int timeNode, int timeNum){
+    public static String timeNodeToDate(int timeNode, int timeNum){
         Calendar calendar=Calendar.getInstance();
         int timeLength = 240/timeNum;
         if(timeNode<(timeNum/2)){
