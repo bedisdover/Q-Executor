@@ -7,18 +7,9 @@ package vo;
  */
 public class StockInfoByPrice implements Comparable {
 
-    double price;
-    double trunover;
-    double percent;
-
-    public StockInfoByPrice() {
-    }
-
-    public StockInfoByPrice(double price, double trunover, double percent) {
-        this.price = price;
-        this.trunover = trunover;
-        this.percent = percent;
-    }
+    private double price;
+    private double trunover;
+    private double percent;
 
     public double getPrice() {
         return price;
