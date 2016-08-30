@@ -28,8 +28,8 @@ public class StockMLServiceImpl implements StockMLService{
     "11:05:00","11:10:00","11:15:00","11:20:00","11:25:00","11:30:00","13:05:00","13:10:00","13:15:00","13:20:00","13:25:00","13:30:00",
     "13:35:00","13:40:00","13:45:00","13:50:00","13:55:00","14:00:00","14:05:00","14:10:00","14:15:00","14:20:00","14:25:00","14:30:00",
     "14:35:00","14:40:00","14:45:00","14:50:00","14:55:00","15:00:00"};
-    @Resource
-    BaseDao baseDao;
+//    @Resource
+//    BaseDao baseDao;
     @Override
     public ArrayList<StockForMLPO> getStockDataML(String stockID, int numOfStock, int currentTime) {
         stockID =  StockUtil.getCode(stockID);
@@ -96,6 +96,15 @@ public class StockMLServiceImpl implements StockMLService{
             return array;
         }
         return array;
+    }
+
+    @Override
+    public String[] getStocksNeedCal() {
+        String[] stocks = {"sh600000","sh600149","sz300459","sh600030","sz300431","sz300076",
+                "sz000156","sh600048","sh600489","sh600309","sh600004", "sh600337","sh600031",
+                "sh600006","sh600597"};
+
+            return stocks;
     }
 
     /**
