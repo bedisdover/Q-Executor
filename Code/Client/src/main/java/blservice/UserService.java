@@ -19,8 +19,9 @@ public interface UserService {
      * private String info;
      * private Object object = null;
      * 其中state表示本次操作是否成功,info表示失败的信息
+     * @throws Exception 
      */
-    MsgInfo register(String userName, String nickName, String password, String mail);
+    MsgInfo register(String userName, String nickName, String password, String mail) throws Exception;
 
     /**
      * 登录，对应url：http:121.42.143.164/login
@@ -31,8 +32,9 @@ public interface UserService {
      * private String info;
      * private Object object = null;
      * 其中state表示本次登录是否成功,info表示失败的信息
+     * @throws Exception 
      */
-    MsgInfo login(String userName, String password);
+    MsgInfo login(String userName, String password) throws Exception;
 
     /**
      * 判断用户是否登录, url: http:121.42.143.164/isLogin
@@ -43,6 +45,7 @@ public interface UserService {
      * private String info;
      * private Object object = null;
      * 其中state表示用户是否登录,info返回状态信息,Object表示用户账号的详情的信息
+     * @throws Exception 
      */
-    MsgInfo isLogin(String userName);
+    MsgInfo isLogin(String userName) throws Exception;
 }

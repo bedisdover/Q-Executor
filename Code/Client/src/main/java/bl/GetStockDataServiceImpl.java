@@ -2,6 +2,7 @@ package bl;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,10 +16,9 @@ import blservice.GetStockDataService;
 
 public class GetStockDataServiceImpl implements GetStockDataService{
 
-	public List<StockNowTimeVO> getNowTimeData(String... codeNum) {
+	public List<StockNowTimeVO> getNowTimeData(String... codeNum) throws Exception {
 		
 		List<StockNowTimeVO> stockList=new ArrayList<StockNowTimeVO>();
-		try {
 			for(int i=0;i<codeNum.length;i++){
 				StockNowTimeVO stockNowTimeVO=new StockNowTimeVO();
 				String url="http://hq.finance.ifeng.com/q.php?l="+codeNum[i];
@@ -61,18 +61,12 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 				stockNowTimeVO.setTime(dt);
 				stockList.add(stockNowTimeVO);
 			}
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return stockList;
 	}
-	
-	public StockBasicInfoVO getBasicInfo(String codeNum) {
-		String url="http://121.42.143.164/BasicComInfo?codeNum=" + codeNum;
+
+	public StockBasicInfoVO getBasicInfo(String codeNum) throws Exception {
+		String url="http://121.42.143.164/BasicComInfo?codeNum=sh600000";
 		StockBasicInfoVO stockBasicInfoVO=new StockBasicInfoVO();
-		try {
 			URL ur=new URL(url);
 			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
 			String line=reader.readLine();
@@ -95,32 +89,96 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 			Date dt = new Date((Long) jsonArray.get("timeToMarket"));
 			stockBasicInfoVO.setTimeToMarket(dt);
 		
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 		
 		return stockBasicInfoVO;
 	}
 
-	@Override
-	public List<StockInfoByPrice> getStockInfoByPrice(String codeNum) {
-		return null;
+	public List<StockInfoByPrice> getStockInfoByPrice(String codeNum) throws Exception {
+		String url="http://121.42.143.164/StockInfoByPrice?codeNum="+codeNum;
+		List<StockInfoByPrice> stockList=new ArrayList<StockInfoByPrice>();
+			URL ur=new URL(url);
+			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
+			String line=reader.readLine();
+			JSONArray jsonArray=new JSONArray(line);
+			int size=jsonArray.length();
+			for(int i=0;i<size;i++){
+				StockInfoByPrice stockKLineVO=new StockInfoByPrice();
+				JSONObject jsonObj=jsonArray.getJSONObject(i);
+				stockKLineVO.setPercent(jsonObj.getDouble("percent"));
+				stockKLineVO.setPrice(jsonObj.getDouble("price"));
+				stockKLineVO.setTrunover(jsonObj.getDouble("trunover"));
+				stockList.add(stockKLineVO);
+			}
+		return stockList;
 	}
 
-	@Override
-	public List<StockInfoByCom> getComStockInfo(String codeNum) {
-		return null;
+	public List<StockInfoByCom> getComStockInfo(String codeNum) throws Exception {
+		String url="http://121.42.143.164/ComStockInfo?codeNum="+codeNum;
+		return getComStock(url); 
 	}
 
-	@Override
-	public List<StockInfoByCom> getComStockInfo(String codeNum, double param) {
-		return null;
+	public List<StockInfoByCom> getComStockInfo(String codeNum, double param) throws Exception {
+		String url="http://121.42.143.164/ComStockInfoParam?codeNum="+codeNum+"&param="+param;
+		return getComStock(url);
 	}
 
-	@Override
-	public List<StockInfoByPer> getPerStockInfo(String codeNum) {
-		return null;
+	public List<StockInfoByPer> getPerStockInfo(String codeNum) throws Exception {
+		String url="http://121.42.143.164/PerStockInfo?codeNum="+codeNum;
+		List<StockInfoByPer> stockList=new ArrayList<StockInfoByPer>();
+			URL ur=new URL(url);
+			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
+			String line=reader.readLine();
+			JSONArray jsonArray=new JSONArray(line);
+			int size=jsonArray.length();
+			for(int i=0;i<size;i++){
+				StockInfoByPer stockKLineVO=new StockInfoByPer();
+				JSONObject jsonObj=jsonArray.getJSONObject(i);
+				stockKLineVO.setTime(jsonObj.getString("time"));
+				stockKLineVO.setPrice(jsonObj.getDouble("price"));
+				stockKLineVO.setVolume(jsonObj.getDouble("volume"));
+				stockKLineVO.setType(jsonObj.getInt("type"));
+				stockKLineVO.setChange_price(jsonObj.getDouble("change_price"));
+				stockKLineVO.setTotalNum(jsonObj.getDouble("totalNum"));
+				stockList.add(stockKLineVO);
+			}
+		return stockList;
 	}
 
+	public List<StockInfoByCom> getComStock(String url) throws Exception{
+		List<StockInfoByCom> stockList=new ArrayList<StockInfoByCom>();
+			URL ur=new URL(url);
+			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
+			String line=reader.readLine();
+			JSONArray jsonArray=new JSONArray(line);
+			int size=jsonArray.length();
+			for(int i=0;i<size;i++){
+				StockInfoByCom stockKLineVO=new StockInfoByCom();
+				JSONObject jsonObj=jsonArray.getJSONObject(i);
+				stockKLineVO.setTime(jsonObj.getString("time"));
+				stockKLineVO.setF_price(jsonObj.getDouble("f_price"));
+				stockKLineVO.setPrice(jsonObj.getDouble("price"));
+				stockKLineVO.setVolume(jsonObj.getDouble("volume"));
+				stockKLineVO.setType(jsonObj.getInt("type"));
+				stockList.add(stockKLineVO);
+			}
+		return stockList;
+	}
+	
+	public static void main(String [] args){
+//		String url="http://121.42.143.164/ComStockInfoParam?codeNum=sh600000&param=400";
+//		StockBasicInfoVO stockBasicInfoVO=new StockBasicInfoVO();
+//		try {
+//			URL ur=new URL(url);
+//			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
+//			String line=reader.readLine();
+//	
+//			System.out.println(line);
+//		
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
+	}
 }

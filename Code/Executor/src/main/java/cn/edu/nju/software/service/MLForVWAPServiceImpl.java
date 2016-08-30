@@ -7,12 +7,13 @@ import libsvm.*;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.TimerTask;
 
 
 /**
  * Created by Liu on 2016/8/16.
  */
-public class MLForVWAPServiceImpl implements MLForVWAPService {
+public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService  {
 
     private StockMLService stockService;
     private svm_problem problem;          //定义svm_problem对象
@@ -23,6 +24,9 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
     private double[] labels;            //对应的标记
     private int numOfStaticAttr;
     private int numOfDynamicAttr;
+
+    private ArrayList<Integer> staticVol_night;
+    private MLForVWAPPriceVO   dynamicPrice_night;
 
     public MLForVWAPServiceImpl( ) {
         stockService=new StockMLServiceImpl();
@@ -269,6 +273,7 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
             list.add( value_int);
        }
 
+       this.staticVol_night=list;
         return list;
     }
 
@@ -285,6 +290,7 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
             String twobit= df.format(predictValue);
             list.add(Double.parseDouble(twobit));
         }
+
 
         return list;
     }
@@ -342,6 +348,16 @@ public class MLForVWAPServiceImpl implements MLForVWAPService {
 
         vo=new MLForVWAPPriceVO(list,currentTime);
         return  vo;
+    }
+
+    @Override
+    public void run() {
+        try {
+
+        } catch (Exception e) {
+
+        }
+
     }
 
 

@@ -11,6 +11,8 @@ import util.JsonUtil;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.*;
 import java.util.List;
 
@@ -57,7 +59,7 @@ class ParamPanel extends JPanel {
 
     private VWAPService vwap = new VWAP();
 
-    ParamPanel(int width, int height) {
+    ParamPanel(int width, int height, TradePanel parent) {
         this.componentW = ((width >> 1) - 3 * H_GAP) >> 1;
         this.componentH = (int)(this.componentW * 0.4);
 
@@ -175,14 +177,12 @@ class ParamPanel extends JPanel {
         box.add(createTimePanel("开始时间"));
         box.add(createTimePanel("结束时间"));
 
-        Box line7 = Box.createHorizontalBox();
+        JPanel line7 = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, V_GAP));
 
-        line7.add(Box.createHorizontalStrut(H_GAP));
         JLabel mode = new JLabel("启动模式");
         mode.setPreferredSize(new Dimension(componentW, componentH));
         line7.add(mode);
 
-        line7.add(Box.createHorizontalStrut(H_GAP));
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, V_GAP));
         JRadioButton trade = new JRadioButton("交易");
         trade.setPreferredSize(new Dimension(componentW, componentH));
@@ -197,19 +197,23 @@ class ParamPanel extends JPanel {
 
         JButton trigger = new JButton("启动");
         trigger.setPreferredSize(new Dimension(componentW, componentH));
-        line7.add(trigger);
-        trigger.addActionListener((e) -> {
-            int tradeNum = Integer.parseInt(quanVal.getText());
-            String code = codeText.getText();
-            try {
-                vwap.predictVn(new VWAP_Param(
-                       tradeNum, code, 0, 0, 0
-                ));
-            } catch (Exception e1) {
-                e1.printStackTrace();
+        trigger.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+//            int tradeNum = Integer.parseInt(quanVal.getText());
+//            String code = codeText.getText();
+//            try {
+//                vwap.predictVn(new VWAP_Param(
+//                       tradeNum, code, 0, 0, 0
+//                ));
+//            } catch (Exception e1) {
+//                e1.printStackTrace();
+//            }
+                parent.updateMsgPanel();
             }
         });
-
+        line7.add(trigger);
         box.add(line7);
 
         this.setLayout(new BorderLayout());
