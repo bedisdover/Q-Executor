@@ -10,11 +10,11 @@ import java.awt.*;
  */
 class MyLabel extends JLabel {
     MyLabel() {
-        this.setFont(new Font("黑体", Font.PLAIN, 16));
+        this.setFont(new Font("微软雅黑", Font.PLAIN, 14));
     }
 
     MyLabel(String text) {
         this.setText(text);
-        this.setFont(new Font("黑体", Font.PLAIN, 16));
+        this.setFont(new Font("微软雅黑", Font.PLAIN, 14));
     }
 }

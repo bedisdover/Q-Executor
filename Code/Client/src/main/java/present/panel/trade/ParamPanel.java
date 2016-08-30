@@ -1,7 +1,20 @@
 package present.panel.trade;
 
+import bl.VWAP;
+import bl.VWAP_Param;
+import blservice.VWAPService;
+import org.json.JSONException;
+import org.json.JSONObject;
+import present.component.TipText;
+import present.utils.StockJsonInfo;
+import util.JsonUtil;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.*;
+import java.util.List;
 
 /**
  * Created by Y481L on 2016/8/28.
@@ -44,7 +57,9 @@ class ParamPanel extends JPanel {
     //下单金额
     private Line invest;
 
-    ParamPanel(int width, int height) {
+    private VWAPService vwap = new VWAP();
+
+    ParamPanel(int width, int height, TradePanel parent) {
         this.componentW = ((width >> 1) - 3 * H_GAP) >> 1;
         this.componentH = (int)(this.componentW * 0.4);
 
@@ -66,15 +81,39 @@ class ParamPanel extends JPanel {
         box.add(line1);
 
         Box line2 = Box.createHorizontalBox();
-        //证券代码
-        JLabel codeLabel = new JLabel("证券代码");
-        JTextField codeText = new JTextField();
-        code = new Line(codeLabel, codeText);
-        line2.add(code);
         //证券名称
         JLabel nameLabel = new JLabel("证券名称");
         JTextField nameVal = new JTextField();
         name = new Line(nameLabel, nameVal);
+        name.getInput().setEnabled(false);
+        line2.add(name);
+        //证券代码
+        JLabel codeLabel = new JLabel("证券代码");
+        TipText codeText = new TipText(componentW << 1, componentH);
+        codeText.setMatcher((key) -> {
+            Vector<String> v = new Vector<>();
+            List<JSONObject> list = JsonUtil.contains(
+                    StockJsonInfo.JSON_KEYS, StockJsonInfo.JSON_PATH, key
+            );
+            for (JSONObject obj : list) {
+                try {
+                    v.addElement(
+                            obj.getString(StockJsonInfo.KEY_CODE) + " " +
+                            obj.getString(StockJsonInfo.KEY_NAME)
+                    );
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            return v;
+        });
+        codeText.setListHandler((text) -> {
+            String[] s = text.split(" ");
+            codeText.setText(s[0]);
+            nameVal.setText(s[1]);
+        });
+        code = new Line(codeLabel, codeText);
+        line2.add(code);
         box.add(line2);
 
         Box line3 = Box.createHorizontalBox();
@@ -138,14 +177,12 @@ class ParamPanel extends JPanel {
         box.add(createTimePanel("开始时间"));
         box.add(createTimePanel("结束时间"));
 
-        Box line7 = Box.createHorizontalBox();
+        JPanel line7 = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, V_GAP));
 
-        line7.add(Box.createHorizontalStrut(H_GAP));
         JLabel mode = new JLabel("启动模式");
         mode.setPreferredSize(new Dimension(componentW, componentH));
         line7.add(mode);
 
-        line7.add(Box.createHorizontalStrut(H_GAP));
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, V_GAP));
         JRadioButton trade = new JRadioButton("交易");
         trade.setPreferredSize(new Dimension(componentW, componentH));
@@ -160,11 +197,23 @@ class ParamPanel extends JPanel {
 
         JButton trigger = new JButton("启动");
         trigger.setPreferredSize(new Dimension(componentW, componentH));
-        line7.add(trigger);
-        trigger.addActionListener((e) -> {
-
+        trigger.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+//            int tradeNum = Integer.parseInt(quanVal.getText());
+//            String code = codeText.getText();
+//            try {
+//                vwap.predictVn(new VWAP_Param(
+//                       tradeNum, code, 0, 0, 0
+//                ));
+//            } catch (Exception e1) {
+//                e1.printStackTrace();
+//            }
+                parent.updateMsgPanel();
+            }
         });
-
+        line7.add(trigger);
         box.add(line7);
 
         this.setLayout(new BorderLayout());

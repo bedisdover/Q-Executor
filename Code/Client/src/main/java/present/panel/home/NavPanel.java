@@ -73,7 +73,8 @@ public class NavPanel extends JPanel{
                 (e) -> switcher.jump(new StockPanel("sh600000")));
 
         SubButton general = new SubButton("大单");
-        general.addActionListener((e) -> switcher.jump(new GeneralPanel("sh600000")));
+        // FIXME 传入CurrentDataPanel对象
+        general.addActionListener((e) -> switcher.jump(new GeneralPanel("sh600000", null)));
         stock.addSubButton(general);
 
         SubButton single = new SubButton("逐笔");

@@ -32,6 +32,10 @@ class CurrentDataPanel extends JPanel {
 
     private HandicapPanel handicapPanel;
 
+    private StockBasicInfoVO stockBasicInfoVO;
+
+    private StockNowTimeVO stockNowTimeVO;
+
     CurrentDataPanel(String stockCode) {
         panel = this;
         this.stockCode = stockCode;
@@ -46,8 +50,8 @@ class CurrentDataPanel extends JPanel {
      */
     private void init() {
         SwingUtilities.invokeLater(() -> {
-            panel.setLayout(new BorderLayout(0, 20));
-            panel.setPreferredSize(new Dimension(1, 780));
+            panel.setLayout(new BorderLayout(0, 5));
+            panel.setPreferredSize(new Dimension(1, 725));
 
             panel.revalidate();
         });
@@ -93,7 +97,9 @@ class CurrentDataPanel extends JPanel {
                 try {
                     List stockNowTimeVOList = (List) get();
 
-                    setCurrentData((StockNowTimeVO) stockNowTimeVOList.get(0));
+                    stockNowTimeVO = (StockNowTimeVO) stockNowTimeVOList.get(0);
+
+                    setCurrentData(stockNowTimeVO);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -109,7 +115,11 @@ class CurrentDataPanel extends JPanel {
      * @param stockBasicInfoVO 基本信息
      */
     void setBasicInfo(StockBasicInfoVO stockBasicInfoVO) {
-        SwingUtilities.invokeLater(() -> basicInfoPanel.setBasicInfo(stockBasicInfoVO));
+        SwingUtilities.invokeLater(() -> {
+            this.stockBasicInfoVO = stockBasicInfoVO;
+
+            basicInfoPanel.setBasicInfo(stockBasicInfoVO);
+        });
     }
 
     /**
@@ -118,8 +128,24 @@ class CurrentDataPanel extends JPanel {
     private void setCurrentData(StockNowTimeVO stockNowTimeVO) {
         pricePanel.setData(stockNowTimeVO);
         dataPanel.setData(stockNowTimeVO);
+        handicapPanel.setData(stockNowTimeVO);
     }
 
+    /**
+     * @see GeneralPanel
+     * @return 成交量
+     */
+    double getAmount() {
+        return stockNowTimeVO.getAmount();
+    }
+
+    /**
+     * @see GeneralPanel
+     * @return 成交额
+     */
+    double getVolume() {
+        return stockNowTimeVO.getVolume();
+    }
 
     /**
      * Created by song on 16-8-26.
@@ -163,7 +189,8 @@ class CurrentDataPanel extends JPanel {
                     northPanel.setBackground(new Color(0xeeeeee));
                     northPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
-                    price = new JLabel("23");
+                    price = new JLabel("--");
+                    price.setFont(new Font("微软雅黑", Font.PLAIN, 16));
                     price.setToolTipText("最新价格");
                     inc_dec = new JLabel(ImageLoader.increase);
                     inc_dec.setBounds(0, 0, 100, 100);
@@ -200,10 +227,18 @@ class CurrentDataPanel extends JPanel {
         }
 
         void setData(StockNowTimeVO stockNowTimeVO) {
-            price.setText(NumberUtil.transferUnit(stockNowTimeVO.getPrice()));
-            incNum.setText(stockNowTimeVO.getIncNum() + "");
-            incRate.setText(stockNowTimeVO.getIncRate() + "");
-            time.setText(getDate(stockNowTimeVO.getTime()));
+            SwingUtilities.invokeLater(() -> {
+                double temp = stockNowTimeVO.getIncNum();
+                Color color = temp >= 0 ? Color.RED : Color.GREEN;
+
+                price.setText(NumberUtil.transferUnit(stockNowTimeVO.getPrice()));
+                incNum.setText(temp + "");
+                incRate.setText("(" + stockNowTimeVO.getIncRate() + "%)");
+                incNum.setForeground(color);
+                incRate.setForeground(color);
+
+                time.setText(getDate(stockNowTimeVO.getTime()));
+            });
         }
 
         private String getDate(Date date) {
@@ -221,7 +256,7 @@ class CurrentDataPanel extends JPanel {
      * 昨  收:	68.42	最  低:	68.51	市盈率TTM:	68.02	成交额:	2.50亿元
      * 振  幅:	2.18%	市净率:	20.87	每股收益:	0.267元	总市值:	32.87亿元
      */
-    private static class DataPanel extends JPanel {
+    private class DataPanel extends JPanel {
         private JPanel panel;
 
         private MyLabel labelOpen, labelHigh, labelTurnOver, labelAmount,
@@ -309,7 +344,21 @@ class CurrentDataPanel extends JPanel {
         }
 
         void setData(StockNowTimeVO stockNowTimeVO) {
-            open.setText(stockNowTimeVO.getOpen() + "");
+            SwingUtilities.invokeLater(() -> {
+                open.setText(stockNowTimeVO.getOpen() + "");
+                close.setText(stockNowTimeVO.getClose() + "");
+                high.setText(stockNowTimeVO.getHigh() + "");
+                low.setText(stockNowTimeVO.getLow() + "");
+                amplitude.setText(stockNowTimeVO.getAmplitude());
+                // turnOver = (amount / outstanding) * 100%
+                // outstanding --- 流通股
+                turnOver.setText(NumberUtil.transferUnit(
+                        stockNowTimeVO.getAmount() / stockBasicInfoVO.getOutstanding() / 1e4 * 100) + "%");
+                amount.setText(NumberUtil.transferUnit(stockNowTimeVO.getAmount()));
+                volume.setText(NumberUtil.transferUnit(stockNowTimeVO.getVolume()));
+                pe.setText(stockBasicInfoVO.getPe() + "");
+                pb.setText(stockBasicInfoVO.getPb() + "");
+            });
         }
     }
 }

@@ -19,16 +19,17 @@ public class TradePanel extends JPanel {
 
     private static final int MSG_PANEL_H = MainFrame.PANEL_H - PARAM_PANEL_H;
 
-    private static final int MONITOR_PANEL_W = RT_PANEL_W;
+    MessagePanel msg = new MessagePanel(MSG_PANEL_W, MSG_PANEL_H);
 
-    private static final int MONITOR_PANEL_H = MSG_PANEL_H;
+//    private static final int MONITOR_PANEL_W = RT_PANEL_W;
+//
+//    private static final int MONITOR_PANEL_H = MSG_PANEL_H;
 
     public TradePanel() {
-        ParamPanel param = new ParamPanel(PARAM_PANEL_W, PARAM_PANEL_H);
+        ParamPanel param = new ParamPanel(PARAM_PANEL_W, PARAM_PANEL_H, this);
         RealTimePanel rt = new RealTimePanel(RT_PANEL_W, RT_PANEL_H);
-        MessagePanel msg = new MessagePanel(MSG_PANEL_W, MSG_PANEL_H);
-//        MonitorPanel monitor = new MonitorPanel(MONITOR_PANEL_W, MONITOR_PANEL_H);
 
+//        MonitorPanel monitor = new MonitorPanel(MONITOR_PANEL_W, MONITOR_PANEL_H);
         Box up = Box.createHorizontalBox();
         up.add(param);
         up.add(rt);
@@ -39,6 +40,11 @@ public class TradePanel extends JPanel {
         this.setLayout(new BorderLayout());
         this.add(up, BorderLayout.NORTH);
         this.add(bottom, BorderLayout.CENTER);
+        param.requestFocus();
+    }
+
+    public void updateMsgPanel() {
+        msg.update();
     }
 
 }

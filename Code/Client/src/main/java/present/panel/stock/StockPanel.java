@@ -71,7 +71,12 @@ public class StockPanel extends JPanel {
                 panel.add(scrollPane, BorderLayout.WEST);
             }
 
-            centerPanel = kLinePanel = new KLine().getKLine(stockCode);
+            try {
+                centerPanel = kLinePanel = new KLine().getKLine(stockCode);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             panel.add(centerPanel, BorderLayout.CENTER);
         });
     }
@@ -96,7 +101,7 @@ public class StockPanel extends JPanel {
                     break;
                 case "GeneralPanel":
                     if (generalPanel == null) {
-                        generalPanel = new GeneralPanel(stockCode);
+                        generalPanel = new GeneralPanel(stockCode, currentDataPanel);
                     }
 
                     centerPanel = generalPanel;
@@ -151,7 +156,6 @@ public class StockPanel extends JPanel {
 
         worker.execute();
     }
-
 
     /**
      * Created by song on 16-8-26.

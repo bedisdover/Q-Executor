@@ -124,15 +124,15 @@ class BasicInfoPanel extends JPanel {
             name.setText(stockBasicInfoVO.getName());
             industry.setText(stockBasicInfoVO.getIndustry());
             area.setText(stockBasicInfoVO.getArea());
-            liquid.setText(NumberUtil.transferUnit(stockBasicInfoVO.getOutstanding()));
-            total.setText(NumberUtil.transferUnit(stockBasicInfoVO.getTotals()));
-            totalAssets.setText(NumberUtil.transferUnit(stockBasicInfoVO.getTotalAssets()));
-            liquidAssets.setText(NumberUtil.transferUnit(stockBasicInfoVO.getLiquidAssets()));
-            fixedAssets.setText(NumberUtil.transferUnit(stockBasicInfoVO.getFixedAssets()));
-            reserved.setText(NumberUtil.transferUnit(stockBasicInfoVO.getReserved()));
-            reservedPerShare.setText(NumberUtil.transferUnit(stockBasicInfoVO.getReservedPerShare()));
-            eps.setText(NumberUtil.transferUnit(stockBasicInfoVO.getEps()));
-            bvps.setText(NumberUtil.transferUnit(stockBasicInfoVO.getBvps()));
+            liquid.setText(NumberUtil.transferUnit(stockBasicInfoVO.getOutstanding() * 1e4));
+            total.setText(NumberUtil.transferUnit(stockBasicInfoVO.getTotals() * 1e4));
+            totalAssets.setText(NumberUtil.transferUnit(stockBasicInfoVO.getTotalAssets() * 1e4));
+            liquidAssets.setText(NumberUtil.transferUnit(stockBasicInfoVO.getLiquidAssets() * 1e4));
+            fixedAssets.setText(NumberUtil.transferUnit(stockBasicInfoVO.getFixedAssets() * 1e4));
+            reserved.setText(NumberUtil.transferUnit(stockBasicInfoVO.getReserved() * 1e4));
+            reservedPerShare.setText(NumberUtil.transferUnit(stockBasicInfoVO.getReservedPerShare() * 1e4));
+            eps.setText(NumberUtil.transferUnit(stockBasicInfoVO.getEps() * 1e4));
+            bvps.setText(NumberUtil.transferUnit(stockBasicInfoVO.getBvps() * 1e4));
             timeToMarket.setText(getDate(stockBasicInfoVO.getTimeToMarket()));
 
             panel.revalidate();
@@ -145,6 +145,10 @@ class BasicInfoPanel extends JPanel {
      * @return 日期格式： yyyy/MM/dd
      */
     private String getDate(Date date) {
+        if (date == null) {
+            return "  --  ";
+        }
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
         return dateFormat.format(date);
