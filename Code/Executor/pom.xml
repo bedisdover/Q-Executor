@@ -317,6 +317,17 @@
       <artifactId>mysql-connector-java</artifactId>
       <version>5.1.39</version>
     </dependency>
+
+
+    <dependency>
+      <groupId>libsvm</groupId>
+      <artifactId>libsvm</artifactId>
+      <version>1.0</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/libsvm.jar</systemPath>
+    </dependency>
+
+
   </dependencies>
 
 

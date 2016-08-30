@@ -7,6 +7,7 @@ import blservice.VWAPService;
 import service.MLForVWAPService;
 import service.MLForVWAPServiceImpl;
 import vo.MLForVWAPPriceVO;
+import vo.VolumeVO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +24,7 @@ public class VWAP implements VWAPService {
 		
 	}
 
-	public List<Integer> predictVn(VWAP_Param param) throws Exception{
+	public List<VolumeVO> predictVn(VWAP_Param param) throws Exception{
 		//交易量概率密度
 		List<Double> Pn;
         MLForVWAPService ml = new MLForVWAPServiceImpl();
@@ -63,9 +64,26 @@ public class VWAP implements VWAPService {
 			int vi=Double.valueOf(param.getUserVol()*Pn.get(i)).intValue();
 			Vn.add(vi);
 		}
-		return Vn;
+		return  getVolumeVOList(Vn,param.getTimeSliceNum());
 	}
-	
+
+	/**
+	 * 将预测的交易量加上时间片标记
+	 * @param Vn
+	 * @param timeNum
+     * @return
+     */
+	private List<VolumeVO> getVolumeVOList(List<Integer> Vn,int timeNum){
+		List<VolumeVO> volumeVOList = new ArrayList<VolumeVO>();
+		for(int i=0;i<Vn.size();i++){
+			String time = TimeUtil.timeNodeToDate(i+1,timeNum);
+			VolumeVO volVO = new VolumeVO(time,Vn.get(i));
+			volumeVOList.add(volVO);
+		}
+
+		return volumeVOList;
+	}
+
 	/**
 	 * 初始化Pn
 	 * @param vList

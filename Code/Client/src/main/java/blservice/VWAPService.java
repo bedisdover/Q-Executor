@@ -1,6 +1,7 @@
 package blservice;
 
 import bl.VWAP_Param;
+import vo.VolumeVO;
 
 import java.util.List;
 
@@ -14,5 +15,5 @@ public interface VWAPService {
      * @return 预测的各时间段的交易量
      * @throws Exception
      */
-    public List<Integer> predictVn(VWAP_Param param) throws Exception;
+    public List<VolumeVO> predictVn(VWAP_Param param) throws Exception;
 }
