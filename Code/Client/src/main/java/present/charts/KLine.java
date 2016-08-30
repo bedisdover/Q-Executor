@@ -1,21 +1,30 @@
 package present.charts;
 
+import bl.GetKLineDataServiceImpl;
+import blservice.GetKLineDataService;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.*;
 import org.jfree.chart.plot.CombinedDomainXYPlot;
 import org.jfree.chart.plot.DatasetRenderingOrder;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.*;
+import org.jfree.chart.renderer.xy.CandlestickRenderer;
+import org.jfree.chart.renderer.xy.StandardXYBarPainter;
+import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
+import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.time.ohlc.OHLCSeries;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
+import util.TimeUtil;
+import vo.StockKLineVO;
 
 import javax.swing.*;
 import java.awt.*;
 import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by song on 16-8-25.
@@ -26,6 +35,8 @@ import java.text.SimpleDateFormat;
 public class KLine {
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+    private GetKLineDataService kLineDataService = new GetKLineDataServiceImpl();
 
     public JTabbedPane getKLine(String stockCode) {
         JTabbedPane tabbedPane = new JTabbedPane();
@@ -44,7 +55,9 @@ public class KLine {
      * @return 包含日K线的panel
      */
     private JPanel getKLineDay(String stockCode) {
-        return new ChartPanel(createChart(stockCode, new KLineVO("sh6000")));
+        List<StockKLineVO> stockKLineVOList = kLineDataService.getKLineDay(stockCode);
+
+        return new ChartPanel(createChart(stockCode, new KLineVO(stockKLineVOList)));
     }
 
     /**
@@ -54,7 +67,9 @@ public class KLine {
      * @return 包含周K线的panel
      */
     private JPanel getKLineWeek(String stockCode) {
-        return new ChartPanel(createChart(stockCode, new KLineVO("")));
+        List<StockKLineVO> stockKLineVOList = kLineDataService.getKLineWeek(stockCode);
+
+        return new ChartPanel(createChart(stockCode, new KLineVO(stockKLineVOList)));
     }
 
     /**
@@ -64,7 +79,9 @@ public class KLine {
      * @return 包含月K线的panel
      */
     private JPanel getKLineMonth(String stockCode) {
-        return new ChartPanel(createChart(stockCode, new KLineVO("")));
+        List<StockKLineVO> stockKLineVOList = kLineDataService.getKLineMonth(stockCode);
+
+        return new ChartPanel(createChart(stockCode, new KLineVO(stockKLineVOList)));
     }
 
     /**
@@ -163,6 +180,9 @@ public class KLine {
     }
 }
 
+/**
+ * k线数据对象
+ */
 class KLineVO {
 
     private OHLCSeriesCollection ohlcSeriesCollection;
@@ -174,43 +194,23 @@ class KLineVO {
     private double high = Double.MIN_VALUE, low = Double.MAX_VALUE,
             high_amount = Double.MIN_VALUE, low_amount = Double.MAX_VALUE;
 
-    KLineVO(String stockCode) {
+    KLineVO(List<StockKLineVO> stockKLineVOList) {
         OHLCSeries ohlcSeries = new OHLCSeries("");
-        ohlcSeries.add(new Day(28, 9, 2007), 9.2, 9.58, 9.16, 9.34);
-        ohlcSeries.add(new Day(27, 9, 2007), 8.9, 9.06, 8.83, 8.96);
-        ohlcSeries.add(new Day(26, 9, 2007), 9.0, 9.1, 8.82, 9.04);
-        ohlcSeries.add(new Day(25, 9, 2007), 9.25, 9.33, 8.88, 9.00);
-        ohlcSeries.add(new Day(24, 9, 2007), 9.05, 9.50, 8.91, 9.25);
-        ohlcSeries.add(new Day(21, 9, 2007), 8.68, 9.05, 8.40, 9.00);
-        ohlcSeries.add(new Day(20, 9, 2007), 8.68, 8.95, 8.50, 8.69);
-        ohlcSeries.add(new Day(19, 9, 2007), 8.80, 8.94, 8.50, 8.66);
-        ohlcSeries.add(new Day(18, 9, 2007), 8.88, 9.17, 8.69, 8.80);
-        ohlcSeries.add(new Day(17, 9, 2007), 8.26, 8.98, 8.15, 8.89);
-        ohlcSeries.add(new Day(14, 9, 2007), 8.44, 8.45, 8.13, 8.33);
-        ohlcSeries.add(new Day(13, 9, 2007), 8.13, 8.46, 7.97, 8.42);
-        ohlcSeries.add(new Day(12, 9, 2007), 8.2, 8.4, 7.81, 8.13);
-        ohlcSeries.add(new Day(11, 9, 2007), 9.0, 9.0, 8.1, 8.24);
-        ohlcSeries.add(new Day(10, 9, 2007), 8.6, 9.03, 8.40, 8.95);
-        ohlcSeries.add(new Day(7, 9, 2007), 8.89, 9.04, 8.70, 8.73);
-        ohlcSeries.add(new Day(6, 9, 2007), 8.4, 9.08, 8.33, 8.88);
-        ohlcSeries.add(new Day(5, 9, 2007), 8.2, 8.74, 8.17, 8.36);
-        ohlcSeries.add(new Day(4, 9, 2007), 7.7, 8.46, 7.67, 8.27);
-        ohlcSeries.add(new Day(3, 9, 2007), 7.5, 7.8, 7.48, 7.69);
-        ohlcSeries.add(new Day(31, 8, 2007), 7.4, 7.6, 7.28, 7.43);
-        ohlcSeries.add(new Day(30, 8, 2007), 7.42, 7.56, 7.31, 7.40);
-        ohlcSeries.add(new Day(29, 8, 2007), 7.42, 7.66, 7.22, 7.33);
-        ohlcSeries.add(new Day(28, 8, 2007), 7.31, 7.70, 7.15, 7.56);
-        ohlcSeries.add(new Day(27, 8, 2007), 7.05, 7.46, 7.02, 7.41);
-        ohlcSeries.add(new Day(24, 8, 2007), 7.05, 7.09, 6.90, 6.99);
-        ohlcSeries.add(new Day(23, 8, 2007), 7.12, 7.16, 7.00, 7.03);
-        ohlcSeries.add(new Day(22, 8, 2007), 6.96, 7.15, 6.93, 7.11);
-        ohlcSeries.add(new Day(21, 8, 2007), 7.10, 7.15, 7.02, 7.07);
-        ohlcSeries.add(new Day(20, 8, 2007), 7.02, 7.19, 6.94, 7.14);
+        TimeSeries timeSeries = new TimeSeries("");
+
+        Day day;
+        for (StockKLineVO kLineVO : stockKLineVOList) {
+            day = new Day(TimeUtil.getDate(kLineVO.getDate()));
+            System.out.println(day);
+            ohlcSeries.add(day,
+                    kLineVO.getOpen(), kLineVO.getHigh(), kLineVO.getLow(), kLineVO.getClose());
+
+//            timeSeries.add(day, kLineVO.getVolume())
+        }
 
         ohlcSeriesCollection = new OHLCSeriesCollection();
         ohlcSeriesCollection.addSeries(ohlcSeries);
 
-        TimeSeries timeSeries = new TimeSeries("");
         timeSeries.add(new Day(28, 9, 2007), 260659400 / 100);
         timeSeries.add(new Day(27, 9, 2007), 119701900 / 100);
         timeSeries.add(new Day(26, 9, 2007), 109719000 / 100);

@@ -1,5 +1,8 @@
 package present.panel.stock;
 
+import util.NumberUtil;
+import vo.StockNowTimeVO;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -12,6 +15,9 @@ class HandicapPanel extends JPanel {
 
     private JPanel panel;
 
+    private CenterPanel centerPanel;
+
+    private SouthPanel southPanel;
 
     HandicapPanel() {
         panel = this;
@@ -38,15 +44,25 @@ class HandicapPanel extends JPanel {
     private void createUIComponents() {
         SwingUtilities.invokeLater(() -> {
             {
-                CenterPanel centerPanel = new CenterPanel();
+                centerPanel = new CenterPanel();
 
                 panel.add(centerPanel, BorderLayout.CENTER);
             }
 
             {
-                SouthPanel southPanel = new SouthPanel();
+                southPanel = new SouthPanel();
                 panel.add(southPanel, BorderLayout.SOUTH);
             }
+        });
+    }
+
+    /**
+     * 设置数据
+     */
+    void setData(StockNowTimeVO stockNowTimeVO) {
+        SwingUtilities.invokeLater(() -> {
+            centerPanel.setData(stockNowTimeVO);
+            southPanel.setData(stockNowTimeVO);
         });
     }
 }
@@ -99,6 +115,18 @@ class CenterPanel extends JPanel {
 
                 panel.add(eastPanel, BorderLayout.EAST);
             }
+        });
+    }
+
+    void setData(StockNowTimeVO stockNowTimeVO) {
+        SwingUtilities.invokeLater(() -> {
+            double temp = stockNowTimeVO.getCommission();
+            Color color = temp >= 0 ? Color.RED : Color.GREEN;
+
+            committee.setText(stockNowTimeVO.getCommittee());
+            commission.setText(stockNowTimeVO.getCommission() + "");
+            committee.setForeground(color);
+            commission.setForeground(color);
         });
     }
 }
@@ -196,17 +224,17 @@ class SouthPanel extends JPanel {
             {
                 Box eastBox = Box.createVerticalBox();
 
-                sell5amount = new MyLabel("7");
-                sell4amount = new MyLabel("7");
-                sell3amount = new MyLabel("7");
-                sell2amount = new MyLabel("7");
-                sell1amount = new MyLabel("7");
+                sell5amount = new MyLabel("--");
+                sell4amount = new MyLabel("--");
+                sell3amount = new MyLabel("--");
+                sell2amount = new MyLabel("--");
+                sell1amount = new MyLabel("--");
                 amount = new MyLabel(" ");
-                buy1amount = new MyLabel("14");
-                buy2amount = new MyLabel("14");
-                buy3amount = new MyLabel("14");
-                buy4amount = new MyLabel("14");
-                buy5amount = new MyLabel("14");
+                buy1amount = new MyLabel("--");
+                buy2amount = new MyLabel("--");
+                buy3amount = new MyLabel("--");
+                buy4amount = new MyLabel("--");
+                buy5amount = new MyLabel("--");
 
                 eastBox.add(sell5amount);
                 eastBox.add(sell4amount);
@@ -222,6 +250,32 @@ class SouthPanel extends JPanel {
 
                 panel.add(eastBox, BorderLayout.EAST);
             }
+        });
+    }
+
+    void setData(StockNowTimeVO stockNowTimeVO) {
+        SwingUtilities.invokeLater(() -> {
+            sell1amount.setText(NumberUtil.transferUnit(stockNowTimeVO.getSell1amount()));
+            sell2amount.setText(NumberUtil.transferUnit(stockNowTimeVO.getSell2amount()));
+            sell3amount.setText(NumberUtil.transferUnit(stockNowTimeVO.getSell3amount()));
+            sell4amount.setText(NumberUtil.transferUnit(stockNowTimeVO.getSell4amount()));
+            sell5amount.setText(NumberUtil.transferUnit(stockNowTimeVO.getSell5amount()));
+            buy1amount.setText(NumberUtil.transferUnit(stockNowTimeVO.getBuy1amount()));
+            buy2amount.setText(NumberUtil.transferUnit(stockNowTimeVO.getBuy2amount()));
+            buy3amount.setText(NumberUtil.transferUnit(stockNowTimeVO.getBuy3amount()));
+            buy4amount.setText(NumberUtil.transferUnit(stockNowTimeVO.getBuy4amount()));
+            buy5amount.setText(NumberUtil.transferUnit(stockNowTimeVO.getBuy5amount()));
+            sell1price.setText(stockNowTimeVO.getSell1price() + "");
+            sell2price.setText(stockNowTimeVO.getSell2price() + "");
+            sell3price.setText(stockNowTimeVO.getSell3price() + "");
+            sell4price.setText(stockNowTimeVO.getSell4price() + "");
+            sell5price.setText(stockNowTimeVO.getSell5price() + "");
+            price.setText(stockNowTimeVO.getPrice() + "");
+            buy1price.setText(stockNowTimeVO.getBuy1price() + "");
+            buy2price.setText(stockNowTimeVO.getBuy2price() + "");
+            buy3price.setText(stockNowTimeVO.getBuy3price() + "");
+            buy4price.setText(stockNowTimeVO.getBuy4price() + "");
+            buy5price.setText(stockNowTimeVO.getBuy5price() + "");
         });
     }
 }
