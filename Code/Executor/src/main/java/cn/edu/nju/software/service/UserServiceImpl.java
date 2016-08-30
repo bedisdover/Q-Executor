@@ -59,7 +59,15 @@ public class UserServiceImpl implements  UserService {
             return  new MsgInfo(false,"邮件发送失败");
         }
 
-        return new MsgInfo(true,"邮件发送成功");
+        String mail = tem.getMail();
+
+        if(mail.length()>4){
+            StringBuffer buffer = new StringBuffer(mail);
+            buffer.replace(1, 3, "*");
+            mail = buffer.toString();
+        }
+
+        return new MsgInfo(true,"邮件发送成功,请查看您的邮箱:"+mail);
     }
 
     public MsgInfo updatePassword(String userName, String password) {

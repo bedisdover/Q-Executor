@@ -32,7 +32,7 @@ public class SelectedStockControllerClient {
         if(null == user)
             return new MsgInfo(false,"用户未登录");
 
-        if(!user.getPassword().equals(SHA256.encrypt(password)))
+        if(!user.getPassword().equals(password))
             return new MsgInfo(false,"密码错误,请重新登录");
 
 
@@ -46,7 +46,7 @@ public class SelectedStockControllerClient {
         if(null == user)
             return new MsgInfo(false,"用户未登录");
 
-        if(!user.getPassword().equals(SHA256.encrypt(password)))
+        if(!user.getPassword().equals(password))
             return new MsgInfo(false,"密码错误,请重新登录");
 
 
@@ -60,7 +60,7 @@ public class SelectedStockControllerClient {
         if(null == user)
             return new MsgInfo(false,"用户未登录");
 
-        if(!user.getPassword().equals(SHA256.encrypt(password)))
+        if(!user.getPassword().equals(password))
             return new MsgInfo(false,"密码错误,请重新登录");
 
         return userSelectedStock.deleteUserSelectedStock(user.getUserName(),codeNum);
