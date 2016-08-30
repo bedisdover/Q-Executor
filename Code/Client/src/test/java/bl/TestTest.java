@@ -25,6 +25,6 @@ public class TestTest {
         im.login("wujiayibest","test1234");
 
         SelfSelectServiceImpl imc = new SelfSelectServiceImpl();
-        imc.getUserSelectedStock();
+//        imc.getUserSelectedStock();
     }
 }
