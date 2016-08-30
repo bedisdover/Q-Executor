@@ -36,4 +36,10 @@ public interface StockMLService {
     @return:今日高频数据的list
      */
     public ArrayList<StockForMLPO> getTodayInforML(String stockID);
+
+    /**
+     * 获取所有需要闲时计算的股票列表
+     * @return 返回需要进行机器学习计算模型的股票代码列表
+     */
+    public String[] getStocksNeedCal();
 }

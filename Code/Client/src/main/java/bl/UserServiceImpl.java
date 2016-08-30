@@ -27,6 +27,13 @@ public class UserServiceImpl implements UserService{
 		String url="http://121.42.143.164/isLogin?userName="+userName;	      
 		return getInfo(url);
 	}
+
+
+	@Override
+	public MsgInfo findPassword(String userName) throws Exception {
+		String url="http://121.42.143.164/findPassword?userName="+userName;
+		return getInfo(url);
+	}
 	
 	public MsgInfo getInfo(String url) throws Exception {
 		MsgInfo info = null;
@@ -37,4 +44,7 @@ public class UserServiceImpl implements UserService{
 		info=new MsgInfo(jsonArray.getBoolean("state"),jsonArray.getString("info"),jsonArray.get("object"));
 		return info;
 	}
+
+
+
 }
