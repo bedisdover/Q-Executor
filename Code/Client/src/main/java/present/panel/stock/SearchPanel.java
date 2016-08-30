@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import present.MainFrame;
 import present.PanelSwitcher;
 import present.component.TextPlusBtn;
+import present.panel.account.LoginPanel;
 import present.utils.StockJsonInfo;
 import util.JsonUtil;
 
@@ -140,8 +141,10 @@ public class SearchPanel extends JPanel {
         Vector<String> data = new Vector<>();
         DefaultTableModel model = new DefaultTableModel(data, header);
         try {
-            List<String> list = self.getUserSelectedStock();
-//            list.forEach(System.out::println);
+            List<String> list = self.getUserSelectedStock(
+                    LoginPanel.LOGIN_USER, LoginPanel.LOGIN_PW
+            );
+            list.forEach(System.out::println);
 
         } catch (Exception e) {
             e.printStackTrace();
