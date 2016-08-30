@@ -125,7 +125,7 @@ public class GeneralPanel extends JPanel {
                 
                 return null;
             }
-        }
+        };
     }
 
     private JScrollPane createTable() {

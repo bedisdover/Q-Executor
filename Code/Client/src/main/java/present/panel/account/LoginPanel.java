@@ -1,5 +1,7 @@
 package present.panel.account;
 
+import bl.UserServiceImpl;
+import blservice.UserService;
 import present.component.QTextField;
 import present.component.QPasswordField;
 import present.panel.home.NavPanel;
@@ -13,6 +15,8 @@ import java.awt.*;
  * 用户登录界面
  */
 public class LoginPanel extends JPanel {
+
+    private UserService service = new UserServiceImpl();
 
     private QTextField name = new QTextField("邮箱/用户名");
 
@@ -31,6 +35,8 @@ public class LoginPanel extends JPanel {
     private static final int HEIGHT = 56;
 
     private static final int PADDING = 20;
+
+    public static String LOGIN_USER = null;
 
     public LoginPanel() {
         this.addComponents();
