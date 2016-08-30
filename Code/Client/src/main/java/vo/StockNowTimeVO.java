@@ -335,6 +335,13 @@ public class StockNowTimeVO {
     }
 
     /**
+     * 获取深度
+     */
+    public String getDepth() {
+        return NumberUtil.transferUnit(buy1amount * buy1price + sell1amount * sell1price);
+    }
+
+    /**
      * 获取委比
      */
     public String getCommittee() {

@@ -18,8 +18,8 @@ import java.awt.*;
  */
 public class GeneralPie {
 
-    public JPanel getPieChart(String codeNum) {
-        JPanel panel = new ChartPanel(createPieChart(codeNum));
+    public static JPanel getPieChart(double general, double total) {
+        JPanel panel = new ChartPanel(createPieChart(general, total));
 
         panel.setPreferredSize(new Dimension(300, 1));
 
@@ -29,8 +29,8 @@ public class GeneralPie {
     /**
      * 创建PieChart
      */
-    private JFreeChart createPieChart(String codeNum) {
-        DefaultPieDataset dataSet = getPieDataSet(codeNum);
+    private static JFreeChart createPieChart(double general, double total) {
+        DefaultPieDataset dataSet = getPieDataSet(general, total);
 
         // JFreeChart主要由三个部分构成：title(标题),legend(图释),plot(图表主体)。
         JFreeChart chart = ChartFactory.createPieChart("", dataSet, false, true, false);
@@ -45,16 +45,16 @@ public class GeneralPie {
      *
      * @param chart 统计图标
      */
-    private void setChartProperties(JFreeChart chart) {
+    private static void setChartProperties(JFreeChart chart) {
         //三个部分设置字体的方法分别如下:
         TextTitle textTitle = chart.getTitle();
-        textTitle.setFont(new Font("宋体", Font.BOLD, 20));
+        textTitle.setFont(new Font("微软雅黑", Font.BOLD, 20));
         LegendTitle legend = chart.getLegend();
         if (legend != null) {
-            legend.setItemFont(new Font("宋体", Font.BOLD, 20));
+            legend.setItemFont(new Font("微软雅黑", Font.BOLD, 20));
         }
         PiePlot pie = (PiePlot) chart.getPlot();
-        pie.setLabelFont(new Font("宋体", Font.BOLD, 12));
+        pie.setLabelFont(new Font("微软雅黑", Font.BOLD, 12));
         pie.setNoDataMessage("No data available");
         //设置PieChart是否显示为圆形
         pie.setCircular(true);
@@ -67,11 +67,11 @@ public class GeneralPie {
      *
      * @return pieChart数据集
      */
-    private DefaultPieDataset getPieDataSet(String codeNum) {
+    private static DefaultPieDataset getPieDataSet(double general, double total) {
         DefaultPieDataset dataSet = new DefaultPieDataset();
 
-        dataSet.setValue("大单", 56.4);
-        dataSet.setValue("其它", 630.5);
+        dataSet.setValue("大单", general);
+        dataSet.setValue("其它", total);
 
         return dataSet;
     }

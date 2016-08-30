@@ -38,7 +38,7 @@ public class KLine {
 
     private GetKLineDataService kLineDataService = new GetKLineDataServiceImpl();
 
-    public JTabbedPane getKLine(String stockCode) {
+    public JTabbedPane getKLine(String stockCode) throws Exception {
         JTabbedPane tabbedPane = new JTabbedPane();
 
         tabbedPane.addTab("日K", getKLineDay(stockCode));
@@ -54,7 +54,7 @@ public class KLine {
      * @param stockCode 股票代码
      * @return 包含日K线的panel
      */
-    private JPanel getKLineDay(String stockCode) {
+    private JPanel getKLineDay(String stockCode) throws Exception {
         List<StockKLineVO> stockKLineVOList = kLineDataService.getKLineDay(stockCode);
 
         return new ChartPanel(createChart(stockCode, new KLineVO(stockKLineVOList)));
@@ -66,7 +66,7 @@ public class KLine {
      * @param stockCode 股票代码
      * @return 包含周K线的panel
      */
-    private JPanel getKLineWeek(String stockCode) {
+    private JPanel getKLineWeek(String stockCode) throws Exception {
         List<StockKLineVO> stockKLineVOList = kLineDataService.getKLineWeek(stockCode);
 
         return new ChartPanel(createChart(stockCode, new KLineVO(stockKLineVOList)));
@@ -78,7 +78,7 @@ public class KLine {
      * @param stockCode 股票代码
      * @return 包含月K线的panel
      */
-    private JPanel getKLineMonth(String stockCode) {
+    private JPanel getKLineMonth(String stockCode) throws Exception {
         List<StockKLineVO> stockKLineVOList = kLineDataService.getKLineMonth(stockCode);
 
         return new ChartPanel(createChart(stockCode, new KLineVO(stockKLineVOList)));

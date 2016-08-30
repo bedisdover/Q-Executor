@@ -2,12 +2,16 @@ package present.panel.account;
 
 import bl.UserServiceImpl;
 import blservice.UserService;
+import config.MsgInfo;
+import present.PanelSwitcher;
 import present.component.QTextField;
 import present.component.QPasswordField;
 import present.panel.home.NavPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Created by Y481L on 2016/8/25.
@@ -17,6 +21,8 @@ import java.awt.*;
 public class LoginPanel extends JPanel {
 
     private UserService service = new UserServiceImpl();
+
+    private PanelSwitcher switcher;
 
     private QTextField name = new QTextField("邮箱/用户名");
 
@@ -38,7 +44,12 @@ public class LoginPanel extends JPanel {
 
     public static String LOGIN_USER = null;
 
-    public LoginPanel() {
+    public static String LOGIN_PW = null;
+
+    public static boolean IS_LOGIN = false;
+
+    public LoginPanel(PanelSwitcher switcher) {
+        this.switcher = switcher;
         this.addComponents();
     }
 
@@ -63,6 +74,7 @@ public class LoginPanel extends JPanel {
         box.add(Box.createVerticalStrut(
                 NavPanel.PANEL_H - (HEIGHT + PADDING) * COMPONENT_NUM
         ));
+        this.addListeners();
         this.setLayout(new BorderLayout());
         this.add(box);
     }
@@ -74,5 +86,47 @@ public class LoginPanel extends JPanel {
         panel.setLayout(new FlowLayout(FlowLayout.CENTER));
         panel.add(c);
         return panel;
+    }
+
+    private void addListeners() {
+        login.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                String user = name.getText();
+                String pw = new String(password.getPassword());
+                try {
+                    MsgInfo result = service.login(user, pw);
+                    if(result.isState()) {
+                        LOGIN_USER = user;
+                        LOGIN_PW = pw;
+                        IS_LOGIN = true;
+                        JOptionPane.showMessageDialog(LoginPanel.this, "登录成功");
+                    }else {
+                        JOptionPane.showMessageDialog(LoginPanel.this, result.getInfo());
+                        System.out.println("LoginPanel.addListeners");
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(LoginPanel.this, "网络异常");
+                }
+            }
+        });
+
+        register.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                switcher.jump(new RegisterPanel());
+            }
+        });
+
+        findPW.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                switcher.jump(new FindPWPanel());
+            }
+        });
     }
 }

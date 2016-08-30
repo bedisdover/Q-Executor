@@ -130,7 +130,7 @@ public class MainFrame extends JFrame{
         login.addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {
-                switcher.jump(new LoginPanel());
+                switcher.jump(new LoginPanel(switcher));
             }
 
             @Override
