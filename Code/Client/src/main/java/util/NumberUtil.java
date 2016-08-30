@@ -27,7 +27,7 @@ public class NumberUtil {
             return Math.round(number / 1e4 * temp) / temp + "万";
         }
 
-        return number + "";
+        return Math.round(number * temp) / temp + "";
     }
 
     /**

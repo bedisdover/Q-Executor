@@ -1,5 +1,7 @@
 package vo;
 
+import util.NumberUtil;
+
 import java.util.Date;
 
 /**
@@ -8,7 +10,7 @@ import java.util.Date;
  * 股票实时数据对象
  */
 public class StockNowTimeVO {
-	/**
+    /**
      * 股票代码
      */
     private String code;
@@ -33,6 +35,14 @@ public class StockNowTimeVO {
      */
     private double open;
     /**
+     * 最高价
+     */
+    private double high;
+    /**
+     * 最低价
+     */
+    private double low;
+    /**
      * 成交量
      */
     private double amount;
@@ -44,7 +54,7 @@ public class StockNowTimeVO {
     /**
      * 买一～买五报价
      */
-    private double buy1price, buy2price, buy3Price, buy4Price, buy5Price;
+    private double buy1price, buy2price, buy3price, buy4price, buy5price;
     /**
      * 买一～买五申报量
      */
@@ -64,59 +74,20 @@ public class StockNowTimeVO {
      */
     private Date time;
 
-    public StockNowTimeVO() {
+    /**
+     * 振幅
+     */
+    private String amplitude;
 
-    }
-
-    public StockNowTimeVO(String code, double price, double close, double incNum, double incRate,
-                          double open, double amount, double volume, double buy1price,
-                          double buy2Price, double buy3Price, double buy4Price,
-                          double buy5Price, double buy1amount, double buy2amount,
-                          double buy3amount, double buy4amount, double buy5amount,
-                          double sell1price, double sell2price, double sell3price,
-                          double sell4price, double sell5price, double sell1amount,
-                          double sell2amount, double sell3amount, double sell4amount,
-                          double sell5amount, Date time) {
-        this.price = price;
-        this.close = close;
-        this.incNum = incNum;
-        this.incRate = incRate;
-        this.open = open;
-        this.amount = amount;
-        this.volume = volume;
-        this.buy1price = buy1price;
-        this.buy2price = buy2Price;
-        this.buy3Price = buy3Price;
-        this.buy4Price = buy4Price;
-        this.buy5Price = buy5Price;
-        this.buy1amount = buy1amount;
-        this.buy2amount = buy2amount;
-        this.buy3amount = buy3amount;
-        this.buy4amount = buy4amount;
-        this.buy5amount = buy5amount;
-        this.sell1price = sell1price;
-        this.sell2price = sell2price;
-        this.sell3price = sell3price;
-        this.sell4price = sell4price;
-        this.sell5price = sell5price;
-        this.sell1amount = sell1amount;
-        this.sell2amount = sell2amount;
-        this.sell3amount = sell3amount;
-        this.sell4amount = sell4amount;
-        this.sell5amount = sell5amount;
-        this.time = time;
-    }
-
-    
     public String getCode() {
-		return code;
-	}
+        return code;
+    }
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	public double getPrice() {
+    public double getPrice() {
         return price;
     }
 
@@ -156,6 +127,22 @@ public class StockNowTimeVO {
         this.open = open;
     }
 
+    public double getHigh() {
+        return high;
+    }
+
+    public void setHigh(double high) {
+        this.high = high;
+    }
+
+    public double getLow() {
+        return low;
+    }
+
+    public void setLow(double low) {
+        this.low = low;
+    }
+
     public double getAmount() {
         return amount;
     }
@@ -188,32 +175,32 @@ public class StockNowTimeVO {
         this.buy2price = buy2price;
     }
 
-    public double getBuy3Price() {
-        return buy3Price;
+    public double getBuy3price() {
+        return buy3price;
     }
 
-    public void setBuy3Price(double buy3Price) {
-        this.buy3Price = buy3Price;
+    public void setBuy3price(double buy3price) {
+        this.buy3price = buy3price;
     }
 
-    public double getBuy4Price() {
-        return buy4Price;
+    public double getBuy4price() {
+        return buy4price;
     }
 
     public void setBuy4Price(double buy4Price) {
-        this.buy4Price = buy4Price;
+        this.buy4price = buy4Price;
     }
 
-    public double getBuy5Price() {
-        return buy5Price;
+    public double getBuy5price() {
+        return buy5price;
     }
 
-    public void setBuy5Price(double buy5Price) {
-        this.buy5Price = buy5Price;
+    public void setBuy5price(double buy5price) {
+        this.buy5price = buy5price;
     }
 
     public double getBuy1amount() {
-        return buy1amount;
+        return buy1amount / 100;
     }
 
     public void setBuy1amount(double buy1amount) {
@@ -221,7 +208,7 @@ public class StockNowTimeVO {
     }
 
     public double getBuy2amount() {
-        return buy2amount;
+        return buy2amount / 100;
     }
 
     public void setBuy2amount(double buy2amount) {
@@ -229,7 +216,7 @@ public class StockNowTimeVO {
     }
 
     public double getBuy3amount() {
-        return buy3amount;
+        return buy3amount / 100;
     }
 
     public void setBuy3amount(double buy3amount) {
@@ -237,7 +224,7 @@ public class StockNowTimeVO {
     }
 
     public double getBuy4amount() {
-        return buy4amount;
+        return buy4amount / 100;
     }
 
     public void setBuy4amount(double buy4amount) {
@@ -245,7 +232,7 @@ public class StockNowTimeVO {
     }
 
     public double getBuy5amount() {
-        return buy5amount;
+        return buy5amount / 100;
     }
 
     public void setBuy5amount(double buy5amount) {
@@ -293,7 +280,7 @@ public class StockNowTimeVO {
     }
 
     public double getSell1amount() {
-        return sell1amount;
+        return sell1amount / 100;
     }
 
     public void setSell1amount(double sell1amount) {
@@ -301,7 +288,7 @@ public class StockNowTimeVO {
     }
 
     public double getSell2amount() {
-        return sell2amount;
+        return sell2amount / 100;
     }
 
     public void setSell2amount(double sell2amount) {
@@ -309,7 +296,7 @@ public class StockNowTimeVO {
     }
 
     public double getSell3amount() {
-        return sell3amount;
+        return sell3amount / 100;
     }
 
     public void setSell3amount(double sell3amount) {
@@ -317,7 +304,7 @@ public class StockNowTimeVO {
     }
 
     public double getSell4amount() {
-        return sell4amount;
+        return sell4amount / 100;
     }
 
     public void setSell4amount(double sell4amount) {
@@ -325,7 +312,7 @@ public class StockNowTimeVO {
     }
 
     public double getSell5amount() {
-        return sell5amount;
+        return sell5amount / 100;
     }
 
     public void setSell5amount(double sell5amount) {
@@ -338,5 +325,34 @@ public class StockNowTimeVO {
 
     public void setTime(Date time) {
         this.time = time;
+    }
+
+    /**
+     * 获取振幅
+     */
+    public String getAmplitude() {
+        return NumberUtil.transferUnit((high - low) / close * 100) + "%";
+    }
+
+    /**
+     * 获取委比
+     */
+    public String getCommittee() {
+        return NumberUtil.transferUnit(getCommission() / (calculateBuy() + calculateSell()) * 100) + "%";
+    }
+
+    /**
+     * 获取委差
+     */
+    public double getCommission() {
+        return calculateBuy() - calculateSell();
+    }
+
+    private double calculateBuy() {
+        return buy1amount + buy2amount + buy3amount + buy4amount + buy5amount;
+    }
+
+    private double calculateSell() {
+        return sell1amount + sell2amount + sell3amount + sell4amount + sell5amount;
     }
 }

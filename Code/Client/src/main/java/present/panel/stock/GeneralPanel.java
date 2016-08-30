@@ -119,7 +119,13 @@ public class GeneralPanel extends JPanel {
     }
 
     private void getData() {
-
+        SwingWorker worker = new SwingWorker() {
+            @Override
+            protected Object doInBackground() throws Exception {
+                
+                return null;
+            }
+        }
     }
 
     private JScrollPane createTable() {
