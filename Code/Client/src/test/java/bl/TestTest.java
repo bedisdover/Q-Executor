@@ -1,5 +1,7 @@
 package bl;
 
+import org.junit.Test;
+
 /**
  * Created by song on 16-8-24.
  *
@@ -16,4 +18,13 @@ public class TestTest {
 
     }
 
+
+    @Test
+    public void test() throws Exception{
+        UserServiceImpl im = new UserServiceImpl();
+        im.login("wujiayibest","test1234");
+
+        SelfSelectServiceImpl imc = new SelfSelectServiceImpl();
+        imc.getUserSelectedStock();
+    }
 }
