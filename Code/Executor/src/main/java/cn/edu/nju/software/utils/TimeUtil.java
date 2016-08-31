@@ -118,4 +118,16 @@ public class TimeUtil {
         return dateFormat.format(date);
 
     }
+
+    public static String getLastworkDate(){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        if (calendar.get(Calendar.DAY_OF_WEEK)==Calendar.SUNDAY){
+            calendar.add(Calendar.DATE,-2);
+        }else if (calendar.DAY_OF_WEEK==Calendar.SATURDAY){
+            calendar.add(Calendar.DATE,-1);
+        }
+
+        return dateFormat.format(calendar.getTime());
+    }
 }
