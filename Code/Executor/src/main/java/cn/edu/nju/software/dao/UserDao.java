@@ -48,7 +48,7 @@ public class UserDao {
 
     }
 
-    public MsgInfo updateUser(User user){
+    public MsgInfo updateUserPassword(User user){
 
         User tem = findUserbyName(user.getUserName());
 
@@ -64,6 +64,16 @@ public class UserDao {
 
         return new MsgInfo(true,"密码修改成功",tem);
 
+    }
+
+    public MsgInfo updateUser(User user){
+
+        User tem = findUserbyName(user.getUserName());
+
+        if(null == tem)
+            return new MsgInfo(false,"该用户不存在");
+        baseDao.update(user);
+        return new MsgInfo(true,"修改成功",tem);
     }
 
 }
