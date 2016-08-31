@@ -24,7 +24,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by song on 16-8-25.
@@ -38,50 +37,106 @@ public class KLine {
 
     private GetKLineDataService kLineDataService = new GetKLineDataServiceImpl();
 
-    public JTabbedPane getKLine(String stockCode) throws Exception {
-        JTabbedPane tabbedPane = new JTabbedPane();
+    private JTabbedPane tabbedPane;
 
-        tabbedPane.addTab("日K", getKLineDay(stockCode));
-        tabbedPane.addTab("周K", getKLineWeek(stockCode));
-        tabbedPane.addTab("月K", getKLineMonth(stockCode));
+    private JPanel kLineDay, kLineWeek, kLineMonth;
+
+    private String stockCode;
+
+    public JTabbedPane getKLine(String stockCode) throws Exception {
+        this.stockCode = stockCode;
+        tabbedPane = new JTabbedPane();
+
+        getKLineDay();
+        getKLineWeek();
+        getKLineMonth();
 
         return tabbedPane;
     }
 
     /**
      * 获取日K线
-     *
-     * @param stockCode 股票代码
-     * @return 包含日K线的panel
      */
-    private JPanel getKLineDay(String stockCode) throws Exception {
-        List<StockKLineVO> stockKLineVOList = kLineDataService.getKLineDay(stockCode);
+    private void getKLineDay() throws Exception {
+        SwingWorker worker = new SwingWorker() {
+            @Override
+            protected Object doInBackground() throws Exception {
+                return kLineDataService.getKLineDay(stockCode);
+            }
 
-        return new ChartPanel(createChart(stockCode, new KLineVO(stockKLineVOList)));
+            @Override
+            @SuppressWarnings("unchecked")
+            protected void done() {
+                try {
+                    List stockKLineVOList = (List) get();
+
+                    kLineDay = new ChartPanel(createChart(new KLineVO(stockKLineVOList), 7));
+
+                    tabbedPane.addTab("日K", kLineDay);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        worker.execute();
     }
 
     /**
      * 获取周K线
-     *
-     * @param stockCode 股票代码
-     * @return 包含周K线的panel
      */
-    private JPanel getKLineWeek(String stockCode) throws Exception {
-        List<StockKLineVO> stockKLineVOList = kLineDataService.getKLineWeek(stockCode);
+    private void getKLineWeek() throws Exception {
+        SwingWorker worker = new SwingWorker() {
+            @Override
+            protected Object doInBackground() throws Exception {
 
-        return new ChartPanel(createChart(stockCode, new KLineVO(stockKLineVOList)));
+                return kLineDataService.getKLineWeek(stockCode);
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            protected void done() {
+                try {
+                    List stockKLineVOList = (List) get();
+
+                    kLineWeek = new ChartPanel(createChart(new KLineVO(stockKLineVOList), 50));
+
+                    tabbedPane.addTab("周K", kLineWeek);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        worker.execute();
     }
 
     /**
      * 获取月K线
-     *
-     * @param stockCode 股票代码
-     * @return 包含月K线的panel
      */
-    private JPanel getKLineMonth(String stockCode) throws Exception {
-        List<StockKLineVO> stockKLineVOList = kLineDataService.getKLineMonth(stockCode);
+    private void getKLineMonth() throws Exception {
+        SwingWorker worker = new SwingWorker() {
+            @Override
+            protected Object doInBackground() throws Exception {
+                return kLineDataService.getKLineMonth(stockCode);
+            }
 
-        return new ChartPanel(createChart(stockCode, new KLineVO(stockKLineVOList)));
+            @Override
+            @SuppressWarnings("unchecked")
+            protected void done() {
+                try {
+                    List stockKLineVOList = (List) get();
+
+                    kLineMonth = new ChartPanel(createChart(new KLineVO(stockKLineVOList), 200));
+
+                    tabbedPane.addTab("月K", kLineMonth);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        worker.execute();
     }
 
     /**
@@ -89,7 +144,7 @@ public class KLine {
      *
      * @return jfreeChart
      */
-    private JFreeChart createChart(String stockCode, KLineVO kLineVO) {
+    private JFreeChart createChart(KLineVO kLineVO, int interval) {
         //保留K线数据的数据集，必须申明为final，后面要在匿名内部类里面用到
         final OHLCSeriesCollection seriesCollection = kLineVO.getOhlcSeriesCollection();
         //保留成交量数据的集合
@@ -115,7 +170,7 @@ public class KLine {
         x1Axis.setAutoTickUnitSelection(false);//设置不采用自动选择刻度值
         x1Axis.setTickMarkPosition(DateTickMarkPosition.MIDDLE);//设置标记的位置
         x1Axis.setStandardTickUnits(DateAxis.createStandardDateTickUnits());//设置标准的时间刻度单位
-        x1Axis.setTickUnit(new DateTickUnit(DateTickUnit.DAY, 7));//设置时间刻度的间隔，一般以周为单位
+        x1Axis.setTickUnit(new DateTickUnit(DateTickUnit.DAY, interval));//设置时间刻度的间隔，一般以周为单位
         x1Axis.setDateFormatOverride(new SimpleDateFormat("yyyy-MM-dd"));//设置显示时间的格式
 
         //设置k线图y轴参数
@@ -199,48 +254,18 @@ class KLineVO {
         TimeSeries timeSeries = new TimeSeries("");
 
         Day day;
-        for (StockKLineVO kLineVO : stockKLineVOList) {
+        StockKLineVO kLineVO;
+        for (int i = 0; i < 50; i++) {
+            kLineVO = stockKLineVOList.get(i);
             day = new Day(TimeUtil.getDate(kLineVO.getDate()));
-            System.out.println(day);
             ohlcSeries.add(day,
                     kLineVO.getOpen(), kLineVO.getHigh(), kLineVO.getLow(), kLineVO.getClose());
 
-//            timeSeries.add(day, kLineVO.getVolume())
+            timeSeries.add(day, kLineVO.getVolume());
         }
 
         ohlcSeriesCollection = new OHLCSeriesCollection();
         ohlcSeriesCollection.addSeries(ohlcSeries);
-
-        timeSeries.add(new Day(28, 9, 2007), 260659400 / 100);
-        timeSeries.add(new Day(27, 9, 2007), 119701900 / 100);
-        timeSeries.add(new Day(26, 9, 2007), 109719000 / 100);
-        timeSeries.add(new Day(25, 9, 2007), 178492400 / 100);
-        timeSeries.add(new Day(24, 9, 2007), 269978500 / 100);
-        timeSeries.add(new Day(21, 9, 2007), 361042300 / 100);
-        timeSeries.add(new Day(20, 9, 2007), 173912600 / 100);
-        timeSeries.add(new Day(19, 9, 2007), 154622600 / 100);
-        timeSeries.add(new Day(18, 9, 2007), 200661600 / 100);
-        timeSeries.add(new Day(17, 9, 2007), 312799600 / 100);
-        timeSeries.add(new Day(14, 9, 2007), 141652900 / 100);
-        timeSeries.add(new Day(13, 9, 2007), 221260400 / 100);
-        timeSeries.add(new Day(12, 9, 2007), 274795400 / 100);
-        timeSeries.add(new Day(11, 9, 2007), 289287300 / 100);
-        timeSeries.add(new Day(10, 9, 2007), 289063600 / 100);
-        timeSeries.add(new Day(7, 9, 2007), 351575300 / 100);
-        timeSeries.add(new Day(6, 9, 2007), 451357300 / 100);
-        timeSeries.add(new Day(5, 9, 2007), 442421200 / 100);
-        timeSeries.add(new Day(4, 9, 2007), 671942600 / 100);
-        timeSeries.add(new Day(3, 9, 2007), 349647800 / 100);
-        timeSeries.add(new Day(31, 8, 2007), 225339300 / 100);
-        timeSeries.add(new Day(30, 8, 2007), 160048200 / 100);
-        timeSeries.add(new Day(29, 8, 2007), 247341700 / 100);
-        timeSeries.add(new Day(28, 8, 2007), 394975400 / 100);
-        timeSeries.add(new Day(27, 8, 2007), 475797500 / 100);
-        timeSeries.add(new Day(24, 8, 2007), 297679500 / 100);
-        timeSeries.add(new Day(23, 8, 2007), 191760600 / 100);
-        timeSeries.add(new Day(22, 8, 2007), 232570200 / 100);
-        timeSeries.add(new Day(21, 8, 2007), 215693200 / 100);
-        timeSeries.add(new Day(20, 8, 2007), 200287500 / 100);
 
         amountSeriesCollection = new TimeSeriesCollection();
         amountSeriesCollection.addSeries(timeSeries);
@@ -263,7 +288,6 @@ class KLineVO {
                     low = ohlcSeriesCollection.getLowValue(i, j);
                 }
             }
-
         }
         //获取最高值和最低值
         int seriesCount2 = amountSeriesCollection.getSeriesCount();//一共有多少个序列，目前为一个
