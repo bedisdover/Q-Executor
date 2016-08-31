@@ -21,6 +21,11 @@ public class NowTimeSelectedStockInfoVO {
     private double traNumber;/*成交量*/
     private double traAmount;/*成交金额*/
 
+    
+    public NowTimeSelectedStockInfoVO(){
+    	
+    }
+    
     public NowTimeSelectedStockInfoVO(String gid, double increPer, double increase, String name, double todayStartPri, double yestodEndPri, double nowPri,
                                       double todayMax, double todayMin, String date, String time, double traNumber, double traAmount) {
         this.gid = gid;

@@ -4,6 +4,8 @@ import config.MsgInfo;
 
 import java.util.List;
 
+import vo.NowTimeSelectedStockInfoVO;
+
 /**
  * Created by song on 16-8-28.
  * Modify by JiayiWu
@@ -16,7 +18,7 @@ public interface SelfSelectService {
      * url: /getUserSelectedStock
      * @throws Exception 
      */
-    List<String> getUserSelectedStock(String userName,String password) throws Exception;
+    List<NowTimeSelectedStockInfoVO> getUserSelectedStock(String userName,String password) throws Exception;
 
     /**
      * 添加自选
