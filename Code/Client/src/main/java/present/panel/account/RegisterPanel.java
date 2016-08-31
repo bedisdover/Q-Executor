@@ -1,5 +1,8 @@
 package present.panel.account;
 
+import bl.UserServiceImpl;
+import blservice.UserService;
+import config.MsgInfo;
 import present.component.QPasswordField;
 import present.component.QTextField;
 import present.panel.home.NavPanel;
@@ -13,6 +16,8 @@ import java.awt.*;
  * 用户注册界面
  */
 public class RegisterPanel extends JPanel{
+
+    private UserService service = new UserServiceImpl();
 
     private QTextField email = new QTextField("邮箱");
 
@@ -61,6 +66,7 @@ public class RegisterPanel extends JPanel{
         box.add(Box.createVerticalStrut(
                 NavPanel.PANEL_H - (HEIGHT + PADDING) * COMPONENT_NUM
         ));
+        this.addBtnListener();
         this.setLayout(new BorderLayout());
         this.add(box);
     }
@@ -71,5 +77,28 @@ public class RegisterPanel extends JPanel{
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panel.add(c);
         return panel;
+    }
+
+    private void addBtnListener() {
+        register.addActionListener((e) -> {
+            //验证密码和确认密码是否一致
+            String pw = new String(password.getPassword());
+            String pwConfirm = new String(confirmPW.getPassword());
+            if (!pw.equals(pwConfirm)) {
+                JOptionPane.showMessageDialog(this, "确认密码与密码不一致");
+                return ;
+            }
+
+            try {
+                MsgInfo result = service.register(
+                        name.getText(), nickname.getText(),
+                        new String(password.getPassword()), email.getText()
+                );
+                JOptionPane.showMessageDialog(this, result.getInfo());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "网络异常");
+            }
+        });
     }
 }

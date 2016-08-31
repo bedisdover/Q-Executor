@@ -7,29 +7,17 @@ package vo;
  */
 public class StockInfoByPer {
     //时间
-    String time;
+    private String time;
     //价格
-    double price;
+    private double price;
     //价格变动
-    double change_price;
+    private double change_price;
     //成交量
-    double volume;
+    private double volume;
     //成交额
-    double totalNum;
+    private double totalNum;
     //性质 0为买盘 1为卖盘 2为中性盘
-    int type;
-
-    public StockInfoByPer() {
-    }
-
-    public StockInfoByPer(String time, double price, double change_price, double vloume, double totalNum, int type) {
-        this.time = time;
-        this.price = price;
-        this.change_price = change_price;
-        this.volume = vloume;
-        this.totalNum = totalNum;
-        this.type = type;
-    }
+    private int type;
 
     public String getTime() {
         return time;

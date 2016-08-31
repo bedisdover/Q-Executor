@@ -1,5 +1,7 @@
 package present.panel.stock;
 
+import bl.SelfSelectServiceImpl;
+import blservice.SelfSelectService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import present.MainFrame;
@@ -12,7 +14,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -26,9 +27,9 @@ public class SearchPanel extends JPanel {
 
     private static final int SEARCH_H = (MainFrame.PANEL_H >> 3) - PADDING;
 
-    private static final int TABLE_H = MainFrame.PANEL_H - SEARCH_H - (PADDING << 1);
+    private static final int TABLE_H = MainFrame.PANEL_H - SEARCH_H - (PADDING << 3);
 
-
+    private SelfSelectService self = new SelfSelectServiceImpl();
 
     public SearchPanel(PanelSwitcher switcher) {
 
@@ -72,16 +73,14 @@ public class SearchPanel extends JPanel {
         p.add(search);
 
 
-
         //滚动面板包含表格
-        Box container = Box.createHorizontalBox();
-        container.add(Box.createHorizontalStrut(PADDING));
+        JPanel container = new JPanel(new FlowLayout(
+                FlowLayout.CENTER, PADDING << 2, 0
+        ));
         container.add(createSelfTable());
-        container.add(Box.createHorizontalStrut(PADDING));
-        container.add(createGeneralTable());
-        container.add(Box.createHorizontalStrut(PADDING));
+//        container.add(Box.createHorizontalStrut(PADDING));
+//        container.add(createGeneralTable());
         container.add(createHotTable());
-        container.add(Box.createHorizontalStrut(PADDING));
 
         //添加组件到主面板
         Box box = Box.createVerticalBox();
@@ -94,39 +93,39 @@ public class SearchPanel extends JPanel {
         this.add(box, BorderLayout.CENTER);
     }
 
-    /**
-     * 创建总体股票表格
-     * @return 总体股票表格
-     */
-    private JScrollPane createGeneralTable() {
-        //表格表头
-        Vector<String> header = new Vector<>(6);
-        header.addElement("名称");
-        header.addElement("最新价");
-        header.addElement("涨跌额");
-        header.addElement("涨跌幅");
-        header.addElement("成交量/手");
-        header.addElement("成交额/万");
-        //表格数据
-        Vector<String> test = new Vector<>(6);
-        test.addElement("阿司匹林");
-        test.addElement("   1");
-        test.addElement("   1");
-        test.addElement("   1");
-        test.addElement("   1");
-        test.addElement("   1");
-        Vector<String> data = new Vector<>();
-        DefaultTableModel model = new DefaultTableModel(data, header);
-        for (int i = 0; i < 16; ++i) model.addRow(test);
-        //表格
-        JTable general = createTable(model);
-
-        JScrollPane pane = new JScrollPane(general);
-        pane.setPreferredSize(new Dimension(
-                MainFrame.PANEL_W >> 1, TABLE_H
-        ));
-        return pane;
-    }
+//    /**
+//     * 创建总体股票表格
+//     * @return 总体股票表格
+//     */
+//    private JScrollPane createGeneralTable() {
+//        //表格表头
+//        Vector<String> header = new Vector<>(6);
+//        header.addElement("名称");
+//        header.addElement("最新价");
+//        header.addElement("涨跌额");
+//        header.addElement("涨跌幅");
+//        header.addElement("成交量/手");
+//        header.addElement("成交额/万");
+//        //表格数据
+//        Vector<String> test = new Vector<>(6);
+//        test.addElement("阿司匹林");
+//        test.addElement("   1");
+//        test.addElement("   1");
+//        test.addElement("   1");
+//        test.addElement("   1");
+//        test.addElement("   1");
+//        Vector<String> data = new Vector<>();
+//        DefaultTableModel model = new DefaultTableModel(data, header);
+//        for (int i = 0; i < 16; ++i) model.addRow(test);
+//        //表格
+//        JTable general = createTable(model);
+//
+//        JScrollPane pane = new JScrollPane(general);
+//        pane.setPreferredSize(new Dimension(
+//                MainFrame.PANEL_W >> 1, TABLE_H
+//        ));
+//        return pane;
+//    }
 
     /**
      * 创建自选股票表格
@@ -140,11 +139,19 @@ public class SearchPanel extends JPanel {
         header.addElement("涨跌幅");
         Vector<String> data = new Vector<>();
         DefaultTableModel model = new DefaultTableModel(data, header);
+        try {
+            List<String> list = self.getUserSelectedStock();
+//            list.forEach(System.out::println);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("SearchPanel.createSelfTable");
+        }
         JTable self = createTable(model);
 
         JScrollPane pane = new JScrollPane(self);
         pane.setPreferredSize(new Dimension(
-                (MainFrame.PANEL_W >> 2) - (PADDING << 1), TABLE_H - (PADDING << 1)
+                (MainFrame.PANEL_W / 3) - (PADDING << 1), TABLE_H - (PADDING << 1)
         ));
 
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -176,7 +183,7 @@ public class SearchPanel extends JPanel {
 
         JScrollPane pane = new JScrollPane(hot);
         pane.setPreferredSize(new Dimension(
-                (MainFrame.PANEL_W >> 2) - (PADDING << 1), TABLE_H - (PADDING << 1)
+                (MainFrame.PANEL_W / 3) - (PADDING << 1), TABLE_H - (PADDING << 1)
         ));
 
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
