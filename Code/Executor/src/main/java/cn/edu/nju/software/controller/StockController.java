@@ -6,6 +6,7 @@ import cn.edu.nju.software.model.StockBasicInfo;
 import cn.edu.nju.software.model.StockInfoByCom;
 import cn.edu.nju.software.model.StockInfoByPer;
 import cn.edu.nju.software.service.StockService;
+import cn.edu.nju.software.vo.HotStockVO;
 import cn.edu.nju.software.vo.StockInfoByPrice;
 import cn.edu.nju.software.vo.StockInfoByTime;
 import cn.edu.nju.software.vo.StockKLineVO;
@@ -99,5 +100,13 @@ public class StockController {
     public List<StockInfoByPer> getPerStockInfo(String codeNum) {
 
         return stockService.getPerStockInfo(codeNum);
+    }
+
+    //逐笔数据
+    @RequestMapping("/HotStocks")
+    @ResponseBody
+    public List<HotStockVO> getHotStocks(){
+
+        return stockService.getHotStocks();
     }
 }
