@@ -89,7 +89,7 @@ public class NavPanel extends JPanel{
 
         //简介
         introduce = new CollapsePanel(new SuperButton("简介"), BUTTON_W, BUTTON_H,
-                (e) -> switcher.jump(new IntroPanel()));
+                (e) -> switcher.jump(new IntroPanel(switcher)));
         introduce.setPreferredSize(new Dimension(BUTTON_W, BUTTON_H));
     }
 

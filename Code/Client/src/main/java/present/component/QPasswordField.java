@@ -4,8 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 /**
  * Created by Y481L on 2016/8/25.
@@ -25,24 +23,11 @@ public class QPasswordField extends JPasswordField {
     }
 
     private void setHandler() {
-        this.addMouseListener(new MouseAdapter() {
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                String pw = new String(getPassword());
-                if (pw.equals(placeholder)) {
-                    setText("");
-                    setEchoChar('*');
-                    setForeground(Color.BLACK);
-                }
-            }
-
-        });
-
         this.addFocusListener(new FocusAdapter() {
 
             @Override
             public void focusLost(FocusEvent e) {
+                super.focusLost(e);
                 String pw = new String(getPassword());
                 if (pw.isEmpty()) {
                     setForeground(Color.GRAY);
@@ -51,6 +36,16 @@ public class QPasswordField extends JPasswordField {
                 }
             }
 
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                String text = new String(getPassword());
+                if (text.equals(placeholder)) {
+                    setText("");
+                    setEchoChar('*');
+                    setForeground(Color.BLACK);
+                }
+            }
         });
     }
 }

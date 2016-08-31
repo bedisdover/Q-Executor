@@ -3,6 +3,9 @@ package present.panel.account;
 import bl.UserServiceImpl;
 import blservice.UserService;
 import config.MsgInfo;
+import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
+import present.MainFrame;
+import present.PanelSwitcher;
 import present.component.QPasswordField;
 import present.component.QTextField;
 import present.panel.home.NavPanel;
@@ -20,6 +23,8 @@ import java.awt.event.MouseEvent;
 public class RegisterPanel extends JPanel{
 
     private UserService service = new UserServiceImpl();
+
+    private PanelSwitcher switcher;
 
     private QTextField email = new QTextField("邮箱");
 
@@ -41,18 +46,32 @@ public class RegisterPanel extends JPanel{
 
     private static final int PADDING = 20;
 
-    public RegisterPanel() {
+    public RegisterPanel(PanelSwitcher switcher) {
+        this.switcher = switcher;
         this.addComponents();
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(
+                new ImageIcon("src/main/resources/images/city2.jpg").getImage(),
+                0, 0, MainFrame.PANEL_W, MainFrame.PANEL_H, null
+        );
     }
 
     private void addComponents() {
         Box box = Box.createVerticalBox();
+        box.setOpaque(false);
+
         box.add(Box.createVerticalStrut(PADDING << 1));
         JLabel title = new JLabel("注册");
         title.setFont(new Font("宋体", Font.PLAIN, 30));
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panel.setOpaque(false);
         panel.add(title);
         box.add(panel);
+
         box.add(Box.createVerticalStrut(PADDING << 1));
         box.add(this.wrapComponents(email));
         box.add(Box.createVerticalStrut(PADDING));
@@ -65,6 +84,7 @@ public class RegisterPanel extends JPanel{
         box.add(this.wrapComponents(confirmPW));
         box.add(Box.createVerticalStrut(PADDING));
         box.add(this.wrapComponents(register));
+        register.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.green));
         box.add(Box.createVerticalStrut(
                 NavPanel.PANEL_H - (HEIGHT + PADDING) * COMPONENT_NUM
         ));
@@ -78,6 +98,7 @@ public class RegisterPanel extends JPanel{
         c.setFont(new Font("宋体", Font.PLAIN, 22));
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panel.add(c);
+        panel.setOpaque(false);
         return panel;
     }
 
@@ -100,6 +121,9 @@ public class RegisterPanel extends JPanel{
                             new String(password.getPassword()), email.getText()
                     );
                     JOptionPane.showMessageDialog(RegisterPanel.this, result.getInfo());
+                    if (result.isState()) {
+                        switcher.jump(new LoginPanel(switcher));
+                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(RegisterPanel.this, "网络异常");

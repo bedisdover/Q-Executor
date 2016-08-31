@@ -19,7 +19,7 @@ import config.MsgInfo;
 public class SelfSelectServiceImpl implements SelfSelectService{
 
 	public List<String> getUserSelectedStock(String userName,String password) throws Exception {
-		String url="http://121.42.143.164/getUserSelectedStock?userName="+userName+"&password="+SHA256.encrypt(password);
+		String url="http://121.42.143.164/getUserSelectedStockClient?userName="+userName+"&password="+SHA256.encrypt(password);
 		URL ur=new URL(url);
 		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
 		String line=reader.readLine();

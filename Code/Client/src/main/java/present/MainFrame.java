@@ -51,9 +51,10 @@ public class MainFrame extends JFrame{
         JPanel container = new JPanel();
         container.setPreferredSize(new Dimension(PANEL_W, PANEL_H));
         container.setLayout(new BorderLayout());
-        IntroPanel current = new IntroPanel();
+        PanelSwitcher switcher = new PanelSwitcher(container);
+        IntroPanel current = new IntroPanel(switcher);
+        switcher.setCurrent(current);
         container.add(current);
-        PanelSwitcher switcher = new PanelSwitcher(container, current);
         this.add(container, BorderLayout.CENTER);
 
         //导航栏
@@ -114,7 +115,7 @@ public class MainFrame extends JFrame{
         introduce.addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {
-                switcher.jump(new IntroPanel());
+                switcher.jump(new IntroPanel(switcher));
             }
 
             @Override
@@ -146,7 +147,7 @@ public class MainFrame extends JFrame{
         register.addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {
-                switcher.jump(new RegisterPanel());
+                switcher.jump(new RegisterPanel(switcher));
             }
 
             @Override
