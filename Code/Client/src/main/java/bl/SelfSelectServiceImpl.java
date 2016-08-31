@@ -10,32 +10,45 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import util.SHA256;
-import vo.StockInfoByPrice;
+import vo.NowTimeSelectedStockInfoVO;
+
 
 import blservice.SelfSelectService;
 import config.MsgInfo;
 
 public class SelfSelectServiceImpl implements SelfSelectService{
 
-	public List<String> getUserSelectedStock(String userName,String password) throws Exception {
+	public List<NowTimeSelectedStockInfoVO> getUserSelectedStock(String userName,String password) throws Exception {
 		String url="http://121.42.143.164/getUserSelectedStockClient?userName="+userName+"&password="+password;
 		URL ur=new URL(url);
 		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
 		String line=reader.readLine();
 		JSONObject json=new JSONObject(line);
-		List<String> stock =new ArrayList<String>();
-		Object obj=json.get("object");
+		List<NowTimeSelectedStockInfoVO> stock =new ArrayList<NowTimeSelectedStockInfoVO>();
+		JSONArray jsonArray=json.getJSONArray("object");
 
-		if(null == obj){
+		if(null == jsonArray){
 			return  stock;
 		}
 
-		JSONArray jsonArray=new JSONArray(obj);
 		int size=jsonArray.length();
 		for(int i=0;i<size;i++){
+			NowTimeSelectedStockInfoVO vo=new NowTimeSelectedStockInfoVO();
 			JSONObject jsonObj=jsonArray.getJSONObject(i);
-			stock.add(jsonObj.getString("gid"));
+			vo.setGid(jsonObj.getString("gid"));
+			vo.setIncrePer(jsonObj.getDouble("increPer"));
+			vo.setIncrease(jsonObj.getDouble("increase"));
+			vo.setName(jsonObj.getString("name"));
+			vo.setYestodEndPri(jsonObj.getDouble("yestodEndPri"));
+			vo.setTodayStartPri(jsonObj.getDouble("todayStartPri"));
+			vo.setNowPri(jsonObj.getDouble("nowPri"));
+			vo.setTodayMax(jsonObj.getDouble("todayMax"));
+			vo.setTodayMin(jsonObj.getDouble("todayMin"));
+			vo.setDate(jsonObj.getString("date"));
+			vo.setTime(jsonObj.getString("time"));
+			vo.setTraNumber(jsonObj.getDouble("traNumber"));
+			vo.setTraAmount(jsonObj.getDouble("traAmount"));
+			stock.add(vo);		
 		}
 		return stock;
 	}
@@ -61,4 +74,5 @@ public class SelfSelectServiceImpl implements SelfSelectService{
 		info=new MsgInfo(jsonArray.getBoolean("state"),jsonArray.getString("info"),jsonArray.get("object"));
 		return info;
 	}
+	
 }
