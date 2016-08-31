@@ -9,6 +9,8 @@ import present.panel.home.NavPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Created by Y481L on 2016/8/25.
@@ -80,24 +82,28 @@ public class RegisterPanel extends JPanel{
     }
 
     private void addBtnListener() {
-        register.addActionListener((e) -> {
-            //验证密码和确认密码是否一致
-            String pw = new String(password.getPassword());
-            String pwConfirm = new String(confirmPW.getPassword());
-            if (!pw.equals(pwConfirm)) {
-                JOptionPane.showMessageDialog(this, "确认密码与密码不一致");
-                return ;
-            }
+        register.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                //验证密码和确认密码是否一致
+                String pw = new String(password.getPassword());
+                String pwConfirm = new String(confirmPW.getPassword());
+                if (!pw.equals(pwConfirm)) {
+                    JOptionPane.showMessageDialog(RegisterPanel.this, "确认密码与密码不一致");
+                    return ;
+                }
 
-            try {
-                MsgInfo result = service.register(
-                        name.getText(), nickname.getText(),
-                        new String(password.getPassword()), email.getText()
-                );
-                JOptionPane.showMessageDialog(this, result.getInfo());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "网络异常");
+                try {
+                    MsgInfo result = service.register(
+                            name.getText(), nickname.getText(),
+                            new String(password.getPassword()), email.getText()
+                    );
+                    JOptionPane.showMessageDialog(RegisterPanel.this, result.getInfo());
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(RegisterPanel.this, "网络异常");
+                }
             }
         });
     }

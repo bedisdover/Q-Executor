@@ -50,21 +50,25 @@ public class MLForVWAPServiceTest {
 
 
         MLForVWAPService ml_service=new MLForVWAPServiceImpl();
+        StockMLService allStockService=new StockMLServiceImpl();
 
         //测试向VWAP传递静态成交量
-//        ArrayList<Integer> list= ml_service.getStaticVol("600000");
-//        for(int i=0;i<list.size();i++){
-//            System.out.println("index:"+(i+1)+" "+list.get(i));
-//        }
-
-       //测试向VWAP传递动态数据
-        MLForVWAPPriceVO dynamicPrice=ml_service.getDynamicPrice("600000");
-        ArrayList<Double> priceList=dynamicPrice.getPriceList();
-        int currentTime=dynamicPrice.getCurrentTime();
-        System.out.println("currnetTime:"+currentTime);
-        for(int i=0;i<priceList.size();i++){
-            System.out.println("index:"+(i+1)+"   "+priceList.get(i));
+        String all_stock[]=allStockService.getStocksNeedCal();
+        for(int j=0;j<all_stock.length;j++) {
+            ArrayList<Integer> list = ml_service.getStaticVol(all_stock[j]);
+            for (int i = 0; i < list.size(); i++) {
+                System.out.print(" index:" + (i + 1) + " " + list.get(i));
+            }
         }
+
+        //测试向VWAP传递动态价格
+        for(int j=0;j<all_stock.length;j++){
+            ArrayList<Double> list= ml_service.getDynamicPrice(all_stock[j]).getPriceList();
+            for(int i=0;i<list.size();i++){
+                System.out.print(" index:"+(i+1)+" "+list.get(i));
+            }
+        }
+
 
 
     }

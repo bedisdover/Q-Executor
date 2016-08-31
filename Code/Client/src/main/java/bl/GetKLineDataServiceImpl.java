@@ -1,20 +1,15 @@
 package bl;
 
+import blservice.GetKLineDataService;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import vo.StockKLineVO;
+
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import vo.StockBasicInfoVO;
-import vo.StockKLineVO;
-import vo.StockNowTimeVO;
-import blservice.GetKLineDataService;
 
 /**
  * Created by Tian on 16-8-26.

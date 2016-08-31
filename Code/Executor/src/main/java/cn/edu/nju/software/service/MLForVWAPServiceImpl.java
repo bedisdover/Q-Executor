@@ -4,6 +4,7 @@ import cn.edu.nju.software.po.InforForMLPO;
 import cn.edu.nju.software.po.StockForMLPO;
 import cn.edu.nju.software.vo.MLForVWAPPriceVO;
 import libsvm.*;
+import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.TimerTask;
 /**
  * Created by Liu on 2016/8/16.
  */
+@Service
 public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService  {
 
     private StockMLService stockService;
