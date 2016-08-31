@@ -77,7 +77,7 @@ public class UserServiceImpl implements  UserService {
             return new MsgInfo(false,"用户名不存在");
         try {
             tem.setPassword(SHA256.encrypt(password));
-            userDao.updateUser(tem);
+            userDao.updateUserPassword(tem);
         }catch (Exception e){
             e.printStackTrace();
             return  new MsgInfo(false,"修改密码错误");

@@ -1,4 +1,4 @@
-package cn.edu.nju.software.clientController;
+package cn.edu.nju.software.controller.controllerCilent;
 
 import cn.edu.nju.software.config.MsgInfo;
 import cn.edu.nju.software.dao.UserDao;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
 
 /**
  * Created by JiayiWu on 8/30/16.
@@ -32,7 +31,7 @@ public class SelectedStockControllerClient {
         if(null == user)
             return new MsgInfo(false,"用户未登录");
 
-        if(!user.getPassword().equals(password))
+        if(!user.getPassword().equals(SHA256.encrypt(password)))
             return new MsgInfo(false,"密码错误,请重新登录");
 
 
@@ -46,7 +45,7 @@ public class SelectedStockControllerClient {
         if(null == user)
             return new MsgInfo(false,"用户未登录");
 
-        if(!user.getPassword().equals(password))
+        if(!user.getPassword().equals(SHA256.encrypt(password)))
             return new MsgInfo(false,"密码错误,请重新登录");
 
 
@@ -60,7 +59,7 @@ public class SelectedStockControllerClient {
         if(null == user)
             return new MsgInfo(false,"用户未登录");
 
-        if(!user.getPassword().equals(password))
+        if(!user.getPassword().equals(SHA256.encrypt(password)))
             return new MsgInfo(false,"密码错误,请重新登录");
 
         return userSelectedStock.deleteUserSelectedStock(user.getUserName(),codeNum);

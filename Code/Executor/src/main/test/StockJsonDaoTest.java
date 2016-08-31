@@ -1,4 +1,5 @@
 import cn.edu.nju.software.dao.StockJsonDao;
+import cn.edu.nju.software.vo.HotStockVO;
 import cn.edu.nju.software.vo.StockKLineVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,6 +39,15 @@ public class StockJsonDaoTest {
         List<StockKLineVO> stockKLineVOs = stockJsonDao.getKLineByMonth("sh6000000");
         for (StockKLineVO vo:stockKLineVOs){
             System.out.println(vo.toString());
+        }
+    }
+
+    @Test
+    public void testHotStocks(){
+        List<HotStockVO> hotStockVOs = stockJsonDao.getHotStocks();
+        System.out.println(hotStockVOs.size());
+        for (HotStockVO vo : hotStockVOs){
+            System.out.println(vo);
         }
     }
 }

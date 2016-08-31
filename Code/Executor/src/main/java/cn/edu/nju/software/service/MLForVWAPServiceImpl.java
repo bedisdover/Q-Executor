@@ -3,9 +3,12 @@ package cn.edu.nju.software.service;
 import cn.edu.nju.software.po.InforForMLPO;
 import cn.edu.nju.software.po.StockForMLPO;
 import cn.edu.nju.software.vo.MLForVWAPPriceVO;
+
+
 import libsvm.*;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.TimerTask;
@@ -16,8 +19,9 @@ import java.util.TimerTask;
  */
 @Service
 public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService  {
-
+    @Resource
     private StockMLService stockService;
+
     private svm_problem problem;          //定义svm_problem对象
     private svm_parameter param  ;        //svm参数
     private svm_model model;              //训练的svm模型
@@ -35,7 +39,7 @@ public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService 
 
 
     public MLForVWAPServiceImpl( ) {
-        stockService=new StockMLServiceImpl();
+
         this.numOfDynamicAttr=36;
         this.numOfStaticAttr=30;
         this.staticVolAllStock =new ArrayList<>();
