@@ -24,6 +24,10 @@ public class PanelSwitcher {
         this.current = current;
     }
 
+    PanelSwitcher(JPanel container) {
+        this(container, null);
+    }
+
     public void jump(JPanel to) {
         if(current.getClass() == to.getClass()) return;
 
@@ -31,5 +35,9 @@ public class PanelSwitcher {
         container.add(to);
         current = to;
         container.revalidate();
+    }
+
+    public void setCurrent(JPanel current) {
+        this.current = current;
     }
 }

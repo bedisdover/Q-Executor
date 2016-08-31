@@ -3,12 +3,13 @@ package present.panel.account;
 import bl.UserServiceImpl;
 import blservice.UserService;
 import config.MsgInfo;
+import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 import present.MainFrame;
 import present.PanelSwitcher;
-import present.component.QTextField;
 import present.component.QPasswordField;
+import present.component.QTextField;
 import present.panel.home.NavPanel;
-import present.utils.ImageLoader;
+import present.panel.stock.SearchPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -57,19 +58,23 @@ public class LoginPanel extends JPanel {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Dimension d = this.getPreferredSize();
-        g.drawImage(ImageLoader.light, 0, 0, MainFrame.PANEL_W, 100, null);
-        System.out.println("LoginPanel.paintComponent");
+        g.drawImage(
+                new ImageIcon("src/main/resources/images/city1.jpg").getImage(),
+                0, 0, MainFrame.PANEL_W, MainFrame.PANEL_H, null
+        );
     }
 
     private void addComponents() {
         Box box = Box.createVerticalBox();
+        box.setOpaque(false);
+
         box.add(Box.createVerticalStrut(PADDING << 1));
         JLabel title = new JLabel("登录");
         title.setFont(new Font("宋体", Font.PLAIN, 30));
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panel.setOpaque(false);
         panel.add(title);
 
         box.add(panel);
@@ -78,10 +83,13 @@ public class LoginPanel extends JPanel {
         box.add(Box.createVerticalStrut(PADDING));
         box.add(this.wrapComponent(password));
         box.add(Box.createVerticalStrut(PADDING));
+        login.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.green));
         box.add(this.wrapComponent(login));
         box.add(Box.createVerticalStrut(PADDING));
+        register.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.green));
         box.add(this.wrapComponent(register));
         box.add(Box.createVerticalStrut(PADDING));
+        findPW.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.green));
         box.add(this.wrapComponent(findPW));
         box.add(Box.createVerticalStrut(
                 NavPanel.PANEL_H - (HEIGHT + PADDING) * COMPONENT_NUM
@@ -98,6 +106,7 @@ public class LoginPanel extends JPanel {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER));
         panel.add(c);
+        panel.setOpaque(false);
         return panel;
     }
 
@@ -115,6 +124,9 @@ public class LoginPanel extends JPanel {
                         IS_LOGIN = true;
                     }
                     JOptionPane.showMessageDialog(LoginPanel.this, result.getInfo());
+                    if (result.isState()) {
+                        switcher.jump(new SearchPanel(switcher));
+                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(LoginPanel.this, "网络异常");
@@ -137,7 +149,7 @@ public class LoginPanel extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-                switcher.jump(new RegisterPanel());
+                switcher.jump(new RegisterPanel(switcher));
             }
         });
 
@@ -145,7 +157,7 @@ public class LoginPanel extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-                switcher.jump(new FindPWPanel());
+                switcher.jump(new FindPWPanel(switcher));
             }
         });
     }

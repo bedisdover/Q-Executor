@@ -4,8 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 /**
  * Created by Y481L on 2016/8/25.
@@ -28,28 +26,25 @@ public class QTextField extends JTextField {
     }
 
     private void setHandler() {
-        this.addMouseListener(new MouseAdapter() {
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                String text = getText();
-                if (text.equals(placeholder)) {
-                    setText("");
-                    setForeground(Color.BLACK);
-                }
-                requestFocus();
-            }
-
-        });
-
         this.addFocusListener(new FocusAdapter() {
 
             @Override
             public void focusLost(FocusEvent e) {
+                super.focusLost(e);
                 String text = getText();
                 if (text.isEmpty()) {
                     setForeground(Color.GRAY);
                     setText(placeholder);
+                }
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                String text = getText();
+                if (text.equals(placeholder)) {
+                    setForeground(Color.BLACK);
+                    setText("");
                 }
             }
 

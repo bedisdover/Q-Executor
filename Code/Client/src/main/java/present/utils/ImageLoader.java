@@ -20,6 +20,5 @@ public class ImageLoader {
         increase = new ImageIcon("images/increase.png");
         decrease = new ImageIcon("images/decrease.png");
         dull = new ImageIcon("images/dull.png");
-        light = new ImageIcon("src/main/java/resources/images/light.png").getImage();
-    }
+   }
 }
