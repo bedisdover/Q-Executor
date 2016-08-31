@@ -3,13 +3,17 @@ package present.panel.account;
 import bl.UserServiceImpl;
 import blservice.UserService;
 import config.MsgInfo;
+import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
+import present.MainFrame;
 import present.PanelSwitcher;
-import present.component.QTextField;
 import present.component.QPasswordField;
+import present.component.QTextField;
 import present.panel.home.NavPanel;
+import present.panel.stock.SearchPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -53,27 +57,44 @@ public class LoginPanel extends JPanel {
         this.addComponents();
     }
 
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(
+                new ImageIcon("src/main/resources/images/city1.jpg").getImage(),
+                0, 0, MainFrame.PANEL_W, MainFrame.PANEL_H, null
+        );
+    }
+
     private void addComponents() {
         Box box = Box.createVerticalBox();
+        box.setOpaque(false);
+
         box.add(Box.createVerticalStrut(PADDING << 1));
         JLabel title = new JLabel("登录");
         title.setFont(new Font("宋体", Font.PLAIN, 30));
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panel.setOpaque(false);
         panel.add(title);
+
         box.add(panel);
         box.add(Box.createVerticalStrut(PADDING << 1));
         box.add(this.wrapComponent(name));
         box.add(Box.createVerticalStrut(PADDING));
         box.add(this.wrapComponent(password));
         box.add(Box.createVerticalStrut(PADDING));
+        login.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.green));
         box.add(this.wrapComponent(login));
         box.add(Box.createVerticalStrut(PADDING));
+        register.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.green));
         box.add(this.wrapComponent(register));
         box.add(Box.createVerticalStrut(PADDING));
+        findPW.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.green));
         box.add(this.wrapComponent(findPW));
         box.add(Box.createVerticalStrut(
                 NavPanel.PANEL_H - (HEIGHT + PADDING) * COMPONENT_NUM
         ));
+
         this.addListeners();
         this.setLayout(new BorderLayout());
         this.add(box);
@@ -85,14 +106,14 @@ public class LoginPanel extends JPanel {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER));
         panel.add(c);
+        panel.setOpaque(false);
         return panel;
     }
 
     private void addListeners() {
-        login.addMouseListener(new MouseAdapter() {
+        AbstractAction enter = new AbstractAction() {
             @Override
-            public void mouseReleased(MouseEvent e) {
-                super.mouseReleased(e);
+            public void actionPerformed(ActionEvent e) {
                 String user = name.getText();
                 String pw = new String(password.getPassword());
                 try {
@@ -101,15 +122,26 @@ public class LoginPanel extends JPanel {
                         LOGIN_USER = user;
                         LOGIN_PW = pw;
                         IS_LOGIN = true;
-                        JOptionPane.showMessageDialog(LoginPanel.this, "登录成功");
-                    }else {
-                        JOptionPane.showMessageDialog(LoginPanel.this, result.getInfo());
-                        System.out.println("LoginPanel.addListeners");
+                    }
+                    JOptionPane.showMessageDialog(LoginPanel.this, result.getInfo());
+                    if (result.isState()) {
+                        switcher.jump(new SearchPanel(switcher));
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(LoginPanel.this, "网络异常");
                 }
+            }
+        };
+
+        password.getInputMap().put(KeyStroke.getKeyStroke('\n'), "login");
+        password.getActionMap().put("login", enter);
+
+        login.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                enter.actionPerformed(null);
             }
         });
 
@@ -117,7 +149,7 @@ public class LoginPanel extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-                switcher.jump(new RegisterPanel());
+                switcher.jump(new RegisterPanel(switcher));
             }
         });
 
@@ -125,7 +157,7 @@ public class LoginPanel extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-                switcher.jump(new FindPWPanel());
+                switcher.jump(new FindPWPanel(switcher));
             }
         });
     }
