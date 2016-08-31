@@ -26,6 +26,13 @@ class FindPWPanel extends JPanel {
     FindPWPanel() {
         Box box = Box.createVerticalBox();
 
+        JLabel title = new JLabel("找回密码");
+        title.setFont(new Font("宋体", Font.PLAIN, 30));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panel.add(title);
+        box.add(Box.createVerticalStrut(PADDING));
+        box.add(panel);
+
         QTextField email = new QTextField("请输入用户名");
         email.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         box.add(Box.createVerticalStrut(PADDING));

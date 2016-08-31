@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import present.MainFrame;
 import present.PanelSwitcher;
+import present.component.Link;
 import present.component.TextPlusBtn;
 import present.panel.account.LoginPanel;
 import present.utils.StockJsonInfo;
@@ -32,7 +33,10 @@ public class SearchPanel extends JPanel {
 
     private SelfSelectService self = new SelfSelectServiceImpl();
 
+    private PanelSwitcher switcher;
+
     public SearchPanel(PanelSwitcher switcher) {
+        this.switcher = switcher;
 
         //搜索
         TextPlusBtn search = new TextPlusBtn(
@@ -134,6 +138,12 @@ public class SearchPanel extends JPanel {
      */
     private Box createSelfTable() {
         //自选股
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel label = new Link("自选股票");
+        label.setPreferredSize(new Dimension(
+                PADDING * 6, PADDING << 1
+        ));
+
         Vector<String> header = new Vector<>(3);
         header.addElement("股票");
         header.addElement("价格");
@@ -141,14 +151,18 @@ public class SearchPanel extends JPanel {
         Vector<String> data = new Vector<>();
         DefaultTableModel model = new DefaultTableModel(data, header);
         try {
-            List<String> list = self.getUserSelectedStock(
-                    LoginPanel.LOGIN_USER, LoginPanel.LOGIN_PW
-            );
-            list.forEach(System.out::println);
+            if (LoginPanel.IS_LOGIN) {
+                List<String> list = self.getUserSelectedStock(
+                        LoginPanel.LOGIN_USER, LoginPanel.LOGIN_PW
+                );
+                panel.add(label);
+            } else {
+                panel.add(createLoginTip());
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("SearchPanel.createSelfTable");
+            JOptionPane.showMessageDialog(this, "网络异常");
         }
         JTable self = createTable(model);
 
@@ -157,12 +171,6 @@ public class SearchPanel extends JPanel {
                 (MainFrame.PANEL_W / 3) - (PADDING << 1), TABLE_H - (PADDING << 1)
         ));
 
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JLabel label = new JLabel("自选股票");
-        label.setPreferredSize(new Dimension(
-                PADDING << 2, PADDING << 1
-        ));
-        panel.add(label);
 
         Box box = Box.createVerticalBox();
         box.add(pane);
@@ -210,5 +218,26 @@ public class SearchPanel extends JPanel {
                 return false;
             }
         };
+    }
+
+    private JPanel createLoginTip() {
+        JPanel panel = new JPanel();
+
+        JPanel up = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        JLabel label1 = new JLabel("请先");
+        up.add(label1);
+
+        Link link = new Link("登录");
+        link.setHandler(() -> switcher.jump(new LoginPanel(switcher)));
+        up.add(link);
+
+        JLabel label2 = new JLabel("再查看自选股票");
+        JPanel down = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        down.add(label2);
+
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(up);
+        panel.add(down);
+        return panel;
     }
 }
