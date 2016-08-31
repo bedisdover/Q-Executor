@@ -6,10 +6,7 @@ import cn.edu.nju.software.model.StockBasicInfo;
 import cn.edu.nju.software.model.StockInfoByCom;
 import cn.edu.nju.software.model.StockInfoByPer;
 import cn.edu.nju.software.service.StockService;
-import cn.edu.nju.software.vo.HotStockVO;
-import cn.edu.nju.software.vo.StockInfoByPrice;
-import cn.edu.nju.software.vo.StockInfoByTime;
-import cn.edu.nju.software.vo.StockKLineVO;
+import cn.edu.nju.software.vo.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -102,7 +99,14 @@ public class StockController {
         return stockService.getPerStockInfo(codeNum);
     }
 
-    //逐笔数据
+    //深度数据
+    @RequestMapping("/DeepStock")
+    @ResponseBody
+    public List<DeepStockVO> DeepStock(String codeNum) {
+
+        return stockService.getDeepStock(codeNum);
+    }
+    //热点股票数据
     @RequestMapping("/HotStocks")
     @ResponseBody
     public List<HotStockVO> getHotStocks(){

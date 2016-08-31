@@ -17,6 +17,7 @@ import cn.edu.nju.software.po.StockInfoPO;
 import cn.edu.nju.software.utils.StockUtil;
 import cn.edu.nju.software.utils.TimeUtil;
 
+import cn.edu.nju.software.vo.DeepStockVO;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -77,6 +78,17 @@ public List<StockInfoPO> filterByTime(List<StockInfoPO> info,Date start,Date end
 		}
 	}
 
+
+	/**
+	 * 获取某个日期某支股票的交易信息
+	 * @param codeNum 股票的code
+	 * @param date 所要获取信息的时间日期
+	 * @param num 返回指定数量的逐步信息
+	 * @return date下的所有股票交易信息
+	 */
+	public List<StockInfoByPer> getPerStockInfo(String codeNum,Date date,int num){
+		return null;
+	}
 	/**
 	 * 对于当日的数据如果是在18点之前需要爬取网页获取交易信息
 	 * @param code
@@ -227,11 +239,25 @@ public List<StockInfoPO> filterByTime(List<StockInfoPO> info,Date start,Date end
 	}
 
 
+
 	//根据股票代码返回股票的基本信息
 	public StockBasicInfo getBasicInfo(String codeNum){
 		return stockBasicInfoDao.getStockBasicInfo(codeNum);
 
 	}
 
+
+
+
+	/**
+	* 返回深度信息
+	* DeepStockVO报错timeline(String) deepPrice(Double)
+	 * timeline只要分时秒
+	 * 如果该交易日没数据,则返回前一个交易日
+	* */
+	public List<DeepStockVO> getDeepStockVo(String codeNum){
+		return null;
+
+	}
 	
 }
