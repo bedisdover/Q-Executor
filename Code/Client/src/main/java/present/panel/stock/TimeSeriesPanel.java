@@ -6,6 +6,8 @@ import present.charts.TimeSeriesChart;
 import vo.StockTimeSeriesVO;
 
 import javax.swing.*;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,10 +33,17 @@ class TimeSeriesPanel extends JPanel {
     private void getData() {
         SwingWorker worker = new SwingWorker() {
             @Override
-            protected Object doInBackground() throws Exception {
+            protected Object doInBackground()  {
                 GetTimeSeriesDataService timeSeriesDataService = new GetTimeSeriesDataServiceImpl();
 
-                return timeSeriesDataService.getData(stockCode);
+                List timeSeriesVOList = new ArrayList();
+                try {
+                    timeSeriesVOList = timeSeriesDataService.getData(stockCode);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                return timeSeriesVOList;
             }
 
             @Override
@@ -57,8 +66,10 @@ class TimeSeriesPanel extends JPanel {
 
     private void injectData(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
         SwingUtilities.invokeLater(() -> {
-            panel = TimeSeriesChart.getChart(stockTimeSeriesVOList);
+            panel.removeAll();
+            panel.add(TimeSeriesChart.getChart(stockTimeSeriesVOList));
 
+            panel.revalidate();
             panel.repaint();
         });
     }
