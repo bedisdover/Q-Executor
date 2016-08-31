@@ -2,6 +2,7 @@ package cn.edu.nju.software.controller;
 
 import cn.edu.nju.software.service.MLForVWAPService;
 import cn.edu.nju.software.service.StockMLService;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -13,6 +14,7 @@ import java.util.ArrayList;
  * <p>
  * 测试VWAP
  */
+@Controller
 public class TestController {
     @Resource
     MLForVWAPService mlForVWAPService;
