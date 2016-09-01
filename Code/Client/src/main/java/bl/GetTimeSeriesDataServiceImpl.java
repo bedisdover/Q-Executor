@@ -22,7 +22,7 @@ public class GetTimeSeriesDataServiceImpl implements GetTimeSeriesDataService {
         URL ur = new URL(url);
         BufferedReader reader = new BufferedReader(new InputStreamReader(ur.openStream()));
         String line = reader.readLine();
-        JSONArray jsonArray = new JSONArray(line);
+        JSONArray jsonArray =new JSONArray(line);
         int size = jsonArray.length();
         for (int i = 0; i < size; i++) {
             StockTimeSeriesVO stockTimeSeriesVO = new StockTimeSeriesVO();
