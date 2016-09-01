@@ -7,12 +7,15 @@ import cn.edu.nju.software.service.StockMLServiceImpl;
 import cn.edu.nju.software.vo.MLForVWAPPriceVO;
 import org.junit.Test;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 
 /**
  * Created by admin on 2016/8/20.
  */
 public class MLForVWAPServiceTest {
+    @Resource
+    MLForVWAPService ml_service;
 
     @Test
     public void testStaticService(){
@@ -49,7 +52,6 @@ public class MLForVWAPServiceTest {
 
 
 
-        MLForVWAPService ml_service=MLForVWAPServiceImpl.getInstance();
 
         StockMLService allStockService=new StockMLServiceImpl();
 

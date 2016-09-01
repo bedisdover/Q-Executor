@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import vo.StockTimeSeriesVO;
 import blservice.GetTimeSeriesDataService;
 
+
 public class GetTimeSeriesDataServiceImpl implements GetTimeSeriesDataService{
 
 	public List<StockTimeSeriesVO> getData(String codeNum) throws Exception {
@@ -35,4 +36,5 @@ public class GetTimeSeriesDataServiceImpl implements GetTimeSeriesDataService{
 	}
 	
 	
+
 }

@@ -6,6 +6,7 @@ import cn.edu.nju.software.vo.MLForVWAPPriceVO;
 
 
 import libsvm.*;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -36,7 +37,8 @@ public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService 
     private ArrayList<ArrayList<Double>> staticPriceAllStock;
     private ArrayList<ArrayList<svm_model>> dynamicPriceModelAllStock;
 
-    //单例模式
+
+    //单例模式(在注入还没加载前loading进来)
     private static MLForVWAPServiceImpl single=null;
 
     public static MLForVWAPServiceImpl getInstance(){
@@ -45,7 +47,6 @@ public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService 
         }
         return single;
     }
-
 
     private MLForVWAPServiceImpl( ) {
         stockService=new StockMLServiceImpl();

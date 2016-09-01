@@ -3,7 +3,9 @@ package cn.edu.nju.software.nightfactory;
 
 import cn.edu.nju.software.service.MLForVWAPService;
 import cn.edu.nju.software.service.MLForVWAPServiceImpl;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.util.Timer;
@@ -14,10 +16,13 @@ import java.util.Date;
 /**
  * Created by Liu on 2016/8/29.
  */
+
 public class NightFactoryML implements ServletContextListener {
 
     private Timer timer;
     private static final long PERIOD_DAY = 24 * 60 * 60 * 1000;
+
+
 
     public void contextDestroyed(ServletContextEvent event) {
         timer.cancel();
