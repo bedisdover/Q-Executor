@@ -3,8 +3,11 @@ package present.panel.stock;
 import bl.GetTimeSeriesDataServiceImpl;
 import blservice.GetTimeSeriesDataService;
 import present.charts.TimeSeriesChart;
+import vo.StockTimeSeriesVO;
 
 import javax.swing.*;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,25 +20,11 @@ class TimeSeriesPanel extends JPanel {
 
     private String stockCode;
 
-    private TimeSeriesChart timeSeriesChart;
-
     TimeSeriesPanel(String stockCode) {
         panel = this;
         this.stockCode = stockCode;
 
         getData();
-        createUIComponents();
-    }
-
-    /**
-     * 创建组件
-     */
-    private void createUIComponents() {
-        SwingUtilities.invokeLater(() -> {
-            timeSeriesChart = new TimeSeriesChart();
-
-            panel = timeSeriesChart.getChart();
-        });
     }
 
     /**
@@ -44,10 +33,17 @@ class TimeSeriesPanel extends JPanel {
     private void getData() {
         SwingWorker worker = new SwingWorker() {
             @Override
-            protected Object doInBackground() throws Exception {
+            protected Object doInBackground()  {
                 GetTimeSeriesDataService timeSeriesDataService = new GetTimeSeriesDataServiceImpl();
 
-                return timeSeriesDataService.getData(stockCode);
+                List timeSeriesVOList = new ArrayList();
+                try {
+                    timeSeriesVOList = timeSeriesDataService.getData(stockCode);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                return timeSeriesVOList;
             }
 
             @Override
@@ -55,7 +51,7 @@ class TimeSeriesPanel extends JPanel {
             protected void done() {
                 try {
                     List timeSeriesVOList = (List) get();
-                    timeSeriesChart.injectData(timeSeriesVOList);
+                    injectData(timeSeriesVOList);
 
                     panel.revalidate();
                     panel.repaint();
@@ -66,5 +62,15 @@ class TimeSeriesPanel extends JPanel {
         };
 
         worker.execute();
+    }
+
+    private void injectData(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
+        SwingUtilities.invokeLater(() -> {
+            panel.removeAll();
+            panel.add(TimeSeriesChart.getChart(stockTimeSeriesVOList));
+
+            panel.revalidate();
+            panel.repaint();
+        });
     }
 }

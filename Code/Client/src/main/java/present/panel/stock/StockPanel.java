@@ -31,7 +31,7 @@ public class StockPanel extends JPanel {
 
     private JTabbedPane kLinePanel;
 
-    private JPanel timeSeriesPanel, generalPanel, singlePanel, priceSharePanel;
+    private JPanel timeSeriesPanel, depthPanel, generalPanel, singlePanel, priceSharePanel;
 
     private String stockCode;
 
@@ -98,6 +98,13 @@ public class StockPanel extends JPanel {
                     }
 
                     centerPanel = timeSeriesPanel;
+                    break;
+                case "DepthPanel":
+                    if (depthPanel == null) {
+                        depthPanel = new DepthPanel(stockCode);
+                    }
+
+                    centerPanel = depthPanel;
                     break;
                 case "GeneralPanel":
                     if (generalPanel == null) {
@@ -168,7 +175,7 @@ public class StockPanel extends JPanel {
 
         private JLabel labelName, labelCode;
 
-        private JButton btn_kLine, btn_TimeSeries, btn_general, btn_single, btn_priceShare;
+        private JButton btn_kLine, btn_TimeSeries, btn_depth, btn_general, btn_single, btn_priceShare;
 
         private JButton portrait;
 
@@ -222,6 +229,7 @@ public class StockPanel extends JPanel {
 
                     btn_kLine = new JButton("K 线");
                     btn_TimeSeries = new JButton("分时");
+                    btn_depth = new JButton("深度");
                     btn_general = new JButton("大单");
                     btn_single = new JButton("逐笔");
                     btn_priceShare = new JButton("分价");
@@ -232,6 +240,7 @@ public class StockPanel extends JPanel {
 
                     eastPanel.add(btn_kLine);
                     eastPanel.add(btn_TimeSeries);
+                    eastPanel.add(btn_depth);
                     eastPanel.add(btn_general);
                     eastPanel.add(btn_single);
                     eastPanel.add(btn_priceShare);
@@ -261,6 +270,13 @@ public class StockPanel extends JPanel {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     createCenterPanel("TimeSeriesPanel");
+                }
+            });
+
+            btn_depth.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    createCenterPanel("DepthPanel");
                 }
             });
 

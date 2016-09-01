@@ -8,10 +8,7 @@ import cn.edu.nju.software.model.StockBasicInfo;
 import cn.edu.nju.software.model.StockInfoByCom;
 import cn.edu.nju.software.model.StockInfoByPer;
 import cn.edu.nju.software.utils.TimeUtil;
-import cn.edu.nju.software.vo.HotStockVO;
-import cn.edu.nju.software.vo.StockInfoByPrice;
-import cn.edu.nju.software.vo.StockInfoByTime;
-import cn.edu.nju.software.vo.StockKLineVO;
+import cn.edu.nju.software.vo.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -71,6 +68,8 @@ public class StockServiceImpl implements StockService {
             return null;
         }
     }
+
+
 
     @Override
     public List<StockInfoByCom> getComStockInfo(String Code) {
@@ -206,7 +205,10 @@ public class StockServiceImpl implements StockService {
             return format.parse(sDate);
 
     }
-
+    @Override
+    public List<DeepStockVO> getDeepStock(String Code) {
+        return stockInfoDao.getDeepStockVo(Code);
+    }
 
     private static double round(double value, int scale, int roundingMode) {
         BigDecimal bd = new BigDecimal(value);
@@ -215,4 +217,6 @@ public class StockServiceImpl implements StockService {
         bd = null;
         return d;
     }
+
+
 }
