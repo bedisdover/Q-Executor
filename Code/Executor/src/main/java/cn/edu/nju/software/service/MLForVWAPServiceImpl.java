@@ -36,10 +36,19 @@ public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService 
     private ArrayList<ArrayList<Double>> staticPriceAllStock;
     private ArrayList<ArrayList<svm_model>> dynamicPriceModelAllStock;
 
+    //单例模式
+    private static MLForVWAPServiceImpl single=null;
+
+    public static MLForVWAPServiceImpl getInstance(){
+        if ( single == null) {
+            single=new MLForVWAPServiceImpl();
+        }
+        return single;
+    }
 
 
-    public MLForVWAPServiceImpl( ) {
-
+    private MLForVWAPServiceImpl( ) {
+        stockService=new StockMLServiceImpl();
         this.numOfDynamicAttr=36;
         this.numOfStaticAttr=30;
         this.staticVolAllStock =new ArrayList<>();
@@ -216,13 +225,16 @@ public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService 
         ArrayList<Integer> list=new ArrayList<Integer>();
 
         for(int i=1;i<49;i++){
-            initStaticData(stockID,i,Type.VOL);
+            /*
+             initStaticData(stockID,i,Type.VOL);
             initSVM();
             //训练模型
             model = svm.svm_train(problem, param);
             Double predictValue= svm.svm_predict(model,predict)*1000000;
             int value_int=predictValue.intValue();
             list.add( value_int);
+             */
+            list.add(i);
        }
 
        this.staticVolAllStock.add(list);
@@ -407,11 +419,15 @@ public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService 
     public void run() {
         try {
 
+            staticPriceAllStock.clear();
+            staticVolAllStock.clear();
+            dynamicPriceModelAllStock.clear();
+
             String[] all_stock=stockService.getStocksNeedCal();
             for(int i=0;i<all_stock.length;i++){
                 this.getStaticVol_svm(all_stock[i]);
-                this.getStaticPrice_svm(all_stock[i]);
-                this.getDynamicPrice_svm(all_stock[i]);
+//                this.getStaticPrice_svm(all_stock[i]);
+//                this.getDynamicPrice_svm(all_stock[i]);
             }
         } catch (Exception e) {
               System.out.println("night factory error!");
