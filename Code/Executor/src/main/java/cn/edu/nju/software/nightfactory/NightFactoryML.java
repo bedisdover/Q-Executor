@@ -33,7 +33,7 @@ public class NightFactoryML implements ServletContextListener {
         calendar.set(Calendar.SECOND, 0);
         Date date = calendar.getTime();
 
-        timer.schedule(new MLForVWAPServiceImpl(), date, PERIOD_DAY);
+        timer.schedule( MLForVWAPServiceImpl.getInstance(), date, PERIOD_DAY);
 
         event.getServletContext().log("add to the schedule list!");
     }
