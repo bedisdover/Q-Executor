@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import vo.NowTimeSelectedStockInfoVO;
@@ -24,6 +25,32 @@ public class SelfSelectServiceImpl implements SelfSelectService{
 		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
 		String line=reader.readLine();
 		JSONObject json=new JSONObject(line);
+		return getJsonArray(json);
+		
+	}
+
+	public MsgInfo addUserSelectedStock(String codeNum,String userName,String password) throws Exception {
+        String url="http://121.42.143.164/addUserSelectedStockClient?codeNum="+codeNum+"&userName="+userName+"&password="+password;
+        MsgInfo info = null;
+		URL ur=new URL(url);
+		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
+		String line=reader.readLine();
+		JSONObject jsonArray=new JSONObject(line);
+		info=new MsgInfo(jsonArray.getBoolean("state"),jsonArray.getString("info"),getJsonArray(jsonArray));
+		return info;
+	}
+
+	public MsgInfo deleteUserSelectedStock(String codeNum,String userName,String password) throws Exception {
+		String url="http://121.42.143.164/deleteUserSelectedStockClient?codeNum="+codeNum+"&userName="+userName+"&password="+password;
+        MsgInfo info = null;
+		URL ur=new URL(url);
+		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
+		String line=reader.readLine();
+		JSONObject jsonArray=new JSONObject(line);
+		info=new MsgInfo(jsonArray.getBoolean("state"),jsonArray.getString("info"),getJsonArray(jsonArray));
+		return info;
+	}
+	public List<NowTimeSelectedStockInfoVO> getJsonArray(JSONObject json) throws Exception{
 		List<NowTimeSelectedStockInfoVO> stock =new ArrayList<NowTimeSelectedStockInfoVO>();
 		JSONArray jsonArray=json.getJSONArray("object");
 
@@ -34,6 +61,9 @@ public class SelfSelectServiceImpl implements SelfSelectService{
 		int size=jsonArray.length();
 		for(int i=0;i<size;i++){
 			NowTimeSelectedStockInfoVO vo=new NowTimeSelectedStockInfoVO();
+			if(jsonArray.get(i).equals(null)){
+				break;
+			}
 			JSONObject jsonObj=jsonArray.getJSONObject(i);
 			vo.setGid(jsonObj.getString("gid"));
 			vo.setIncrePer(jsonObj.getDouble("increPer"));
@@ -51,28 +81,6 @@ public class SelfSelectServiceImpl implements SelfSelectService{
 			stock.add(vo);		
 		}
 		return stock;
-	}
-
-	public MsgInfo addUserSelectedStock(String codeNum,String userName,String password) throws Exception {
-        String url="http://121.42.143.164/addUserSelectedStockClient?codeNum="+codeNum+"&userName="+userName+"&password="+password;
-        MsgInfo info = null;
-		URL ur=new URL(url);
-		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
-		String line=reader.readLine();
-		JSONObject jsonArray=new JSONObject(line);
-		info=new MsgInfo(jsonArray.getBoolean("state"),jsonArray.getString("info"),jsonArray.get("object"));
-		return info;
-	}
-
-	public MsgInfo deleteUserSelectedStock(String codeNum,String userName,String password) throws Exception {
-		String url="http://121.42.143.164/deleteUserSelectedStockClient?codeNum="+codeNum+"&userName="+userName+"&password="+password;
-        MsgInfo info = null;
-		URL ur=new URL(url);
-		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
-		String line=reader.readLine();
-		JSONObject jsonArray=new JSONObject(line);
-		info=new MsgInfo(jsonArray.getBoolean("state"),jsonArray.getString("info"),jsonArray.get("object"));
-		return info;
 	}
 	
 }
