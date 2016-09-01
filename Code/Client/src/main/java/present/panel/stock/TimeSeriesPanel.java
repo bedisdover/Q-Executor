@@ -39,7 +39,7 @@ class TimeSeriesPanel extends JPanel {
                 List timeSeriesVOList = new ArrayList();
                 try {
                     timeSeriesVOList = timeSeriesDataService.getData(stockCode);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
