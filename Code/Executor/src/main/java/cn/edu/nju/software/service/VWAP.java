@@ -23,7 +23,7 @@ public class VWAP implements  VWAPService{
 	public List<Integer> predictVn(VWAP_Param param) throws Exception{
 		//交易量概率密度
 		List<Double> Pn;
-        MLForVWAPService ml = MLForVWAPServiceImpl.getInstance();
+        MLForVWAPService ml =MLForVWAPServiceImpl.getInstance();
         MLForVWAPPriceVO priceVO;
 		if(param.getTimeNode()==0 || !stockPnMap.containsKey(param.getStockid())){
 			//从机器学习处获得静态预测的Vn和Wn

@@ -1,6 +1,7 @@
 package cn.edu.nju.software.nightfactory;
 
 
+import cn.edu.nju.software.service.MLForVWAPService;
 import cn.edu.nju.software.service.MLForVWAPServiceImpl;
 
 import javax.servlet.ServletContextEvent;
@@ -33,7 +34,9 @@ public class NightFactoryML implements ServletContextListener {
         calendar.set(Calendar.SECOND, 0);
         Date date = calendar.getTime();
 
-        timer.schedule( MLForVWAPServiceImpl.getInstance(), date, PERIOD_DAY);
+        System.out.println("NightFactoryML.contextInitialized");
+
+        timer.schedule(MLForVWAPServiceImpl.getInstance(), date, PERIOD_DAY);
 
         event.getServletContext().log("add to the schedule list!");
     }

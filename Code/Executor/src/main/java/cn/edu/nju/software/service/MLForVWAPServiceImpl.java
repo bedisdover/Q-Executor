@@ -48,9 +48,7 @@ public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService 
 
 
     private MLForVWAPServiceImpl( ) {
-
         stockService=new StockMLServiceImpl();
-
         this.numOfDynamicAttr=36;
         this.numOfStaticAttr=30;
         this.staticVolAllStock =new ArrayList<>();
