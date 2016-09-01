@@ -53,7 +53,7 @@ public class GetKLineDataServiceImpl implements GetKLineDataService{
 				stockKLineVO.setP_change((Double) jsonObj.get("p_change"));
 				stockKLineVO.setMa5((Double) jsonObj.get("ma5"));
 				stockKLineVO.setMa10((Double) jsonObj.get("ma10"));
-				stockKLineVO.setMa10((Double) jsonObj.get("ma20"));
+				stockKLineVO.setMa20((Double) jsonObj.get("ma20"));
 				stockKLineVO.setV_ma5((Double) jsonObj.get("v_ma5"));
 				stockKLineVO.setV_ma10((Double) jsonObj.get("v_ma10"));
 				stockKLineVO.setV_ma20((Double) jsonObj.get("v_ma20"));
