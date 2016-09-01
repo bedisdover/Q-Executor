@@ -32,6 +32,9 @@ public class SearchPanel extends JPanel {
 
     private static final int TABLE_H = MainFrame.PANEL_H - SEARCH_H - (PADDING << 3);
 
+    //字符串切割符
+    private static final String spliter = "--";
+
     private SelfSelectService self = new SelfSelectServiceImpl();
 
     private PanelSwitcher switcher;
@@ -53,8 +56,8 @@ public class SearchPanel extends JPanel {
             for (JSONObject obj : list) {
                 try {
                     v.addElement(
-                        obj.getString(StockJsonInfo.KEY_CODE) + "  "
-                        + obj.getString(StockJsonInfo.KEY_NAME) + "  "
+                        obj.getString(StockJsonInfo.KEY_CODE) + spliter
+                        + obj.getString(StockJsonInfo.KEY_NAME) + spliter
                         + obj.getString(StockJsonInfo.KEY_INDUSTRY)
                     );
                 } catch (JSONException e) {
@@ -64,9 +67,9 @@ public class SearchPanel extends JPanel {
             return v;
         });
         //设置下拉提示列表监听
-        search.setListClickHandler((text) -> switcher.jump(new StockPanel(text.split("  ")[0])));
+        search.setListClickHandler((text) -> switcher.jump(new StockPanel(text.split(spliter)[0])));
         search.setListFocusHandler((field, text) -> {
-            field.setText(text.split("  ")[0]);
+            field.setText(text.split(spliter)[0]);
         });
         //设置确定按钮监听
         search.setBtnListener((e) -> {
