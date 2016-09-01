@@ -11,6 +11,7 @@ import present.component.TextPlusBtn;
 import present.panel.account.LoginPanel;
 import present.utils.StockJsonInfo;
 import util.JsonUtil;
+import vo.NowTimeSelectedStockInfoVO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -166,7 +167,7 @@ public class SearchPanel extends JPanel {
         DefaultTableModel model = new DefaultTableModel(data, header);
         try {
             if (LoginPanel.IS_LOGIN) {
-                List<String> list = self.getUserSelectedStock(
+                List<NowTimeSelectedStockInfoVO> list = self.getUserSelectedStock(
                         LoginPanel.LOGIN_USER, LoginPanel.LOGIN_PW
                 );
                 panel.add(label);
