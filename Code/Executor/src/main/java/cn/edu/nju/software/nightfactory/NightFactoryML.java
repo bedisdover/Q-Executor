@@ -16,7 +16,7 @@ import java.util.Date;
 /**
  * Created by Liu on 2016/8/29.
  */
-@Service
+
 public class NightFactoryML implements ServletContextListener {
 
     private Timer timer;
