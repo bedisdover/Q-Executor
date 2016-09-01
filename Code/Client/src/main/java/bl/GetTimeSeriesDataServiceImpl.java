@@ -2,6 +2,7 @@ package bl;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +15,9 @@ import blservice.GetTimeSeriesDataService;
 
 public class GetTimeSeriesDataServiceImpl implements GetTimeSeriesDataService{
 
-	public List<StockTimeSeriesVO> getData(String codeNum) {
+	public List<StockTimeSeriesVO> getData(String codeNum) throws Exception {
 		String url="http://121.42.143.164/StockInfoByTime?codeNum="+codeNum;
 		List<StockTimeSeriesVO> stockList=new ArrayList<StockTimeSeriesVO>();
-		try {
 			URL ur=new URL(url);
 			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
 			String line=reader.readLine();
@@ -30,10 +30,6 @@ public class GetTimeSeriesDataServiceImpl implements GetTimeSeriesDataService{
 				stockTimeSeriesVO.setPrice((Double) jsonObj.get("price"));
 				stockList.add(stockTimeSeriesVO);
 			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return stockList;
 	}
 	
