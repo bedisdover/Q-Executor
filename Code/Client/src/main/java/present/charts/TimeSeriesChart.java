@@ -75,9 +75,6 @@ public class TimeSeriesChart {
         timeseriescollection.addSeries(timeSeries1);
         timeseriescollection.addSeries(timeSeries2);
 
-        System.out.println(timeSeries1.getItems());
-        System.out.println(timeSeries2.getItems());
-
         return timeseriescollection;
     }
 

@@ -166,9 +166,9 @@ public class SearchPanel extends JPanel {
         DefaultTableModel model = new DefaultTableModel(data, header);
         try {
             if (LoginPanel.IS_LOGIN) {
-                List<String> list = self.getUserSelectedStock(
-                        LoginPanel.LOGIN_USER, LoginPanel.LOGIN_PW
-                );
+//                List<String> list = self.getUserSelectedStock(
+//                        LoginPanel.LOGIN_USER, LoginPanel.LOGIN_PW
+//                );
                 panel.add(label);
             } else {
                 panel.add(createLoginTip());

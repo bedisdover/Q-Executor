@@ -102,7 +102,7 @@ public class StockController {
         return stockService.getPerStockInfo(codeNum);
     }
 
-    //逐笔数据
+    //热门股票
     @RequestMapping("/HotStocks")
     @ResponseBody
     public List<HotStockVO> getHotStocks(){
