@@ -17,6 +17,13 @@ public interface GetTimeSeriesDataService {
      * 获取分时数据
      * @param codeNum 股票代码
      * @return 分时数据
+     * @throws Exception 
      */
-    List<StockTimeSeriesVO> getData(String codeNum) throws IOException, JSONException;
+<<<<<<< HEAD
+    List<StockTimeSeriesVO> getData(String codeNum) throws IOException, JSONException, Exception;
+=======
+
+    List<StockTimeSeriesVO> getData(String codeNum) throws Exception;
+
+>>>>>>> c22f825089602728815fc4535f09dbc41e4685dc
 }
