@@ -145,6 +145,16 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 		return stockList;
 	}
 
+	@Override
+	public List<DeepStockVO> getStockDepth(String codeNum) throws Exception {
+		return null;
+	}
+
+	@Override
+	public List<HotStockVO> getHotStock() throws Exception {
+		return null;
+	}
+
 	public List<StockInfoByCom> getComStock(String url) throws Exception{
 		List<StockInfoByCom> stockList=new ArrayList<StockInfoByCom>();
 			URL ur=new URL(url);
