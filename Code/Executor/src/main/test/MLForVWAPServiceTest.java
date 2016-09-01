@@ -64,13 +64,13 @@ public class MLForVWAPServiceTest {
             }
         }
 
-//        //测试向VWAP传递动态价格
-//        for(int j=0;j<all_stock.length;j++){
-//            ArrayList<Double> list= ml_service.getDynamicPrice(all_stock[j]).getPriceList();
-//            for(int i=0;i<list.size();i++){
-//                System.out.print(" index:"+(i+1)+" "+list.get(i));
-//            }
-//        }
+        //测试向VWAP传递动态价格
+        for(int j=0;j<all_stock.length;j++){
+            ArrayList<Double> list= ml_service.getDynamicPrice(all_stock[j]).getPriceList();
+            for(int i=0;i<list.size();i++){
+                System.out.print(" index:"+(i+1)+" "+list.get(i));
+            }
+        }
 
 
 
