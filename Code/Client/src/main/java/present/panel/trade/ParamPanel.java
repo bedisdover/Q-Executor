@@ -1,7 +1,6 @@
 package present.panel.trade;
 
 import bl.VWAP;
-import bl.VWAP_Param;
 import blservice.VWAPService;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -107,10 +106,14 @@ class ParamPanel extends JPanel {
             }
             return v;
         });
-        codeText.setListHandler((text) -> {
+        codeText.setListClickHandler((text) -> {
             String[] s = text.split(" ");
             codeText.setText(s[0]);
             nameVal.setText(s[1]);
+        });
+        codeText.setListFocusHandler((field, text) -> {
+            String[] s = text.split(" ");
+            field.setText(s[0]);
         });
         code = new Line(codeLabel, codeText);
         line2.add(code);

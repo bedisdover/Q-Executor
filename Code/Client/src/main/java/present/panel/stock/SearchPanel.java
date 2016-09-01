@@ -64,7 +64,10 @@ public class SearchPanel extends JPanel {
             return v;
         });
         //设置下拉提示列表监听
-        search.setListHandler((text) -> switcher.jump(new StockPanel(text.split("  ")[0])));
+        search.setListClickHandler((text) -> switcher.jump(new StockPanel(text.split("  ")[0])));
+        search.setListFocusHandler((field, text) -> {
+            field.setText(text.split("  ")[0]);
+        });
         //设置确定按钮监听
         search.setBtnListener((e) -> {
             try {
