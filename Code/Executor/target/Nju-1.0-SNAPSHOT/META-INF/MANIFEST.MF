@@ -1,11 +1,5 @@
 Manifest-Version: 1.0
-<<<<<<< HEAD
 Built-By: JiayiWu
 Created-By: IntelliJ IDEA
 Build-Jdk: 1.8.0_74
-=======
-Built-By: song
-Created-By: IntelliJ IDEA
-Build-Jdk: 1.8.0_91
->>>>>>> 59a13f6338d5f44d8f4d4ddea66b6287596023bb
 
