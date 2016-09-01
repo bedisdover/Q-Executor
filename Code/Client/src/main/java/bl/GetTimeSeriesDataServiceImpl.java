@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import vo.StockTimeSeriesVO;
@@ -16,7 +17,7 @@ import blservice.GetTimeSeriesDataService;
 
 public class GetTimeSeriesDataServiceImpl implements GetTimeSeriesDataService {
 
-    public List<StockTimeSeriesVO> getData(String codeNum) throws IOException {
+    public List<StockTimeSeriesVO> getData(String codeNum) throws IOException, JSONException {
         String url = "http://121.42.143.164/StockInfoByTime?codeNum=" + codeNum;
         List<StockTimeSeriesVO> stockList = new ArrayList<StockTimeSeriesVO>();
         URL ur = new URL(url);

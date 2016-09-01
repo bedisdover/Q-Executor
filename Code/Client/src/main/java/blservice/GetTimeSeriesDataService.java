@@ -1,5 +1,6 @@
 package blservice;
 
+import org.json.JSONException;
 import vo.StockTimeSeriesVO;
 
 import java.io.IOException;
@@ -17,5 +18,5 @@ public interface GetTimeSeriesDataService {
      * @param codeNum 股票代码
      * @return 分时数据
      */
-    List<StockTimeSeriesVO> getData(String codeNum) throws IOException;
+    List<StockTimeSeriesVO> getData(String codeNum) throws IOException, JSONException;
 }

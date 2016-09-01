@@ -70,7 +70,7 @@ public class KLine {
                 try {
                     List stockKLineVOList = (List) get();
 
-                    kLineDay = new ChartPanel(createChart(new KLineVO(stockKLineVOList), 7));
+                    kLineDay = new ChartPanel(createChart(new KLineVO(stockKLineVOList), 30));
 
                     tabbedPane.addTab("日K", kLineDay);
                 } catch (Exception e) {
@@ -255,7 +255,7 @@ class KLineVO {
 
         Day day;
         StockKLineVO kLineVO;
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < stockKLineVOList.size(); i++) {
             kLineVO = stockKLineVOList.get(i);
             day = new Day(TimeUtil.getDate(kLineVO.getDate()));
             ohlcSeries.add(day,
