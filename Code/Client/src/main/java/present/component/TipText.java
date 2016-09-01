@@ -116,6 +116,7 @@ public class TipText extends QTextField {
 
                 mappedStrings = matcher.getMatchString(getText());
                 showTipList();
+                requestFocus();
             }
         });
     }
