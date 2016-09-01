@@ -85,4 +85,5 @@ public interface GetStockDataService {
      * @throws Exception 
      */
     List<StockInfoByPer> getPerStockInfo(String codeNum) throws Exception;
+    
 }
