@@ -105,10 +105,12 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 			for(int i=0;i<size;i++){
 				StockInfoByPrice stockKLineVO=new StockInfoByPrice();
 				JSONObject jsonObj=jsonArray.getJSONObject(i);
-				stockKLineVO.setPercent(jsonObj.getDouble("percent"));
-				stockKLineVO.setPrice(jsonObj.getDouble("price"));
-				stockKLineVO.setTrunover(jsonObj.getDouble("trunover"));
-				stockList.add(stockKLineVO);
+				if (jsonObj.getDouble("price") != 0.0) {
+					stockKLineVO.setPercent(jsonObj.getDouble("percent"));
+					stockKLineVO.setPrice(jsonObj.getDouble("price"));
+					stockKLineVO.setTrunover(jsonObj.getDouble("trunover"));
+					stockList.add(stockKLineVO);
+				}
 			}
 		return stockList;
 	}

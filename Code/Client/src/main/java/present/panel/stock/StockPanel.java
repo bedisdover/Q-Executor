@@ -5,6 +5,7 @@ import blservice.GetStockDataService;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 import present.charts.KLine;
 import present.panel.error.ErrorPanel;
+import present.panel.loading.LoadingPanel;
 import present.panel.progress.ProgressPanel;
 import vo.StockBasicInfoVO;
 
@@ -104,8 +105,7 @@ public class StockPanel extends JPanel {
                     break;
                 case "DepthPanel":
                     if (depthPanel == null) {
-//                        depthPanel = new DepthPanel(stockCode);
-                        depthPanel = new ProgressPanel();
+                        depthPanel = new DepthPanel(stockCode);
                     }
 
                     centerPanel = depthPanel;

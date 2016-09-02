@@ -2,6 +2,7 @@ package present.panel.stock;
 
 import bl.GetStockDataServiceImpl;
 import blservice.GetStockDataService;
+import present.panel.loading.LoadingPanel;
 import util.StockUtil;
 import vo.StockInfoByPer;
 
@@ -28,6 +29,8 @@ public class SinglePanel extends JPanel {
     private void init() {
         SwingUtilities.invokeLater(() -> {
             panel.setLayout(new BorderLayout());
+
+            panel.add(new LoadingPanel(), BorderLayout.CENTER);
         });
     }
 
@@ -59,6 +62,7 @@ public class SinglePanel extends JPanel {
         SwingUtilities.invokeLater(() -> {
             JScrollPane scrollPane = createTable(stockInfoByPerList);
 
+            panel.removeAll();
             panel.add(scrollPane, BorderLayout.WEST);
 
             panel.revalidate();

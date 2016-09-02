@@ -9,25 +9,21 @@ import javax.swing.*;
  */
 public class ErrorPanel extends JPanel {
 
-    private JPanel panel;
-
     private JLabel label;
 
     public ErrorPanel() {
-        panel = this;
-
         createUIComponents();
     }
 
     private void createUIComponents() {
         SwingUtilities.invokeLater(() -> {
-            panel.setLayout(null);
+            this.setLayout(null);
 
             label = new JLabel(new ImageIcon("src/main/resources/images/error.png"));
             label.setBounds(100, 200, 180, 170);
 
-            panel.add(label);
-            panel.repaint();
+            this.add(label);
+            this.repaint();
         });
     }
 }
