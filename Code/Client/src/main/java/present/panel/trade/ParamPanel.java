@@ -1,7 +1,6 @@
 package present.panel.trade;
 
 import bl.VWAP;
-import bl.VWAP_Param;
 import blservice.VWAPService;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +31,9 @@ class ParamPanel extends JPanel {
     private static final int V_GAP = 10;
 
     private static final Font font = new Font("宋体", Font.PLAIN, 12);
+
+    //字符串切割符
+    private static final String spliter = " : ";
 
     //资金账户
     private Line account;
@@ -98,7 +100,7 @@ class ParamPanel extends JPanel {
             for (JSONObject obj : list) {
                 try {
                     v.addElement(
-                            obj.getString(StockJsonInfo.KEY_CODE) + " " +
+                            obj.getString(StockJsonInfo.KEY_CODE) + spliter +
                             obj.getString(StockJsonInfo.KEY_NAME)
                     );
                 } catch (JSONException e) {
@@ -107,10 +109,14 @@ class ParamPanel extends JPanel {
             }
             return v;
         });
-        codeText.setListHandler((text) -> {
-            String[] s = text.split(" ");
+        codeText.setListClickHandler((text) -> {
+            String[] s = text.split(spliter);
             codeText.setText(s[0]);
             nameVal.setText(s[1]);
+        });
+        codeText.setListFocusHandler((field, text) -> {
+            String[] s = text.split(spliter);
+            field.setText(s[0]);
         });
         code = new Line(codeLabel, codeText);
         line2.add(code);

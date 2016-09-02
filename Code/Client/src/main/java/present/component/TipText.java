@@ -2,9 +2,7 @@ package present.component;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.util.Vector;
 
 /**
@@ -23,17 +21,30 @@ public class TipText extends QTextField {
     }
 
     /**
-     * 下拉列表事件处理器
+     * 下拉列表点击事件处理器
      */
     @FunctionalInterface
-    public interface ListHandler {
-        void handleItemClicked(String text);
+    public interface ListClickHandler {
+        void handle(String text);
     }
 
     /**
-     * 默认下拉提示列表监听器
+     * 下拉列表项选择发生改变的事件处理器
      */
-    private ListHandler handler = (text) -> {};
+    public interface ItemChangedHandler {
+        void handle(JTextField field, String text);
+    }
+
+
+    /**
+     * 默认下拉提示列表点击监听器
+     */
+    private ListClickHandler clickHandler = (text) -> {};
+
+    /**
+     * 默认下拉提示列表焦点获得监听器
+     */
+    private ItemChangedHandler focusHandler = (field, text) -> { field.setText(text);};
 
     /**
      * 默认字符串匹配器
@@ -76,11 +87,15 @@ public class TipText extends QTextField {
         this.matcher = matcher;
     }
 
-    public void setListHandler(ListHandler handler) {
-        this.handler = (t) -> {
+    public void setListClickHandler(ListClickHandler handler) {
+        this.clickHandler = (t) -> {
             this.setText(t);
-            handler.handleItemClicked(t);
+            handler.handle(t);
         };
+    }
+
+    public void setListFocusHandler(ItemChangedHandler handler) {
+        this.focusHandler = handler;
     }
 
     public void hideTips() {
@@ -175,7 +190,27 @@ public class TipText extends QTextField {
     private JMenuItem createItem(String text) {
         JMenuItem item = new JMenuItem(text);
         item.setPreferredSize(new Dimension(textW, textH));
-        item.addActionListener((e) -> handler.handleItemClicked(text));
+
+        //设置点击事件监听器
+        item.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                clickHandler.handle(text);
+            }
+        });
+        //设置选中状态改变监听器
+        item.addChangeListener((e) -> focusHandler.handle(TipText.this, text));
+        //将回车与点击事件处理绑定
+        AbstractAction action = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clickHandler.handle(text);
+            }
+        };
+        item.getActionMap().put("enter", action);
+        item.getInputMap().put(KeyStroke.getKeyStroke('\n'), "enter");
+
         return item;
     }
 }

@@ -50,8 +50,12 @@ public class TextPlusBtn extends JPanel {
         text.setMatcher(matcher);
     }
 
-    public void setListHandler(TipText.ListHandler handler) {
-        text.setListHandler(handler);
+    public void setListClickHandler(TipText.ListClickHandler handler) {
+        text.setListClickHandler(handler);
+    }
+
+    public void setListFocusHandler(TipText.ItemChangedHandler handler) {
+        text.setListFocusHandler(handler);
     }
 
     public String getText() {
