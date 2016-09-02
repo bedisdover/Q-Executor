@@ -11,6 +11,7 @@ import present.component.TextPlusBtn;
 import present.panel.account.LoginPanel;
 import present.utils.StockJsonInfo;
 import util.JsonUtil;
+import vo.NowTimeSelectedStockInfoVO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -153,7 +154,8 @@ public class SearchPanel extends JPanel {
         //自选股
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panel.setBackground(new Color(0x2c4cb1));
-        JLabel label = new Link("自选股票");
+        JLabel label = new JLabel("自选股票");
+        label.setForeground(Color.WHITE);
         label.setPreferredSize(new Dimension(
                 PADDING * 6, PADDING << 1
         ));
@@ -166,9 +168,16 @@ public class SearchPanel extends JPanel {
         DefaultTableModel model = new DefaultTableModel(data, header);
         try {
             if (LoginPanel.IS_LOGIN) {
-//                List<String> list = self.getUserSelectedStock(
-//                        LoginPanel.LOGIN_USER, LoginPanel.LOGIN_PW
-//                );
+                List<NowTimeSelectedStockInfoVO> list = self.getUserSelectedStock(
+                        LoginPanel.LOGIN_USER, LoginPanel.LOGIN_PW
+                );
+                list.forEach((vo) -> {
+                    Vector<String> row = new Vector<>();
+                    row.addElement(vo.getName());
+                    row.addElement(String.valueOf(vo.getNowPri()));
+                    row.add(String.valueOf(vo.getIncrePer()));
+                    model.addRow(row);
+                });
                 panel.add(label);
             } else {
                 panel.add(createLoginTip());

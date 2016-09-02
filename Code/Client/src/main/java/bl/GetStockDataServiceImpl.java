@@ -145,6 +145,31 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 		return stockList;
 	}
 
+	public List<DeepStockVO> getStockDepth(String codeNum) throws Exception {
+		return null;
+	}
+
+	public List<HotStockVO> getHotStock() throws Exception {
+		String url="http://121.42.143.164/HotStocks";
+		List<HotStockVO> stockList=new ArrayList<HotStockVO>();
+		URL ur=new URL(url);
+		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
+		String line=reader.readLine();
+		JSONArray jsonArray=new JSONArray(line);
+		int size=jsonArray.length();
+		for(int i=0;i<size;i++){
+			HotStockVO stockKLineVO=new HotStockVO();
+			JSONObject jsonObj=jsonArray.getJSONObject(i);
+			stockKLineVO.setCode(jsonObj.getString("code"));
+			stockKLineVO.setName(jsonObj.getString("name"));
+			stockKLineVO.setPchange(jsonObj.getDouble("pchange"));
+			stockKLineVO.setReason(jsonObj.getString("reason"));
+			stockKLineVO.setDate(jsonObj.getString("date"));
+			stockList.add(stockKLineVO);
+		}
+	return stockList;
+	}
+
 	public List<StockInfoByCom> getComStock(String url) throws Exception{
 		List<StockInfoByCom> stockList=new ArrayList<StockInfoByCom>();
 			URL ur=new URL(url);
@@ -165,8 +190,8 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 		return stockList;
 	}
 	
-	public static void main(String [] args){
-//		String url="http://121.42.143.164/ComStockInfoParam?codeNum=sh600000&param=400";
+//	public static void main(String [] args){
+//		String url="http://121.42.143.164/DeepStock";
 //		StockBasicInfoVO stockBasicInfoVO=new StockBasicInfoVO();
 //		try {
 //			URL ur=new URL(url);
@@ -179,6 +204,13 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-		
-	}
+//		GetStockDataServiceImpl A=new GetStockDataServiceImpl();
+//		try {
+//			System.out.println(A.getHotStock().get(0).getName());
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//	}
 }

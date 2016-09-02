@@ -2,6 +2,7 @@ package present.panel.stock;
 
 import bl.GetTimeSeriesDataServiceImpl;
 import blservice.GetTimeSeriesDataService;
+import org.json.JSONException;
 import present.charts.TimeSeriesChart;
 import vo.StockTimeSeriesVO;
 
@@ -39,7 +40,7 @@ class TimeSeriesPanel extends JPanel {
                 List timeSeriesVOList = new ArrayList();
                 try {
                     timeSeriesVOList = timeSeriesDataService.getData(stockCode);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 

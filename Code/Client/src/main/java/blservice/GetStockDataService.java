@@ -74,16 +74,28 @@ public interface GetStockDataService {
 
     /**
      * 大单数据(带参数筛选)
-     * url: /ComStockInfoParam"
+     * url: /ComStockInfoParam
      * @throws Exception 
      */
     List<StockInfoByCom> getComStockInfo(String codeNum, double param) throws Exception;
 
     /**
      * 逐笔数据
-     * url: /PerStockInfo"
+     * url: /PerStockInfo
      * @throws Exception 
      */
     List<StockInfoByPer> getPerStockInfo(String codeNum) throws Exception;
-    
+
+    /**
+     * 深度数据
+     * url: /DeepStock
+     */
+    List<DeepStockVO> getStockDepth(String codeNum) throws Exception;
+
+    /**
+     * 热点股票数据
+     * url: /HotStocks
+     */
+    List<HotStockVO> getHotStock() throws Exception;
+
 }
