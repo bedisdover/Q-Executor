@@ -82,7 +82,7 @@ public class PriceSharePanel extends JPanel {
         //采用自定义数据模型
 
         StockInfoByPrice temp;
-        for (int i = 0; i < data.length; i++) {
+        for (int i = 0; i < stockInfoByPriceList.size(); i++) {
             temp = stockInfoByPriceList.get(i);
 
             if (temp.getPrice() == 0) {

@@ -5,6 +5,7 @@ import blservice.GetStockDataService;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 import present.charts.KLine;
 import present.panel.error.ErrorPanel;
+import present.panel.progress.ProgressPanel;
 import vo.StockBasicInfoVO;
 
 import javax.swing.*;
@@ -28,9 +29,7 @@ public class StockPanel extends JPanel {
     /**
      * 中部面板
      */
-    private JPanel centerPanel;
-
-    private JComponent currentPanel;
+    private JComponent centerPanel;
 
     private JTabbedPane kLinePanel;
 
@@ -75,10 +74,7 @@ public class StockPanel extends JPanel {
             }
 
             try {
-                currentPanel = kLinePanel = new KLine().getKLine(stockCode);
-
-                centerPanel = new JPanel(new BorderLayout());
-                centerPanel.add(currentPanel, BorderLayout.CENTER);
+                centerPanel = kLinePanel = new KLine().getKLine(stockCode);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -92,11 +88,11 @@ public class StockPanel extends JPanel {
      */
     private void createCenterPanel(String panelType) {
         SwingUtilities.invokeLater(() -> {
-//            panel.remove(centerPanel);
-            centerPanel.remove(currentPanel);
+            panel.remove(centerPanel);
+
             switch (panelType) {
                 case "KLinePanel":
-                    currentPanel = kLinePanel;
+                    centerPanel = kLinePanel;
                     break;
                 case "TimeSeriesPanel":
                     if (timeSeriesPanel == null) {
@@ -104,43 +100,41 @@ public class StockPanel extends JPanel {
                         timeSeriesPanel = new ErrorPanel();
                     }
 
-                    currentPanel = timeSeriesPanel;
+                    centerPanel = timeSeriesPanel;
                     break;
                 case "DepthPanel":
                     if (depthPanel == null) {
-                        depthPanel = new DepthPanel(stockCode);
+//                        depthPanel = new DepthPanel(stockCode);
+                        depthPanel = new ProgressPanel();
                     }
 
-                    currentPanel = depthPanel;
+                    centerPanel = depthPanel;
                     break;
                 case "GeneralPanel":
                     if (generalPanel == null) {
                         generalPanel = new GeneralPanel(stockCode, currentDataPanel);
                     }
 
-                    currentPanel = generalPanel;
+                   centerPanel = generalPanel;
                     break;
                 case "SinglePanel":
                     if (singlePanel == null) {
                         singlePanel = new SinglePanel(stockCode);
                     }
 
-                    currentPanel = singlePanel;
+                    centerPanel = singlePanel;
                     break;
                 case "PriceSharePanel":
                     if (priceSharePanel == null) {
                         priceSharePanel = new PriceSharePanel(stockCode);
                     }
 
-                    currentPanel = priceSharePanel;
+                    centerPanel = priceSharePanel;
                     break;
             }
 
 
-//            panel.add(centerPanel, BorderLayout.CENTER);
-            centerPanel.add(currentPanel, BorderLayout.CENTER);
-            centerPanel.revalidate();
-            centerPanel.repaint();
+            panel.add(centerPanel, BorderLayout.CENTER);
 
             panel.revalidate();
             panel.repaint();
