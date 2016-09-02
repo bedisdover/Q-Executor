@@ -217,15 +217,21 @@ public class SearchPanel extends JPanel {
     private Box createHotTable() {
         Vector<String> header = new Vector<>(4);
         header.addElement("股票");
-        header.addElement("价格");
         header.addElement("涨跌额");
-        header.addElement("涨跌幅");
+        header.addElement("最新交易日");
         Vector<String> data = new Vector<>();
         DefaultTableModel model = new DefaultTableModel(data, header);
         JTable hot = createTable(model);
 
         try {
             List<HotStockVO> hotDatas = hotStocks.getHotStock();
+            for (HotStockVO vo : hotDatas) {
+                Vector<String> v = new Vector<>();
+                v.addElement(vo.getName());
+                v.addElement(String.valueOf(vo.getPchange()));
+                v.addElement(vo.getDate());
+                model.addRow(v);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
