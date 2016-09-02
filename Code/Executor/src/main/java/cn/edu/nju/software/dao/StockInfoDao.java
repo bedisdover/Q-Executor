@@ -6,7 +6,9 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -256,8 +258,32 @@ public List<StockInfoPO> filterByTime(List<StockInfoPO> info,Date start,Date end
 	 * 如果该交易日没数据,则返回前一个交易日
 	* */
 	public List<DeepStockVO> getDeepStockVo(String codeNum){
-		return null;
+		List<DeepStockVO> deepStockVOs = new ArrayList<>();
+		codeNum = StockUtil.getCode(codeNum);
+		int i = 0 ;//最多遍历10遍
+		int index = Integer.parseInt(codeNum.substring(2))%25;
+		Date date = TimeUtil.getLastworkDay();
+		List<Object[]> objects = baseDao.execSqlQuery("select time,deepData from StocksInstance"+index+" where time>"+date.getTime()+" and code=\""+codeNum+"\";");
+		//如果信息为空我去找昨天的
+		Calendar calendar = Calendar.getInstance();
+		while (objects.size()==0&&i<10){
+			i++;
+			calendar.setTime(date);
+			calendar.add(Calendar.DATE,-1);
+			objects = baseDao.execSqlQuery("select time,deepData from StocksInstance"+index+" where time>"+calendar.getTime().getTime()+" and code=\""+codeNum+"\";");
+		}
 
+		for (Object[] objs : objects){
+			try{
+				DeepStockVO vo = new DeepStockVO(TimeUtil.getDetailTime(new Date(Long.parseLong(objs[0].toString()))),Double.parseDouble(objs[1].toString()));
+				deepStockVOs.add(vo);
+			}catch (Exception e){
+				continue;//如果遇到错误我就不加进来好了
+			}
+		}
+
+//		System.out.println(deepStockVOs.size());
+		return deepStockVOs;
 	}
 	
 }

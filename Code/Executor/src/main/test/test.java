@@ -1,5 +1,6 @@
 import cn.edu.nju.software.dao.UserDao;
 import cn.edu.nju.software.model.User;
+import cn.edu.nju.software.utils.TimeUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,11 @@ public class test  {
         User user =userDao.findUserbyName("bestwujiayi");
         System.out.println(user.getNickName());
 //        System.out.println("hh");
+    }
+
+    @Test
+    public void test1(){
+        System.out.print(TimeUtil.getTimeLong("2016-08-30"));
     }
 
 
