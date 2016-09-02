@@ -19,6 +19,7 @@ import vo.NowTimeSelectedStockInfoVO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -44,6 +45,8 @@ public class SearchPanel extends JPanel {
 
     private PanelSwitcher switcher;
 
+    private DefaultTableModel hotTableModel;
+
     public SearchPanel(PanelSwitcher switcher) {
         this.switcher = switcher;
 
@@ -61,9 +64,9 @@ public class SearchPanel extends JPanel {
             for (JSONObject obj : list) {
                 try {
                     v.addElement(
-                        obj.getString(StockJsonInfo.KEY_CODE) + spliter
-                        + obj.getString(StockJsonInfo.KEY_NAME) + spliter
-                        + obj.getString(StockJsonInfo.KEY_INDUSTRY)
+                            obj.getString(StockJsonInfo.KEY_CODE) + spliter
+                                    + obj.getString(StockJsonInfo.KEY_NAME) + spliter
+                                    + obj.getString(StockJsonInfo.KEY_INDUSTRY)
                     );
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -96,9 +99,9 @@ public class SearchPanel extends JPanel {
         ));
         container.setOpaque(false);
         container.add(createSelfTable());
-//        container.add(Box.createHorizontalStrut(PADDING));
-//        container.add(createGeneralTable());
+
         container.add(createHotTable());
+        getData();
 
         //添加组件到主面板
         Box box = Box.createVerticalBox();
@@ -220,21 +223,9 @@ public class SearchPanel extends JPanel {
         header.addElement("涨跌额");
         header.addElement("最新交易日");
         Vector<String> data = new Vector<>();
-        DefaultTableModel model = new DefaultTableModel(data, header);
-        JTable hot = createTable(model);
+        hotTableModel = new DefaultTableModel(data, header);
+        JTable hot = createTable(hotTableModel);
 
-        try {
-            List<HotStockVO> hotDatas = hotStocks.getHotStock();
-            for (HotStockVO vo : hotDatas) {
-                Vector<String> v = new Vector<>();
-                v.addElement(vo.getName());
-                v.addElement(String.valueOf(vo.getPchange()));
-                v.addElement(vo.getDate());
-                model.addRow(v);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         JScrollPane pane = new JScrollPane(hot);
         pane.setPreferredSize(new Dimension(
@@ -290,5 +281,39 @@ public class SearchPanel extends JPanel {
         panel.add(down);
         panel.setOpaque(false);
         return panel;
+    }
+
+    private void getData() {
+        SwingWorker worker = new SwingWorker<List<HotStockVO>, Void>() {
+            @Override
+            protected List<HotStockVO> doInBackground() throws Exception {
+                try {
+                    return hotStocks.getHotStock();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return new ArrayList<>();
+                }
+            }
+
+            @Override
+            protected void done() {
+                super.done();
+                try {
+                    List<HotStockVO> hotDatas = get();
+                    for (HotStockVO vo : hotDatas) {
+                        Vector<String> v = new Vector<>();
+                        v.addElement(vo.getName());
+                        v.addElement(String.valueOf(vo.getPchange()));
+                        v.addElement(vo.getDate());
+                        hotTableModel.addRow(v);
+                    }
+                    hotTableModel.fireTableDataChanged();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        worker.execute();
     }
 }

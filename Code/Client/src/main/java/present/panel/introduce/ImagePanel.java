@@ -34,24 +34,13 @@ class ImagePanel extends JPanel {
 
         //logo
         box.add(Box.createVerticalStrut(PADDING >> 1));
-        JPanel icon = new JPanel() {
-            @Override
-            public void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Image img = new ImageIcon("src/main/resources/images/logo.png").getImage();
-                int x = (MainFrame.PANEL_W - ICON_WIDTH) >> 1;
-                int y = PADDING >> 1;
-                g.drawImage(
-                        img,
-                        x, y, x + ICON_WIDTH, y + ICON_HEIGHT,
-                        0, 0, img.getWidth(null), img.getHeight(null) + PADDING,
-                        null
-                );
-            }
-        };
-        icon.setPreferredSize(new Dimension(MainFrame.PANEL_W, ICON_HEIGHT));
-        icon.setOpaque(false);
-        box.add(icon);
+        JLabel icon = new JLabel();
+        icon.setIcon(new ImageIcon("src/main/resources/images/logo.png"));
+        icon.setPreferredSize(new Dimension(ICON_WIDTH, ICON_HEIGHT));
+        JPanel iconPane = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        iconPane.add(icon);
+        iconPane.setOpaque(false);
+        box.add(iconPane);
 
         //文本简介
         box.add(Box.createVerticalStrut(PADDING >> 1));

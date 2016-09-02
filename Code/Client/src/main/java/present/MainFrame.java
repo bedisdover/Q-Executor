@@ -43,6 +43,7 @@ public class MainFrame extends JFrame{
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.pack();
+        this.setResizable(false);
         this.setFrameAtCenter();
     }
 
