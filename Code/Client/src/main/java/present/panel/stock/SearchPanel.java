@@ -1,6 +1,8 @@
 package present.panel.stock;
 
+import bl.GetStockDataServiceImpl;
 import bl.SelfSelectServiceImpl;
+import blservice.GetStockDataService;
 import blservice.SelfSelectService;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,6 +13,7 @@ import present.component.TextPlusBtn;
 import present.panel.account.LoginPanel;
 import present.utils.StockJsonInfo;
 import util.JsonUtil;
+import vo.HotStockVO;
 import vo.NowTimeSelectedStockInfoVO;
 
 import javax.swing.*;
@@ -36,6 +39,8 @@ public class SearchPanel extends JPanel {
     private static final String spliter = "--";
 
     private SelfSelectService self = new SelfSelectServiceImpl();
+
+    private GetStockDataService hotStocks = new GetStockDataServiceImpl();
 
     private PanelSwitcher switcher;
 
@@ -68,9 +73,7 @@ public class SearchPanel extends JPanel {
         });
         //设置下拉提示列表监听
         search.setListClickHandler((text) -> switcher.jump(new StockPanel(text.split(spliter)[0])));
-        search.setListFocusHandler((field, text) -> {
-            field.setText(text.split(spliter)[0]);
-        });
+        search.setListFocusHandler((field, text) -> field.setText(text.split(spliter)[1]));
         //设置确定按钮监听
         search.setBtnListener((e) -> {
             try {
@@ -220,6 +223,12 @@ public class SearchPanel extends JPanel {
         Vector<String> data = new Vector<>();
         DefaultTableModel model = new DefaultTableModel(data, header);
         JTable hot = createTable(model);
+
+        try {
+            List<HotStockVO> hotDatas = hotStocks.getHotStock();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         JScrollPane pane = new JScrollPane(hot);
         pane.setPreferredSize(new Dimension(
