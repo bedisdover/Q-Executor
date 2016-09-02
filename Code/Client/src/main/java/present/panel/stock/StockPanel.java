@@ -4,6 +4,7 @@ import bl.GetStockDataServiceImpl;
 import blservice.GetStockDataService;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 import present.charts.KLine;
+import present.panel.error.ErrorPanel;
 import vo.StockBasicInfoVO;
 
 import javax.swing.*;
@@ -27,7 +28,9 @@ public class StockPanel extends JPanel {
     /**
      * 中部面板
      */
-    private JComponent centerPanel;
+    private JPanel centerPanel;
+
+    private JComponent currentPanel;
 
     private JTabbedPane kLinePanel;
 
@@ -72,7 +75,10 @@ public class StockPanel extends JPanel {
             }
 
             try {
-                centerPanel = kLinePanel = new KLine().getKLine(stockCode);
+                currentPanel = kLinePanel = new KLine().getKLine(stockCode);
+
+                centerPanel = new JPanel(new BorderLayout());
+                centerPanel.add(currentPanel, BorderLayout.CENTER);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -86,50 +92,55 @@ public class StockPanel extends JPanel {
      */
     private void createCenterPanel(String panelType) {
         SwingUtilities.invokeLater(() -> {
-            panel.remove(centerPanel);
-
+//            panel.remove(centerPanel);
+            centerPanel.remove(currentPanel);
             switch (panelType) {
                 case "KLinePanel":
-                    centerPanel = kLinePanel;
+                    currentPanel = kLinePanel;
                     break;
                 case "TimeSeriesPanel":
                     if (timeSeriesPanel == null) {
-                        timeSeriesPanel = new TimeSeriesPanel(stockCode);
+//                        timeSeriesPanel = new TimeSeriesPanel(stockCode);
+                        timeSeriesPanel = new ErrorPanel();
                     }
 
-                    centerPanel = timeSeriesPanel;
+                    currentPanel = timeSeriesPanel;
                     break;
                 case "DepthPanel":
                     if (depthPanel == null) {
                         depthPanel = new DepthPanel(stockCode);
                     }
 
-                    centerPanel = depthPanel;
+                    currentPanel = depthPanel;
                     break;
                 case "GeneralPanel":
                     if (generalPanel == null) {
                         generalPanel = new GeneralPanel(stockCode, currentDataPanel);
                     }
 
-                    centerPanel = generalPanel;
+                    currentPanel = generalPanel;
                     break;
                 case "SinglePanel":
                     if (singlePanel == null) {
                         singlePanel = new SinglePanel(stockCode);
                     }
 
-                    centerPanel = singlePanel;
+                    currentPanel = singlePanel;
                     break;
                 case "PriceSharePanel":
                     if (priceSharePanel == null) {
                         priceSharePanel = new PriceSharePanel(stockCode);
                     }
 
-                    centerPanel = priceSharePanel;
+                    currentPanel = priceSharePanel;
                     break;
             }
 
-            panel.add(centerPanel, BorderLayout.CENTER);
+
+//            panel.add(centerPanel, BorderLayout.CENTER);
+            centerPanel.add(currentPanel, BorderLayout.CENTER);
+            centerPanel.revalidate();
+            centerPanel.repaint();
 
             panel.revalidate();
             panel.repaint();
@@ -210,7 +221,7 @@ public class StockPanel extends JPanel {
                     westPanel.setBackground(new Color(0xeeeeee));
                     westPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 15));
 
-                    labelName = new JLabel("浦发银行");
+                    labelName = new JLabel("");
                     labelName.setFont(new Font("微软雅黑", Font.PLAIN, 20));
 
                     labelCode = new JLabel("(" + stockCode + ")");

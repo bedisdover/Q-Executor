@@ -49,10 +49,9 @@ public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService 
     }
 
     private MLForVWAPServiceImpl( ) {
-<<<<<<< HEAD
-=======
+
         stockService=new StockMLServiceImpl();
->>>>>>> c22f825089602728815fc4535f09dbc41e4685dc
+
         this.numOfDynamicAttr=36;
         this.numOfStaticAttr=30;
         this.staticVolAllStock =new ArrayList<>();
@@ -430,8 +429,8 @@ public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService 
             String[] all_stock=stockService.getStocksNeedCal();
             for(int i=0;i<all_stock.length;i++){
                 this.getStaticVol_svm(all_stock[i]);
-//                this.getStaticPrice_svm(all_stock[i]);
-//                this.getDynamicPrice_svm(all_stock[i]);
+                this.getStaticPrice_svm(all_stock[i]);
+                this.getDynamicPrice_svm(all_stock[i]);
             }
         } catch (Exception e) {
               System.out.println("night factory error!");
