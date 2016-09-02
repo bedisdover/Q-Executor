@@ -97,4 +97,5 @@ public interface GetStockDataService {
      * url: /HotStocks
      */
     List<HotStockVO> getHotStock() throws Exception;
+
 }
