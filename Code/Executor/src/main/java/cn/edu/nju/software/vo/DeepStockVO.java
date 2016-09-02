@@ -33,4 +33,18 @@ public class DeepStockVO {
     public void setDeepPrice(double deepPrice) {
         this.deepPrice = deepPrice;
     }
+
+
+    /**
+     * toString 是为了测试用的
+     * @return
+     */
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("DeepStockVO{");
+        sb.append("timeline='").append(timeline).append('\'');
+        sb.append(", deepPrice=").append(deepPrice);
+        sb.append('}');
+        return sb.toString();
+    }
 }
