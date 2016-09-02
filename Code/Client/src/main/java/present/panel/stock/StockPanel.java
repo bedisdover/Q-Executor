@@ -4,6 +4,9 @@ import bl.GetStockDataServiceImpl;
 import blservice.GetStockDataService;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 import present.charts.KLine;
+import present.panel.error.ErrorPanel;
+import present.panel.loading.LoadingPanel;
+import present.panel.progress.ProgressPanel;
 import vo.StockBasicInfoVO;
 
 import javax.swing.*;
@@ -94,7 +97,8 @@ public class StockPanel extends JPanel {
                     break;
                 case "TimeSeriesPanel":
                     if (timeSeriesPanel == null) {
-                        timeSeriesPanel = new TimeSeriesPanel(stockCode);
+//                        timeSeriesPanel = new TimeSeriesPanel(stockCode);
+                        timeSeriesPanel = new ErrorPanel();
                     }
 
                     centerPanel = timeSeriesPanel;
@@ -111,7 +115,7 @@ public class StockPanel extends JPanel {
                         generalPanel = new GeneralPanel(stockCode, currentDataPanel);
                     }
 
-                    centerPanel = generalPanel;
+                   centerPanel = generalPanel;
                     break;
                 case "SinglePanel":
                     if (singlePanel == null) {
@@ -128,6 +132,7 @@ public class StockPanel extends JPanel {
                     centerPanel = priceSharePanel;
                     break;
             }
+
 
             panel.add(centerPanel, BorderLayout.CENTER);
 
@@ -210,7 +215,7 @@ public class StockPanel extends JPanel {
                     westPanel.setBackground(new Color(0xeeeeee));
                     westPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 15));
 
-                    labelName = new JLabel("浦发银行");
+                    labelName = new JLabel("");
                     labelName.setFont(new Font("微软雅黑", Font.PLAIN, 20));
 
                     labelCode = new JLabel("(" + stockCode + ")");

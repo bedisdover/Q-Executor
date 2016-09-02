@@ -17,8 +17,8 @@ public class ImageLoader {
     public static Image light;
 
     static {
-        increase = new ImageIcon("images/increase.png");
-        decrease = new ImageIcon("images/decrease.png");
-        dull = new ImageIcon("images/dull.png");
-   }
+        increase = new ImageIcon("src/main/resources/images/increase.png");
+        decrease = new ImageIcon("src/main/resources/images/decrease.png");
+        dull = new ImageIcon("src/main/resources/images/dull.png");
+    }
 }
