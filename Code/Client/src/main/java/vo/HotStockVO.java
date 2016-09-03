@@ -17,6 +17,11 @@ public class HotStockVO implements Comparable{
      * 最近一个交易日的涨跌额
      */
     private double pchange;
+
+    /**
+     * 当前的价格
+     */
+    private String currentPrice;
     /**
      * 上榜原因
      */
@@ -26,10 +31,22 @@ public class HotStockVO implements Comparable{
      */
     private String date;
 
+
+
     public HotStockVO(String code, String name, double pchange, String reason, String date) {
         this.code = code;
         this.name = name;
         this.pchange = pchange;
+        this.reason = reason;
+        this.date = date;
+        this.currentPrice = "--";
+    }
+
+    public HotStockVO(String code, String name, double pchange, String currentPrice, String reason, String date) {
+        this.code = code;
+        this.name = name;
+        this.pchange = pchange;
+        this.currentPrice = currentPrice;
         this.reason = reason;
         this.date = date;
     }
@@ -77,6 +94,14 @@ public class HotStockVO implements Comparable{
         this.date = date;
     }
 
+    public String getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(String currentPrice) {
+        this.currentPrice = currentPrice;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -98,18 +123,6 @@ public class HotStockVO implements Comparable{
     }
 
     @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("HotStockVO{");
-        sb.append("code='").append(code).append('\'');
-        sb.append(", name='").append(name).append('\'');
-        sb.append(", pchange=").append(pchange);
-        sb.append(", reason='").append(reason).append('\'');
-        sb.append(", date='").append(date).append('\'');
-        sb.append('}');
-        return sb.toString();
-    }
-
-    @Override
     public int compareTo(Object o) {
         if (((HotStockVO)o).getReason().length()>this.getReason().length()){
             return 1;
@@ -118,5 +131,17 @@ public class HotStockVO implements Comparable{
         }else {
             return -1;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "HotStockVO{" +
+                "code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", pchange=" + pchange +
+                ", currentPrice='" + currentPrice + '\'' +
+                ", reason='" + reason + '\'' +
+                ", date='" + date + '\'' +
+                '}';
     }
 }

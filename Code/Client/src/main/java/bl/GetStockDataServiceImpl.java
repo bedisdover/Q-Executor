@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import util.StockUtil;
 import vo.*;
 import blservice.GetStockDataService;
 
@@ -206,6 +207,18 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 			List<HotStockVO> stockVOList = getStockVOsByJson(array);
 			Collections.sort(stockVOList);
 			stockVOs = stockVOList.subList(0,15);
+
+			url="http://hq.sinajs.cn/list=";
+			for (HotStockVO vo:stockVOs){
+				String info = getContentFromURL(url+ StockUtil.getCode(vo.getCode()));
+				try {
+					vo.setCurrentPrice(info.split(",")[3]);
+				}catch (Exception e){
+					vo.setCurrentPrice("--");
+					continue;
+				}
+			}
+
 			return stockVOs;
 
 		} catch (JSONException e) {
