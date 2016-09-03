@@ -110,9 +110,7 @@ public class TimeSeriesChart {
         private TimeSeriesCollection timeSeriesCollection;
 
         TimeSeriesVO(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
-            TimeSeries timeSeries1 = null;
-            TimeSeries1 = new TimeSeries("price");
-
+            TimeSeries timeSeries1 = new TimeSeries("price");
             TimeSeries timeSeries2 = new TimeSeries("average price");
 
             StockTimeSeriesVO stockVO;
