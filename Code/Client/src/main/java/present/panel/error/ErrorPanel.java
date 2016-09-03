@@ -1,6 +1,7 @@
 package present.panel.error;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Created by song on 16-9-1.
@@ -17,12 +18,13 @@ public class ErrorPanel extends JPanel {
 
     private void createUIComponents() {
         SwingUtilities.invokeLater(() -> {
-            this.setLayout(null);
+            this.setLayout(new GridLayout(3, 1));
 
+            this.add(new JPanel());
             label = new JLabel(new ImageIcon("src/main/resources/images/error.png"));
-            label.setBounds(100, 200, 180, 170);
 
             this.add(label);
+            this.add(new JPanel());
             this.repaint();
         });
     }

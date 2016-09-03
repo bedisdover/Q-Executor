@@ -11,6 +11,8 @@ import vo.StockBasicInfoVO;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -97,8 +99,7 @@ public class StockPanel extends JPanel {
                     break;
                 case "TimeSeriesPanel":
                     if (timeSeriesPanel == null) {
-//                        timeSeriesPanel = new TimeSeriesPanel(stockCode);
-                        timeSeriesPanel = new ErrorPanel();
+                        timeSeriesPanel = new TimeSeriesPanel(stockCode);
                     }
 
                     centerPanel = timeSeriesPanel;
@@ -115,7 +116,7 @@ public class StockPanel extends JPanel {
                         generalPanel = new GeneralPanel(stockCode, currentDataPanel);
                     }
 
-                   centerPanel = generalPanel;
+                    centerPanel = generalPanel;
                     break;
                 case "SinglePanel":
                     if (singlePanel == null) {
@@ -131,8 +132,10 @@ public class StockPanel extends JPanel {
 
                     centerPanel = priceSharePanel;
                     break;
+                case "ErrorPanel":
+                    centerPanel = new ErrorPanel();
+                    break;
             }
-
 
             panel.add(centerPanel, BorderLayout.CENTER);
 
@@ -145,18 +148,26 @@ public class StockPanel extends JPanel {
      * 获取基本数据，用于设置namePanel及currentDataPanel中的BasicInfoPanel
      */
     private void getData() {
-        SwingWorker worker = new SwingWorker() {
+        SwingWorker<StockBasicInfoVO, Void> worker = new SwingWorker<StockBasicInfoVO, Void>() {
             @Override
-            protected Object doInBackground() throws Exception {
+            protected StockBasicInfoVO doInBackground() throws Exception {
                 GetStockDataService stockDataService = new GetStockDataServiceImpl();
 
-                return stockDataService.getBasicInfo(stockCode);
+                StockBasicInfoVO stockBasicInfoVO = null;
+                try {
+                    stockBasicInfoVO = stockDataService.getBasicInfo(stockCode);
+                } catch(Exception e) {
+                    createCenterPanel("ErrorPanel");
+                    e.printStackTrace();
+                }
+
+                return stockBasicInfoVO;
             }
 
             @Override
             protected void done() {
                 try {
-                    StockBasicInfoVO stockBasicInfoVO = (StockBasicInfoVO) get();
+                    StockBasicInfoVO stockBasicInfoVO = get();
 
                     namePanel.setName(stockBasicInfoVO.getName());
                     currentDataPanel.setBasicInfo(stockBasicInfoVO);

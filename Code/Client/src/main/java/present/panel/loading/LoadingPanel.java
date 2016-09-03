@@ -11,6 +11,16 @@ import java.awt.*;
 public class LoadingPanel extends JPanel {
     private JPanel panel;
 
+    /**
+     * 渐变标记
+     */
+    private boolean flag;
+
+    /**
+     * 透明度
+     */
+    private float opacity = 1;
+
     public LoadingPanel() {
         panel = this;
         createUIComponents();
@@ -28,26 +38,6 @@ public class LoadingPanel extends JPanel {
 
             this.add(label);
             this.repaint();
-        });
-    }
-
-    /**
-     * 停止加载动画, 渐变消失，完全消失后加入新的面板
-     *
-     * @param container 容器对象，包含动画面板
-     * @param target    目标对象，动画结束后添加的面板
-     */
-    public void stopLoading(JPanel container, JPanel target) {
-        SwingUtilities.invokeLater(() -> {
-            new Thread() {
-                @Override
-                public void run() {
-                    double opaque = 1;
-
-                    for (int i = 0; i < 10; i++) {
-                    }
-                }
-            };
         });
     }
 }

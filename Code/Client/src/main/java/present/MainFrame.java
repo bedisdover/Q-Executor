@@ -44,6 +44,7 @@ public class MainFrame extends JFrame{
         this.setVisible(true);
         this.pack();
         this.setFrameAtCenter();
+        SwingUtilities.invokeLater(() -> this.setResizable(false));
     }
 
     private void addComponents() {

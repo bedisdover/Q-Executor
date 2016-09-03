@@ -19,6 +19,8 @@ public class SinglePanel extends JPanel {
 
     private JPanel panel;
 
+    private LoadingPanel loadingPanel;
+
     public SinglePanel(String stockCode) {
         panel = this;
 
@@ -30,7 +32,8 @@ public class SinglePanel extends JPanel {
         SwingUtilities.invokeLater(() -> {
             panel.setLayout(new BorderLayout());
 
-            panel.add(new LoadingPanel(), BorderLayout.CENTER);
+            loadingPanel = new LoadingPanel();
+            panel.add(loadingPanel, BorderLayout.CENTER);
         });
     }
 
