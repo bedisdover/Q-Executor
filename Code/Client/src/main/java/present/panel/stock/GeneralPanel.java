@@ -245,6 +245,8 @@ public class GeneralPanel extends JPanel {
         }
 
         MyTable table = new MyTable(data, names);
+        // 渲染“价格变动”的颜色
+        table.setDefaultRenderer(Object.class, new MyRenderer(2));
         JScrollPane scrollPane = table.createTable();
 
         scrollPane.setPreferredSize(new Dimension(table.getColumnModel().getTotalColumnWidth() + 28, 300));

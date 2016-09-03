@@ -1,11 +1,11 @@
 package present.panel.stock;
 
+import present.utils.ColorUtil;
+
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
+import javax.swing.table.*;
 import java.awt.*;
+import java.awt.geom.Arc2D;
 
 /**
  * Created by song on 2016/8/27
@@ -14,8 +14,14 @@ import java.awt.*;
  */
 class MyTable extends JTable {
 
+    /**
+     * 表格数据
+     */
     private Object[][] data;
 
+    /**
+     * 列名
+     */
     private String[] columnNames;
 
     MyTable(Object[][] data, String[] columnNames) {
@@ -72,3 +78,75 @@ class MyTable extends JTable {
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     }
 }
+
+class MyRenderer implements TableCellRenderer {
+
+    private static final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
+
+    private JTable table;
+
+    /**
+     * 列号数组，可能有多个
+     */
+    private int[] columnList;
+
+    /**
+     * 创建基于指定列的渲染器, 对字体颜色进行渲染
+     *
+     * @param columnNum 列号, 0-base
+     */
+    MyRenderer(int... columnNum) {
+        this.columnList = columnNum;
+    }
+
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value,
+                                                   boolean isSelected, boolean hasFocus, int row, int column) {
+        this.table = table;
+
+        Component renderer = DEFAULT_RENDERER.getTableCellRendererComponent(table, value,
+                isSelected, hasFocus, row, column);
+
+        if (!isTarget(column)) {
+            renderer.setForeground(Color.BLACK);
+        } else {
+            renderer.setForeground(getColor(row, column));
+        }
+
+        return renderer;
+    }
+
+    /**
+     * 判断指定列是否为渲染目标
+     *
+     * @param column 列号
+     */
+    private boolean isTarget(int column) {
+        for (int temp : columnList) {
+            if (column == temp) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * 获取渲染色
+     *
+     * @param row    行号
+     * @param column 列号
+     */
+    private Color getColor(int row, int column) {
+        Object temp = table.getValueAt(row, column);
+
+        if (temp instanceof Double) {
+            return ColorUtil.getTextColor((Double) table.getValueAt(row, column));
+        } else if(temp instanceof String) {
+            return ColorUtil.getTextColor((String) table.getValueAt(row, column));
+        }
+
+        return Color.BLACK;
+    }
+}
+

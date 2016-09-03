@@ -1,9 +1,7 @@
 package present.panel.stock;
 
 import util.NumberUtil;
-import util.TimeUtil;
 import vo.StockBasicInfoVO;
-import vo.StockKLineVO;
 
 import javax.swing.*;
 import java.awt.*;
@@ -81,19 +79,19 @@ class BasicInfoPanel extends JPanel {
             {
                 Box eastBox = Box.createVerticalBox();
 
-                name = new MyLabel("浦发银行");
-                industry = new MyLabel("金融行业");
-                area = new MyLabel("上海");
-                liquid = new MyLabel("6.00亿");
-                total = new MyLabel("7.67亿");
-                totalAssets = new MyLabel("98.00亿");
-                liquidAssets = new MyLabel("46.34亿");
-                fixedAssets = new MyLabel("53.23亿");
-                reserved = new MyLabel("2345元");
-                reservedPerShare = new MyLabel("0.10元");
-                eps = new MyLabel("0.11元");
-                bvps = new MyLabel("1.64元");
-                timeToMarket = new MyLabel("2011-04-26");
+                name = new MyLabel(" -- ");
+                industry = new MyLabel(" -- ");
+                area = new MyLabel(" -- ");
+                liquid = new MyLabel(" -- ");
+                total = new MyLabel(" -- ");
+                totalAssets = new MyLabel(" -- ");
+                liquidAssets = new MyLabel(" -- ");
+                fixedAssets = new MyLabel(" -- ");
+                reserved = new MyLabel(" -- ");
+                reservedPerShare = new MyLabel(" -- ");
+                eps = new MyLabel(" -- ");
+                bvps = new MyLabel(" -- ");
+                timeToMarket = new MyLabel(" -- ");
 
                 eastBox.add(name);
                 eastBox.add(industry);
@@ -142,6 +140,7 @@ class BasicInfoPanel extends JPanel {
 
     /**
      * 转换时间
+     *
      * @return 日期格式： yyyy/MM/dd
      */
     private String getDate(Date date) {

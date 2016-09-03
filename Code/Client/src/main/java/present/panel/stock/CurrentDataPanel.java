@@ -2,6 +2,7 @@ package present.panel.stock;
 
 import bl.GetStockDataServiceImpl;
 import blservice.GetStockDataService;
+import present.utils.ColorUtil;
 import present.utils.ImageLoader;
 import util.NumberUtil;
 import vo.StockBasicInfoVO;
@@ -132,16 +133,16 @@ class CurrentDataPanel extends JPanel {
     }
 
     /**
-     * @see GeneralPanel
      * @return 成交量
+     * @see GeneralPanel
      */
     double getAmount() {
         return stockNowTimeVO.getAmount();
     }
 
     /**
-     * @see GeneralPanel
      * @return 成交额
+     * @see GeneralPanel
      */
     double getVolume() {
         return stockNowTimeVO.getVolume();
@@ -187,16 +188,15 @@ class CurrentDataPanel extends JPanel {
                     JPanel northPanel = new JPanel();
 
                     northPanel.setBackground(new Color(0xeeeeee));
-                    northPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+                    northPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 10));
 
-                    price = new JLabel("--");
+                    price = new JLabel(" -- ");
                     price.setFont(new Font("微软雅黑", Font.PLAIN, 16));
                     price.setToolTipText("最新价格");
-                    inc_dec = new JLabel(ImageLoader.increase);
-                    inc_dec.setBounds(0, 0, 100, 100);
-                    incNum = new JLabel("234");
+                    inc_dec = new JLabel();
+                    incNum = new JLabel(" -- ");
                     incNum.setToolTipText("涨跌额");
-                    incRate = new JLabel("(234)");
+                    incRate = new JLabel(" (--) ");
                     incRate.setToolTipText("涨跌幅");
 
                     northPanel.add(price);
@@ -215,7 +215,7 @@ class CurrentDataPanel extends JPanel {
                     southPanel.setBackground(new Color(0xeeeeee));
                     southPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-                    time = new JLabel("2016年08月26日 14:03:21");
+                    time = new JLabel("--年--月--日 --:--:--");
 
                     southPanel.add(time);
 
@@ -229,9 +229,11 @@ class CurrentDataPanel extends JPanel {
         void setData(StockNowTimeVO stockNowTimeVO) {
             SwingUtilities.invokeLater(() -> {
                 double temp = stockNowTimeVO.getIncNum();
-                Color color = temp >= 0 ? Color.RED : Color.GREEN;
+                Color color = ColorUtil.getTextColor(temp);
+                ImageIcon icon = ColorUtil.getIcon(temp);
 
                 price.setText(NumberUtil.transferUnit(stockNowTimeVO.getPrice()));
+                inc_dec.setIcon(icon);
                 incNum.setText(temp + "");
                 incRate.setText("(" + stockNowTimeVO.getIncRate() + "%)");
                 incNum.setForeground(color);
@@ -316,16 +318,16 @@ class CurrentDataPanel extends JPanel {
                 {
                     Box eastPanel = Box.createVerticalBox();
 
-                    open = new MyLabel("23.43");
-                    close = new MyLabel("12.54");
-                    high = new MyLabel("22.21");
-                    low = new MyLabel("20.12");
-                    amplitude = new MyLabel("1.67%");
-                    turnOver = new MyLabel("2.43%");
-                    amount = new MyLabel("4.41万手");
-                    volume = new MyLabel("3.05亿元");
-                    pe = new MyLabel("68.02");
-                    pb = new MyLabel("20.87");
+                    open = new MyLabel(" -- ");
+                    close = new MyLabel(" -- ");
+                    high = new MyLabel(" -- ");
+                    low = new MyLabel(" -- ");
+                    amplitude = new MyLabel(" -- ");
+                    turnOver = new MyLabel(" -- ");
+                    amount = new MyLabel(" -- ");
+                    volume = new MyLabel(" -- ");
+                    pe = new MyLabel(" -- ");
+                    pb = new MyLabel(" -- ");
 
                     eastPanel.add(open);
                     eastPanel.add(close);
