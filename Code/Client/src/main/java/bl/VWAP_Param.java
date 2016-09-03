@@ -21,19 +21,15 @@ public class VWAP_Param {
 	//总时间段数量
 	private int timeSliceNum;
 
-	//风险偏好
-	private int riskPrefer;
-
 	//是否在规定时间一定全部交易完
 	private boolean tradeAll;
 
-	public VWAP_Param(long userVol, String stockid, double delta, int timeNode, int timeSliceNum, int riskPrefer, boolean tradeAll) {
+	public VWAP_Param(long userVol, String stockid, double delta, int timeNode, int timeSliceNum, boolean tradeAll) {
 		this.userVol = userVol;
 		this.stockid = stockid;
 		this.delta = delta;
 		this.timeNode = timeNode;
 		this.timeSliceNum = timeSliceNum;
-		this.riskPrefer = riskPrefer;
 		this.tradeAll = tradeAll;
 	}
 
@@ -78,14 +74,6 @@ public class VWAP_Param {
 
 	public void setTimeSliceNum(int timeSliceNum) {
 		this.timeSliceNum = timeSliceNum;
-	}
-
-	public int getRiskPrefer() {
-		return riskPrefer;
-	}
-
-	public void setRiskPrefer(int riskPrefer) {
-		this.riskPrefer = riskPrefer;
 	}
 
 	public boolean isTradeAll() {

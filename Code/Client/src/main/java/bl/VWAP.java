@@ -25,11 +25,18 @@ public class VWAP implements VWAPService {
 	}
 
 	public List<VolumeVO> predictVn(VWAP_Param param) throws Exception{
+
+		//已交易比例阈值
+		double volThre = 0.8;
+
+		//时间阈值
+		double timrThre = 220.0/240;
+
 		//交易量概率密度
 		List<Double> Pn;
         MLForVWAPService ml = new MLForVWAPServiceImpl();
         MLForVWAPPriceVO priceVO;
-		if(param.getTimeNode()==0 || !stockPnMap.containsKey(param.getStockid())){
+		if(param.getTimeNode()==1 || !stockPnMap.containsKey(param.getStockid())){
 			//从机器学习处获得静态预测的Vn和Wn
 			List<Integer> Vn = ml.getStaticVol(param.getStockid());
             priceVO = ml.getDynamicPrice(param.getStockid());
@@ -39,8 +46,16 @@ public class VWAP implements VWAPService {
 			stockPnMap.put(param.getStockid(), Pn);
 		}
 		
-		Pn=stockPnMap.get(param.getStockid()); 
-		if(param.getTimeNode()>0){
+		Pn=stockPnMap.get(param.getStockid());
+
+
+        double gama = 0;
+        for(int i = param.getTimeNode()-1;i<Pn.size();i++){
+            gama += Pn.get(i);
+        }
+        if(gama>=volThre || 1.0*param.getTimeNode()/param.getTimeSliceNum() >=timrThre){
+
+        }else if(param.getTimeNode()>1){
             priceVO = ml.getDynamicPrice(param.getStockid());
             //判断预测的当前时间段是否有误差
             if(priceVO.getCurrentTime() == param.getTimeNode()){
@@ -59,13 +74,25 @@ public class VWAP implements VWAPService {
             }
 
 		}
-		List<Integer> Vn = new ArrayList<Integer>();
-		for(int i=0;i<Pn.size();i++){
-			int vi=Double.valueOf(param.getUserVol()*Pn.get(i)).intValue();
-			Vn.add(vi);
-		}
+		List<Integer> Vn = calcVn(Pn,param);
 		return  getVolumeVOList(Vn,param.getTimeSliceNum());
 	}
+
+    /**
+     *
+     * @param Pn
+     * @param param
+     * @return
+     */
+    private List<Integer> calcVn(List<Double> Pn,VWAP_Param param){
+        List<Integer> Vn = new ArrayList<Integer>();
+        for(int i=0;i<Pn.size();i++){
+            int vi=Double.valueOf(param.getUserVol()*Pn.get(i)).intValue();
+            Vn.add(vi);
+        }
+        return Vn;
+    }
+
 
 	/**
 	 * 将预测的交易量加上时间片标记
