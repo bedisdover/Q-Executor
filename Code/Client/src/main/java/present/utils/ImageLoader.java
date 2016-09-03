@@ -1,7 +1,6 @@
 package present.utils;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * Created by song on 16-8-26.
@@ -14,11 +13,9 @@ public class ImageLoader {
      */
     public static ImageIcon increase, decrease, dull;
 
-    public static Image light;
-
     static {
-        increase = new ImageIcon("images/increase.png");
-        decrease = new ImageIcon("images/decrease.png");
-        dull = new ImageIcon("images/dull.png");
-   }
+        increase = new ImageIcon("src/main/resources/images/increase.png");
+        decrease = new ImageIcon("src/main/resources/images/decrease.png");
+        dull = new ImageIcon("src/main/resources/images/dull.png");
+    }
 }

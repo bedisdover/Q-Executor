@@ -199,17 +199,17 @@ class SouthPanel extends JPanel {
             {
                 Box centerBox = Box.createVerticalBox();
 
-                sell5price = new MyLabel("164.47");
-                sell4price = new MyLabel("167.74");
-                sell3price = new MyLabel("165.23");
-                sell2price = new MyLabel("167.4");
-                sell1price = new MyLabel("167.38");
-                price = new MyLabel("167.36");
-                buy1price = new MyLabel("167.36");
-                buy2price = new MyLabel("167.36");
-                buy3price = new MyLabel("167.36");
-                buy4price = new MyLabel("167.36");
-                buy5price = new MyLabel("167.36");
+                sell5price = new MyLabel(" -- ");
+                sell4price = new MyLabel(" -- ");
+                sell3price = new MyLabel(" -- ");
+                sell2price = new MyLabel(" -- ");
+                sell1price = new MyLabel(" -- ");
+                price = new MyLabel(" -- ");
+                buy1price = new MyLabel(" -- ");
+                buy2price = new MyLabel(" -- ");
+                buy3price = new MyLabel(" -- ");
+                buy4price = new MyLabel(" -- ");
+                buy5price = new MyLabel(" -- ");
 
                 centerBox.add(sell5price);
                 centerBox.add(sell4price);
@@ -229,17 +229,17 @@ class SouthPanel extends JPanel {
             {
                 Box eastBox = Box.createVerticalBox();
 
-                sell5amount = new MyLabel("--");
-                sell4amount = new MyLabel("--");
-                sell3amount = new MyLabel("--");
-                sell2amount = new MyLabel("--");
-                sell1amount = new MyLabel("--");
+                sell5amount = new MyLabel(" -- ");
+                sell4amount = new MyLabel(" -- ");
+                sell3amount = new MyLabel(" -- ");
+                sell2amount = new MyLabel(" -- ");
+                sell1amount = new MyLabel(" -- ");
                 amount = new MyLabel(" ");
-                buy1amount = new MyLabel("--");
-                buy2amount = new MyLabel("--");
-                buy3amount = new MyLabel("--");
-                buy4amount = new MyLabel("--");
-                buy5amount = new MyLabel("--");
+                buy1amount = new MyLabel(" -- ");
+                buy2amount = new MyLabel(" -- ");
+                buy3amount = new MyLabel(" -- ");
+                buy4amount = new MyLabel(" -- ");
+                buy5amount = new MyLabel(" -- ");
 
                 eastBox.add(sell5amount);
                 eastBox.add(sell4amount);

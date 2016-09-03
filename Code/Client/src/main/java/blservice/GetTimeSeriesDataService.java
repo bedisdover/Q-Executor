@@ -1,10 +1,7 @@
 package blservice;
 
-import org.json.JSONException;
 import vo.StockTimeSeriesVO;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.List;
 
 /**
@@ -19,8 +16,5 @@ public interface GetTimeSeriesDataService {
      * @return 分时数据
      * @throws Exception 
      */
-
-
     List<StockTimeSeriesVO> getData(String codeNum) throws Exception;
-
 }

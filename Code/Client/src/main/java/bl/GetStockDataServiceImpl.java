@@ -68,7 +68,7 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 	}
 
 	public StockBasicInfoVO getBasicInfo(String codeNum) throws Exception {
-		String url="http://121.42.143.164/BasicComInfo?codeNum=sh600000";
+		String url="http://121.42.143.164/BasicComInfo?codeNum=" + codeNum;
 		StockBasicInfoVO stockBasicInfoVO=new StockBasicInfoVO();
 			URL ur=new URL(url);
 			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
@@ -108,10 +108,12 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 			for(int i=0;i<size;i++){
 				StockInfoByPrice stockKLineVO=new StockInfoByPrice();
 				JSONObject jsonObj=jsonArray.getJSONObject(i);
-				stockKLineVO.setPercent(jsonObj.getDouble("percent"));
-				stockKLineVO.setPrice(jsonObj.getDouble("price"));
-				stockKLineVO.setTrunover(jsonObj.getDouble("trunover"));
-				stockList.add(stockKLineVO);
+				if (jsonObj.getDouble("price") != 0.0) {
+					stockKLineVO.setPercent(jsonObj.getDouble("percent"));
+					stockKLineVO.setPrice(jsonObj.getDouble("price"));
+					stockKLineVO.setTrunover(jsonObj.getDouble("trunover"));
+					stockList.add(stockKLineVO);
+				}
 			}
 		return stockList;
 	}
@@ -137,19 +139,35 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 			for(int i=0;i<size;i++){
 				StockInfoByPer stockKLineVO=new StockInfoByPer();
 				JSONObject jsonObj=jsonArray.getJSONObject(i);
-				stockKLineVO.setTime(jsonObj.getString("time"));
-				stockKLineVO.setPrice(jsonObj.getDouble("price"));
-				stockKLineVO.setVolume(jsonObj.getDouble("volume"));
-				stockKLineVO.setType(jsonObj.getInt("type"));
-				stockKLineVO.setChange_price(jsonObj.getDouble("change_price"));
-				stockKLineVO.setTotalNum(jsonObj.getDouble("totalNum"));
-				stockList.add(stockKLineVO);
+				if (jsonObj.getDouble("volume") != 0) {
+                    stockKLineVO.setTime(jsonObj.getString("time"));
+                    stockKLineVO.setPrice(jsonObj.getDouble("price"));
+                    stockKLineVO.setVolume(jsonObj.getDouble("volume"));
+                    stockKLineVO.setType(jsonObj.getInt("type"));
+                    stockKLineVO.setChange_price(jsonObj.getDouble("change_price"));
+                    stockKLineVO.setTotalNum(jsonObj.getDouble("totalNum"));
+                    stockList.add(stockKLineVO);
+				}
 			}
 		return stockList;
 	}
 
 	public List<DeepStockVO> getStockDepth(String codeNum) throws Exception {
-		return null;
+		String url="http://121.42.143.164/DeepStock?codeNum="+codeNum;
+		List<DeepStockVO> stockList=new ArrayList<DeepStockVO>();
+		URL ur=new URL(url);
+		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
+		String line=reader.readLine();
+		JSONArray jsonArray=new JSONArray(line);
+		int size=jsonArray.length();
+		for(int i=0;i<size;i++){
+			DeepStockVO stockKLineVO=new DeepStockVO();
+			JSONObject jsonObj=jsonArray.getJSONObject(i);
+			stockKLineVO.setTimeline(jsonObj.getString("timeline"));
+			stockKLineVO.setDeepPrice(jsonObj.getDouble("deepPrice"));
+			stockList.add(stockKLineVO);
+		}
+	return stockList;
 	}
 
 	public List<HotStockVO> getHotStock() throws Exception {
@@ -254,13 +272,18 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 		}
 	}
 //	public static void main(String [] args){
-//		String url="http://121.42.143.164/DeepStock";
+//		String url="http://121.42.143.164/DeepStock?codeNum=sh600000";
 //		StockBasicInfoVO stockBasicInfoVO=new StockBasicInfoVO();
 //		try {
 //			URL ur=new URL(url);
 //			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
 //			String line=reader.readLine();
-//	
+//			JSONArray jsonArray=new JSONArray(line);
+//			int size=jsonArray.length();
+//			for(int i=0;i<size;i++){
+//				JSONObject jsonObj=jsonArray.getJSONObject(i);
+//				System.out.println(jsonObj.get("time"));
+//			}
 //			System.out.println(line);
 //		
 //		} catch (Exception e) {
@@ -269,7 +292,7 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 //		}
 //		GetStockDataServiceImpl A=new GetStockDataServiceImpl();
 //		try {
-//			System.out.println(A.getHotStock().get(0).getName());
+//			System.out.println(A.getStockDepth("sh600000").get(0).getDeepPrice());
 //		} catch (Exception e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();

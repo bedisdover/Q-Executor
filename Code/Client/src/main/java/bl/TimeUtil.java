@@ -10,6 +10,9 @@ import java.util.Date;
  */
 public class TimeUtil {
 
+    private static int allTimeLength = 240;
+
+
     /**
      * 获取当前时间片
      * @param timeNum 时间片数量
@@ -41,12 +44,21 @@ public class TimeUtil {
     }
 
     /**
-     * 强时间片数量转换为时间片长度，单位：分钟
+     * 将时间片数量转换为时间片长度，单位：分钟
      * @param timeNum 时间片数量
      * @return 时间片长度
      */
     private static int timeNumTOLength(int timeNum){
-        return 240/timeNum;
+        return allTimeLength/timeNum;
+    }
+
+    /**
+     * 将时间片长度转换为时间片总数，
+     * @param timeLength 时间片长度，单位：分钟
+     * @return 时间片数量
+     */
+    public static int timeLengthToNum(int timeLength){
+        return allTimeLength/timeLength;
     }
 
     /**
@@ -57,7 +69,7 @@ public class TimeUtil {
      */
     public static String timeNodeToDate(int timeNode, int timeNum){
         Calendar calendar=Calendar.getInstance();
-        int timeLength = 240/timeNum;
+        int timeLength = allTimeLength/timeNum;
         if(timeNode<(timeNum/2)){
             calendar.set(Calendar.HOUR_OF_DAY,9);
             calendar.set(Calendar.MINUTE,30);

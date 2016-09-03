@@ -1,6 +1,8 @@
 package present.panel.stock;
 
+import bl.GetStockDataServiceImpl;
 import bl.SelfSelectServiceImpl;
+import blservice.GetStockDataService;
 import blservice.SelfSelectService;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,11 +13,13 @@ import present.component.TextPlusBtn;
 import present.panel.account.LoginPanel;
 import present.utils.StockJsonInfo;
 import util.JsonUtil;
+import vo.HotStockVO;
 import vo.NowTimeSelectedStockInfoVO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -37,7 +41,13 @@ public class SearchPanel extends JPanel {
 
     private SelfSelectService self = new SelfSelectServiceImpl();
 
+    private GetStockDataService hotStocks = new GetStockDataServiceImpl();
+
     private PanelSwitcher switcher;
+
+    private DefaultTableModel hotTableModel;
+
+    private MyTable hotTable;
 
     public SearchPanel(PanelSwitcher switcher) {
         this.switcher = switcher;
@@ -56,9 +66,9 @@ public class SearchPanel extends JPanel {
             for (JSONObject obj : list) {
                 try {
                     v.addElement(
-                        obj.getString(StockJsonInfo.KEY_CODE) + spliter
-                        + obj.getString(StockJsonInfo.KEY_NAME) + spliter
-                        + obj.getString(StockJsonInfo.KEY_INDUSTRY)
+                            obj.getString(StockJsonInfo.KEY_CODE) + spliter
+                                    + obj.getString(StockJsonInfo.KEY_NAME) + spliter
+                                    + obj.getString(StockJsonInfo.KEY_INDUSTRY)
                     );
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -68,9 +78,7 @@ public class SearchPanel extends JPanel {
         });
         //设置下拉提示列表监听
         search.setListClickHandler((text) -> switcher.jump(new StockPanel(text.split(spliter)[0])));
-        search.setListFocusHandler((field, text) -> {
-            field.setText(text.split(spliter)[0]);
-        });
+        search.setListFocusHandler((field, text) -> field.setText(text.split(spliter)[1]));
         //设置确定按钮监听
         search.setBtnListener((e) -> {
             try {
@@ -93,9 +101,9 @@ public class SearchPanel extends JPanel {
         ));
         container.setOpaque(false);
         container.add(createSelfTable());
-//        container.add(Box.createHorizontalStrut(PADDING));
-//        container.add(createGeneralTable());
+
         container.add(createHotTable());
+        getData();
 
         //添加组件到主面板
         Box box = Box.createVerticalBox();
@@ -193,7 +201,8 @@ public class SearchPanel extends JPanel {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "网络异常");
         }
-        JTable self = createTable(model);
+        JTable self = new MyTable(model);
+
 
         JScrollPane pane = new JScrollPane(self);
         pane.setPreferredSize(new Dimension(
@@ -214,14 +223,14 @@ public class SearchPanel extends JPanel {
     private Box createHotTable() {
         Vector<String> header = new Vector<>(4);
         header.addElement("股票");
-        header.addElement("价格");
         header.addElement("涨跌额");
-        header.addElement("涨跌幅");
+        header.addElement("最新交易日");
         Vector<String> data = new Vector<>();
-        DefaultTableModel model = new DefaultTableModel(data, header);
-        JTable hot = createTable(model);
+        hotTableModel = new DefaultTableModel(data, header);
+        hotTable = new MyTable(hotTableModel);
 
-        JScrollPane pane = new JScrollPane(hot);
+
+        JScrollPane pane = new JScrollPane(hotTable);
         pane.setPreferredSize(new Dimension(
                 (MainFrame.PANEL_W / 3) - (PADDING << 1), TABLE_H - (PADDING << 1)
         ));
@@ -239,16 +248,6 @@ public class SearchPanel extends JPanel {
         box.add(pane);
         box.add(panel);
         return box;
-    }
-
-    private JTable createTable(DefaultTableModel model) {
-        return new JTable(model) {
-            private static final long serialVersionUID = 1L;
-            //设置表格不可编辑
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
     }
 
     private JPanel createLoginTip() {
@@ -275,5 +274,40 @@ public class SearchPanel extends JPanel {
         panel.add(down);
         panel.setOpaque(false);
         return panel;
+    }
+
+    private void getData() {
+        SwingWorker worker = new SwingWorker<List<HotStockVO>, Void>() {
+            @Override
+            protected List<HotStockVO> doInBackground() throws Exception {
+                try {
+                    return hotStocks.getHotStock();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return new ArrayList<>();
+                }
+            }
+
+            @Override
+            protected void done() {
+                super.done();
+                try {
+                    List<HotStockVO> hotDatas = get();
+                    for (HotStockVO vo : hotDatas) {
+                        Vector<String> v = new Vector<>();
+                        v.addElement(vo.getName());
+                        v.addElement(String.valueOf(vo.getPchange()));
+                        v.addElement(vo.getDate());
+                        hotTableModel.addRow(v);
+                    }
+                    hotTable.setRenderer(new MyRenderer(1), 3);
+                    hotTableModel.fireTableDataChanged();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        worker.execute();
     }
 }

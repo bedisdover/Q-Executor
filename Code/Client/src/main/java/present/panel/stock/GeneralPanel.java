@@ -27,7 +27,7 @@ public class GeneralPanel extends JPanel {
 
     private JLabel general_amount, general_volume, total_amount, total_volume;
 
-    private JPanel centerPanel, southPanel;
+    private JPanel chartPanel, centerPanel;
 
     private Box labelBox;
 
@@ -55,8 +55,10 @@ public class GeneralPanel extends JPanel {
 
     private void createUIComponents() {
         SwingUtilities.invokeLater(() -> {
+            JPanel northPanel = new JPanel(new BorderLayout());
             {
-                JPanel northPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+                // 选项面板
+                JPanel radioPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
 
                 JLabel label = new MyLabel("成交量大于等于(≥):");
 
@@ -70,14 +72,14 @@ public class GeneralPanel extends JPanel {
 
                 buttonGroup = new ButtonGroup();
 
-                northPanel.add(label);
-                northPanel.add(radio400);
-                northPanel.add(radio500);
-                northPanel.add(radio600);
-                northPanel.add(radio700);
-                northPanel.add(radio800);
-                northPanel.add(radio900);
-                northPanel.add(radio1000);
+                radioPanel.add(label);
+                radioPanel.add(radio400);
+                radioPanel.add(radio500);
+                radioPanel.add(radio600);
+                radioPanel.add(radio700);
+                radioPanel.add(radio800);
+                radioPanel.add(radio900);
+                radioPanel.add(radio1000);
                 buttonGroup.add(radio400);
                 buttonGroup.add(radio500);
                 buttonGroup.add(radio600);
@@ -86,13 +88,13 @@ public class GeneralPanel extends JPanel {
                 buttonGroup.add(radio900);
                 buttonGroup.add(radio1000);
 
-                panel.add(northPanel, BorderLayout.NORTH);
+                northPanel.add(radioPanel, BorderLayout.NORTH);
             }
 
             {
-                centerPanel = new JPanel(new BorderLayout());
+                chartPanel = new JPanel(new BorderLayout());
 
-                centerPanel.setPreferredSize(new Dimension(1, 300));
+                chartPanel.setPreferredSize(new Dimension(1, 200));
 
                 labelBox = Box.createVerticalBox();
                 labelBox.setPreferredSize(new Dimension(400, 1));
@@ -113,17 +115,17 @@ public class GeneralPanel extends JPanel {
                 labelBox.add(new MyLabel("  "));
                 labelBox.add(total_volume);
 
-                centerPanel.add(labelBox, BorderLayout.EAST);
+                chartPanel.add(labelBox, BorderLayout.EAST);
 
-                panel.add(centerPanel, BorderLayout.CENTER);
+                northPanel.add(chartPanel, BorderLayout.CENTER);
             }
 
+            panel.add(northPanel, BorderLayout.NORTH);
+
             {
-                southPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-                southPanel.setPreferredSize(new Dimension(1, 300));
-
-                panel.add(southPanel, BorderLayout.SOUTH);
+                panel.add(centerPanel, BorderLayout.CENTER);
             }
 
             addListeners();
@@ -181,13 +183,13 @@ public class GeneralPanel extends JPanel {
     @SuppressWarnings("unchecked")
     private void injectData(List stockInfoByComList) {
         SwingUtilities.invokeLater(() -> {
-            centerPanel.removeAll();
+            chartPanel.removeAll();
             JPanel chartPanel = GeneralPie.getPieChart(calculateAmount(stockInfoByComList), totalAmount);
-            centerPanel.add(chartPanel, BorderLayout.WEST);
-            centerPanel.add(labelBox, BorderLayout.EAST);
+            this.chartPanel.add(chartPanel, BorderLayout.WEST);
+            this.chartPanel.add(labelBox, BorderLayout.EAST);
 
-            southPanel.removeAll();
-            southPanel.add(createTable(stockInfoByComList));
+            centerPanel.removeAll();
+            centerPanel.add(createTable(stockInfoByComList));
 
             general_amount.setText("大单成交量: " +
                     NumberUtil.transferUnit(calculateAmount(stockInfoByComList)) + "手");
@@ -226,7 +228,7 @@ public class GeneralPanel extends JPanel {
 
     private JScrollPane createTable(List<StockInfoByCom> stockInfoByComList) {
         //字段名称
-        String[] names = {"交易时间", "成交价", "价格变动", "成交量(手)", "成交额(万元)", "交易总量", "买卖盘性质"};
+        String[] names = {"交易时间", "成交价", "价格变动", "成交量(手)", "成交额(万元)", "买卖盘性质"};
         Object[][] data = new Object[stockInfoByComList.size()][names.length];
 
         StockInfoByCom temp;
@@ -236,15 +238,17 @@ public class GeneralPanel extends JPanel {
             data[i] = new Object[]{
                     temp.getTime(),
                     temp.getPrice(),
-                    temp.getChange_price(),
+                    NumberUtil.round(temp.getChange_price(), 3),
                     temp.getVolume(),
-                    temp.getVolume() * temp.getPrice() / 1e4,
-                    temp.getTotal_number(),
+                    NumberUtil.round(temp.getVolume() * temp.getPrice() / 1e4),
                     temp.getType()
             };
         }
 
         MyTable table = new MyTable(data, names);
+        // 渲染“价格变动”的颜色
+        table.setRenderer(new MyRenderer(2, 5));
+
         JScrollPane scrollPane = table.createTable();
 
         scrollPane.setPreferredSize(new Dimension(table.getColumnModel().getTotalColumnWidth() + 28, 300));

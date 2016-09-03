@@ -2,6 +2,8 @@ package present.panel.stock;
 
 import bl.GetStockDataServiceImpl;
 import blservice.GetStockDataService;
+import present.panel.loading.LoadingPanel;
+import util.NumberUtil;
 import util.StockUtil;
 import vo.StockInfoByPer;
 
@@ -18,6 +20,8 @@ public class SinglePanel extends JPanel {
 
     private JPanel panel;
 
+    private LoadingPanel loadingPanel;
+
     public SinglePanel(String stockCode) {
         panel = this;
 
@@ -28,6 +32,9 @@ public class SinglePanel extends JPanel {
     private void init() {
         SwingUtilities.invokeLater(() -> {
             panel.setLayout(new BorderLayout());
+
+            loadingPanel = new LoadingPanel();
+            panel.add(loadingPanel, BorderLayout.CENTER);
         });
     }
 
@@ -59,6 +66,7 @@ public class SinglePanel extends JPanel {
         SwingUtilities.invokeLater(() -> {
             JScrollPane scrollPane = createTable(stockInfoByPerList);
 
+            panel.removeAll();
             panel.add(scrollPane, BorderLayout.WEST);
 
             panel.revalidate();
@@ -79,7 +87,7 @@ public class SinglePanel extends JPanel {
             data[i] = new Object[]{
                     temp.getTime(),
                     temp.getPrice(),
-                    temp.getChange_price(),
+                    NumberUtil.round(temp.getChange_price(), 3),
                     temp.getVolume(),
                     temp.getTotalNum() / 1e4,
                     StockUtil.getType(temp.getType())
@@ -87,6 +95,8 @@ public class SinglePanel extends JPanel {
         }
 
         MyTable table = new MyTable(data, names);
+        table.setRenderer(new MyRenderer(2, 5));
+
         JScrollPane scrollPane = table.createTable();
 
         scrollPane.setPreferredSize(new Dimension(table.getColumnModel().getTotalColumnWidth() + 28, 500));

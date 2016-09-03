@@ -2,6 +2,7 @@ package present.panel.stock;
 
 import bl.GetStockDataServiceImpl;
 import blservice.GetStockDataService;
+import present.panel.loading.LoadingPanel;
 import util.NumberUtil;
 import vo.StockInfoByPrice;
 
@@ -34,7 +35,9 @@ public class PriceSharePanel extends JPanel {
 
     private void init() {
         SwingUtilities.invokeLater(() -> {
-            panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+            panel.setLayout(new BorderLayout());
+
+            panel.add(new LoadingPanel(), BorderLayout.CENTER);
 
             panel.revalidate();
         });
@@ -68,7 +71,7 @@ public class PriceSharePanel extends JPanel {
     private void injectData(List stockInfoByPriceList) {
         SwingUtilities.invokeLater(() -> {
             panel.removeAll();
-            panel.add(createTable(stockInfoByPriceList));
+            panel.add(createTable(stockInfoByPriceList), BorderLayout.CENTER);
 
             panel.revalidate();
             panel.repaint();
@@ -82,7 +85,7 @@ public class PriceSharePanel extends JPanel {
         //采用自定义数据模型
 
         StockInfoByPrice temp;
-        for (int i = 0; i < data.length; i++) {
+        for (int i = 0; i < stockInfoByPriceList.size(); i++) {
             temp = stockInfoByPriceList.get(i);
 
             if (temp.getPrice() == 0) {
@@ -99,15 +102,18 @@ public class PriceSharePanel extends JPanel {
         }
 
         MyTableModel model = new MyTableModel(names, data);
-        JTable table = new MyTable(model);
+        MyTable table = new MyTable(model);
         //插入单元格元素，采用自定义元素
         new ProgressBarColumn(table, 3);
         table.getColumnModel().getColumn(3).setPreferredWidth(600);
+        //无法修改表头大小
+        table.getTableHeader().setResizingAllowed(false);
+        //无法拖动表头
+        table.getTableHeader().setReorderingAllowed(false);
 
         JScrollPane scrollPane = new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-//        scrollPane.setPreferredSize(new Dimension(table.getColumnModel().getTotalColumnWidth() + 28, 540));
         scrollPane.setPreferredSize(new Dimension(800, 540));
 
         return scrollPane;
@@ -115,13 +121,13 @@ public class PriceSharePanel extends JPanel {
 
 
     //自定义表格模型
-    class MyTableModel extends AbstractTableModel {
+    private class MyTableModel extends AbstractTableModel {
         //单元格元素类型
         private Class[] cellType = {String.class, String.class, String.class, JProgressBar.class};
         //表头
-        private String title[] = {};
+        private String title[];
         //模拟数据
-        private Object data[][] = {};
+        private Object data[][];
 
         MyTableModel(String[] columnNames, Object[][] data) {
             this.title = columnNames;
@@ -190,7 +196,7 @@ public class PriceSharePanel extends JPanel {
                 bar.setBorderPainted(true);
                 bar.setPreferredSize(new Dimension(100, 20));
                 MyTableModel tableModel = (MyTableModel) table.getModel();
-                bar.setMaximum((int) (tableModel.getMax() * 100) + 1);
+                bar.setMaximum((int) (tableModel.getMax() * 100) + 10);
 
                 TableColumnModel columnModel = table.getColumnModel();
                 columnModel.getColumn(column).setCellRenderer(this);
