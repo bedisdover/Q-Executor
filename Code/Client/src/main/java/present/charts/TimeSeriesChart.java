@@ -4,6 +4,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.*;
+import org.jfree.chart.encoders.EncoderUtil;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
@@ -14,6 +15,7 @@ import vo.StockTimeSeriesVO;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -107,8 +109,10 @@ public class TimeSeriesChart {
         private TimeSeriesCollection timeSeriesCollection;
 
         TimeSeriesVO(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
-            TimeSeries timeSeries1 = new TimeSeries("实时价格");
-            TimeSeries timeSeries2 = new TimeSeries("平均价格");
+            TimeSeries timeSeries1 = null;
+            TimeSeries1 = new TimeSeries("price");
+
+            TimeSeries timeSeries2 = new TimeSeries("average price");
 
             StockTimeSeriesVO stockVO;
             for (int i = stockTimeSeriesVOList.size() - 1; i >= 0; i--) {

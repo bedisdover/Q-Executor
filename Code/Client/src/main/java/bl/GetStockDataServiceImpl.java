@@ -23,7 +23,7 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 				StockNowTimeVO stockNowTimeVO=new StockNowTimeVO();
 				String url="http://hq.finance.ifeng.com/q.php?l="+codeNum[i];
 				URL ur=new URL(url);
-				BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
+				BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream(), "utf-8"));
 				String line=reader.readLine();
 				JSONObject jsonArray=new JSONObject(line.substring(11));
 				JSONArray a=(JSONArray)jsonArray.get(codeNum[i]);
@@ -68,7 +68,7 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 		String url="http://121.42.143.164/BasicComInfo?codeNum=" + codeNum;
 		StockBasicInfoVO stockBasicInfoVO=new StockBasicInfoVO();
 			URL ur=new URL(url);
-			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
+			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream(), "utf-8"));
 			String line=reader.readLine();
 			JSONObject jsonArray=new JSONObject(line);
 			stockBasicInfoVO.setCode(codeNum);
@@ -98,7 +98,7 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 		String url="http://121.42.143.164/StockInfoByPrice?codeNum="+codeNum;
 		List<StockInfoByPrice> stockList=new ArrayList<StockInfoByPrice>();
 			URL ur=new URL(url);
-			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
+			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream(), "utf-8"));
 			String line=reader.readLine();
 			JSONArray jsonArray=new JSONArray(line);
 			int size=jsonArray.length();
@@ -129,7 +129,7 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 		String url="http://121.42.143.164/PerStockInfo?codeNum="+codeNum;
 		List<StockInfoByPer> stockList=new ArrayList<StockInfoByPer>();
 			URL ur=new URL(url);
-			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
+			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream(), "utf-8"));
 			String line=reader.readLine();
 			JSONArray jsonArray=new JSONArray(line);
 			int size=jsonArray.length();
@@ -153,7 +153,7 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 		String url="http://121.42.143.164/DeepStock?codeNum="+codeNum;
 		List<DeepStockVO> stockList=new ArrayList<DeepStockVO>();
 		URL ur=new URL(url);
-		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
+		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream(), "utf-8"));
 		String line=reader.readLine();
 		JSONArray jsonArray=new JSONArray(line);
 		int size=jsonArray.length();
@@ -171,7 +171,7 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 		String url="http://121.42.143.164/HotStocks";
 		List<HotStockVO> stockList=new ArrayList<HotStockVO>();
 		URL ur=new URL(url);
-		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
+		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream(), "utf-8"));
 		String line=reader.readLine();
 		JSONArray jsonArray=new JSONArray(line);
 		int size=jsonArray.length();
@@ -191,7 +191,7 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 	public List<StockInfoByCom> getComStock(String url) throws Exception{
 		List<StockInfoByCom> stockList=new ArrayList<StockInfoByCom>();
 			URL ur=new URL(url);
-			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
+			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream(), "utf-8"));
 			String line=reader.readLine();
 			JSONArray jsonArray=new JSONArray(line);
 			int size=jsonArray.length();

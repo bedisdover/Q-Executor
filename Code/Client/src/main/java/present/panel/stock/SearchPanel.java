@@ -19,6 +19,8 @@ import vo.NowTimeSelectedStockInfoVO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -126,40 +128,6 @@ public class SearchPanel extends JPanel {
         );
     }
 
-    //    /**
-//     * 创建总体股票表格
-//     * @return 总体股票表格
-//     */
-//    private JScrollPane createGeneralTable() {
-//        //表格表头
-//        Vector<String> header = new Vector<>(6);
-//        header.addElement("名称");
-//        header.addElement("最新价");
-//        header.addElement("涨跌额");
-//        header.addElement("涨跌幅");
-//        header.addElement("成交量/手");
-//        header.addElement("成交额/万");
-//        //表格数据
-//        Vector<String> test = new Vector<>(6);
-//        test.addElement("阿司匹林");
-//        test.addElement("   1");
-//        test.addElement("   1");
-//        test.addElement("   1");
-//        test.addElement("   1");
-//        test.addElement("   1");
-//        Vector<String> data = new Vector<>();
-//        DefaultTableModel model = new DefaultTableModel(data, header);
-//        for (int i = 0; i < 16; ++i) model.addRow(test);
-//        //表格
-//        JTable general = createTable(model);
-//
-//        JScrollPane pane = new JScrollPane(general);
-//        pane.setPreferredSize(new Dimension(
-//                MainFrame.PANEL_W >> 1, TABLE_H
-//        ));
-//        return pane;
-//    }
-
     /**
      * 创建自选股票表格
      * @return 自选股票表格
@@ -202,7 +170,13 @@ public class SearchPanel extends JPanel {
             JOptionPane.showMessageDialog(this, "网络异常");
         }
         JTable self = new MyTable(model);
-
+        self.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                System.out.println(self.getSelectedRow());
+            }
+        });
 
         JScrollPane pane = new JScrollPane(self);
         pane.setPreferredSize(new Dimension(
