@@ -1,7 +1,11 @@
 package present.panel.stock;
 
 import bl.GetStockDataServiceImpl;
+import bl.SelfSelectServiceImpl;
+import bl.UserServiceImpl;
 import blservice.GetStockDataService;
+import blservice.SelfSelectService;
+import blservice.UserService;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 import present.charts.KLine;
 import present.panel.error.ErrorPanel;
@@ -156,7 +160,7 @@ public class StockPanel extends JPanel {
                 StockBasicInfoVO stockBasicInfoVO = null;
                 try {
                     stockBasicInfoVO = stockDataService.getBasicInfo(stockCode);
-                } catch(Exception e) {
+                } catch (Exception e) {
                     createCenterPanel("ErrorPanel");
                     e.printStackTrace();
                 }
@@ -244,6 +248,7 @@ public class StockPanel extends JPanel {
                     eastPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
 
                     btn_kLine = new JButton("K 线");
+                    setButtonStyle(btn_kLine);
                     btn_TimeSeries = new JButton("分时");
                     btn_depth = new JButton("深度");
                     btn_general = new JButton("大单");
@@ -279,6 +284,8 @@ public class StockPanel extends JPanel {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     createCenterPanel("KLinePanel");
+                    resetButtonStyle();
+                    setButtonStyle(btn_kLine);
                 }
             });
 
@@ -286,6 +293,8 @@ public class StockPanel extends JPanel {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     createCenterPanel("TimeSeriesPanel");
+                    resetButtonStyle();
+                    setButtonStyle(btn_TimeSeries);
                 }
             });
 
@@ -293,6 +302,8 @@ public class StockPanel extends JPanel {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     createCenterPanel("DepthPanel");
+                    resetButtonStyle();
+                    setButtonStyle(btn_depth);
                 }
             });
 
@@ -300,6 +311,8 @@ public class StockPanel extends JPanel {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     createCenterPanel("GeneralPanel");
+                    resetButtonStyle();
+                    setButtonStyle(btn_general);
                 }
             });
 
@@ -307,6 +320,8 @@ public class StockPanel extends JPanel {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     createCenterPanel("SinglePanel");
+                    resetButtonStyle();
+                    setButtonStyle(btn_single);
                 }
             });
 
@@ -314,8 +329,35 @@ public class StockPanel extends JPanel {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     createCenterPanel("PriceSharePanel");
+                    resetButtonStyle();
+                    setButtonStyle(btn_priceShare);
                 }
             });
+
+            portrait.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    SelfSelectService selfSelect = new SelfSelectServiceImpl();
+
+                    selfSelect.addUserSelectedStock(stockCode)
+                }
+            });
+        }
+
+        private void setButtonStyle(JButton button) {
+            button.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.lightBlue));
+        }
+
+        /**
+         * 重置按钮样式
+         */
+        private void resetButtonStyle() {
+            btn_kLine.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.normal));
+            btn_TimeSeries.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.normal));
+            btn_depth.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.normal));
+            btn_general.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.normal));
+            btn_single.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.normal));
+            btn_priceShare.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.normal));
         }
 
         public void setName(String name) {
