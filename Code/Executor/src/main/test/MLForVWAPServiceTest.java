@@ -7,12 +7,15 @@ import cn.edu.nju.software.service.StockMLServiceImpl;
 import cn.edu.nju.software.vo.MLForVWAPPriceVO;
 import org.junit.Test;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 
 /**
  * Created by admin on 2016/8/20.
  */
 public class MLForVWAPServiceTest {
+
+
 
     @Test
     public void testStaticService(){
@@ -49,8 +52,9 @@ public class MLForVWAPServiceTest {
 
 
 
-        MLForVWAPService ml_service=new MLForVWAPServiceImpl();
+
         StockMLService allStockService=new StockMLServiceImpl();
+        MLForVWAPService ml_service=new MLForVWAPServiceImpl();
 
         //测试向VWAP传递静态成交量
         String all_stock[]=allStockService.getStocksNeedCal();
@@ -61,13 +65,13 @@ public class MLForVWAPServiceTest {
             }
         }
 
-        //测试向VWAP传递动态价格
-        for(int j=0;j<all_stock.length;j++){
-            ArrayList<Double> list= ml_service.getDynamicPrice(all_stock[j]).getPriceList();
-            for(int i=0;i<list.size();i++){
-                System.out.print(" index:"+(i+1)+" "+list.get(i));
-            }
-        }
+//        //测试向VWAP传递动态价格
+//        for(int j=0;j<all_stock.length;j++){
+//            ArrayList<Double> list= ml_service.getDynamicPrice(all_stock[j]).getPriceList();
+//            for(int i=0;i<list.size();i++){
+//                System.out.print(" index:"+(i+1)+" "+list.get(i));
+//            }
+//        }
 
 
 

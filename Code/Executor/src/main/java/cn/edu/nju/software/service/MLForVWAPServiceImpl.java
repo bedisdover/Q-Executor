@@ -6,19 +6,19 @@ import cn.edu.nju.software.vo.MLForVWAPPriceVO;
 
 
 import libsvm.*;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.TimerTask;
 
 
 /**
  * Created by Liu on 2016/8/16.
  */
 @Service
-public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService  {
+public class MLForVWAPServiceImpl   implements MLForVWAPService  {
     @Resource
     private StockMLService stockService;
 
@@ -32,13 +32,13 @@ public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService 
     private int numOfDynamicAttr;
 
     //用于存储深夜计算数据的list
-    private ArrayList<ArrayList<Integer>> staticVolAllStock;
-    private ArrayList<ArrayList<Double>> staticPriceAllStock;
-    private ArrayList<ArrayList<svm_model>> dynamicPriceModelAllStock;
-
-
+     public static ArrayList<ArrayList<Integer>> staticVolAllStock;
+     public static ArrayList<ArrayList<Double>> staticPriceAllStock;
+     public static ArrayList<ArrayList<svm_model>> dynamicPriceModelAllStock;
 
     public MLForVWAPServiceImpl( ) {
+//
+        stockService=new StockMLServiceImpl();
 
         this.numOfDynamicAttr=36;
         this.numOfStaticAttr=30;
@@ -49,6 +49,8 @@ public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService 
 
     //svm相关数据初始化
     private void initSVM(){
+        System.gc();
+
         // 定义svm_problem对象
         problem = new svm_problem();
         problem.l = trainingData.length; // 向量个数
@@ -211,25 +213,29 @@ public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService 
 
 
     //返回最新数据下静态预测的48个成交量
-    private void  getStaticVol_svm(String stockID){
+    public void  getStaticVol_svm(String stockID){
 
         ArrayList<Integer> list=new ArrayList<Integer>();
 
         for(int i=1;i<49;i++){
-            initStaticData(stockID,i,Type.VOL);
+            /*
+             initStaticData(stockID,i,Type.VOL);
             initSVM();
             //训练模型
             model = svm.svm_train(problem, param);
             Double predictValue= svm.svm_predict(model,predict)*1000000;
             int value_int=predictValue.intValue();
             list.add( value_int);
+             */
+            list.add(i);
        }
 
+       System.out.println(stockID +" getStaticVol_svm");
        this.staticVolAllStock.add(list);
     }
 
     //返回最新数据下静态预测的48个价格
-    private void getStaticPrice_svm(String stockID){
+    public void getStaticPrice_svm(String stockID){
 
         ArrayList<Double> list=new ArrayList<Double>();
         DecimalFormat df=new DecimalFormat("0.00");
@@ -249,7 +255,7 @@ public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService 
 
 
     //动态预测的模型存储
-    private void getDynamicPrice_svm(String stockID){
+    public void getDynamicPrice_svm(String stockID){
 
         ArrayList<svm_model> list=new ArrayList<>();
         for(int i=4;i<49;i++){
@@ -403,21 +409,6 @@ public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService 
     }
 
 
-    @Override
-    public void run() {
-        try {
-
-            String[] all_stock=stockService.getStocksNeedCal();
-            for(int i=0;i<all_stock.length;i++){
-                this.getStaticVol_svm(all_stock[i]);
-                this.getStaticPrice_svm(all_stock[i]);
-                this.getDynamicPrice_svm(all_stock[i]);
-            }
-        } catch (Exception e) {
-              System.out.println("night factory error!");
-        }
-
-    }
 
 
     //枚举类：价格和成交量两种类型

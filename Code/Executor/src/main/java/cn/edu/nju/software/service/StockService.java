@@ -4,10 +4,7 @@ import cn.edu.nju.software.config.MsgInfo;
 import cn.edu.nju.software.model.StockBasicInfo;
 import cn.edu.nju.software.model.StockInfoByCom;
 import cn.edu.nju.software.model.StockInfoByPer;
-import cn.edu.nju.software.vo.HotStockVO;
-import cn.edu.nju.software.vo.StockInfoByPrice;
-import cn.edu.nju.software.vo.StockInfoByTime;
-import cn.edu.nju.software.vo.StockKLineVO;
+import cn.edu.nju.software.vo.*;
 
 import java.util.List;
 
@@ -27,6 +24,7 @@ public interface StockService {
 
     public List<StockInfoByPer> getPerStockInfo(String Code);
 
+
     public List<StockInfoByCom> getComStockInfo(String Code);
 
     public List<StockInfoByCom> getComStockInfo(String Code,double param);
@@ -38,4 +36,6 @@ public interface StockService {
     public StockBasicInfo getStockBasicInfo(String Code);
 
     public List<HotStockVO> getHotStocks();
+
+    public List<DeepStockVO> getDeepStock(String Code);
 }

@@ -6,7 +6,9 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +19,7 @@ import cn.edu.nju.software.po.StockInfoPO;
 import cn.edu.nju.software.utils.StockUtil;
 import cn.edu.nju.software.utils.TimeUtil;
 
+import cn.edu.nju.software.vo.DeepStockVO;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -77,6 +80,17 @@ public List<StockInfoPO> filterByTime(List<StockInfoPO> info,Date start,Date end
 		}
 	}
 
+
+	/**
+	 * 获取某个日期某支股票的交易信息
+	 * @param codeNum 股票的code
+	 * @param date 所要获取信息的时间日期
+	 * @param num 返回指定数量的逐步信息
+	 * @return date下的所有股票交易信息
+	 */
+	public List<StockInfoByPer> getPerStockInfo(String codeNum,Date date,int num){
+		return null;
+	}
 	/**
 	 * 对于当日的数据如果是在18点之前需要爬取网页获取交易信息
 	 * @param code
@@ -227,11 +241,49 @@ public List<StockInfoPO> filterByTime(List<StockInfoPO> info,Date start,Date end
 	}
 
 
+
 	//根据股票代码返回股票的基本信息
 	public StockBasicInfo getBasicInfo(String codeNum){
 		return stockBasicInfoDao.getStockBasicInfo(codeNum);
 
 	}
 
+
+
+
+	/**
+	* 返回深度信息
+	* DeepStockVO报错timeline(String) deepPrice(Double)
+	 * timeline只要分时秒
+	 * 如果该交易日没数据,则返回前一个交易日
+	* */
+	public List<DeepStockVO> getDeepStockVo(String codeNum){
+		List<DeepStockVO> deepStockVOs = new ArrayList<>();
+		codeNum = StockUtil.getCode(codeNum);
+		int i = 0 ;//最多遍历10遍
+		int index = Integer.parseInt(codeNum.substring(2))%25;
+		Date date = TimeUtil.getLastworkDay();
+		List<Object[]> objects = baseDao.execSqlQuery("select time,deepData from StocksInstance"+index+" where time>"+date.getTime()+" and code=\""+codeNum+"\";");
+		//如果信息为空我去找昨天的
+		Calendar calendar = Calendar.getInstance();
+		while (objects.size()==0&&i<10){
+			i++;
+			calendar.setTime(date);
+			calendar.add(Calendar.DATE,-1);
+			objects = baseDao.execSqlQuery("select time,deepData from StocksInstance"+index+" where time>"+calendar.getTime().getTime()+" and code=\""+codeNum+"\";");
+		}
+
+		for (Object[] objs : objects){
+			try{
+				DeepStockVO vo = new DeepStockVO(TimeUtil.getDetailTime(new Date(Long.parseLong(objs[0].toString()))),Double.parseDouble(objs[1].toString()));
+				deepStockVOs.add(vo);
+			}catch (Exception e){
+				continue;//如果遇到错误我就不加进来好了
+			}
+		}
+
+//		System.out.println(deepStockVOs.size());
+		return deepStockVOs;
+	}
 	
 }

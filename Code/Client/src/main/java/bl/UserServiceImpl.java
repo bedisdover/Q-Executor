@@ -28,8 +28,6 @@ public class UserServiceImpl implements UserService{
 		return getInfo(url);
 	}
 
-
-	@Override
 	public MsgInfo findPassword(String userName) throws Exception {
 		String url="http://121.42.143.164/findPassword?userName="+userName;
 		return getInfo(url);

@@ -5,6 +5,7 @@ package cn.edu.nju.software.service;
  */
 import cn.edu.nju.software.vo.MLForVWAPPriceVO;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +15,9 @@ public class VWAP implements  VWAPService{
 
 	
 	Map<String,List<Double>> stockPnMap ;
-	
+
+	@Resource
+	MLForVWAPService ml;
 	public VWAP(){
 		stockPnMap = new HashMap<String,List<Double>>();
 		
@@ -23,7 +26,6 @@ public class VWAP implements  VWAPService{
 	public List<Integer> predictVn(VWAP_Param param) throws Exception{
 		//交易量概率密度
 		List<Double> Pn;
-        MLForVWAPService ml = new MLForVWAPServiceImpl();
         MLForVWAPPriceVO priceVO;
 		if(param.getTimeNode()==0 || !stockPnMap.containsKey(param.getStockid())){
 			//从机器学习处获得静态预测的Vn和Wn

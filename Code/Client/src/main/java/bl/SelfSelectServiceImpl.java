@@ -8,36 +8,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import util.SHA256;
-import vo.StockInfoByPrice;
+import vo.NowTimeSelectedStockInfoVO;
+
 
 import blservice.SelfSelectService;
 import config.MsgInfo;
 
 public class SelfSelectServiceImpl implements SelfSelectService{
 
-	public List<String> getUserSelectedStock(String userName,String password) throws Exception {
+	public List<NowTimeSelectedStockInfoVO> getUserSelectedStock(String userName,String password) throws Exception {
 		String url="http://121.42.143.164/getUserSelectedStockClient?userName="+userName+"&password="+password;
 		URL ur=new URL(url);
 		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
 		String line=reader.readLine();
 		JSONObject json=new JSONObject(line);
-		List<String> stock =new ArrayList<String>();
-		Object obj=json.get("object");
-
-		if(null == obj){
-			return  stock;
-		}
-
-		JSONArray jsonArray=new JSONArray(obj);
-		int size=jsonArray.length();
-		for(int i=0;i<size;i++){
-			JSONObject jsonObj=jsonArray.getJSONObject(i);
-			stock.add(jsonObj.getString("gid"));
-		}
-		return stock;
+		return getJsonArray(json);
+		
 	}
 
 	public MsgInfo addUserSelectedStock(String codeNum,String userName,String password) throws Exception {
@@ -47,7 +36,7 @@ public class SelfSelectServiceImpl implements SelfSelectService{
 		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
 		String line=reader.readLine();
 		JSONObject jsonArray=new JSONObject(line);
-		info=new MsgInfo(jsonArray.getBoolean("state"),jsonArray.getString("info"),jsonArray.get("object"));
+		info=new MsgInfo(jsonArray.getBoolean("state"),jsonArray.getString("info"),getJsonArray(jsonArray));
 		return info;
 	}
 
@@ -58,7 +47,40 @@ public class SelfSelectServiceImpl implements SelfSelectService{
 		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
 		String line=reader.readLine();
 		JSONObject jsonArray=new JSONObject(line);
-		info=new MsgInfo(jsonArray.getBoolean("state"),jsonArray.getString("info"),jsonArray.get("object"));
+		info=new MsgInfo(jsonArray.getBoolean("state"),jsonArray.getString("info"),getJsonArray(jsonArray));
 		return info;
 	}
+	public List<NowTimeSelectedStockInfoVO> getJsonArray(JSONObject json) throws Exception{
+		List<NowTimeSelectedStockInfoVO> stock =new ArrayList<NowTimeSelectedStockInfoVO>();
+		JSONArray jsonArray=json.getJSONArray("object");
+
+		if(null == jsonArray){
+			return  stock;
+		}
+
+		int size=jsonArray.length();
+		for(int i=0;i<size;i++){
+			NowTimeSelectedStockInfoVO vo=new NowTimeSelectedStockInfoVO();
+			if(jsonArray.get(i).equals(null)){
+				break;
+			}
+			JSONObject jsonObj=jsonArray.getJSONObject(i);
+			vo.setGid(jsonObj.getString("gid"));
+			vo.setIncrePer(jsonObj.getDouble("increPer"));
+			vo.setIncrease(jsonObj.getDouble("increase"));
+			vo.setName(jsonObj.getString("name"));
+			vo.setYestodEndPri(jsonObj.getDouble("yestodEndPri"));
+			vo.setTodayStartPri(jsonObj.getDouble("todayStartPri"));
+			vo.setNowPri(jsonObj.getDouble("nowPri"));
+			vo.setTodayMax(jsonObj.getDouble("todayMax"));
+			vo.setTodayMin(jsonObj.getDouble("todayMin"));
+			vo.setDate(jsonObj.getString("date"));
+			vo.setTime(jsonObj.getString("time"));
+			vo.setTraNumber(jsonObj.getDouble("traNumber"));
+			vo.setTraAmount(jsonObj.getDouble("traAmount"));
+			stock.add(vo);		
+		}
+		return stock;
+	}
+	
 }

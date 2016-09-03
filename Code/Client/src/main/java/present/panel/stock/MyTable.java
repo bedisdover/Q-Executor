@@ -27,6 +27,10 @@ class MyTable extends JTable {
         init();
     }
 
+    MyTable(PriceSharePanel.MyTableModel model) {
+        super(model);
+    }
+
     private void init() {
         //行高
         setRowHeight(30);

@@ -11,6 +11,7 @@ import present.component.TextPlusBtn;
 import present.panel.account.LoginPanel;
 import present.utils.StockJsonInfo;
 import util.JsonUtil;
+import vo.NowTimeSelectedStockInfoVO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -30,6 +31,9 @@ public class SearchPanel extends JPanel {
     private static final int SEARCH_H = (MainFrame.PANEL_H >> 3) - PADDING;
 
     private static final int TABLE_H = MainFrame.PANEL_H - SEARCH_H - (PADDING << 3);
+
+    //字符串切割符
+    private static final String spliter = "--";
 
     private SelfSelectService self = new SelfSelectServiceImpl();
 
@@ -52,8 +56,8 @@ public class SearchPanel extends JPanel {
             for (JSONObject obj : list) {
                 try {
                     v.addElement(
-                        obj.getString(StockJsonInfo.KEY_CODE) + "  "
-                        + obj.getString(StockJsonInfo.KEY_NAME) + "  "
+                        obj.getString(StockJsonInfo.KEY_CODE) + spliter
+                        + obj.getString(StockJsonInfo.KEY_NAME) + spliter
                         + obj.getString(StockJsonInfo.KEY_INDUSTRY)
                     );
                 } catch (JSONException e) {
@@ -63,7 +67,10 @@ public class SearchPanel extends JPanel {
             return v;
         });
         //设置下拉提示列表监听
-        search.setListHandler((text) -> switcher.jump(new StockPanel(text.split("  ")[0])));
+        search.setListClickHandler((text) -> switcher.jump(new StockPanel(text.split(spliter)[0])));
+        search.setListFocusHandler((field, text) -> {
+            field.setText(text.split(spliter)[0]);
+        });
         //设置确定按钮监听
         search.setBtnListener((e) -> {
             try {
@@ -153,7 +160,8 @@ public class SearchPanel extends JPanel {
         //自选股
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panel.setBackground(new Color(0x2c4cb1));
-        JLabel label = new Link("自选股票");
+        JLabel label = new JLabel("自选股票");
+        label.setForeground(Color.WHITE);
         label.setPreferredSize(new Dimension(
                 PADDING * 6, PADDING << 1
         ));
@@ -166,9 +174,16 @@ public class SearchPanel extends JPanel {
         DefaultTableModel model = new DefaultTableModel(data, header);
         try {
             if (LoginPanel.IS_LOGIN) {
-                List<String> list = self.getUserSelectedStock(
+                List<NowTimeSelectedStockInfoVO> list = self.getUserSelectedStock(
                         LoginPanel.LOGIN_USER, LoginPanel.LOGIN_PW
                 );
+                list.forEach((vo) -> {
+                    Vector<String> row = new Vector<>();
+                    row.addElement(vo.getName());
+                    row.addElement(String.valueOf(vo.getNowPri()));
+                    row.add(String.valueOf(vo.getIncrePer()));
+                    model.addRow(row);
+                });
                 panel.add(label);
             } else {
                 panel.add(createLoginTip());

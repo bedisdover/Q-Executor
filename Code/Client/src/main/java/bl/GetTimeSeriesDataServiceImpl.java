@@ -1,41 +1,50 @@
 package bl;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import vo.StockTimeSeriesVO;
 import blservice.GetTimeSeriesDataService;
 
+
 public class GetTimeSeriesDataServiceImpl implements GetTimeSeriesDataService{
 
-	public List<StockTimeSeriesVO> getData(String codeNum) {
+	public List<StockTimeSeriesVO> getData(String codeNum) throws Exception {
 		String url="http://121.42.143.164/StockInfoByTime?codeNum="+codeNum;
 		List<StockTimeSeriesVO> stockList=new ArrayList<StockTimeSeriesVO>();
-		try {
 			URL ur=new URL(url);
 			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
 			String line=reader.readLine();
 			JSONArray jsonArray=new JSONArray(line);
 			int size=jsonArray.length();
-			for(int i=0;i<size;i++){
+			double price=0;
+			double volume=0;
+			for(int i=(size-1);i>=0;i--){
 				StockTimeSeriesVO stockTimeSeriesVO=new StockTimeSeriesVO();
 				JSONObject jsonObj=jsonArray.getJSONObject(i);
+				price+=jsonObj.getDouble("price")*jsonObj.getDouble("volume");
+				volume+=jsonObj.getDouble("volume");
+				double ave=0;
+				if(volume!=0){
+					DecimalFormat df = new DecimalFormat("0.00");
+					ave=price/volume;
+					ave=Double.parseDouble(df.format(ave));
+				}			
+				stockTimeSeriesVO.setAvePrice(ave);
 				stockTimeSeriesVO.setTimeLine((String) jsonObj.get("time"));
 				stockTimeSeriesVO.setPrice((Double) jsonObj.get("price"));
 				stockList.add(stockTimeSeriesVO);
 			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return stockList;
 	}
-	
-	
 }
