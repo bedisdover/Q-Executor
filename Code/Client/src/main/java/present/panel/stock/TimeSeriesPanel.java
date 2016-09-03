@@ -4,9 +4,11 @@ import bl.GetTimeSeriesDataServiceImpl;
 import blservice.GetTimeSeriesDataService;
 import org.json.JSONException;
 import present.charts.TimeSeriesChart;
+import present.panel.loading.LoadingPanel;
 import vo.StockTimeSeriesVO;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +27,18 @@ class TimeSeriesPanel extends JPanel {
         panel = this;
         this.stockCode = stockCode;
 
+        createUIComponents();
         getData();
+    }
+
+    private void createUIComponents() {
+        SwingUtilities.invokeLater(() -> {
+            panel.setLayout(new BorderLayout());
+
+            panel.add(new LoadingPanel(), BorderLayout.CENTER);
+
+            panel.revalidate();
+        });
     }
 
     /**

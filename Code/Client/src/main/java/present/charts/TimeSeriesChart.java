@@ -7,8 +7,9 @@ import org.jfree.chart.axis.*;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.data.Range;
-import org.jfree.data.time.*;
+import org.jfree.data.time.Minute;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.ui.RectangleInsets;
 import vo.StockTimeSeriesVO;
 

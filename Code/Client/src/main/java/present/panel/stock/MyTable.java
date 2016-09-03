@@ -39,7 +39,6 @@ class MyTable extends JTable {
     MyTable(AbstractTableModel model) {
         super(model);
         this.model = model;
-        System.out.println(((DefaultTableModel) model).getDataVector());
 
         init();
     }
