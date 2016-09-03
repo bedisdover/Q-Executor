@@ -75,4 +75,33 @@ public class TimeUtil {
         time = time+"05";
         return time;
     }
+
+    public static Date getLastworkDay(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,9);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.SECOND,0);
+        if (calendar.get(Calendar.DAY_OF_WEEK)==Calendar.SUNDAY){
+            calendar.add(Calendar.DATE,-2);
+        }else if (calendar.get(Calendar.DAY_OF_WEEK)==Calendar.SATURDAY){
+            calendar.add(Calendar.DATE,-1);
+        }
+
+        return calendar.getTime();
+    }
+
+    public static String getLastworkDate(){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,9);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.SECOND,0);
+        if (calendar.get(Calendar.DAY_OF_WEEK)==Calendar.SUNDAY){
+            calendar.add(Calendar.DATE,-2);
+        }else if (calendar.get(Calendar.DAY_OF_WEEK)==Calendar.SATURDAY){
+            calendar.add(Calendar.DATE,-1);
+        }
+
+        return dateFormat.format(calendar.getTime());
+    }
 }
