@@ -39,7 +39,9 @@ public class TimeSeriesChart {
         DateAxis dateAxis = new DateAxis();
         dateAxis.setAutoRange(false);
         dateAxis.setRange(timeSeriesVO.getStartTime(), timeSeriesVO.getEndTime());
-//        dateAxis.setTimeline();
+        SegmentedTimeline timeline = SegmentedTimeline.newFifteenMinuteTimeline();
+        timeline.addException(timeSeriesVO.getInterruptTime().getTime(), timeSeriesVO.getResumeTime().getTime());
+        dateAxis.setTimeline(timeline);
         dateAxis.setTickMarkPosition(DateTickMarkPosition.MIDDLE);//设置标记的位置
         dateAxis.setStandardTickUnits(DateAxis.createStandardDateTickUnits());//设置标准的时间刻度单位
         dateAxis.setTickUnit(new DateTickUnit(DateTickUnit.MINUTE, 30));//设置时间刻度的间隔
@@ -50,6 +52,8 @@ public class TimeSeriesChart {
 
         XYPlot xyplot = (XYPlot) jfreechart.getPlot();
         xyplot.setBackgroundPaint(Color.BLACK);
+        xyplot.setDomainGridlinesVisible(false);
+        xyplot.setRangeGridlinesVisible(false);
         xyplot.setDomainGridlinePaint(Color.white);
         xyplot.setRangeGridlinePaint(Color.white);
         xyplot.setAxisOffset(new RectangleInsets(5D, 5D, 5D, 5D));
@@ -84,17 +88,17 @@ public class TimeSeriesChart {
      *
      * @param time 格式: "HH:mm:ss"
      */
-    private static Second getTime(String time) {
-        Second second;
+    private static Minute getMinute(String time) {
+        Minute minute;
 
         try {
-            second = new Second(dateFormat.parse(time));
+            minute= new Minute(dateFormat.parse(time));
         } catch (ParseException e) {
             e.printStackTrace();
-            return new Second(new Date());
+            return new Minute(new Date());
         }
 
-        return second;
+        return minute;
     }
 
     private static class TimeSeriesVO {
@@ -110,8 +114,8 @@ public class TimeSeriesChart {
             for (int i = stockTimeSeriesVOList.size() - 1; i >= 0; i--) {
                 stockVO = stockTimeSeriesVOList.get(i);
 
-                timeSeries1.add(getTime(stockVO.getTimeLine()), stockVO.getPrice());
-                timeSeries2.add(getTime(stockVO.getTimeLine()), stockVO.getAvePrice());
+                timeSeries1.add(getMinute(stockVO.getTimeLine()), stockVO.getPrice());
+                timeSeries2.add(getMinute(stockVO.getTimeLine()), stockVO.getAvePrice());
             }
 
             timeSeriesCollection = new TimeSeriesCollection();
@@ -151,21 +155,26 @@ public class TimeSeriesChart {
         }
 
         Date getStartTime() {
-            Date date = null;
-            try {
-                date =  dateFormat.parse("09:30");
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            return date;
+            return getTime("9:30");
         }
 
         Date getEndTime() {
+            return getTime("15:00");
+        }
+
+        Date getInterruptTime() {
+            return getTime("11:30");
+        }
+
+        Date getResumeTime() {
+            return getTime("13:00");
+        }
+
+        private Date getTime(String time) {
             Date date = null;
 
             try {
-                date = dateFormat.parse("15:30");
+                date = dateFormat.parse(time);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
