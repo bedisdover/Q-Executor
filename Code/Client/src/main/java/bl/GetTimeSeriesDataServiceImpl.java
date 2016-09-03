@@ -32,18 +32,20 @@ public class GetTimeSeriesDataServiceImpl implements GetTimeSeriesDataService{
 			for(int i=(size-1);i>=0;i--){
 				StockTimeSeriesVO stockTimeSeriesVO=new StockTimeSeriesVO();
 				JSONObject jsonObj=jsonArray.getJSONObject(i);
-				price+=jsonObj.getDouble("price")*jsonObj.getDouble("volume");
-				volume+=jsonObj.getDouble("volume");
-				double ave=0;
-				if(volume!=0){
-					DecimalFormat df = new DecimalFormat("0.00");
-					ave=price/volume;
-					ave=Double.parseDouble(df.format(ave));
-				}			
-				stockTimeSeriesVO.setAvePrice(ave);
-				stockTimeSeriesVO.setTimeLine((String) jsonObj.get("time"));
-				stockTimeSeriesVO.setPrice((Double) jsonObj.get("price"));
-				stockList.add(stockTimeSeriesVO);
+				if (jsonObj.getDouble("price") != 0) {
+					price += jsonObj.getDouble("price") * jsonObj.getDouble("volume");
+					volume += jsonObj.getDouble("volume");
+					double ave = 0;
+					if (volume != 0) {
+						DecimalFormat df = new DecimalFormat("0.00");
+						ave = price / volume;
+						ave = Double.parseDouble(df.format(ave));
+					}
+					stockTimeSeriesVO.setAvePrice(ave);
+					stockTimeSeriesVO.setTimeLine((String) jsonObj.get("time"));
+					stockTimeSeriesVO.setPrice((Double) jsonObj.get("price"));
+					stockList.add(stockTimeSeriesVO);
+				}
 			}
 		return stockList;
 	}

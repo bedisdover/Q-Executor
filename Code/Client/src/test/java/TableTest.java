@@ -92,9 +92,16 @@ class MyRenderer implements TableCellRenderer {
         Object temp = table.getValueAt(row, column);
 
         if (temp instanceof Double) {
-            return ColorUtil.getTextColor((Double) table.getValueAt(row, column));
+            return ColorUtil.getTextColor((Double) temp);
         } else if (temp instanceof String) {
-            return ColorUtil.getTextColor((String) table.getValueAt(row, column));
+            double number;
+
+            try {
+                number = Double.parseDouble((String) temp);
+                return ColorUtil.getTextColor(number);
+            } catch (NumberFormatException e) {
+                return ColorUtil.getTextColor((String) temp);
+            }
         }
 
         return Color.BLACK;

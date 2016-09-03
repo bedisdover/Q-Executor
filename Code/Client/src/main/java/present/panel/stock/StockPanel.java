@@ -256,7 +256,7 @@ public class StockPanel extends JPanel {
                     btn_priceShare = new JButton("分价");
 
                     portrait = new JButton("添加自选");
-                    portrait.setPreferredSize(new Dimension(80, 30));
+                    portrait.setPreferredSize(new Dimension(90, 30));
                     portrait.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.green));
 
                     eastPanel.add(btn_kLine);
@@ -339,7 +339,7 @@ public class StockPanel extends JPanel {
                 public void mouseClicked(MouseEvent e) {
                     SelfSelectService selfSelect = new SelfSelectServiceImpl();
 
-                    selfSelect.addUserSelectedStock(stockCode)
+                    portrait.setText("取消自选");
                 }
             });
         }

@@ -121,7 +121,7 @@ public class PriceSharePanel extends JPanel {
 
 
     //自定义表格模型
-    class MyTableModel extends AbstractTableModel {
+    private class MyTableModel extends AbstractTableModel {
         //单元格元素类型
         private Class[] cellType = {String.class, String.class, String.class, JProgressBar.class};
         //表头

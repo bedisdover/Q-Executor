@@ -47,6 +47,8 @@ public class SearchPanel extends JPanel {
 
     private DefaultTableModel hotTableModel;
 
+    private MyTable hotTable;
+
     public SearchPanel(PanelSwitcher switcher) {
         this.switcher = switcher;
 
@@ -199,7 +201,8 @@ public class SearchPanel extends JPanel {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "网络异常");
         }
-        JTable self = createTable(model);
+        JTable self = new MyTable(model);
+
 
         JScrollPane pane = new JScrollPane(self);
         pane.setPreferredSize(new Dimension(
@@ -224,10 +227,10 @@ public class SearchPanel extends JPanel {
         header.addElement("最新交易日");
         Vector<String> data = new Vector<>();
         hotTableModel = new DefaultTableModel(data, header);
-        JTable hot = createTable(hotTableModel);
+        hotTable = new MyTable(hotTableModel);
 
 
-        JScrollPane pane = new JScrollPane(hot);
+        JScrollPane pane = new JScrollPane(hotTable);
         pane.setPreferredSize(new Dimension(
                 (MainFrame.PANEL_W / 3) - (PADDING << 1), TABLE_H - (PADDING << 1)
         ));
@@ -245,16 +248,6 @@ public class SearchPanel extends JPanel {
         box.add(pane);
         box.add(panel);
         return box;
-    }
-
-    private JTable createTable(DefaultTableModel model) {
-        return new JTable(model) {
-            private static final long serialVersionUID = 1L;
-            //设置表格不可编辑
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
     }
 
     private JPanel createLoginTip() {
@@ -307,6 +300,7 @@ public class SearchPanel extends JPanel {
                         v.addElement(vo.getDate());
                         hotTableModel.addRow(v);
                     }
+                    hotTable.setRenderer(new MyRenderer(1), 3);
                     hotTableModel.fireTableDataChanged();
                 } catch (Exception e) {
                     e.printStackTrace();

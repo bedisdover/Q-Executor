@@ -23,17 +23,25 @@ class MyTable extends JTable {
      */
     private String[] columnNames;
 
+    private TableModel model;
+
     MyTable(Object[][] data, String[] columnNames) {
         super(data, columnNames);
 
         this.data = data;
         this.columnNames = columnNames;
 
+        model = new DefaultTableModel(data, columnNames);
+
         init();
     }
 
-    MyTable(PriceSharePanel.MyTableModel model) {
+    MyTable(AbstractTableModel model) {
         super(model);
+        this.model = model;
+        System.out.println(((DefaultTableModel) model).getDataVector());
+
+        init();
     }
 
     private void init() {
@@ -53,29 +61,29 @@ class MyTable extends JTable {
             thr.setHorizontalAlignment(SwingConstants.CENTER);
             header.setDefaultRenderer(thr);
         }
-        //设置table内容不可编辑
-        DefaultTableModel model = new DefaultTableModel(data, columnNames) {
-            public Class<?> getColumnClass(int column) {
-                return getValueAt(0, column).getClass();
-            }
 
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        setModel(model);
         //设置表头排序方式
         TableRowSorter<TableModel> sorter = new TableRowSorter<>(model);
         setRowSorter(sorter);
     }
 
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return false;
+    }
+
     public void setRenderer(TableCellRenderer renderer) {
+        this.setRenderer(renderer, columnNames.length);
+    }
+
+    public void setRenderer(TableCellRenderer renderer, int columnNum) {
         setDefaultRenderer(Object.class, renderer);
 
-        for (int i = 0; i < columnNames.length; i++) {
+        for (int i = 0; i < columnNum; i++) {
             getColumnModel().getColumn(i).setCellRenderer(renderer);
         }
     }
+
 
     JScrollPane createTable() {
         return new JScrollPane(this, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,

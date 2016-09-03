@@ -3,15 +3,12 @@ package present.charts;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.DateAxis;
-import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.*;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.data.time.Second;
-import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesCollection;
-import org.jfree.data.xy.XYDataset;
+import org.jfree.data.Range;
+import org.jfree.data.time.*;
 import org.jfree.ui.RectangleInsets;
 import vo.StockTimeSeriesVO;
 
@@ -28,7 +25,7 @@ import java.util.List;
  * 分时图
  */
 public class TimeSeriesChart {
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
 
     public static JPanel getChart(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
         TimeSeriesVO timeSeriesVO = getData(stockTimeSeriesVOList);
@@ -37,7 +34,16 @@ public class TimeSeriesChart {
         yAxis.setAutoRange(false);//设置不采用自动设置数据范围
         yAxis.setUpperMargin(10);//设置向上边框距离
         yAxis.setLabelFont(new Font("微软雅黑", Font.BOLD, 12));
-        yAxis.setRange(timeSeriesVO.getLow() * 0.9, timeSeriesVO.getHigh() * 1.1);//设置y轴数据范围
+        yAxis.setRange(timeSeriesVO.getLow(), timeSeriesVO.getHigh());//设置y轴数据范围
+
+        DateAxis dateAxis = new DateAxis();
+        dateAxis.setAutoRange(false);
+        dateAxis.setRange(timeSeriesVO.getStartTime(), timeSeriesVO.getEndTime());
+//        dateAxis.setTimeline();
+        dateAxis.setTickMarkPosition(DateTickMarkPosition.MIDDLE);//设置标记的位置
+        dateAxis.setStandardTickUnits(DateAxis.createStandardDateTickUnits());//设置标准的时间刻度单位
+        dateAxis.setTickUnit(new DateTickUnit(DateTickUnit.MINUTE, 30));//设置时间刻度的间隔
+        dateAxis.setDateFormatOverride(dateFormat);//设置显示时间的格式
 
         JFreeChart jfreechart = ChartFactory.createTimeSeriesChart(
                 "", "", "", timeSeriesVO.getTimeSeriesCollection(), true, true, true);
@@ -50,6 +56,7 @@ public class TimeSeriesChart {
         xyplot.setDomainCrosshairVisible(true);
         xyplot.setRangeCrosshairVisible(true);
         xyplot.setRangeAxis(yAxis);
+        xyplot.setDomainAxis(dateAxis);
 
         XYItemRenderer xyitemrenderer = xyplot.getRenderer();
         if (xyitemrenderer instanceof XYLineAndShapeRenderer) {
@@ -131,16 +138,39 @@ public class TimeSeriesChart {
             }
         }
 
-        public TimeSeriesCollection getTimeSeriesCollection() {
+        TimeSeriesCollection getTimeSeriesCollection() {
             return timeSeriesCollection;
         }
 
-        public double getHigh() {
+        double getHigh() {
             return high;
         }
 
-        public double getLow() {
+        double getLow() {
             return low;
+        }
+
+        Date getStartTime() {
+            Date date = null;
+            try {
+                date =  dateFormat.parse("09:30");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            return date;
+        }
+
+        Date getEndTime() {
+            Date date = null;
+
+            try {
+                date = dateFormat.parse("15:30");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            return date;
         }
     }
 }
