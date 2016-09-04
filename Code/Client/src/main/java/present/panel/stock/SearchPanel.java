@@ -79,12 +79,15 @@ public class SearchPanel extends JPanel {
             return v;
         });
         //设置下拉提示列表监听
-        search.setListClickHandler((text) -> switcher.jump(new StockPanel(text.split(spliter)[0])));
+        search.setListClickHandler((text) ->
+            switcher.jump(new StockPanel(text.split(spliter)[0]))
+        );
         search.setListFocusHandler((field, text) -> field.setText(text.split(spliter)[1]));
         //设置确定按钮监听
         search.setBtnListener((e) -> {
             try {
-                StockPanel p = new StockPanel(search.getText());
+                StockPanel p = new StockPanel(JsonUtil.confirm(StockJsonInfo.KEY_NAME
+                        , StockJsonInfo.KEY_CODE, search.getText(), StockJsonInfo.JSON_PATH));
                 switcher.jump(p);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(
@@ -142,7 +145,8 @@ public class SearchPanel extends JPanel {
                 PADDING * 6, PADDING << 1
         ));
 
-        Vector<String> header = new Vector<>(3);
+        Vector<String> header = new Vector<>(4);
+        header.addElement("代码");
         header.addElement("股票");
         header.addElement("价格");
         header.addElement("涨跌幅");
@@ -155,6 +159,7 @@ public class SearchPanel extends JPanel {
                 );
                 list.forEach((vo) -> {
                     Vector<String> row = new Vector<>();
+                    row.addElement(vo.getGid());
                     row.addElement(vo.getName());
                     row.addElement(String.valueOf(vo.getNowPri()));
                     row.add(String.valueOf(vo.getIncrePer()));
@@ -174,13 +179,13 @@ public class SearchPanel extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-                System.out.println(self.getSelectedRow());
+                switcher.jump(new StockPanel((String)self.getValueAt(self.getSelectedRow(), 0)));
             }
         });
 
         JScrollPane pane = new JScrollPane(self);
         pane.setPreferredSize(new Dimension(
-                (MainFrame.PANEL_W / 3) - (PADDING << 1), TABLE_H - (PADDING << 1)
+                (int)(MainFrame.PANEL_W * 0.4) - (PADDING << 1), TABLE_H - (PADDING << 1)
         ));
 
 
@@ -196,17 +201,24 @@ public class SearchPanel extends JPanel {
      */
     private Box createHotTable() {
         Vector<String> header = new Vector<>(4);
+        header.addElement("代码");
         header.addElement("股票");
         header.addElement("涨跌额");
         header.addElement("最新交易日");
         Vector<String> data = new Vector<>();
         hotTableModel = new DefaultTableModel(data, header);
         hotTable = new MyTable(hotTableModel);
-
+        hotTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                switcher.jump(new StockPanel((String)hotTable.getValueAt(hotTable.getSelectedRow(), 0)));
+            }
+        });
 
         JScrollPane pane = new JScrollPane(hotTable);
         pane.setPreferredSize(new Dimension(
-                (MainFrame.PANEL_W / 3) - (PADDING << 1), TABLE_H - (PADDING << 1)
+                (int)(MainFrame.PANEL_W * 0.4) - (PADDING << 1), TABLE_H - (PADDING << 1)
         ));
 
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -269,6 +281,7 @@ public class SearchPanel extends JPanel {
                     List<HotStockVO> hotDatas = get();
                     for (HotStockVO vo : hotDatas) {
                         Vector<String> v = new Vector<>();
+                        v.addElement(vo.getCode());
                         v.addElement(vo.getName());
                         v.addElement(String.valueOf(vo.getPchange()));
                         v.addElement(vo.getDate());
