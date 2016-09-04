@@ -50,7 +50,7 @@ public interface GetStockDataService {
 
     /**
      * 获取股票基本信息
-     * 对应url：http://121.42.143.164/BasicComInfo?codeNum=sh600000
+     * 对应url：http:// + Connect.IP + /BasicComInfo?codeNum=sh600000
      *
      * @param codeNum 股票代码
      * @return 基本信息

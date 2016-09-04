@@ -129,8 +129,8 @@ class BasicInfoPanel extends JPanel {
             fixedAssets.setText(NumberUtil.transferUnit(stockBasicInfoVO.getFixedAssets() * 1e4));
             reserved.setText(NumberUtil.transferUnit(stockBasicInfoVO.getReserved() * 1e4));
             reservedPerShare.setText(NumberUtil.transferUnit(stockBasicInfoVO.getReservedPerShare() * 1e4));
-            eps.setText(NumberUtil.transferUnit(stockBasicInfoVO.getEps() * 1e4));
-            bvps.setText(NumberUtil.transferUnit(stockBasicInfoVO.getBvps() * 1e4));
+            eps.setText(NumberUtil.transferUnit(stockBasicInfoVO.getEps()));
+            bvps.setText(NumberUtil.transferUnit(stockBasicInfoVO.getBvps()));
             timeToMarket.setText(getDate(stockBasicInfoVO.getTimeToMarket()));
 
             panel.revalidate();

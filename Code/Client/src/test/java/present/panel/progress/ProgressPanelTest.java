@@ -1,5 +1,7 @@
 package present.panel.progress;
 
+import bl.Connect;
+
 import javax.swing.*;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -46,7 +48,7 @@ public class ProgressPanelTest extends JPanel {
         protected List<String> doInBackground() throws Exception {
             List<String> result = new ArrayList<>();
 
-            String url = "http://121.42.143.164/StockInfoByPrice?codeNum=sh600000";
+            String url = "http://" + Connect.IP + "/StockInfoByPrice?codeNum=sh600000";
             URL ur = new URL(url);
             System.out.println(System.currentTimeMillis());
             InputStream stream = ur.openStream();

@@ -20,7 +20,7 @@ import config.MsgInfo;
 public class SelfSelectServiceImpl implements SelfSelectService{
 
 	public List<NowTimeSelectedStockInfoVO> getUserSelectedStock(String userName,String password) throws Exception {
-		String url="http://121.42.143.164/getUserSelectedStockClient?userName="+userName+"&password="+password;
+		String url="http://" + Connect.IP + "/getUserSelectedStockClient?userName="+userName+"&password="+password;
 		URL ur=new URL(url);
 		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
 		String line=reader.readLine();
@@ -30,7 +30,7 @@ public class SelfSelectServiceImpl implements SelfSelectService{
 	}
 
 	public MsgInfo addUserSelectedStock(String codeNum,String userName,String password) throws Exception {
-        String url="http://121.42.143.164/addUserSelectedStockClient?codeNum="+codeNum+"&userName="+userName+"&password="+password;
+        String url="http://" + Connect.IP + "/addUserSelectedStockClient?codeNum="+codeNum+"&userName="+userName+"&password="+password;
         MsgInfo info = null;
 		URL ur=new URL(url);
 		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
@@ -41,7 +41,7 @@ public class SelfSelectServiceImpl implements SelfSelectService{
 	}
 
 	public MsgInfo deleteUserSelectedStock(String codeNum,String userName,String password) throws Exception {
-		String url="http://121.42.143.164/deleteUserSelectedStockClient?codeNum="+codeNum+"&userName="+userName+"&password="+password;
+		String url="http://" + Connect.IP + "/deleteUserSelectedStockClient?codeNum="+codeNum+"&userName="+userName+"&password="+password;
         MsgInfo info = null;
 		URL ur=new URL(url);
 		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
