@@ -174,7 +174,8 @@ public class SearchPanel extends JPanel {
                 PADDING * 6, PADDING << 1
         ));
 
-        Vector<String> header = new Vector<>(3);
+        Vector<String> header = new Vector<>(4);
+        header.addElement("代码");
         header.addElement("股票");
         header.addElement("价格");
         header.addElement("涨跌幅");
@@ -187,6 +188,7 @@ public class SearchPanel extends JPanel {
                 );
                 list.forEach((vo) -> {
                     Vector<String> row = new Vector<>();
+                    row.addElement(vo.getGid());
                     row.addElement(vo.getName());
                     row.addElement(String.valueOf(vo.getNowPri()));
                     row.add(String.valueOf(vo.getIncrePer()));
@@ -202,6 +204,13 @@ public class SearchPanel extends JPanel {
             JOptionPane.showMessageDialog(this, "网络异常");
         }
         JTable self = createTable(model);
+        self.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                switcher.jump(new StockPanel((String)self.getValueAt(self.getSelectedRow(), 0)));
+            }
+        });
 
         JScrollPane pane = new JScrollPane(self);
         pane.setPreferredSize(new Dimension(
@@ -221,6 +230,7 @@ public class SearchPanel extends JPanel {
      */
     private Box createHotTable() {
         Vector<String> header = new Vector<>(4);
+        header.addElement("代码");
         header.addElement("股票");
         header.addElement("涨跌额");
         header.addElement("最新交易日");
@@ -231,10 +241,17 @@ public class SearchPanel extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-                System.out.println(hot.getSelectedRow());
+                switcher.jump(new StockPanel((String)hot.getValueAt(hot.getSelectedRow(), 0)));
             }
         });
 
+        hot.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                System.out.println(hot.getSelectedRow());
+            }
+        });
 
         JScrollPane pane = new JScrollPane(hot);
         pane.setPreferredSize(new Dimension(
@@ -309,7 +326,8 @@ public class SearchPanel extends JPanel {
                 try {
                     List<HotStockVO> hotDatas = get();
                     for (HotStockVO vo : hotDatas) {
-                        Vector<String> v = new Vector<>();
+                        Vector<String> v = new Vector<>(4);
+                        v.addElement(vo.getCode());
                         v.addElement(vo.getName());
                         v.addElement(String.valueOf(vo.getPchange()));
                         v.addElement(vo.getDate());

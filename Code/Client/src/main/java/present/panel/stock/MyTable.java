@@ -46,7 +46,7 @@ class MyTable extends JTable {
         //无法拖动表头
         getTableHeader().setReorderingAllowed(false);
         //设置每列的宽度
-        setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+//        setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         {
             //设置table表头居中
             DefaultTableCellRenderer thr = new DefaultTableCellRenderer();
