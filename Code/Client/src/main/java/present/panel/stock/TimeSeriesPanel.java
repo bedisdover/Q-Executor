@@ -4,9 +4,11 @@ import bl.GetTimeSeriesDataServiceImpl;
 import blservice.GetTimeSeriesDataService;
 import org.json.JSONException;
 import present.charts.TimeSeriesChart;
+import present.panel.loading.LoadingPanel;
 import vo.StockTimeSeriesVO;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +23,26 @@ class TimeSeriesPanel extends JPanel {
 
     private String stockCode;
 
-    TimeSeriesPanel(String stockCode) {
+    private double close;
+
+    TimeSeriesPanel(String stockCode, double close) {
+        this.close = close;
+
         panel = this;
         this.stockCode = stockCode;
 
+        createUIComponents();
         getData();
+    }
+
+    private void createUIComponents() {
+        SwingUtilities.invokeLater(() -> {
+            panel.setLayout(new BorderLayout());
+
+            panel.add(new LoadingPanel(), BorderLayout.CENTER);
+
+            panel.revalidate();
+        });
     }
 
     /**
@@ -34,7 +51,7 @@ class TimeSeriesPanel extends JPanel {
     private void getData() {
         SwingWorker worker = new SwingWorker() {
             @Override
-            protected Object doInBackground()  {
+            protected Object doInBackground() {
                 GetTimeSeriesDataService timeSeriesDataService = new GetTimeSeriesDataServiceImpl();
 
                 List timeSeriesVOList = new ArrayList();
@@ -68,7 +85,7 @@ class TimeSeriesPanel extends JPanel {
     private void injectData(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
         SwingUtilities.invokeLater(() -> {
             panel.removeAll();
-            panel.add(TimeSeriesChart.getChart(stockTimeSeriesVOList));
+            panel.add(TimeSeriesChart.getChart(stockTimeSeriesVOList, close));
 
             panel.revalidate();
             panel.repaint();

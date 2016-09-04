@@ -3,6 +3,7 @@ package present.panel.stock;
 import bl.GetStockDataServiceImpl;
 import blservice.GetStockDataService;
 import present.panel.loading.LoadingPanel;
+import util.NumberUtil;
 import util.StockUtil;
 import vo.StockInfoByPer;
 
@@ -86,7 +87,7 @@ public class SinglePanel extends JPanel {
             data[i] = new Object[]{
                     temp.getTime(),
                     temp.getPrice(),
-                    temp.getChange_price(),
+                    NumberUtil.round(temp.getChange_price(), 3),
                     temp.getVolume(),
                     temp.getTotalNum() / 1e4,
                     StockUtil.getType(temp.getType())
@@ -94,6 +95,8 @@ public class SinglePanel extends JPanel {
         }
 
         MyTable table = new MyTable(data, names);
+        table.setRenderer(new MyRenderer(2, 5));
+
         JScrollPane scrollPane = table.createTable();
 
         scrollPane.setPreferredSize(new Dimension(table.getColumnModel().getTotalColumnWidth() + 28, 500));

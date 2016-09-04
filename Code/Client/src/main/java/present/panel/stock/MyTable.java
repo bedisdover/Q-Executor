@@ -5,7 +5,6 @@ import present.utils.ColorUtil;
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
-import java.awt.geom.Arc2D;
 
 /**
  * Created by song on 2016/8/27
@@ -24,54 +23,66 @@ class MyTable extends JTable {
      */
     private String[] columnNames;
 
+    private TableModel model;
+
     MyTable(Object[][] data, String[] columnNames) {
         super(data, columnNames);
 
         this.data = data;
         this.columnNames = columnNames;
 
+        model = new DefaultTableModel(data, columnNames);
+
         init();
     }
 
-    MyTable(PriceSharePanel.MyTableModel model) {
+    MyTable(AbstractTableModel model) {
         super(model);
+        this.model = model;
+
+        init();
     }
 
     private void init() {
         //行高
         setRowHeight(30);
-        getTableHeader().setPreferredSize(new Dimension(getTableHeader().getWidth(), 40));
+        JTableHeader header = getTableHeader();
+        header.setPreferredSize(new Dimension(getTableHeader().getWidth(), 40));
         //无法修改表头大小
-        getTableHeader().setResizingAllowed(true);
+        header.setResizingAllowed(false);
         //无法拖动表头
-        getTableHeader().setReorderingAllowed(false);
+        header.setReorderingAllowed(false);
         //设置每列的宽度
 //        setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         {
             //设置table表头居中
             DefaultTableCellRenderer thr = new DefaultTableCellRenderer();
             thr.setHorizontalAlignment(SwingConstants.CENTER);
-            getTableHeader().setDefaultRenderer(thr);
-            //设置table内容居中
-            DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
-            tcr.setHorizontalAlignment(SwingConstants.CENTER);
-            setDefaultRenderer(Object.class, tcr);
+            header.setDefaultRenderer(thr);
         }
-        //设置table内容不可编辑
-        DefaultTableModel model = new DefaultTableModel(data, columnNames) {
-            public Class<?> getColumnClass(int column) {
-                return getValueAt(0, column).getClass();
-            }
 
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        setModel(model);
         //设置表头排序方式
         TableRowSorter<TableModel> sorter = new TableRowSorter<>(model);
         setRowSorter(sorter);
     }
+
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return false;
+    }
+
+    public void setRenderer(TableCellRenderer renderer) {
+        this.setRenderer(renderer, columnNames.length);
+    }
+
+    public void setRenderer(TableCellRenderer renderer, int columnNum) {
+        setDefaultRenderer(Object.class, renderer);
+
+        for (int i = 0; i < columnNum; i++) {
+            getColumnModel().getColumn(i).setCellRenderer(renderer);
+        }
+    }
+
 
     JScrollPane createTable() {
         return new JScrollPane(this, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -79,11 +90,9 @@ class MyTable extends JTable {
     }
 }
 
-class MyRenderer implements TableCellRenderer {
+class MyRenderer extends DefaultTableCellRenderer {
 
     private static final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
-
-    private JTable table;
 
     /**
      * 列号数组，可能有多个
@@ -97,20 +106,21 @@ class MyRenderer implements TableCellRenderer {
      */
     MyRenderer(int... columnNum) {
         this.columnList = columnNum;
+
+        DEFAULT_RENDERER.setHorizontalAlignment(SwingConstants.CENTER);
+        this.setHorizontalAlignment(SwingConstants.CENTER);
     }
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
                                                    boolean isSelected, boolean hasFocus, int row, int column) {
-        this.table = table;
-
         Component renderer = DEFAULT_RENDERER.getTableCellRendererComponent(table, value,
                 isSelected, hasFocus, row, column);
 
         if (!isTarget(column)) {
             renderer.setForeground(Color.BLACK);
         } else {
-            renderer.setForeground(getColor(row, column));
+            renderer.setForeground(getColor(value));
         }
 
         return renderer;
@@ -133,17 +143,12 @@ class MyRenderer implements TableCellRenderer {
 
     /**
      * 获取渲染色
-     *
-     * @param row    行号
-     * @param column 列号
      */
-    private Color getColor(int row, int column) {
-        Object temp = table.getValueAt(row, column);
-
-        if (temp instanceof Double) {
-            return ColorUtil.getTextColor((Double) table.getValueAt(row, column));
-        } else if(temp instanceof String) {
-            return ColorUtil.getTextColor((String) table.getValueAt(row, column));
+    private Color getColor(Object value) {
+        if (value instanceof Double) {
+            return ColorUtil.getTextColor((Double) value);
+        } else if (value instanceof String) {
+            return ColorUtil.getTextColor((String) value);
         }
 
         return Color.BLACK;

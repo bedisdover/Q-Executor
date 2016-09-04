@@ -18,19 +18,23 @@ public class VWAP_Param {
 	//当前时间段
 	private int timeNode;
 
-	public VWAP_Param(long userVol, String stockid, double delta, int timeNode, int timeSliceNum) {
+	//总时间段数量
+	private int timeSliceNum;
+
+	//是否在规定时间一定全部交易完
+	private boolean tradeAll;
+
+	public VWAP_Param(long userVol, String stockid, double delta, int timeNode, int timeSliceNum, boolean tradeAll) {
 		this.userVol = userVol;
 		this.stockid = stockid;
 		this.delta = delta;
 		this.timeNode = timeNode;
 		this.timeSliceNum = timeSliceNum;
+		this.tradeAll = tradeAll;
 	}
 
 	public VWAP_Param() {
 	}
-
-	//总时间段数量
-	private int timeSliceNum;
 
 	public long getUserVol() {
 		return userVol;
@@ -71,6 +75,12 @@ public class VWAP_Param {
 	public void setTimeSliceNum(int timeSliceNum) {
 		this.timeSliceNum = timeSliceNum;
 	}
-	
-	
+
+	public boolean isTradeAll() {
+		return tradeAll;
+	}
+
+	public void setTradeAll(boolean tradeAll) {
+		this.tradeAll = tradeAll;
+	}
 }

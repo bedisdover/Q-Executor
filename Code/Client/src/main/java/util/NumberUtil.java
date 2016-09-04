@@ -36,4 +36,19 @@ public class NumberUtil {
     public static String transferUnit(double number) {
         return transferUnit(number, 2);
     }
+
+    /**
+     * 默认保留两位小数
+     */
+    public static double round(double number) {
+        return round(number, 2);
+    }
+
+    /**
+     * 保留小数
+     */
+    public static double round(double number, int round) {
+        double temp = Math.pow(10, round);
+        return Math.round(number * temp) / temp;
+    }
 }

@@ -137,4 +137,34 @@ public class TimeUtil {
 
         return calendar.getTime();
     }
+
+
+    public static Date getStartTime() {
+        return getTime("9:29");
+    }
+
+    public static Date getEndTime() {
+        return getTime("15:01");
+    }
+
+    public static Date getInterruptTime() {
+        return getTime("11:29");
+    }
+
+    public static Date getResumeTime() {
+        return getTime("13:01");
+    }
+
+    private static Date getTime(String time) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        Date date = null;
+
+        try {
+            date = dateFormat.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return date;
+    }
 }

@@ -41,6 +41,14 @@ public class StockTimeSeriesVO {
         this.avePrice = avePrice;
     }
 
+    public void setVolume(double volume) {
+        this.volume = volume;
+    }
+
+    public double getVolume() {
+        return volume;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("StockTimeSeriesVO{");

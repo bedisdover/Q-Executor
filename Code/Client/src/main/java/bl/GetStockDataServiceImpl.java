@@ -1,14 +1,17 @@
 package bl;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import vo.*;
@@ -136,40 +139,79 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 			for(int i=0;i<size;i++){
 				StockInfoByPer stockKLineVO=new StockInfoByPer();
 				JSONObject jsonObj=jsonArray.getJSONObject(i);
-				stockKLineVO.setTime(jsonObj.getString("time"));
-				stockKLineVO.setPrice(jsonObj.getDouble("price"));
-				stockKLineVO.setVolume(jsonObj.getDouble("volume"));
-				stockKLineVO.setType(jsonObj.getInt("type"));
-				stockKLineVO.setChange_price(jsonObj.getDouble("change_price"));
-				stockKLineVO.setTotalNum(jsonObj.getDouble("totalNum"));
-				stockList.add(stockKLineVO);
+				if (jsonObj.getDouble("volume") != 0) {
+                    stockKLineVO.setTime(jsonObj.getString("time"));
+                    stockKLineVO.setPrice(jsonObj.getDouble("price"));
+                    stockKLineVO.setVolume(jsonObj.getDouble("volume"));
+                    stockKLineVO.setType(jsonObj.getInt("type"));
+                    stockKLineVO.setChange_price(jsonObj.getDouble("change_price"));
+                    stockKLineVO.setTotalNum(jsonObj.getDouble("totalNum"));
+                    stockList.add(stockKLineVO);
+				}
 			}
 		return stockList;
 	}
 
 	public List<DeepStockVO> getStockDepth(String codeNum) throws Exception {
-		return null;
-	}
-
-	public List<HotStockVO> getHotStock() throws Exception {
-		String url="http://121.42.143.164/HotStocks";
-		List<HotStockVO> stockList=new ArrayList<HotStockVO>();
+		String url="http://121.42.143.164/DeepStock?codeNum="+codeNum;
+		List<DeepStockVO> stockList=new ArrayList<DeepStockVO>();
 		URL ur=new URL(url);
 		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
 		String line=reader.readLine();
 		JSONArray jsonArray=new JSONArray(line);
 		int size=jsonArray.length();
 		for(int i=0;i<size;i++){
-			HotStockVO stockKLineVO=new HotStockVO();
+			DeepStockVO stockKLineVO=new DeepStockVO();
 			JSONObject jsonObj=jsonArray.getJSONObject(i);
-			stockKLineVO.setCode(jsonObj.getString("code"));
-			stockKLineVO.setName(jsonObj.getString("name"));
-			stockKLineVO.setPchange(jsonObj.getDouble("pchange"));
-			stockKLineVO.setReason(jsonObj.getString("reason"));
-			stockKLineVO.setDate(jsonObj.getString("date"));
+			stockKLineVO.setTimeline(jsonObj.getString("timeline"));
+			stockKLineVO.setDeepPrice(jsonObj.getDouble("deepPrice"));
 			stockList.add(stockKLineVO);
 		}
 	return stockList;
+	}
+
+	public List<HotStockVO> getHotStock() throws Exception {
+//		String url="http://121.42.143.164/HotStocks";
+//		List<HotStockVO> stockList=new ArrayList<HotStockVO>();
+//		URL ur=new URL(url);
+//		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
+//		String line=reader.readLine();
+//		JSONArray jsonArray=new JSONArray(line);
+//		int size=jsonArray.length();
+//		for(int i=0;i<size;i++){
+//			HotStockVO stockKLineVO=new HotStockVO();
+//			JSONObject jsonObj=jsonArray.getJSONObject(i);
+//			stockKLineVO.setCode(jsonObj.getString("code"));
+//			stockKLineVO.setName(jsonObj.getString("name"));
+//			stockKLineVO.setPchange(jsonObj.getDouble("pchange"));
+//			stockKLineVO.setReason(jsonObj.getString("reason"));
+//			stockKLineVO.setDate(jsonObj.getString("date"));
+//			stockList.add(stockKLineVO);
+//		}
+//	return stockList;
+		List<HotStockVO> stockVOs = new ArrayList<HotStockVO>();
+
+		String date = TimeUtil.getLastworkDate();
+		String url = "http://data.eastmoney.com/DataCenter_V3/stock2016/TradeDetail/pagesize=200,page=1,sortRule=-1,sortType=,startDate="+date+",endDate="+date+",gpfw=0,js=vardata_tab_1.html";
+		String content = getContentFromURL(url);
+		if (content==null){
+			return stockVOs;
+		}
+		try {
+//            System.out.println(content);
+//            JSONObject jsonObject = new JSONObject(content.substring(content));
+
+			JSONArray array = new JSONArray(content.substring(content.indexOf("["),content.indexOf("]")+1));
+
+			List<HotStockVO> stockVOList = getStockVOsByJson(array);
+			Collections.sort(stockVOList);
+			stockVOs = stockVOList.subList(0,15);
+			return stockVOs;
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return stockVOs;
+		}
 	}
 
 	public List<StockInfoByCom> getComStock(String url) throws Exception{
@@ -191,15 +233,57 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 			}
 		return stockList;
 	}
-	
+
+
+	private List<HotStockVO> getStockVOsByJson(JSONArray array) throws JSONException {
+		List<HotStockVO> result = new ArrayList<HotStockVO>();
+		for (int i = 0 ; i < array.length() ;i++){
+
+			JSONObject object = array.getJSONObject(i);
+			HotStockVO vo = new HotStockVO(object.getString("SCode"),
+					object.getString("SName"),object.getDouble("Chgradio"),
+					object.getString("Ctypedes"),object.getString("Tdate"));
+
+			if (result.contains(vo)){
+				for(HotStockVO obj :result){
+					if (obj.equals(vo)){
+						obj.addReason(vo.getReason());
+					}
+				}
+			}else{
+				result.add(vo);
+			}
+		}
+
+		return result;
+	}
+
+	private String getContentFromURL(String url) {
+
+		try {
+			URL ur = new URL(url);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(ur.openStream(),"GBK"));
+			String line = null;
+			line = reader.readLine();
+			return line;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 //	public static void main(String [] args){
-//		String url="http://121.42.143.164/DeepStock";
+//		String url="http://121.42.143.164/DeepStock?codeNum=sh600000";
 //		StockBasicInfoVO stockBasicInfoVO=new StockBasicInfoVO();
 //		try {
 //			URL ur=new URL(url);
 //			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
 //			String line=reader.readLine();
-//	
+//			JSONArray jsonArray=new JSONArray(line);
+//			int size=jsonArray.length();
+//			for(int i=0;i<size;i++){
+//				JSONObject jsonObj=jsonArray.getJSONObject(i);
+//				System.out.println(jsonObj.get("time"));
+//			}
 //			System.out.println(line);
 //		
 //		} catch (Exception e) {
@@ -208,7 +292,7 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 //		}
 //		GetStockDataServiceImpl A=new GetStockDataServiceImpl();
 //		try {
-//			System.out.println(A.getHotStock().get(0).getName());
+//			System.out.println(A.getStockDepth("sh600000").get(0).getDeepPrice());
 //		} catch (Exception e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();

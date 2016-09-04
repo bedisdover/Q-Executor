@@ -102,15 +102,18 @@ public class PriceSharePanel extends JPanel {
         }
 
         MyTableModel model = new MyTableModel(names, data);
-        JTable table = new MyTable(model);
+        MyTable table = new MyTable(model);
         //插入单元格元素，采用自定义元素
         new ProgressBarColumn(table, 3);
         table.getColumnModel().getColumn(3).setPreferredWidth(600);
+        //无法修改表头大小
+        table.getTableHeader().setResizingAllowed(false);
+        //无法拖动表头
+        table.getTableHeader().setReorderingAllowed(false);
 
         JScrollPane scrollPane = new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-//        scrollPane.setPreferredSize(new Dimension(table.getColumnModel().getTotalColumnWidth() + 28, 540));
         scrollPane.setPreferredSize(new Dimension(800, 540));
 
         return scrollPane;
@@ -118,7 +121,7 @@ public class PriceSharePanel extends JPanel {
 
 
     //自定义表格模型
-    class MyTableModel extends AbstractTableModel {
+    private class MyTableModel extends AbstractTableModel {
         //单元格元素类型
         private Class[] cellType = {String.class, String.class, String.class, JProgressBar.class};
         //表头

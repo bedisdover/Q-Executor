@@ -49,6 +49,8 @@ public class SearchPanel extends JPanel {
 
     private DefaultTableModel hotTableModel;
 
+    private MyTable hotTable;
+
     public SearchPanel(PanelSwitcher switcher) {
         this.switcher = switcher;
 
@@ -203,7 +205,8 @@ public class SearchPanel extends JPanel {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "网络异常");
         }
-        JTable self = createTable(model);
+
+        JTable self = new MyTable(model);
         self.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -236,24 +239,25 @@ public class SearchPanel extends JPanel {
         header.addElement("最新交易日");
         Vector<String> data = new Vector<>();
         hotTableModel = new DefaultTableModel(data, header);
-        JTable hot = createTable(hotTableModel);
-        hot.addMouseListener(new MouseAdapter() {
+
+        hotTable = new MyTable(hotTableModel);
+        hotTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-                switcher.jump(new StockPanel((String)hot.getValueAt(hot.getSelectedRow(), 0)));
+                switcher.jump(new StockPanel((String)hotTable.getValueAt(hotTable.getSelectedRow(), 0)));
             }
         });
 
-        hot.addMouseListener(new MouseAdapter() {
+        hotTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-                System.out.println(hot.getSelectedRow());
+                System.out.println(hotTable.getSelectedRow());
             }
         });
 
-        JScrollPane pane = new JScrollPane(hot);
+        JScrollPane pane = new JScrollPane(hotTable);
         pane.setPreferredSize(new Dimension(
                 (MainFrame.PANEL_W / 3) - (PADDING << 1), TABLE_H - (PADDING << 1)
         ));
@@ -271,15 +275,6 @@ public class SearchPanel extends JPanel {
         box.add(pane);
         box.add(panel);
         return box;
-    }
-
-    private JTable createTable(DefaultTableModel model) {
-        return new JTable(model) { private static final long serialVersionUID = 1L;
-            //设置表格不可编辑
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
     }
 
     private JPanel createLoginTip() {
@@ -333,6 +328,7 @@ public class SearchPanel extends JPanel {
                         v.addElement(vo.getDate());
                         hotTableModel.addRow(v);
                     }
+                    hotTable.setRenderer(new MyRenderer(1), 3);
                     hotTableModel.fireTableDataChanged();
                 } catch (Exception e) {
                     e.printStackTrace();

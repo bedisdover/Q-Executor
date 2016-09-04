@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import util.NumberUtil;
 import vo.StockTimeSeriesVO;
 import blservice.GetTimeSeriesDataService;
 
@@ -26,12 +28,26 @@ public class GetTimeSeriesDataServiceImpl implements GetTimeSeriesDataService{
 			String line=reader.readLine();
 			JSONArray jsonArray=new JSONArray(line);
 			int size=jsonArray.length();
-			for(int i=0;i<size;i++){
+			double price=0;
+			double volume=0;
+			for(int i=(size-1);i>=0;i--){
 				StockTimeSeriesVO stockTimeSeriesVO=new StockTimeSeriesVO();
 				JSONObject jsonObj=jsonArray.getJSONObject(i);
-				stockTimeSeriesVO.setTimeLine((String) jsonObj.get("time"));
-				stockTimeSeriesVO.setPrice((Double) jsonObj.get("price"));
-				stockList.add(stockTimeSeriesVO);
+				if (jsonObj.getDouble("price") != 0) {
+					price += jsonObj.getDouble("price") * jsonObj.getDouble("volume");
+					volume += jsonObj.getDouble("volume");
+					double ave = 0;
+					if (volume != 0) {
+						DecimalFormat df = new DecimalFormat("0.00");
+						ave = price / volume;
+						ave = Double.parseDouble(df.format(ave));
+					}
+					stockTimeSeriesVO.setAvePrice(ave);
+					stockTimeSeriesVO.setTimeLine((String) jsonObj.get("time"));
+					stockTimeSeriesVO.setPrice((Double) jsonObj.get("price"));
+					stockTimeSeriesVO.setVolume(NumberUtil.round(jsonObj.getDouble("volume")));
+					stockList.add(stockTimeSeriesVO);
+				}
 			}
 		return stockList;
 	}
