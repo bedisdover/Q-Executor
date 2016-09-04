@@ -61,7 +61,7 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 				stockNowTimeVO.setSell3amount(a.getDouble(28));
 				stockNowTimeVO.setSell4amount(a.getDouble(29));
 				stockNowTimeVO.setSell5amount(a.getDouble(30));
-				Date dt = new Date(a.getLong(34));
+				Date dt = new Date(a.getLong(34) * 1000);
 				stockNowTimeVO.setTime(dt);
 				stockList.add(stockNowTimeVO);
 			}

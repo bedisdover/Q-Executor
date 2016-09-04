@@ -16,13 +16,24 @@ import java.util.List;
  * <p>
  * 分时图面板
  */
-class TimeSeriesPanel extends JPanel {
+public class TimeSeriesPanel extends JPanel {
     private JPanel panel;
 
     private String stockCode;
 
-    TimeSeriesPanel(String stockCode) {
+    public TimeSeriesPanel() {
         panel = this;
+    }
+
+    public TimeSeriesPanel(String stockCode) {
+        panel = this;
+        this.stockCode = stockCode;
+
+        createUIComponents();
+        getData();
+    }
+
+    public void setStockCode(String stockCode) {
         this.stockCode = stockCode;
 
         createUIComponents();

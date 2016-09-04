@@ -19,7 +19,7 @@ import java.util.List;
  * <p>
  * 实时数据面板
  */
-class CurrentDataPanel extends JPanel {
+public class CurrentDataPanel extends JPanel {
 
     private JPanel panel;
 
@@ -36,6 +36,12 @@ class CurrentDataPanel extends JPanel {
     private StockBasicInfoVO stockBasicInfoVO;
 
     private StockNowTimeVO stockNowTimeVO;
+
+    /**
+     * 收盘价
+     * @see TimeSeriesPanel
+     */
+    private static double close = 0;
 
     CurrentDataPanel(String stockCode) {
         panel = this;
@@ -131,7 +137,7 @@ class CurrentDataPanel extends JPanel {
         dataPanel.setData(stockNowTimeVO);
         handicapPanel.setData(stockNowTimeVO);
 
-        Common.close = stockNowTimeVO.getClose();
+        close = stockNowTimeVO.getClose();
     }
 
     /**
@@ -148,6 +154,10 @@ class CurrentDataPanel extends JPanel {
      */
     double getVolume() {
         return stockNowTimeVO.getVolume();
+    }
+
+    public static double getClose() {
+        return close;
     }
 
     /**
@@ -246,7 +256,7 @@ class CurrentDataPanel extends JPanel {
         }
 
         private String getDate(Date date) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 hh:mm:ss");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
 
             return dateFormat.format(date);
         }
@@ -356,10 +366,10 @@ class CurrentDataPanel extends JPanel {
                 amplitude.setText(stockNowTimeVO.getAmplitude());
                 // turnOver = (amount / outstanding) * 100%
                 // outstanding --- 流通股
-                turnOver.setText(NumberUtil.transferUnit(
-                        stockNowTimeVO.getAmount() / stockBasicInfoVO.getOutstanding() / 1e4 * 100) + "%");
                 amount.setText(NumberUtil.transferUnit(stockNowTimeVO.getAmount()));
                 volume.setText(NumberUtil.transferUnit(stockNowTimeVO.getVolume()));
+                turnOver.setText(NumberUtil.transferUnit(
+                        stockNowTimeVO.getAmount() / stockBasicInfoVO.getOutstanding() / 1e4 * 100) + "%");
                 pe.setText(stockBasicInfoVO.getPe() + "");
                 pb.setText(stockBasicInfoVO.getPb() + "");
             });

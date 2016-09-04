@@ -1,6 +1,7 @@
 package present.panel.trade;
 
 import present.MainFrame;
+import present.panel.stock.TimeSeriesPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,12 +28,15 @@ public class TradePanel extends JPanel {
 
     public TradePanel() {
         ParamPanel param = new ParamPanel(PARAM_PANEL_W, PARAM_PANEL_H, this);
-        RealTimePanel rt = new RealTimePanel(RT_PANEL_W, RT_PANEL_H);
+
+        TimeSeriesPanel timeSeriesPanel = new TimeSeriesPanel();
+        timeSeriesPanel.setStockCode("sh600000");
+        timeSeriesPanel.setPreferredSize(new Dimension(RT_PANEL_W, RT_PANEL_H));
 
 //        MonitorPanel monitor = new MonitorPanel(MONITOR_PANEL_W, MONITOR_PANEL_H);
         Box up = Box.createHorizontalBox();
         up.add(param);
-        up.add(rt);
+        up.add(timeSeriesPanel);
         Box bottom = Box.createHorizontalBox();
         bottom.add(msg);
 //        bottom.add(monitor);
