@@ -41,10 +41,10 @@ public class MainFrame extends JFrame{
 
     private void setAttributes() {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setVisible(true);
         this.pack();
         this.setFrameAtCenter();
         SwingUtilities.invokeLater(() -> this.setResizable(false));
+        this.setVisible(true);
     }
 
     private void addComponents() {

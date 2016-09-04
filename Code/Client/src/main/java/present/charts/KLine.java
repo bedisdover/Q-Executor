@@ -151,7 +151,7 @@ public class KLine {
         candlestickRender.setAutoWidthMethod(CandlestickRenderer.WIDTHMETHOD_AVERAGE);//设置如何对K线图的宽度进行设定
         candlestickRender.setAutoWidthGap(0.001);//设置各个K线图之间的间隔
         candlestickRender.setUpPaint(Color.BLACK);//设置股票上涨的K线图颜色
-        candlestickRender.setDownPaint(Color.GREEN);//设置股票下跌的K线图颜色
+        candlestickRender.setDownPaint(Color.CYAN);//设置股票下跌的K线图颜色
         // FIXME color
         candlestickRender.setSeriesOutlinePaint(0, Color.RED);
         candlestickRender.setSeriesOutlinePaint(1, Color.GREEN);
@@ -192,8 +192,8 @@ public class KLine {
         plot1.setDataset(1, kLineVO.getAvgPriceCollection());
         plot1.setRenderer(1, lineAndShapeRenderer);
         plot1.setBackgroundPaint(Color.BLACK);
-        plot1.setDomainGridlinesVisible(false);//不显示网格
-        plot1.setRangeGridlinePaint(Color.RED);//设置间距格线颜色为红色
+//        plot1.setDomainGridlinesVisible(false);//不显示网格
+//        plot1.setRangeGridlinePaint(Color.RED);//设置间距格线颜色为红色
         plot1.setDatasetRenderingOrder(DatasetRenderingOrder.FORWARD);
 
         XYBarRenderer xyBarRender = new XYBarRenderer() {
@@ -237,10 +237,10 @@ public class KLine {
         plot2.setDataset(1, kLineVO.getAvgVolumeCollection());
         plot2.setRenderer(1, lineAndShapeRenderer2);
         plot2.setBackgroundPaint(Color.BLACK);
-        plot2.setRangeGridlinePaint(Color.BLACK);// 设置横轴参考线颜色
-        plot2.setDomainGridlinePaint(Color.BLACK);// 设置纵轴参考线颜色
-        plot2.setDomainGridlinesVisible(false);//不显示网格
-        plot2.setRangeGridlinePaint(Color.RED);//设置间距格线颜色为红色
+//        plot2.setRangeGridlinePaint(Color.BLACK);// 设置横轴参考线颜色
+//        plot2.setDomainGridlinePaint(Color.BLACK);// 设置纵轴参考线颜色
+//        plot2.setDomainGridlinesVisible(false);//不显示网格
+//        plot2.setRangeGridlinePaint(Color.RED);//设置间距格线颜色为红色
 
         CombinedDomainXYPlot combineddomainxyplot = new CombinedDomainXYPlot(x1Axis);//建立一个恰当的联合图形区域对象，以x轴为共享轴
         combineddomainxyplot.add(plot1, 2);//添加图形区域对象，后面的数字是计算这个区域对象应该占据多大的区域2/3

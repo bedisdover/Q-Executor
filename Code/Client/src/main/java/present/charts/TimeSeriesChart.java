@@ -12,6 +12,7 @@ import org.jfree.data.Range;
 import org.jfree.data.time.Minute;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
+import present.panel.stock.Common;
 import util.TimeUtil;
 import vo.StockTimeSeriesVO;
 
@@ -30,8 +31,8 @@ import java.util.List;
 public class TimeSeriesChart {
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
 
-    public static JPanel getChart(List<StockTimeSeriesVO> stockTimeSeriesVOList, double close) {
-        TimeSeriesVO timeSeriesVO = getData(stockTimeSeriesVOList, close);
+    public static JPanel getChart(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
+        TimeSeriesVO timeSeriesVO = getData(stockTimeSeriesVOList);
 
         // 横轴
         DateAxis dateAxis = new DateAxis();
@@ -71,9 +72,8 @@ public class TimeSeriesChart {
         pricePlot.setRangeAxis(0, yAxis);
         pricePlot.setRangeAxis(1, avgAxis);
         pricePlot.setBackgroundPaint(Color.BLACK);
-        pricePlot.setDomainGridlinesVisible(false);
-        pricePlot.setRangeGridlinesVisible(false);
-        pricePlot.setRangeCrosshairVisible(false);
+//        pricePlot.setDomainGridlinesVisible(false);
+//        pricePlot.setRangeGridlinesVisible(false);
 
         // 成交量纵轴
         NumberAxis y1Axis = new NumberAxis();
@@ -92,8 +92,8 @@ public class TimeSeriesChart {
         // 成交量图
         XYPlot amountPlot = new XYPlot(timeSeriesVO.getAmountCollection(), null, y1Axis, amountRender);
         amountPlot.setBackgroundPaint(Color.BLACK);
-        amountPlot.setDomainGridlinesVisible(false);
-        amountPlot.setRangeGridlinesVisible(false);
+//        amountPlot.setDomainGridlinesVisible(false);
+//        amountPlot.setRangeGridlinesVisible(false);
 
         CombinedDomainXYPlot combinedDomainXYPlot = new CombinedDomainXYPlot(dateAxis);
         combinedDomainXYPlot.add(pricePlot, 2);
@@ -105,8 +105,8 @@ public class TimeSeriesChart {
         return new ChartPanel(jfreechart);
     }
 
-    private static TimeSeriesVO getData(List<StockTimeSeriesVO> stockTimeSeriesVOList, double close) {
-        return new TimeSeriesVO(stockTimeSeriesVOList, close);
+    private static TimeSeriesVO getData(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
+        return new TimeSeriesVO(stockTimeSeriesVOList);
     }
 
     /**
@@ -136,8 +136,10 @@ public class TimeSeriesChart {
 
         private double close;
 
-        TimeSeriesVO(List<StockTimeSeriesVO> stockTimeSeriesVOList, double close) {
-            this.close = close;
+        TimeSeriesVO(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
+            while (Common.close == -1) ;
+
+            close = Common.close;
 
             TimeSeries priceSeries = new TimeSeries("实时价格");
             TimeSeries avgSeries = new TimeSeries("平均价格");

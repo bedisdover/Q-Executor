@@ -130,6 +130,8 @@ class CurrentDataPanel extends JPanel {
         pricePanel.setData(stockNowTimeVO);
         dataPanel.setData(stockNowTimeVO);
         handicapPanel.setData(stockNowTimeVO);
+
+        Common.close = stockNowTimeVO.getClose();
     }
 
     /**
@@ -146,14 +148,6 @@ class CurrentDataPanel extends JPanel {
      */
     double getVolume() {
         return stockNowTimeVO.getVolume();
-    }
-
-    /**
-     * @return 昨日收盘价
-     * @see TimeSeriesPanel
-     */
-    double getClose() {
-        return stockNowTimeVO.getClose();
     }
 
     /**

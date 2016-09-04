@@ -8,6 +8,7 @@ import blservice.SelfSelectService;
 import blservice.UserService;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 import present.charts.KLine;
+import present.panel.account.LoginPanel;
 import present.panel.error.ErrorPanel;
 import present.panel.loading.LoadingPanel;
 import present.panel.progress.ProgressPanel;
@@ -93,7 +94,7 @@ public class StockPanel extends JPanel {
     /**
      * 创建中部面板
      */
-    private void createCenterPanel(String panelType) {
+    private void createCenterPanel(final String panelType) {
         SwingUtilities.invokeLater(() -> {
             panel.remove(centerPanel);
 
@@ -103,7 +104,7 @@ public class StockPanel extends JPanel {
                     break;
                 case "TimeSeriesPanel":
                     if (timeSeriesPanel == null) {
-                        timeSeriesPanel = new TimeSeriesPanel(stockCode, currentDataPanel.getClose());
+                        timeSeriesPanel = new TimeSeriesPanel(stockCode);
                     }
 
                     centerPanel = timeSeriesPanel;
@@ -337,7 +338,14 @@ public class StockPanel extends JPanel {
             portrait.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    SelfSelectService selfSelect = new SelfSelectServiceImpl();
+                    if (!LoginPanel.IS_LOGIN) {
+                        SwingUtilities.invokeLater(() ->
+                                JOptionPane.showConfirmDialog(StockPanel.this, "尚未登录，请先登录", "登录", JOptionPane.CLOSED_OPTION));
+
+                        return;
+                    }
+
+
 
                     portrait.setText("取消自选");
                 }
