@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import util.NumberUtil;
 import vo.StockTimeSeriesVO;
 import blservice.GetTimeSeriesDataService;
 
@@ -44,6 +45,7 @@ public class GetTimeSeriesDataServiceImpl implements GetTimeSeriesDataService{
 					stockTimeSeriesVO.setAvePrice(ave);
 					stockTimeSeriesVO.setTimeLine((String) jsonObj.get("time"));
 					stockTimeSeriesVO.setPrice((Double) jsonObj.get("price"));
+					stockTimeSeriesVO.setVolume(NumberUtil.round(jsonObj.getDouble("volume")));
 					stockList.add(stockTimeSeriesVO);
 				}
 			}

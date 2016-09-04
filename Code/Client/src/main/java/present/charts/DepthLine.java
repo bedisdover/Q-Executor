@@ -7,11 +7,12 @@ import org.jfree.chart.axis.*;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.data.time.Minute;
+import org.jfree.data.Range;
 import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.ui.RectangleInsets;
+import util.TimeUtil;
 import vo.DeepStockVO;
 
 import javax.swing.*;
@@ -27,7 +28,7 @@ import java.util.List;
  * 深度曲线
  */
 public class DepthLine {
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
     public static JPanel getChart(List<DeepStockVO> deepStockVOList) {
         TimeSeriesVO timeSeriesVO = getData(deepStockVOList);
@@ -35,16 +36,14 @@ public class DepthLine {
         NumberAxis yAxis = new NumberAxis();
         yAxis.setAutoRange(false);//设置不采用自动设置数据范围
         yAxis.setUpperMargin(10);//设置向上边框距离
-        yAxis.setLabelFont(new Font("微软雅黑", Font.BOLD, 12));
-        yAxis.setRange(timeSeriesVO.getLow() * 0.9, timeSeriesVO.getHigh() * 1.1);//设置y轴数据范围
+        yAxis.setRange(timeSeriesVO.getRange());//设置y轴数据范围
 
         DateAxis dateAxis = new DateAxis();
-        // FIXME 去掉无数据的时间点
-//        dateAxis.setAutoRange(false);
-//        dateAxis.setRange(timeSeriesVO.getStartTime(), timeSeriesVO.getEndTime());
-//        SegmentedTimeline timeline = SegmentedTimeline.newFifteenMinuteTimeline();
-//        timeline.addException(timeSeriesVO.getInterruptTime().getTime(), timeSeriesVO.getResumeTime().getTime());
-//        dateAxis.setTimeline(timeline);
+        dateAxis.setAutoRange(false);
+        dateAxis.setRange(TimeUtil.getStartTime(), TimeUtil.getEndTime());
+        SegmentedTimeline timeline = SegmentedTimeline.newFifteenMinuteTimeline();
+        timeline.addException(TimeUtil.getInterruptTime().getTime(), TimeUtil.getResumeTime().getTime());
+        dateAxis.setTimeline(timeline);
         dateAxis.setTickMarkPosition(DateTickMarkPosition.MIDDLE);//设置标记的位置
         dateAxis.setStandardTickUnits(DateAxis.createStandardDateTickUnits());//设置标准的时间刻度单位
         dateAxis.setTickUnit(new DateTickUnit(DateTickUnit.MINUTE, 30));//设置时间刻度的间隔
@@ -74,10 +73,6 @@ public class DepthLine {
             xylineandshaperenderer.setSeriesShapesVisible(0, false);
             xylineandshaperenderer.setSeriesShapesVisible(1, false);
         }
-
-//        DateAxis dateaxis = (DateAxis) xyplot.getDomainAxis();
-//        dateaxis.setDateFormatOverride(new SimpleDateFormat("HH:mm:ss"));
-//        dateaxis.setPositiveArrowVisible(true);
 
         return new ChartPanel(jfreechart);
     }
@@ -146,40 +141,10 @@ public class DepthLine {
             return timeSeriesCollection;
         }
 
-        double getHigh() {
-            return high;
-        }
+        Range getRange() {
+            double temp = (high - low) * 0.1;
 
-        double getLow() {
-            return low;
-        }
-
-        Date getStartTime() {
-            return getTime("2016-08-31 9:30:00");
-        }
-
-        Date getEndTime() {
-            return getTime("2016-08-31 15:00:00");
-        }
-
-        Date getInterruptTime() {
-            return getTime("2016-08-31 11:30:00");
-        }
-
-        Date getResumeTime() {
-            return getTime("2016-08-31 13:00:00");
-        }
-
-        private Date getTime(String time) {
-            Date date = null;
-
-            try {
-                date = dateFormat.parse(time);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            return date;
+            return new Range(low - temp * 0.1, high + temp);
         }
     }
 }

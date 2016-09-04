@@ -174,6 +174,7 @@ public class SearchPanel extends JPanel {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "网络异常");
         }
+
         JTable self = new MyTable(model);
         self.addMouseListener(new MouseAdapter() {
             @Override
@@ -207,6 +208,7 @@ public class SearchPanel extends JPanel {
         header.addElement("最新交易日");
         Vector<String> data = new Vector<>();
         hotTableModel = new DefaultTableModel(data, header);
+
         hotTable = new MyTable(hotTableModel);
         hotTable.addMouseListener(new MouseAdapter() {
             @Override
@@ -280,7 +282,7 @@ public class SearchPanel extends JPanel {
                 try {
                     List<HotStockVO> hotDatas = get();
                     for (HotStockVO vo : hotDatas) {
-                        Vector<String> v = new Vector<>();
+                        Vector<String> v = new Vector<>(4);
                         v.addElement(vo.getCode());
                         v.addElement(vo.getName());
                         v.addElement(String.valueOf(vo.getPchange()));

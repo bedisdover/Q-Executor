@@ -149,6 +149,14 @@ class CurrentDataPanel extends JPanel {
     }
 
     /**
+     * @return 昨日收盘价
+     * @see TimeSeriesPanel
+     */
+    double getClose() {
+        return stockNowTimeVO.getClose();
+    }
+
+    /**
      * Created by song on 16-8-26.
      * <p>
      * 价格面板，包含当前价格、涨跌额（涨跌幅）、数据时间

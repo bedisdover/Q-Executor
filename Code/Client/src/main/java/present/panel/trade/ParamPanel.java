@@ -152,34 +152,6 @@ class ParamPanel extends JPanel {
         line4.add(invest);
         box.add(line4);
 
-//        west.add(this.getLineItem(start, startPanel));
-//        //成交置信度
-//        JLabel confidence = new JLabel("成交置信度");
-//        JComboBox<String> confiVal = new JComboBox<>();
-//        west.add(this.getLineItem(confidence, confiVal));
-//        //回测开始
-//        JLabel startDate = new JLabel("回测开始");
-//        JTextField startDateVal = new JTextField();
-//        Chooser chooser1 = Chooser.getInstance();
-//        chooser1.register(startDateVal);
-//        west.add(this.getLineItem(startDate, startDateVal));
-
-//        //结束时间
-//        JLabel end = new JLabel("结束时间");
-//        JComboBox<String> endVal = new JComboBox<>();
-//        east.add(this.getLineItem(end, endVal));
-//        //参考周期（分）
-//        JLabel reference = new JLabel("参考周期");
-//        JTextField refVal = new JTextField();
-//        east.add(this.getLineItem(reference, refVal));
-//        //回测结束
-//        JLabel endDate = new JLabel("回测结束");
-//        JTextField endDataVal = new JTextField();
-//        Chooser chooser2 = Chooser.getInstance();
-//        chooser2.register(endDataVal);
-//        east.add(this.getLineItem(endDate, endDataVal));
-
-
         box.add(createTimePanel("开始时间"));
         box.add(createTimePanel("结束时间"));
 
@@ -207,15 +179,6 @@ class ParamPanel extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-//            int tradeNum = Integer.parseInt(quanVal.getText());
-//            String code = codeText.getText();
-//            try {
-//                vwap.predictVn(new VWAP_Param(
-//                       tradeNum, code, 0, 0, 0
-//                ));
-//            } catch (Exception e1) {
-//                e1.printStackTrace();
-//            }
                 parent.updateMsgPanel();
             }
         });
