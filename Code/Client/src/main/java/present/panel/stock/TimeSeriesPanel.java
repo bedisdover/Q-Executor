@@ -2,14 +2,12 @@ package present.panel.stock;
 
 import bl.GetTimeSeriesDataServiceImpl;
 import blservice.GetTimeSeriesDataService;
-import org.json.JSONException;
 import present.charts.TimeSeriesChart;
 import present.panel.loading.LoadingPanel;
 import vo.StockTimeSeriesVO;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +21,7 @@ class TimeSeriesPanel extends JPanel {
 
     private String stockCode;
 
-    private double close;
-
-    TimeSeriesPanel(String stockCode, double close) {
-        this.close = close;
-
+    TimeSeriesPanel(String stockCode) {
         panel = this;
         this.stockCode = stockCode;
 
@@ -85,7 +79,7 @@ class TimeSeriesPanel extends JPanel {
     private void injectData(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
         SwingUtilities.invokeLater(() -> {
             panel.removeAll();
-            panel.add(TimeSeriesChart.getChart(stockTimeSeriesVOList, close));
+            panel.add(TimeSeriesChart.getChart(stockTimeSeriesVOList));
 
             panel.revalidate();
             panel.repaint();

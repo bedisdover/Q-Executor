@@ -2,23 +2,20 @@ package present.panel.stock;
 
 import bl.GetStockDataServiceImpl;
 import bl.SelfSelectServiceImpl;
-import bl.UserServiceImpl;
 import blservice.GetStockDataService;
 import blservice.SelfSelectService;
-import blservice.UserService;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 import present.charts.KLine;
+import present.panel.account.LoginPanel;
 import present.panel.error.ErrorPanel;
-import present.panel.loading.LoadingPanel;
-import present.panel.progress.ProgressPanel;
+import vo.NowTimeSelectedStockInfoVO;
 import vo.StockBasicInfoVO;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 /**
  * Created by Y481L on 2016/8/25.
@@ -93,7 +90,7 @@ public class StockPanel extends JPanel {
     /**
      * 创建中部面板
      */
-    private void createCenterPanel(String panelType) {
+    private void createCenterPanel(final String panelType) {
         SwingUtilities.invokeLater(() -> {
             panel.remove(centerPanel);
 
@@ -103,7 +100,7 @@ public class StockPanel extends JPanel {
                     break;
                 case "TimeSeriesPanel":
                     if (timeSeriesPanel == null) {
-                        timeSeriesPanel = new TimeSeriesPanel(stockCode, currentDataPanel.getClose());
+                        timeSeriesPanel = new TimeSeriesPanel(stockCode);
                     }
 
                     centerPanel = timeSeriesPanel;
@@ -204,6 +201,7 @@ public class StockPanel extends JPanel {
 
             init();
             createUIComponents();
+            getAllPortrait();
         }
 
         /**
@@ -337,11 +335,82 @@ public class StockPanel extends JPanel {
             portrait.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    SelfSelectService selfSelect = new SelfSelectServiceImpl();
+                    if (!LoginPanel.IS_LOGIN) {
+                        SwingUtilities.invokeLater(() ->
+                                JOptionPane.showConfirmDialog(StockPanel.this, "尚未登录，请先登录", "登录", JOptionPane.CLOSED_OPTION));
 
-                    portrait.setText("取消自选");
+                        return;
+                    }
+
+                    if (portrait.getText().equals("添加自选")) {
+                        addPortrait();
+                    } else {
+                        removePortrait();
+                    }
                 }
             });
+        }
+
+        private void getAllPortrait() {
+            if (LoginPanel.IS_LOGIN) {
+                SwingWorker<List<NowTimeSelectedStockInfoVO>, Void> worker =
+                        new SwingWorker<List<NowTimeSelectedStockInfoVO>, Void>() {
+                            @Override
+                            protected List<NowTimeSelectedStockInfoVO> doInBackground() throws Exception {
+                                SelfSelectService selfSelectService = new SelfSelectServiceImpl();
+
+                                return selfSelectService.getUserSelectedStock(LoginPanel.LOGIN_USER, LoginPanel.LOGIN_PW);
+                            }
+
+                            @Override
+                            protected void done() {
+                                try {
+                                    List<NowTimeSelectedStockInfoVO> stockList = get();
+
+                                    for (NowTimeSelectedStockInfoVO aStockList : stockList) {
+                                        if (aStockList.getGid().equals(stockCode)) {
+                                            portrait.setText("取消自选");
+                                            portrait.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.red));
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        };
+
+                worker.execute();
+            }
+        }
+
+        /**
+         * 添加自选
+         */
+        private void addPortrait() {
+            try {
+                SelfSelectService selfSelect = new SelfSelectServiceImpl();
+                selfSelect.addUserSelectedStock(stockCode, LoginPanel.LOGIN_USER, LoginPanel.LOGIN_PW);
+
+                portrait.setText("取消自选");
+                portrait.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.red));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        /**
+         * 取消自选
+         */
+        private void removePortrait() {
+            try {
+                SelfSelectService selfSelect = new SelfSelectServiceImpl();
+                selfSelect.deleteUserSelectedStock(stockCode, LoginPanel.LOGIN_USER, LoginPanel.LOGIN_PW);
+
+                portrait.setText("添加自选");
+                portrait.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.green));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         private void setButtonStyle(JButton button) {
