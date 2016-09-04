@@ -174,7 +174,6 @@ public class KLine {
         y1Axis.setRange(kLineVO.getLow() * 0.9, kLineVO.getHigh() * 1.1);//设定y轴值的范围，比最低值要低一些，比最大值要大一些，这样图形看起来会美观些
         y1Axis.setTickUnit(new NumberTickUnit((kLineVO.getHigh() * 1.1 - kLineVO.getLow() * 0.9) / 10));//设置刻度显示的密度
         y1Axis.setUpperMargin(5);//设置向上边框距离
-        y1Axis.setLabelFont(new Font("微软雅黑", Font.BOLD, 12));
 
         //设置均线图画图器
         XYLineAndShapeRenderer lineAndShapeRenderer = new XYLineAndShapeRenderer();

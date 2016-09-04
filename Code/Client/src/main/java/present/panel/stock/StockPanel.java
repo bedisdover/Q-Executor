@@ -103,7 +103,7 @@ public class StockPanel extends JPanel {
                     break;
                 case "TimeSeriesPanel":
                     if (timeSeriesPanel == null) {
-                        timeSeriesPanel = new TimeSeriesPanel(stockCode);
+                        timeSeriesPanel = new TimeSeriesPanel(stockCode, currentDataPanel.getClose());
                     }
 
                     centerPanel = timeSeriesPanel;

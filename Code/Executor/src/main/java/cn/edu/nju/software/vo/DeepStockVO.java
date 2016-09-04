@@ -14,7 +14,7 @@ public class DeepStockVO {
     }
 
     public DeepStockVO(String timeline, double deepPrice) {
-        this.timeline = timeline;
+        this.timeline = timeline.split(" ")[1];
         this.deepPrice = deepPrice;
     }
 

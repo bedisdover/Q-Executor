@@ -23,7 +23,11 @@ class TimeSeriesPanel extends JPanel {
 
     private String stockCode;
 
-    TimeSeriesPanel(String stockCode) {
+    private double close;
+
+    TimeSeriesPanel(String stockCode, double close) {
+        this.close = close;
+
         panel = this;
         this.stockCode = stockCode;
 
@@ -47,7 +51,7 @@ class TimeSeriesPanel extends JPanel {
     private void getData() {
         SwingWorker worker = new SwingWorker() {
             @Override
-            protected Object doInBackground()  {
+            protected Object doInBackground() {
                 GetTimeSeriesDataService timeSeriesDataService = new GetTimeSeriesDataServiceImpl();
 
                 List timeSeriesVOList = new ArrayList();
@@ -81,7 +85,7 @@ class TimeSeriesPanel extends JPanel {
     private void injectData(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
         SwingUtilities.invokeLater(() -> {
             panel.removeAll();
-            panel.add(TimeSeriesChart.getChart(stockTimeSeriesVOList));
+            panel.add(TimeSeriesChart.getChart(stockTimeSeriesVOList, close));
 
             panel.revalidate();
             panel.repaint();
