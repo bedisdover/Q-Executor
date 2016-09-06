@@ -42,6 +42,11 @@ public class StockServiceImpl implements StockService {
 
     }
 
+    @Override
+    public List<StockKLineVO> getKLineByMinute(String codeNum, int interval) {
+        // TODO 栋栋写这里
+        return null;
+    }
 
     @Override
     public List<StockKLineVO> getKLineByDay(String Code) {
@@ -205,6 +210,7 @@ public class StockServiceImpl implements StockService {
             return format.parse(sDate);
 
     }
+
     @Override
     public List<DeepStockVO> getDeepStock(String Code) {
         return stockInfoDao.getDeepStockVo(Code);

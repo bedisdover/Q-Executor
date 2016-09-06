@@ -38,4 +38,6 @@ public interface StockService {
     public List<HotStockVO> getHotStocks();
 
     public List<DeepStockVO> getDeepStock(String Code);
+
+    List<StockKLineVO> getKLineByMinute(String codeNum, int interval);
 }

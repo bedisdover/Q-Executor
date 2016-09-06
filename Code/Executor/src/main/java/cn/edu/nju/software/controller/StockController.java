@@ -32,6 +32,11 @@ public class StockController {
         return stockService.getStockNowTime(codeNum);
     }
 
+    @RequestMapping("/KLineMinute")
+    @ResponseBody
+    public List<StockKLineVO> getKLineByMinute(String codeNum, int interval) {
+        return stockService.getKLineByMinute(codeNum, interval);
+    }
 
     @RequestMapping("/KLineDay")
     @ResponseBody
