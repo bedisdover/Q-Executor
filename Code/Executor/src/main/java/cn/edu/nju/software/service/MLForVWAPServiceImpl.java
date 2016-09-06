@@ -236,6 +236,7 @@ public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService 
     //返回最新数据下静态预测的48个成交量
     private void  getStaticVol_svm( ){
 
+        System.gc();
         ArrayList<Integer> list ;
         String[] all_stock=stockService .getStocksNeedCal();
         for(int j=0;j<all_stock.length;j++) {
@@ -259,6 +260,7 @@ public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService 
     //返回最新数据下静态预测的48个价格
     private void getStaticPrice_svm( ){
 
+        System.gc();
         ArrayList<Double> list;
         DecimalFormat df=new DecimalFormat("0.00");
 
@@ -281,6 +283,7 @@ public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService 
     //动态预测的模型存储
     private void getDynamicPrice_svm( ) {
 
+        System.gc();
         ArrayList<svm_model> list ;
         String[] all_stock = stockService.getStocksNeedCal();
         for (int j = 0; j < all_stock.length; j++) {
