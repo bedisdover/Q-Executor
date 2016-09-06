@@ -54,7 +54,7 @@ public class MLForVWAPServiceTest {
 
 
         StockMLService allStockService=new StockMLServiceImpl();
-        MLForVWAPService ml_service=new MLForVWAPServiceImpl();
+        MLForVWAPService ml_service=MLForVWAPServiceImpl.getInstance();
 
         //测试向VWAP传递静态成交量
         String all_stock[]=allStockService.getStocksNeedCal();
