@@ -441,6 +441,10 @@ public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService 
     @Override
     public void run() {
         try {
+            this.staticPriceAllStock.clear();
+            this.staticVolAllStock.clear();
+            this.dynamicPriceModelAllStock.clear();
+
             this.getStaticVol_svm();
             this.getStaticPrice_svm();
             this.getDynamicPrice_svm();
