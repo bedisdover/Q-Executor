@@ -40,4 +40,12 @@ public interface StockService {
     public List<DeepStockVO> getDeepStock(String Code);
 
     List<StockKLineVO> getKLineByMinute(String codeNum, int interval);
+
+    List<KDJVO> getKDJ(String codeNum);
+
+    List<IndexVO> getRSI(String codeNum);
+
+    List<IndexVO> getBIAS(String codeNum);
+
+    List<IndexVO> getMACD(String codeNum);
 }
