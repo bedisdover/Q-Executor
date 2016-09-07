@@ -1,8 +1,12 @@
-package present.panel.stock;
+package present.panel.stock.center;
 
 import bl.GetStockDataServiceImpl;
 import blservice.GetStockDataService;
 import present.charts.GeneralPie;
+import present.panel.stock.west.CurrentDataPanel;
+import present.panel.stock.MyLabel;
+import present.panel.stock.MyRenderer;
+import present.panel.stock.MyTable;
 import util.NumberUtil;
 import vo.StockInfoByCom;
 
@@ -15,9 +19,9 @@ import java.util.List;
  * <p>
  * 大单面板
  */
-public class GeneralPanel extends JPanel {
+public class GeneralPanel extends CenterPanel {
 
-    private JPanel panel;
+    private GeneralPanel panel;
 
     private String stockCode;
 
@@ -33,6 +37,11 @@ public class GeneralPanel extends JPanel {
 
     private double totalAmount, totalVolume;
 
+    /**
+     * 当前选择范围
+     */
+    private double rangeNum = 0;
+
     public GeneralPanel(String stockCode, CurrentDataPanel currentDataPanel) {
         panel = this;
         this.stockCode = stockCode;
@@ -42,7 +51,7 @@ public class GeneralPanel extends JPanel {
 
         init();
         createUIComponents();
-        getData(0);
+        getData(rangeNum);
     }
 
     private void init() {
@@ -148,6 +157,11 @@ public class GeneralPanel extends JPanel {
         radio1000.addActionListener(e -> getData(1000));
     }
 
+    @Override
+    public void getData() {
+        getData(rangeNum);
+    }
+
     /**
      * 获取大单数据
      * @param filterNum 筛选条件，成交量的范围
@@ -161,6 +175,8 @@ public class GeneralPanel extends JPanel {
                 if (filterNum == 0) {
                     return stockDataService.getComStockInfo(stockCode);
                 }
+
+                rangeNum = filterNum;
 
                 return stockDataService.getComStockInfo(stockCode, filterNum);
             }
@@ -214,7 +230,6 @@ public class GeneralPanel extends JPanel {
 
         return result;
     }
-
 
     private double calculateVolume(List<StockInfoByCom> stockInfoByComList) {
         double result = 0;

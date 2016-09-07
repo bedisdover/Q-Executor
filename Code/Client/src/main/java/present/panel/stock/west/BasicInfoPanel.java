@@ -1,5 +1,6 @@
-package present.panel.stock;
+package present.panel.stock.west;
 
+import present.panel.stock.MyLabel;
 import util.NumberUtil;
 import vo.StockBasicInfoVO;
 

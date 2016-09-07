@@ -1,7 +1,7 @@
 package present.panel.trade;
 
 import present.MainFrame;
-import present.panel.stock.TimeSeriesPanel;
+import present.panel.stock.center.TimeSeriesPanel;
 
 import javax.swing.*;
 import java.awt.*;

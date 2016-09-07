@@ -12,7 +12,7 @@ import org.jfree.data.Range;
 import org.jfree.data.time.Minute;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
-import present.panel.stock.CurrentDataPanel;
+import present.panel.stock.west.CurrentDataPanel;
 import util.TimeUtil;
 import vo.StockTimeSeriesVO;
 

@@ -5,9 +5,10 @@ import bl.SelfSelectServiceImpl;
 import blservice.GetStockDataService;
 import blservice.SelfSelectService;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
-import present.charts.KLine;
 import present.panel.account.LoginPanel;
 import present.panel.error.ErrorPanel;
+import present.panel.stock.center.*;
+import present.panel.stock.west.CurrentDataPanel;
 import vo.NowTimeSelectedStockInfoVO;
 import vo.StockBasicInfoVO;
 
@@ -15,9 +16,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.*;
 import java.util.List;
 import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Y481L on 2016/8/25.
@@ -35,11 +36,9 @@ public class StockPanel extends JPanel {
     /**
      * 中部面板
      */
-    private JComponent centerPanel;
+    private CenterPanel centerPanel;
 
-    private JTabbedPane kLinePanel;
-
-    private JPanel timeSeriesPanel, depthPanel, generalPanel, singlePanel, priceSharePanel;
+    private CenterPanel kLinePanel, timeSeriesPanel, depthPanel, generalPanel, singlePanel, priceSharePanel;
 
     private String stockCode;
 
@@ -61,6 +60,14 @@ public class StockPanel extends JPanel {
 
             panel.revalidate();
         });
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                centerPanel.getData();
+            }
+        }, 3000, 3000);
     }
 
     /**
@@ -79,11 +86,7 @@ public class StockPanel extends JPanel {
                 panel.add(scrollPane, BorderLayout.WEST);
             }
 
-            try {
-                centerPanel = kLinePanel = new KLine().getKLine(stockCode);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            createCenterPanel("KLinePanel");
 
             panel.add(centerPanel, BorderLayout.CENTER);
         });
@@ -98,6 +101,10 @@ public class StockPanel extends JPanel {
 
             switch (panelType) {
                 case "KLinePanel":
+                    if (kLinePanel == null) {
+                        kLinePanel = new KLinePanel(stockCode);
+                    }
+
                     centerPanel = kLinePanel;
                     break;
                 case "TimeSeriesPanel":
@@ -136,7 +143,7 @@ public class StockPanel extends JPanel {
                     centerPanel = priceSharePanel;
                     break;
                 case "ErrorPanel":
-                    centerPanel = new ErrorPanel();
+                    centerPanel = new ErrorPanel(centerPanel);
                     break;
             }
 
@@ -159,7 +166,6 @@ public class StockPanel extends JPanel {
                 StockBasicInfoVO stockBasicInfoVO = null;
                 try {
                     stockBasicInfoVO = stockDataService.getBasicInfo(stockCode);
-                    publish(stockBasicInfoVO);
                 } catch (Exception e) {
                     createCenterPanel("ErrorPanel");
                     e.printStackTrace();
@@ -169,7 +175,7 @@ public class StockPanel extends JPanel {
             }
 
             @Override
-            protected void process(List<StockBasicInfoVO> chunks) {
+            protected void done() {
                 try {
                     StockBasicInfoVO stockBasicInfoVO = get();
 
@@ -179,27 +185,9 @@ public class StockPanel extends JPanel {
                     e.printStackTrace();
                 }
             }
-
-            @Override
-            protected void done() {
-            }
         };
 
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    worker.execute();
-                    Thread.sleep(3000);
-                    if (worker.isDone()) {
-                        worker.cancel(true);
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, 3000, 3000);
+        worker.execute();
     }
 
     /**

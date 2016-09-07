@@ -1,9 +1,11 @@
-package present.panel.stock;
+package present.panel.stock.west;
 
 import bl.GetStockDataServiceImpl;
 import blservice.GetStockDataService;
+import present.panel.stock.MyLabel;
+import present.panel.stock.center.GeneralPanel;
+import present.panel.stock.center.TimeSeriesPanel;
 import present.utils.ColorUtil;
-import present.utils.ImageLoader;
 import util.NumberUtil;
 import vo.StockBasicInfoVO;
 import vo.StockNowTimeVO;
@@ -13,6 +15,8 @@ import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by song on 16-8-26.
@@ -39,11 +43,12 @@ public class CurrentDataPanel extends JPanel {
 
     /**
      * 收盘价
+     *
      * @see TimeSeriesPanel
      */
     private static double close = 0;
 
-    CurrentDataPanel(String stockCode) {
+    public CurrentDataPanel(String stockCode) {
         panel = this;
         this.stockCode = stockCode;
 
@@ -62,6 +67,14 @@ public class CurrentDataPanel extends JPanel {
 
             panel.revalidate();
         });
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                getData();
+            }
+        }, 3000, 3000);
     }
 
     /**
@@ -121,7 +134,7 @@ public class CurrentDataPanel extends JPanel {
      *
      * @param stockBasicInfoVO 基本信息
      */
-    void setBasicInfo(StockBasicInfoVO stockBasicInfoVO) {
+    public void setBasicInfo(StockBasicInfoVO stockBasicInfoVO) {
         SwingUtilities.invokeLater(() -> {
             this.stockBasicInfoVO = stockBasicInfoVO;
 
@@ -144,7 +157,7 @@ public class CurrentDataPanel extends JPanel {
      * @return 成交量
      * @see GeneralPanel
      */
-    double getAmount() {
+    public double getAmount() {
         return stockNowTimeVO.getAmount();
     }
 
@@ -152,7 +165,7 @@ public class CurrentDataPanel extends JPanel {
      * @return 成交额
      * @see GeneralPanel
      */
-    double getVolume() {
+    public double getVolume() {
         return stockNowTimeVO.getVolume();
     }
 

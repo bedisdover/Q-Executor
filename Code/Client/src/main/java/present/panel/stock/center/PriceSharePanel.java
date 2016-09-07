@@ -1,8 +1,9 @@
-package present.panel.stock;
+package present.panel.stock.center;
 
 import bl.GetStockDataServiceImpl;
 import blservice.GetStockDataService;
 import present.panel.loading.LoadingPanel;
+import present.panel.stock.MyTable;
 import util.NumberUtil;
 import vo.StockInfoByPrice;
 
@@ -19,9 +20,9 @@ import java.util.List;
  * <p>
  * 分价面板
  */
-public class PriceSharePanel extends JPanel {
+public class PriceSharePanel extends CenterPanel {
 
-    private JPanel panel;
+    private PriceSharePanel panel;
 
     private String stockCode;
 
@@ -43,7 +44,8 @@ public class PriceSharePanel extends JPanel {
         });
     }
 
-    private void getData() {
+    @Override
+    public void getData() {
         SwingWorker worker = new SwingWorker() {
             @Override
             protected Object doInBackground() throws Exception {

@@ -1,4 +1,4 @@
-package present.panel.stock;
+package present.panel.stock.center;
 
 import bl.GetStockDataServiceImpl;
 import blservice.GetStockDataService;
@@ -13,19 +13,20 @@ import java.util.List;
  *
  * 深度面板
  */
-class DepthPanel extends JPanel {
-    private JPanel panel;
+public class DepthPanel extends CenterPanel {
+    private DepthPanel panel;
 
     private String stockCode;
 
-    DepthPanel(String stockCode) {
+    public DepthPanel(String stockCode) {
         panel = this;
         this.stockCode = stockCode;
 
         getData();
     }
 
-    private void getData() {
+    @Override
+    public void getData() {
         SwingWorker<List<DeepStockVO>, Void> worker = new SwingWorker<List<DeepStockVO>, Void>() {
             @Override
             protected List<DeepStockVO> doInBackground() throws Exception {

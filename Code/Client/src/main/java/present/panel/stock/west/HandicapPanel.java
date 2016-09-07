@@ -1,5 +1,7 @@
-package present.panel.stock;
+package present.panel.stock.west;
 
+import present.panel.stock.MyLabel;
+import present.utils.ColorUtil;
 import util.NumberUtil;
 import vo.StockNowTimeVO;
 
@@ -124,8 +126,7 @@ class CenterPanel extends JPanel {
 
     void setData(StockNowTimeVO stockNowTimeVO) {
         SwingUtilities.invokeLater(() -> {
-            double temp = stockNowTimeVO.getCommission();
-            Color color = temp >= 0 ? Color.RED : Color.GREEN;
+            Color color = ColorUtil.getTextColor(stockNowTimeVO.getCommission());
 
             depth.setText(stockNowTimeVO.getDepth());
             committee.setText(stockNowTimeVO.getCommittee());

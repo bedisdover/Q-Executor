@@ -1,8 +1,10 @@
-package present.panel.stock;
+package present.panel.stock.center;
 
 import bl.GetStockDataServiceImpl;
 import blservice.GetStockDataService;
 import present.panel.loading.LoadingPanel;
+import present.panel.stock.MyRenderer;
+import present.panel.stock.MyTable;
 import util.NumberUtil;
 import util.StockUtil;
 import vo.StockInfoByPer;
@@ -10,23 +12,27 @@ import vo.StockInfoByPer;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Y481L on 2016/8/27.
  * <p>
  * 逐笔面板
  */
-public class SinglePanel extends JPanel {
+public class SinglePanel extends CenterPanel {
 
-    private JPanel panel;
+    private SinglePanel panel;
+
+    private String stockCode;
 
     private LoadingPanel loadingPanel;
 
     public SinglePanel(String stockCode) {
         panel = this;
+        this.stockCode = stockCode;
 
         init();
-        getData(stockCode);
+        getData();
     }
 
     private void init() {
@@ -38,7 +44,10 @@ public class SinglePanel extends JPanel {
         });
     }
 
-    private void getData(String stockCode) {
+    @Override
+    public boolean getData() {
+        final boolean[] flag = new boolean[]{true};
+
         SwingWorker worker = new SwingWorker() {
             @Override
             protected Object doInBackground() throws Exception {
@@ -49,17 +58,21 @@ public class SinglePanel extends JPanel {
 
             @Override
             protected void done() {
+                List stockInfoByPerList = null;
                 try {
-                    List stockInfoByPerList = (List) get();
-
-                    injectData(stockInfoByPerList);
+                    stockInfoByPerList = (List) get();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    flag[0] = false;
                 }
+
+                injectData(stockInfoByPerList);
             }
         };
 
         worker.execute();
+
+        return flag[0];
     }
 
     private void injectData(List stockInfoByPerList) {
@@ -71,6 +84,7 @@ public class SinglePanel extends JPanel {
 
             panel.revalidate();
             panel.repaint();
+            System.out.println("SinglePanel.injectData");
         });
     }
 

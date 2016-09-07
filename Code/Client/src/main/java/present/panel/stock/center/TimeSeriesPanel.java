@@ -1,4 +1,4 @@
-package present.panel.stock;
+package present.panel.stock.center;
 
 import bl.GetTimeSeriesDataServiceImpl;
 import blservice.GetTimeSeriesDataService;
@@ -16,8 +16,8 @@ import java.util.List;
  * <p>
  * 分时图面板
  */
-public class TimeSeriesPanel extends JPanel {
-    private JPanel panel;
+public class TimeSeriesPanel extends CenterPanel {
+    private TimeSeriesPanel panel;
 
     private String stockCode;
 
@@ -53,7 +53,7 @@ public class TimeSeriesPanel extends JPanel {
     /**
      * 加载数据
      */
-    private void getData() {
+    public void getData() {
         SwingWorker worker = new SwingWorker() {
             @Override
             protected Object doInBackground() {
