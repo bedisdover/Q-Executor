@@ -51,6 +51,7 @@ public class TimeSeriesChart {
         yAxis.setAutoRange(false);//设置不采用自动设置数据范围
         yAxis.setUpperMargin(10);//设置向上边框距离
         yAxis.setRange(timeSeriesVO.getPriceRange());//设置y轴数据范围
+
         // 涨跌幅纵轴
         NumberAxis avgAxis = new NumberAxis("涨跌幅(%)");
         avgAxis.setAutoRange(false);
