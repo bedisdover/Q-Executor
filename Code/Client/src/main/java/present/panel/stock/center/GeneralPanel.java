@@ -3,6 +3,7 @@ package present.panel.stock.center;
 import bl.GetStockDataServiceImpl;
 import blservice.GetStockDataService;
 import present.charts.GeneralPie;
+import present.panel.stock.StockPanel;
 import present.panel.stock.west.CurrentDataPanel;
 import present.panel.stock.MyLabel;
 import present.panel.stock.MyRenderer;
@@ -42,9 +43,12 @@ public class GeneralPanel extends CenterPanel {
      */
     private double rangeNum = 0;
 
-    public GeneralPanel(String stockCode, CurrentDataPanel currentDataPanel) {
+    private StockPanel stockPanel;
+
+    public GeneralPanel(String stockCode, CurrentDataPanel currentDataPanel, StockPanel stockPanel) {
         panel = this;
         this.stockCode = stockCode;
+        this.stockPanel = stockPanel;
 
         totalAmount = currentDataPanel.getAmount() / 100;
         totalVolume = currentDataPanel.getVolume();
@@ -189,6 +193,7 @@ public class GeneralPanel extends CenterPanel {
                     injectData(stockInfoByComList);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    stockPanel.displayError();
                 }
             }
         };

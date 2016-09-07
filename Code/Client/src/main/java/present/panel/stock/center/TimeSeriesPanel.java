@@ -3,7 +3,9 @@ package present.panel.stock.center;
 import bl.GetTimeSeriesDataServiceImpl;
 import blservice.GetTimeSeriesDataService;
 import present.charts.TimeSeriesChart;
+import present.panel.error.ErrorPanel;
 import present.panel.loading.LoadingPanel;
+import present.panel.stock.StockPanel;
 import vo.StockTimeSeriesVO;
 
 import javax.swing.*;
@@ -21,13 +23,16 @@ public class TimeSeriesPanel extends CenterPanel {
 
     private String stockCode;
 
+    private StockPanel stockPanel;
+
     public TimeSeriesPanel() {
         panel = this;
     }
 
-    public TimeSeriesPanel(String stockCode) {
+    public TimeSeriesPanel(String stockCode, StockPanel stockPanel) {
         panel = this;
         this.stockCode = stockCode;
+        this.stockPanel = stockPanel;
 
         createUIComponents();
         getData();
@@ -54,26 +59,30 @@ public class TimeSeriesPanel extends CenterPanel {
      * 加载数据
      */
     public void getData() {
-        SwingWorker worker = new SwingWorker() {
+        SwingWorker<List<StockTimeSeriesVO>, Void> worker = new SwingWorker<List<StockTimeSeriesVO>, Void>() {
             @Override
-            protected Object doInBackground() {
+            protected List<StockTimeSeriesVO> doInBackground() {
                 GetTimeSeriesDataService timeSeriesDataService = new GetTimeSeriesDataServiceImpl();
 
-                List timeSeriesVOList = new ArrayList();
+                List<StockTimeSeriesVO> timeSeriesVOList = new ArrayList<>();
                 try {
                     timeSeriesVOList = timeSeriesDataService.getData(stockCode);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    if (stockPanel != null) {
+                        stockPanel.displayError();
+                    } else {
+                        panel.add(new ErrorPanel(panel));
+                    }
                 }
 
                 return timeSeriesVOList;
             }
 
             @Override
-            @SuppressWarnings("unchecked")
             protected void done() {
                 try {
-                    List timeSeriesVOList = (List) get();
+                    List<StockTimeSeriesVO> timeSeriesVOList = get();
                     injectData(timeSeriesVOList);
 
                     panel.revalidate();
@@ -90,7 +99,7 @@ public class TimeSeriesPanel extends CenterPanel {
     private void injectData(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
         SwingUtilities.invokeLater(() -> {
             panel.removeAll();
-            panel.add(new TimeSeriesChart(stockTimeSeriesVOList).getChart());
+            panel.add(TimeSeriesChart.getChart(stockTimeSeriesVOList));
 
             panel.revalidate();
             panel.repaint();

@@ -3,6 +3,7 @@ package present.panel.stock.center;
 import bl.GetStockDataServiceImpl;
 import blservice.GetStockDataService;
 import present.charts.DepthLine;
+import present.panel.stock.StockPanel;
 import vo.DeepStockVO;
 
 import javax.swing.*;
@@ -11,14 +12,17 @@ import java.util.List;
 
 /**
  * Created by song on 16-9-1.
- *
+ * <p>
  * 深度面板
  */
 public class DepthPanel extends CenterPanel {
     private String stockCode;
 
-    public DepthPanel(String stockCode) {
+    private StockPanel stockPanel;
+
+    public DepthPanel(String stockCode, StockPanel stockPanel) {
         this.stockCode = stockCode;
+        this.stockPanel = stockPanel;
 
         super.init();
         getData();
@@ -40,6 +44,7 @@ public class DepthPanel extends CenterPanel {
                     injectData(get());
                 } catch (Exception e) {
                     e.printStackTrace();
+                    stockPanel.displayError();
                 }
             }
         };

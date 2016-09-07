@@ -2,9 +2,9 @@ package present.panel.stock.center;
 
 import bl.GetStockDataServiceImpl;
 import blservice.GetStockDataService;
-import present.panel.loading.LoadingPanel;
 import present.panel.stock.MyRenderer;
 import present.panel.stock.MyTable;
+import present.panel.stock.StockPanel;
 import util.NumberUtil;
 import util.StockUtil;
 import vo.StockInfoByPer;
@@ -24,9 +24,12 @@ public class SinglePanel extends CenterPanel {
 
     private String stockCode;
 
-    public SinglePanel(String stockCode) {
+    private StockPanel stockPanel;
+
+    public SinglePanel(String stockCode, StockPanel stockPanel) {
         panel = this;
         this.stockCode = stockCode;
+        this.stockPanel = stockPanel;
 
         super.init();
         getData();
@@ -34,9 +37,9 @@ public class SinglePanel extends CenterPanel {
 
     @Override
     public void getData() {
-        SwingWorker worker = new SwingWorker() {
+        SwingWorker<List<StockInfoByPer>, Void> worker = new SwingWorker<List<StockInfoByPer>, Void>() {
             @Override
-            protected Object doInBackground() throws Exception {
+            protected List<StockInfoByPer> doInBackground() throws Exception {
                 GetStockDataService stockDataService = new GetStockDataServiceImpl();
 
                 return stockDataService.getPerStockInfo(stockCode);
@@ -44,10 +47,11 @@ public class SinglePanel extends CenterPanel {
 
             @Override
             protected void done() {
-                List stockInfoByPerList = null;
+                List<StockInfoByPer> stockInfoByPerList = null;
                 try {
-                    stockInfoByPerList = (List) get();
+                    stockInfoByPerList =  get();
                 } catch (Exception e) {
+                    stockPanel.displayError();
                     e.printStackTrace();
                 }
 
@@ -70,7 +74,6 @@ public class SinglePanel extends CenterPanel {
         });
     }
 
-    @SuppressWarnings("unchecked")
     private JScrollPane createTable(List stockInfoByPerList) {
         //字段名称
         String[] names = {"交易时间", "成交价", "价格变动", "成交量(手)", "成交额(万元)", "买卖盘性质"};

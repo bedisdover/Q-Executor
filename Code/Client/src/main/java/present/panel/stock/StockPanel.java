@@ -102,42 +102,42 @@ public class StockPanel extends JPanel {
             switch (panelType) {
                 case "KLinePanel":
                     if (kLinePanel == null) {
-                        kLinePanel = new KLinePanel(stockCode);
+                        kLinePanel = new KLinePanel(stockCode, this);
                     }
 
                     centerPanel = kLinePanel;
                     break;
                 case "TimeSeriesPanel":
                     if (timeSeriesPanel == null) {
-                        timeSeriesPanel = new TimeSeriesPanel(stockCode);
+                        timeSeriesPanel = new TimeSeriesPanel(stockCode, this);
                     }
 
                     centerPanel = timeSeriesPanel;
                     break;
                 case "DepthPanel":
                     if (depthPanel == null) {
-                        depthPanel = new DepthPanel(stockCode);
+                        depthPanel = new DepthPanel(stockCode, this);
                     }
 
                     centerPanel = depthPanel;
                     break;
                 case "GeneralPanel":
                     if (generalPanel == null) {
-                        generalPanel = new GeneralPanel(stockCode, currentDataPanel);
+                        generalPanel = new GeneralPanel(stockCode, currentDataPanel, this);
                     }
 
                     centerPanel = generalPanel;
                     break;
                 case "SinglePanel":
                     if (singlePanel == null) {
-                        singlePanel = new SinglePanel(stockCode);
+                        singlePanel = new SinglePanel(stockCode, this);
                     }
 
                     centerPanel = singlePanel;
                     break;
                 case "PriceSharePanel":
                     if (priceSharePanel == null) {
-                        priceSharePanel = new PriceSharePanel(stockCode);
+                        priceSharePanel = new PriceSharePanel(stockCode, this);
                     }
 
                     centerPanel = priceSharePanel;
@@ -189,6 +189,13 @@ public class StockPanel extends JPanel {
         };
 
         worker.execute();
+    }
+
+    /**
+     * 展示错误信息
+     */
+    public void displayError() {
+        createCenterPanel("ErrorPanel");
     }
 
     /**
