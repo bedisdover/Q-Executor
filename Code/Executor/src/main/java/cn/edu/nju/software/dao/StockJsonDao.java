@@ -76,9 +76,9 @@ public class StockJsonDao {
             JSONArray array = object.getJSONArray(RECORD);
             int index = 0 ;
             //如果大于100的话那么解析就不是从0开始
-            if(array.length()>100){
-                index = array.length()-100;
-            }
+//            if(array.length()>100){
+//                index = array.length()-100;
+//            }
 
             for(;index<array.length();index++){
                 JSONArray data = array.getJSONArray(index);
