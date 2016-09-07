@@ -3,7 +3,6 @@ package present.panel.account;
 import bl.UserServiceImpl;
 import blservice.UserService;
 import config.MsgInfo;
-import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 import present.PanelSwitcher;
 import present.component.QTextField;
 
@@ -30,7 +29,8 @@ class FindPWPanel extends JPanel {
         box.setOpaque(false);
 
         JLabel title = new JLabel("找回密码");
-        title.setFont(new Font("宋体", Font.PLAIN, 30));
+        title.setFont(new Font("微软雅黑", Font.PLAIN, 28));
+        title.setForeground(Color.white);
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panel.add(title);
         panel.setOpaque(false);
@@ -39,7 +39,7 @@ class FindPWPanel extends JPanel {
 
         QTextField email = new QTextField("请输入用户名");
         email.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        email.setFont(new Font("宋体", Font.PLAIN, 20));
+        email.setFont(new Font("等线", Font.PLAIN, 20));
         box.add(Box.createVerticalStrut(PADDING));
         JPanel emailPane = new JPanel(new FlowLayout(FlowLayout.CENTER));
         emailPane.add(email);
@@ -47,8 +47,7 @@ class FindPWPanel extends JPanel {
         box.add(emailPane);
 
         JButton send = new JButton("发送邮件找回密码");
-        send.setFont(new Font("宋体", Font.PLAIN, 22));
-        send.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.green));
+        send.setFont(new Font("等线", Font.PLAIN, 22));
         send.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         send.addActionListener((e) -> {
             try {
