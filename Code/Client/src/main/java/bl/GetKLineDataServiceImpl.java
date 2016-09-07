@@ -19,17 +19,17 @@ import java.util.List;
 public class GetKLineDataServiceImpl implements GetKLineDataService{
 
 	public List<StockKLineVO> getKLineDay(String stockCode) throws Exception {
-		String url="http://121.42.143.164/KLineDay?codeNum="+stockCode;
+		String url="http://" + Connect.IP + "/KLineDay?codeNum="+stockCode;
 		return getDate(url);
 	}
 
 	public List<StockKLineVO> getKLineWeek(String stockCode) throws Exception {
-		String url="http://121.42.143.164/KLineWeek?codeNum="+stockCode;
+		String url="http://" + Connect.IP + "/KLineWeek?codeNum="+stockCode;
 		return getDate(url);
 	}
 
 	public List<StockKLineVO> getKLineMonth(String stockCode) throws Exception {
-		String url="http://121.42.143.164/KLineMonth?codeNum="+stockCode;
+		String url="http://" + Connect.IP + "/KLineMonth?codeNum="+stockCode;
 		return getDate(url);
 	}
 	

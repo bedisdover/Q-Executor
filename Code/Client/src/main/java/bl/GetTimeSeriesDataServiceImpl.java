@@ -21,7 +21,7 @@ import blservice.GetTimeSeriesDataService;
 public class GetTimeSeriesDataServiceImpl implements GetTimeSeriesDataService{
 
 	public List<StockTimeSeriesVO> getData(String codeNum) throws Exception {
-		String url="http://121.42.143.164/StockInfoByTime?codeNum="+codeNum;
+		String url="http://" + Connect.IP + "/StockInfoByTime?codeNum="+codeNum;
 		List<StockTimeSeriesVO> stockList=new ArrayList<StockTimeSeriesVO>();
 			URL ur=new URL(url);
 			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));

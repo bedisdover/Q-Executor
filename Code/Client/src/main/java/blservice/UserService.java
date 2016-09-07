@@ -10,7 +10,7 @@ import config.MsgInfo;
  */
 public interface UserService {
     /**
-     * 注册，对应url：http:121.42.143.164/register
+     * 注册，对应url：http: + Connect.IP + /register
      *
      * @param userName 用户名
      * @param nickName 昵称（可为空）
@@ -25,7 +25,7 @@ public interface UserService {
     MsgInfo register(String userName, String nickName, String password, String mail) throws Exception;
 
     /**
-     * 登录，对应url：http:121.42.143.164/login
+     * 登录，对应url：http: + Connect.IP + /login
      *
      * @param userName 用户名
      * @param password 密码
@@ -38,7 +38,7 @@ public interface UserService {
     MsgInfo login(String userName, String password) throws Exception;
 
     /**
-     * 判断用户是否登录, url: http:121.42.143.164/isLogin
+     * 判断用户是否登录, url: http: + Connect.IP + /isLogin
      *
      * @param userName 用户名
      * @return MsgInfo
@@ -53,7 +53,7 @@ public interface UserService {
 
 
     /**
-     * 注册，对应url：http:121.42.143.164/findPassword
+     * 注册，对应url：http: + Connect.IP + /findPassword
      *
      * @param userName 用户名
      * @return MsgInfo

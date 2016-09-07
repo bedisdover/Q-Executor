@@ -15,7 +15,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.*;
 import java.util.List;
+import java.util.Timer;
 
 /**
  * Created by Y481L on 2016/8/25.
@@ -149,7 +151,7 @@ public class StockPanel extends JPanel {
      * 获取基本数据，用于设置namePanel及currentDataPanel中的BasicInfoPanel
      */
     private void getData() {
-        SwingWorker<StockBasicInfoVO, Void> worker = new SwingWorker<StockBasicInfoVO, Void>() {
+        SwingWorker<StockBasicInfoVO, StockBasicInfoVO> worker = new SwingWorker<StockBasicInfoVO, StockBasicInfoVO>() {
             @Override
             protected StockBasicInfoVO doInBackground() throws Exception {
                 GetStockDataService stockDataService = new GetStockDataServiceImpl();
@@ -157,6 +159,7 @@ public class StockPanel extends JPanel {
                 StockBasicInfoVO stockBasicInfoVO = null;
                 try {
                     stockBasicInfoVO = stockDataService.getBasicInfo(stockCode);
+                    publish(stockBasicInfoVO);
                 } catch (Exception e) {
                     createCenterPanel("ErrorPanel");
                     e.printStackTrace();
@@ -166,7 +169,7 @@ public class StockPanel extends JPanel {
             }
 
             @Override
-            protected void done() {
+            protected void process(List<StockBasicInfoVO> chunks) {
                 try {
                     StockBasicInfoVO stockBasicInfoVO = get();
 
@@ -176,9 +179,27 @@ public class StockPanel extends JPanel {
                     e.printStackTrace();
                 }
             }
+
+            @Override
+            protected void done() {
+            }
         };
 
-        worker.execute();
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    worker.execute();
+                    Thread.sleep(3000);
+                    if (worker.isDone()) {
+                        worker.cancel(true);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 3000, 3000);
     }
 
     /**

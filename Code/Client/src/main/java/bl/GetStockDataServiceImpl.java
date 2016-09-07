@@ -59,7 +59,7 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 				stockNowTimeVO.setSell3amount(a.getDouble(28));
 				stockNowTimeVO.setSell4amount(a.getDouble(29));
 				stockNowTimeVO.setSell5amount(a.getDouble(30));
-				Date dt = new Date(a.getLong(34));
+				Date dt = new Date(a.getLong(34) * 1000);
 				stockNowTimeVO.setTime(dt);
 				stockList.add(stockNowTimeVO);
 			}
@@ -67,7 +67,7 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 	}
 
 	public StockBasicInfoVO getBasicInfo(String codeNum) throws Exception {
-		String url="http://121.42.143.164/BasicComInfo?codeNum=" + codeNum;
+		String url="http://" + Connect.IP + "/BasicComInfo?codeNum=" + codeNum;
 		StockBasicInfoVO stockBasicInfoVO=new StockBasicInfoVO();
 			URL ur=new URL(url);
 			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream(), "utf-8"));
@@ -97,7 +97,7 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 	}
 
 	public List<StockInfoByPrice> getStockInfoByPrice(String codeNum) throws Exception {
-		String url="http://121.42.143.164/StockInfoByPrice?codeNum="+codeNum;
+		String url="http://" + Connect.IP + "/StockInfoByPrice?codeNum="+codeNum;
 		List<StockInfoByPrice> stockList=new ArrayList<StockInfoByPrice>();
 			URL ur=new URL(url);
 			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream(), "utf-8"));
@@ -118,17 +118,17 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 	}
 
 	public List<StockInfoByCom> getComStockInfo(String codeNum) throws Exception {
-		String url="http://121.42.143.164/ComStockInfo?codeNum="+codeNum;
+		String url="http://" + Connect.IP + "/ComStockInfo?codeNum="+codeNum;
 		return getComStock(url); 
 	}
 
 	public List<StockInfoByCom> getComStockInfo(String codeNum, double param) throws Exception {
-		String url="http://121.42.143.164/ComStockInfoParam?codeNum="+codeNum+"&param="+param;
+		String url="http://" + Connect.IP + "/ComStockInfoParam?codeNum="+codeNum+"&param="+param;
 		return getComStock(url);
 	}
 
 	public List<StockInfoByPer> getPerStockInfo(String codeNum) throws Exception {
-		String url="http://121.42.143.164/PerStockInfo?codeNum="+codeNum;
+		String url="http://" + Connect.IP + "/PerStockInfo?codeNum="+codeNum;
 		List<StockInfoByPer> stockList=new ArrayList<StockInfoByPer>();
 			URL ur=new URL(url);
 			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream(), "utf-8"));
@@ -152,7 +152,7 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 	}
 
 	public List<DeepStockVO> getStockDepth(String codeNum) throws Exception {
-		String url="http://121.42.143.164/DeepStock?codeNum="+codeNum;
+		String url="http://" + Connect.IP + "/DeepStock?codeNum="+codeNum;
 		List<DeepStockVO> stockList=new ArrayList<DeepStockVO>();
 		URL ur=new URL(url);
 		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream(), "utf-8"));
@@ -170,7 +170,7 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 	}
 
 	public List<HotStockVO> getHotStock() throws Exception {
-//		String url="http://121.42.143.164/HotStocks";
+//		String url="http://" + Connect.IP + "/HotStocks";
 //		List<HotStockVO> stockList=new ArrayList<HotStockVO>();
 //		URL ur=new URL(url);
 //		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
@@ -283,7 +283,7 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 		}
 	}
 //	public static void main(String [] args){
-//		String url="http://121.42.143.164/DeepStock?codeNum=sh600000";
+//		String url="http://" + Connect.IP + "/DeepStock?codeNum=sh600000";
 //		StockBasicInfoVO stockBasicInfoVO=new StockBasicInfoVO();
 //		try {
 //			URL ur=new URL(url);

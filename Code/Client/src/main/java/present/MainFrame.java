@@ -43,7 +43,8 @@ public class MainFrame extends JFrame{
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.pack();
         this.setFrameAtCenter();
-        SwingUtilities.invokeLater(() -> this.setResizable(false));
+//        SwingUtilities.invokeLater(() -> this.setResizable(false));
+        setMinimumSize(new Dimension(PANEL_W, PANEL_H + MENU_H));
         this.setVisible(true);
     }
 

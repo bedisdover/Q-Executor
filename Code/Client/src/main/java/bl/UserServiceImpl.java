@@ -14,22 +14,22 @@ public class UserServiceImpl implements UserService{
 
 	public MsgInfo register(String userName, String nickName, String password,
 			String mail) throws Exception {
-		String url="http://121.42.143.164/register?userName="+userName+"&nickName="+nickName+"&password="+password+"&mail="+mail;	      
+		String url="http://" + Connect.IP + "/register?userName="+userName+"&nickName="+nickName+"&password="+password+"&mail="+mail;
 		return getInfo(url);
 	}
 
 	public MsgInfo login(String userName, String password) throws Exception {
-		String url="http://121.42.143.164/login?userName="+userName+"&password="+password;	      
+		String url="http://" + Connect.IP + "/login?userName="+userName+"&password="+password;
 		return getInfo(url);
 	}
 
 	public MsgInfo isLogin(String userName) throws Exception {
-		String url="http://121.42.143.164/isLogin?userName="+userName;	      
+		String url="http://" + Connect.IP + "/isLogin?userName="+userName;
 		return getInfo(url);
 	}
 
 	public MsgInfo findPassword(String userName) throws Exception {
-		String url="http://121.42.143.164/findPassword?userName="+userName;
+		String url="http://" + Connect.IP + "/findPassword?userName="+userName;
 		return getInfo(url);
 	}
 	

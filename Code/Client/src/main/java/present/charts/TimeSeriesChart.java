@@ -12,7 +12,7 @@ import org.jfree.data.Range;
 import org.jfree.data.time.Minute;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
-import present.panel.stock.Common;
+import present.panel.stock.CurrentDataPanel;
 import util.TimeUtil;
 import vo.StockTimeSeriesVO;
 
@@ -52,7 +52,7 @@ public class TimeSeriesChart {
         yAxis.setUpperMargin(10);//设置向上边框距离
         yAxis.setRange(timeSeriesVO.getPriceRange());//设置y轴数据范围
         // 涨跌幅纵轴
-        NumberAxis avgAxis = new NumberAxis();
+        NumberAxis avgAxis = new NumberAxis("涨跌幅(%)");
         avgAxis.setAutoRange(false);
         avgAxis.setRange(timeSeriesVO.getIncRateRange());
         avgAxis.setTickUnit(new NumberTickUnit(0.05));
@@ -134,13 +134,15 @@ public class TimeSeriesChart {
 
         private TimeSeriesCollection amountCollection;
 
-        private double close;
-
         TimeSeriesVO(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
-            while (Common.close == -1) ;
+            initData(stockTimeSeriesVOList);
+        }
 
-            close = Common.close;
+        private double getClose() {
+            return CurrentDataPanel.getClose();
+        }
 
+        private void initData(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
             TimeSeries priceSeries = new TimeSeries("实时价格");
             TimeSeries avgSeries = new TimeSeries("平均价格");
             TimeSeries closeSeries = new TimeSeries("收盘价");
@@ -154,7 +156,7 @@ public class TimeSeriesChart {
                 minute = getMinute(stockVO.getTimeLine());
                 priceSeries.add(minute, stockVO.getPrice());
                 avgSeries.add(minute, stockVO.getAvePrice());
-                closeSeries.add(minute, close);
+                closeSeries.add(minute, getClose());
 
                 amountSeries.add(getMinute(stockVO.getTimeLine()), stockVO.getVolume());
             }
@@ -208,6 +210,8 @@ public class TimeSeriesChart {
          * 获取涨跌幅范围
          */
         Range getIncRateRange() {
+            double close = getClose();
+
             return new Range((getPriceRange().getLowerBound() - close) / close * 100,
                     (getPriceRange().getUpperBound() - close) / close * 100);
         }
