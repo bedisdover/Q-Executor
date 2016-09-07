@@ -204,7 +204,9 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 
 			List<HotStockVO> stockVOList = getStockVOsByJson(array);
 			Collections.sort(stockVOList);
-			stockVOs = stockVOList.subList(0,15);
+			int size = stockVOList.size();
+			int end = size >= 15 ? 15 : size;
+			stockVOs = stockVOList.subList(0, end);
 
 			url="http://hq.sinajs.cn/list=";
 			for (HotStockVO vo:stockVOs){

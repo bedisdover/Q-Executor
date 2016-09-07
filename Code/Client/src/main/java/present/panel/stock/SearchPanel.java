@@ -38,6 +38,8 @@ public class SearchPanel extends JPanel {
 
     private static final int TABLE_H = MainFrame.PANEL_H - SEARCH_H - (PADDING << 3);
 
+    private static final int TABLE_W = (int)(MainFrame.PANEL_W * 0.4);
+
     //字符串切割符
     private static final String spliter = "--";
 
@@ -127,7 +129,7 @@ public class SearchPanel extends JPanel {
         super.paintComponent(g);
         g.drawImage(
                 new ImageIcon("src/main/resources/images/city5.jpg").getImage(),
-                0, 0, MainFrame.PANEL_W, MainFrame.PANEL_H, null
+                0, 0, this.getWidth(), this.getHeight(), null
         );
     }
 
@@ -186,7 +188,7 @@ public class SearchPanel extends JPanel {
 
         JScrollPane pane = new JScrollPane(self);
         pane.setPreferredSize(new Dimension(
-                (int)(MainFrame.PANEL_W * 0.4) - (PADDING << 1), TABLE_H - (PADDING << 1)
+                TABLE_W, TABLE_H - (PADDING << 1)
         ));
 
 
@@ -220,7 +222,7 @@ public class SearchPanel extends JPanel {
 
         JScrollPane pane = new JScrollPane(hotTable);
         pane.setPreferredSize(new Dimension(
-                (int)(MainFrame.PANEL_W * 0.4) - (PADDING << 1), TABLE_H - (PADDING << 1)
+                TABLE_W, TABLE_H - (PADDING << 1)
         ));
 
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));

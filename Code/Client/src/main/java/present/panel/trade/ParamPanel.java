@@ -12,8 +12,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.*;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by Y481L on 2016/8/28.
@@ -35,30 +35,6 @@ class ParamPanel extends JPanel {
     //字符串切割符
     private static final String spliter = " : ";
 
-    //资金账户
-    private Line account;
-
-    //可用资金
-    private Line money;
-
-    //证券代码
-    private Line code;
-
-    //证券名称
-    private Line name;
-
-    //投资方向
-    private Line operation;
-
-    //数量（股）
-    private Line quantity;
-
-    //盘口类型
-    private Line type;
-
-    //下单金额
-    private Line invest;
-
     private VWAPService vwap = new VWAP();
 
     ParamPanel(int width, int height, TradePanel parent) {
@@ -67,32 +43,15 @@ class ParamPanel extends JPanel {
 
         Box box = Box.createVerticalBox();
 
-        Box line1 = Box.createHorizontalBox();
-        //资金账户
-        JLabel accountLabel = new JLabel("资金账户");
-        JComboBox<String> accountValue = new JComboBox<>();
-        accountValue.addItem("12345");
-        accountValue.addItem("54321");
-        account = new Line(accountLabel, accountValue);
-        line1.add(account);
-        //可用资金
-        JLabel moneyLabel = new JLabel("可用资金");
-        JTextField moneyVal = new JTextField();
-        money = new Line(moneyLabel, moneyVal);
-        line1.add(money);
-        box.add(line1);
-
-        Box line2 = Box.createHorizontalBox();
-        //证券名称
-        JLabel nameLabel = new JLabel("证券名称");
-        JTextField nameVal = new JTextField();
-        name = new Line(nameLabel, nameVal);
-        name.getInput().setEnabled(false);
-        line2.add(name);
         //证券代码
         JLabel codeLabel = new JLabel("证券代码");
-        TipText codeText = new TipText(componentW << 1, componentH);
-        codeText.setMatcher((key) -> {
+        JTextField codeText = new JTextField();
+        codeText.setEnabled(false);
+        InputPair code = new InputPair(codeLabel, codeText);
+        //证券名称
+        JLabel nameLabel = new JLabel("证券名称");
+        TipText nameVal = new TipText(componentW << 1, componentH);
+        nameVal.setMatcher((key) -> {
             Vector<String> v = new Vector<>();
             List<JSONObject> list = JsonUtil.contains(
                     StockJsonInfo.JSON_KEYS, StockJsonInfo.JSON_PATH, key
@@ -100,8 +59,8 @@ class ParamPanel extends JPanel {
             for (JSONObject obj : list) {
                 try {
                     v.addElement(
-                            obj.getString(StockJsonInfo.KEY_CODE) + spliter +
-                            obj.getString(StockJsonInfo.KEY_NAME)
+                            obj.getString(StockJsonInfo.KEY_NAME) + spliter +
+                                    obj.getString(StockJsonInfo.KEY_CODE)
                     );
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -109,71 +68,48 @@ class ParamPanel extends JPanel {
             }
             return v;
         });
-        codeText.setListClickHandler((text) -> {
+        nameVal.setListClickHandler((text) -> {
             String[] s = text.split(spliter);
-            codeText.setText(s[0]);
-            nameVal.setText(s[1]);
+            nameVal.setText(s[0]);
+            codeText.setText(s[1]);
         });
-        codeText.setListFocusHandler((field, text) -> {
+        nameVal.setListFocusHandler((field, text) -> {
             String[] s = text.split(spliter);
             field.setText(s[0]);
         });
-        code = new Line(codeLabel, codeText);
-        line2.add(code);
-        box.add(line2);
+        InputPair name = new InputPair(nameLabel, nameVal);
+        //证券名称、证券代码
+        JPanel stock = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, 0));
+        stock.add(name);
+        stock.add(code);
+        box.add(stock);
 
-        Box line3 = Box.createHorizontalBox();
+        //数量（手）
+        JLabel quantityLabel = new JLabel("数量/手");
+        JTextField quanVal = new JTextField();
+        InputPair quantity = new InputPair(quantityLabel, quanVal);
+        //下单金额
+        JLabel investLabel = new JLabel("下单金额");
+        JTextField investVal = new JTextField();
+        investVal.setEnabled(false);
+        InputPair invest = new InputPair(investLabel, investVal);
+        //数量（手）、下单金额
+        JPanel amount = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, 0));
+        amount.add(quantity);
+        amount.add(invest);
+        box.add(amount);
+
+        box.add(createTimePanel("开始时间"));
+        box.add(createTimePanel("结束时间"));
+
         //投资方向
         JLabel operationLabel = new JLabel("投资方向");
         JComboBox<String> operationVal = new JComboBox<>();
         operationVal.addItem("买");
         operationVal.addItem("卖");
-        operation = new Line(operationLabel, operationVal);
-        line3.add(operation);
-        //数量（股）
-        JLabel quantityLabel = new JLabel("数量/股");
-        JTextField quanVal = new JTextField();
-        quantity = new Line(quantityLabel, quanVal);
-        line3.add(quantity);
-        box.add(line3);
-
-        Box line4 = Box.createHorizontalBox();
-        //盘口
-        JLabel typeLabel = new JLabel("盘口");
-        JComboBox<String> typeVal = new JComboBox<>();
-        typeVal.addItem("自动盘口");
-        typeVal.addItem("手动盘口");
-        type = new Line(typeLabel, typeVal);
-        line4.add(type);
-        //下单金额
-        JLabel investLabel = new JLabel("下单金额");
-        JTextField investVal = new JTextField();
-        invest = new Line(investLabel, investVal);
-        line4.add(invest);
-        box.add(line4);
-
-        box.add(createTimePanel("开始时间"));
-        box.add(createTimePanel("结束时间"));
-
-        JPanel line7 = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, V_GAP));
-
-        JLabel mode = new JLabel("启动模式");
-        mode.setPreferredSize(new Dimension(componentW, componentH));
-        line7.add(mode);
-
-        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, V_GAP));
-        JRadioButton trade = new JRadioButton("交易");
-        trade.setPreferredSize(new Dimension(componentW, componentH));
-        p.add(trade);
-        JRadioButton test = new JRadioButton("回测");
-        test.setPreferredSize(new Dimension(componentW, componentH));
-        ButtonGroup group = new ButtonGroup();
-        group.add(trade);
-        group.add(test);
-        p.add(test);
-        line7.add(p);
-
-        JButton trigger = new JButton("启动");
+        InputPair operation = new InputPair(operationLabel, operationVal);
+        //开始交易
+        JButton trigger = new JButton("开始交易");
         trigger.setPreferredSize(new Dimension(componentW, componentH));
         trigger.addMouseListener(new MouseAdapter() {
             @Override
@@ -182,8 +118,13 @@ class ParamPanel extends JPanel {
                 parent.updateMsgPanel();
             }
         });
-        line7.add(trigger);
-        box.add(line7);
+        JPanel start = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, 0));
+        start.add(operation);
+        JPanel empty = new JPanel();
+        empty.setPreferredSize(new Dimension(H_GAP, componentH));
+        start.add(empty);
+        start.add(trigger);
+        box.add(start);
 
         this.setLayout(new BorderLayout());
         this.add(box, BorderLayout.CENTER);
@@ -191,17 +132,17 @@ class ParamPanel extends JPanel {
     }
 
     private JPanel createTimePanel(String name) {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, V_GAP));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, 0));
 
         JLabel label = new JLabel(name);
         label.setFont(font);
-        label.setPreferredSize(new Dimension(componentW, componentH));
+        label.setPreferredSize(new Dimension(componentW - (H_GAP << 1), componentH));
         panel.add(label);
 
         JComboBox<String> hour = new JComboBox<>();
         initHourBox(hour);
         hour.setFont(font);
-        hour.setPreferredSize(new Dimension(componentW, componentH));
+        hour.setPreferredSize(new Dimension(componentW + (H_GAP << 1), componentH));
         panel.add(hour);
 
         JLabel split = new JLabel(":");
@@ -239,18 +180,14 @@ class ParamPanel extends JPanel {
         box.addItem("16");
     }
 
-    private class Line extends JPanel {
-
-        private JComponent input;
-
+    private class InputPair extends JPanel {
         /**
          * 创建包含一行组件的面板，左边为标签，右边为输入组件
          *
          * @param name 标签
          * @param input 输入组件
          */
-        Line(JLabel name, JComponent input) {
-            this.input = input;
+        InputPair(JLabel name, JComponent input) {
             name.setPreferredSize(new Dimension(componentW - (H_GAP << 1), componentH));
             name.setFont(font);
             input.setPreferredSize(new Dimension(componentW + (H_GAP << 1), componentH));
@@ -258,10 +195,5 @@ class ParamPanel extends JPanel {
             this.add(name);
             this.add(input);
         }
-
-        JComponent getInput() {
-            return input;
-        }
     }
-
 }

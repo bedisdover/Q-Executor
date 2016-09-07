@@ -4,7 +4,6 @@ import bl.UserServiceImpl;
 import blservice.UserService;
 import config.MsgInfo;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
-import present.MainFrame;
 import present.PanelSwitcher;
 import present.component.QPasswordField;
 import present.component.QTextField;
@@ -56,7 +55,7 @@ public class RegisterPanel extends JPanel{
         super.paintComponent(g);
         g.drawImage(
                 new ImageIcon("src/main/resources/images/city2.jpg").getImage(),
-                0, 0, MainFrame.PANEL_W, MainFrame.PANEL_H, null
+                0, 0, this.getWidth(), this.getHeight(), null
         );
     }
 
