@@ -90,7 +90,7 @@ public class TimeSeriesPanel extends CenterPanel {
     private void injectData(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
         SwingUtilities.invokeLater(() -> {
             panel.removeAll();
-            panel.add(TimeSeriesChart.getChart(stockTimeSeriesVOList));
+            panel.add(new TimeSeriesChart(stockTimeSeriesVOList).getChart());
 
             panel.revalidate();
             panel.repaint();

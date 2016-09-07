@@ -8,13 +8,17 @@ import org.jfree.chart.axis.*;
 import org.jfree.chart.plot.CombinedDomainXYPlot;
 import org.jfree.chart.plot.DatasetRenderingOrder;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.*;
+import org.jfree.chart.renderer.xy.CandlestickRenderer;
+import org.jfree.chart.renderer.xy.StandardXYBarPainter;
+import org.jfree.chart.renderer.xy.XYBarRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.Range;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.time.ohlc.OHLCSeries;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
+import present.utils.ColorUtil;
 import util.TimeUtil;
 import vo.StockKLineVO;
 
@@ -36,7 +40,7 @@ public class KLine {
 
     private JTabbedPane tabbedPane;
 
-    private JPanel kLineDay, kLineWeek, kLineMonth;
+    private ChartPanel kLineDay, kLineWeek, kLineMonth;
 
     private String stockCode;
 
@@ -67,7 +71,8 @@ public class KLine {
                 try {
                     List stockKLineVOList = (List) get();
 
-                    kLineDay = new ChartPanel(createChart(new KLineVO(stockKLineVOList), 20));
+                    kLineDay = new ChartPanel(createChart(new KLineVO(stockKLineVOList), "day"));
+                    kLineDay.setMouseZoomable(false);// 禁止鼠标缩放
 
                     tabbedPane.addTab("日K", kLineDay);
                 } catch (Exception e) {
@@ -96,7 +101,8 @@ public class KLine {
                 try {
                     List stockKLineVOList = (List) get();
 
-                    kLineWeek = new ChartPanel(createChart(new KLineVO(stockKLineVOList), 80));
+                    kLineWeek = new ChartPanel(createChart(new KLineVO(stockKLineVOList), "week"));
+                    kLineWeek.setMouseZoomable(false);// 禁止鼠标缩放
 
                     tabbedPane.addTab("周K", kLineWeek);
                 } catch (Exception e) {
@@ -124,7 +130,8 @@ public class KLine {
                 try {
                     List stockKLineVOList = (List) get();
 
-                    kLineMonth = new ChartPanel(createChart(new KLineVO(stockKLineVOList), 300));
+                    kLineMonth = new ChartPanel(createChart(new KLineVO(stockKLineVOList), "month"));
+                    kLineMonth.setMouseZoomable(false);
 
                     tabbedPane.addTab("月K", kLineMonth);
                 } catch (Exception e) {
@@ -137,11 +144,19 @@ public class KLine {
     }
 
     /**
+     * 获取5/15/30/60分钟均线
+     */
+    private void getKLineMinute(int interval) {
+
+    }
+
+    /**
      * 绘制图形
      *
+     * @param type k线类型
      * @return jfreeChart
      */
-    private JFreeChart createChart(KLineVO kLineVO, int interval) {
+    private JFreeChart createChart(KLineVO kLineVO, String type) {
         //保留K线数据的数据集，必须申明为final，后面要在匿名内部类里面用到
         final OHLCSeriesCollection seriesCollection = kLineVO.getOhlcSeriesCollection();
         //保留成交量数据的集合
@@ -151,40 +166,36 @@ public class KLine {
             @Override
             public Paint getItemOutlinePaint(int row, int column) {
                 if (seriesCollection.getCloseValue(row, column) > seriesCollection.getOpenValue(row, column)) {
-                    return Color.RED;
+                    return ColorUtil.INC_COLOR;
                 } else {
-                    return Color.GREEN;
+                    return ColorUtil.DEC_COLOR;
                 }
             }
-        } ;
+        };
         candlestickRender.setUseOutlinePaint(true); //设置是否使用自定义的边框线，程序自带的边框线的颜色不符合中国股票市场的习惯
         candlestickRender.setAutoWidthMethod(CandlestickRenderer.WIDTHMETHOD_AVERAGE);//设置如何对K线图的宽度进行设定
         candlestickRender.setAutoWidthGap(0.001);//设置各个K线图之间的间隔
         candlestickRender.setCandleWidth(5);
         candlestickRender.setUpPaint(Color.BLACK);//设置股票上涨的K线图颜色
-        candlestickRender.setDownPaint(Color.GREEN);//设置股票下跌的K线图颜色
-        // FIXME color
-        candlestickRender.setSeriesOutlinePaint(1, Color.GREEN);
-//        candlestickRender.setSeriesOutlinePaint(0, Color.RED);
+        candlestickRender.setDownPaint(ColorUtil.DEC_COLOR);//设置股票下跌的K线图颜色
         candlestickRender.setSeriesVisibleInLegend(0, false);//设置不显示legend（数据颜色提示)
         candlestickRender.setSeriesVisibleInLegend(1, false);//设置不显示legend（数据颜色提示)
 
         //设置x轴，也就是时间轴
-        DateAxis x1Axis = new DateAxis();
-        x1Axis.setAutoRange(false);//设置不采用自动设置时间范围
-        x1Axis.setRange(kLineVO.getStartDate(), kLineVO.getEndDate());//设置时间范围，注意时间的最大值要比已有的时间最大值要多一天
-        x1Axis.setTimeline(SegmentedTimeline.newMondayThroughFridayTimeline());//设置时间线显示的规则，用这个方法就摒除掉了周六和周日这些没有交易的日期，使图形看上去连续
-        x1Axis.setAutoTickUnitSelection(false);//设置不采用自动选择刻度值
-        x1Axis.setTickMarkPosition(DateTickMarkPosition.MIDDLE);//设置标记的位置
-        x1Axis.setStandardTickUnits(DateAxis.createStandardDateTickUnits());//设置标准的时间刻度单位
-        x1Axis.setTickUnit(new DateTickUnit(DateTickUnit.DAY, interval));//设置时间刻度的间隔
-        x1Axis.setDateFormatOverride(new SimpleDateFormat("yyyy-MM-dd"));//设置显示时间的格式
+        DateAxis dateAxis = new DateAxis();
+        dateAxis.setAutoRange(false);//设置不采用自动设置时间范围
+        dateAxis.setRange(kLineVO.getStartDate(), kLineVO.getEndDate());//设置时间范围，注意时间的最大值要比已有的时间最大值要多一天
+        dateAxis.setTimeline(SegmentedTimeline.newMondayThroughFridayTimeline());//设置时间线显示的规则，用这个方法就摒除掉了周六和周日这些没有交易的日期，使图形看上去连续
+        dateAxis.setAutoTickUnitSelection(false);//设置不采用自动选择刻度值
+        dateAxis.setTickUnit(getTickUnit(type));
+        dateAxis.setTickMarkPosition(DateTickMarkPosition.MIDDLE);//设置标记的位置
+        dateAxis.setStandardTickUnits(DateAxis.createStandardDateTickUnits());//设置标准的时间刻度单位
+        dateAxis.setDateFormatOverride(new SimpleDateFormat("yyyy-MM-dd"));//设置显示时间的格式
 
         //设置k线图y轴参数
         NumberAxis y1Axis = new NumberAxis();//设置Y轴，为数值,后面的设置，参考上面的X轴设置
         y1Axis.setAutoRange(false);//不使用自动设定范围
         y1Axis.setRange(kLineVO.getRange());//设定y轴值的范围，比最低值要低一些，比最大值要大一些，这样图形看起来会美观些
-//        y1Axis.setTickUnit(new NumberTickUnit((kLineVO.getHigh() * 1.1 - kLineVO.getLow() * 0.9) / 10));//设置刻度显示的密度
         y1Axis.setUpperMargin(5);//设置向上边框距离
 
         //设置均线图画图器
@@ -198,14 +209,12 @@ public class KLine {
         lineAndShapeRenderer.setSeriesPaint(2, Color.MAGENTA);
 
         //设置柱状图参数
-        XYPlot plot1 = new XYPlot(null, x1Axis, y1Axis, null);//设置画图区域对象
+        XYPlot plot1 = new XYPlot(null, dateAxis, y1Axis, null);//设置画图区域对象
         plot1.setDataset(0, seriesCollection);
         plot1.setRenderer(0, candlestickRender);
         plot1.setDataset(1, kLineVO.getAvgPriceCollection());
         plot1.setRenderer(1, lineAndShapeRenderer);
         plot1.setBackgroundPaint(Color.BLACK);
-//        plot1.setDomainGridlinesVisible(false);//不显示网格
-//        plot1.setRangeGridlinePaint(Color.RED);//设置间距格线颜色为红色
         plot1.setDatasetRenderingOrder(DatasetRenderingOrder.FORWARD);
 
         XYBarRenderer xyBarRender = new XYBarRenderer() {
@@ -220,35 +229,33 @@ public class KLine {
             @Override
             public Paint getItemOutlinePaint(int row, int column) {
                 if (seriesCollection.getCloseValue(row, column) > seriesCollection.getOpenValue(row, column)) {
-                    return Color.RED;
+                    return ColorUtil.INC_COLOR;
                 } else {
-                    return Color.GREEN;
+                    return ColorUtil.DEC_COLOR;
                 }
             }
         };
-        xyBarRender.setMargin(0.1);//设置柱形图之间的间隔
+        xyBarRender.setMargin(0.3);//设置柱形图之间的间隔
         xyBarRender.setDrawBarOutline(true);//设置显示边框线
         xyBarRender.setBarPainter(new StandardXYBarPainter());//取消渐变效果
-        xyBarRender.setSeriesPaint(0, Color.BLACK);//设置柱子内部颜色
-        xyBarRender.setSeriesPaint(1, Color.GREEN);//设置柱子内部颜色
-        xyBarRender.setSeriesOutlinePaint(0, Color.RED);//设置柱子边框颜色
-        xyBarRender.setSeriesOutlinePaint(1, Color.GREEN);//设置柱子边框颜色
-        xyBarRender.setSeriesVisibleInLegend(false);//设置不显示legend（数据颜色提示)
+        xyBarRender.setSeriesVisibleInLegend(0, false);//设置不显示legend（数据颜色提示)
+        xyBarRender.setSeriesVisibleInLegend(1, false);
         xyBarRender.setShadowVisible(false);//设置没有阴影
 
         //设置柱状图y轴参数
         NumberAxis y2Axis = new NumberAxis();//设置Y轴，为数值,后面的设置，参考上面的y轴设置
         y2Axis.setAutoRange(true);
-        y2Axis.setLabelFont(new Font("微软雅黑", Font.BOLD, 12));//设置y轴字体
 
         // 绘制成交量的均线
         XYLineAndShapeRenderer lineAndShapeRenderer2 = null;
         try {
             lineAndShapeRenderer2 = (XYLineAndShapeRenderer) lineAndShapeRenderer.clone();
+            lineAndShapeRenderer2.setSeriesVisibleInLegend(0, false);
+            lineAndShapeRenderer2.setSeriesVisibleInLegend(1, false);
+            lineAndShapeRenderer2.setSeriesVisibleInLegend(2, false);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
-        lineAndShapeRenderer2.setSeriesVisibleInLegend(false);
 
         //建立第二个画图区域对象，主要此时的x轴设为了null值，因为要与第一个画图区域对象共享x轴
         XYPlot plot2 = new XYPlot(null, null, y2Axis, null);
@@ -262,12 +269,34 @@ public class KLine {
 //        plot2.setDomainGridlinesVisible(false);//不显示网格
 //        plot2.setRangeGridlinePaint(Color.RED);//设置间距格线颜色为红色
 
-        CombinedDomainXYPlot combineddomainxyplot = new CombinedDomainXYPlot(x1Axis);//建立一个恰当的联合图形区域对象，以x轴为共享轴
+        CombinedDomainXYPlot combineddomainxyplot = new CombinedDomainXYPlot(dateAxis);//建立一个恰当的联合图形区域对象，以x轴为共享轴
         combineddomainxyplot.add(plot1, 2);//添加图形区域对象，后面的数字是计算这个区域对象应该占据多大的区域2/3
         combineddomainxyplot.add(plot2, 1);//添加图形区域对象，后面的数字是计算这个区域对象应该占据多大的区域1/3
         combineddomainxyplot.setGap(10);//设置两个图形区域对象之间的间隔空间
 
-        return new JFreeChart("", JFreeChart.DEFAULT_TITLE_FONT, combineddomainxyplot, true);
+        JFreeChart jFreeChart = new JFreeChart("", JFreeChart.DEFAULT_TITLE_FONT, combineddomainxyplot, true);
+        return jFreeChart;
+    }
+
+    /**
+     * 获取时间间隔
+     * @param type K线类型
+     */
+    private DateTickUnit getTickUnit(String type) {
+        DateTickUnit dateTickUnit = null;
+        switch (type) {
+            case "month":
+                dateTickUnit = new DateTickUnit(DateTickUnitType.MONTH, 8);
+                break;
+            case "week":
+                dateTickUnit = new DateTickUnit(DateTickUnitType.DAY, 80);
+                break;
+            case "day":
+                dateTickUnit = new DateTickUnit(DateTickUnitType.DAY, 20);
+                break;
+        }
+
+        return dateTickUnit;
     }
 }
 
@@ -363,7 +392,7 @@ class KLineVO {
         return avgPriceCollection;
     }
 
-    public TimeSeriesCollection getAvgVolumeCollection() {
+    TimeSeriesCollection getAvgVolumeCollection() {
         return avgVolumeCollection;
     }
 

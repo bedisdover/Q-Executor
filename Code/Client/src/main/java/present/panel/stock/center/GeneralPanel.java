@@ -54,7 +54,7 @@ public class GeneralPanel extends CenterPanel {
         getData(rangeNum);
     }
 
-    private void init() {
+    protected void init() {
         SwingUtilities.invokeLater(() -> {
             panel.setLayout(new BorderLayout(0, 5));
 

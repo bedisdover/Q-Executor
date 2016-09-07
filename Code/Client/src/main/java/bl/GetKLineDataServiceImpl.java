@@ -18,6 +18,12 @@ import java.util.List;
  */
 public class GetKLineDataServiceImpl implements GetKLineDataService{
 
+	@Override
+	public List<StockKLineVO> getKLineMinute(String stockCode, int interval) throws Exception {
+	    // TODO
+		return null;
+	}
+
 	public List<StockKLineVO> getKLineDay(String stockCode) throws Exception {
 		String url="http://" + Connect.IP + "/KLineDay?codeNum="+stockCode;
 		return getDate(url);

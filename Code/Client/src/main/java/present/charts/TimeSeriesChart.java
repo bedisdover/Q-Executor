@@ -18,6 +18,8 @@ import vo.StockTimeSeriesVO;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,9 +33,87 @@ import java.util.List;
 public class TimeSeriesChart {
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
 
-    public static JPanel getChart(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
-        TimeSeriesVO timeSeriesVO = getData(stockTimeSeriesVOList);
+    private TimeSeriesVO timeSeriesVO;
 
+    public TimeSeriesChart(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
+        timeSeriesVO = getData(stockTimeSeriesVOList);
+    }
+
+    private JPanel getPriceChart() {
+        // 实时价格纵轴
+        NumberAxis priceAxis = new NumberAxis();
+        priceAxis.setAutoRange(false);
+        priceAxis.setRange(timeSeriesVO.getPriceRange());
+        priceAxis.setVisible(false);
+
+        // 涨跌幅纵轴
+        NumberAxis incRateAxis = new NumberAxis();
+        incRateAxis.setAutoRange(false);
+        incRateAxis.setRange(timeSeriesVO.getIncRateRange());
+        NumberFormat numberFormat = new DecimalFormat("0.00%");
+        incRateAxis.setNumberFormatOverride(numberFormat);
+        incRateAxis.setVisible(false);
+
+        //设置价格绘图器
+        XYLineAndShapeRenderer priceRenderer = new XYLineAndShapeRenderer();
+        priceRenderer.setBaseItemLabelsVisible(true);
+        priceRenderer.setSeriesShapesVisible(0, false);//设置不显示数据点模型
+        priceRenderer.setSeriesShapesVisible(1, false);
+        priceRenderer.setSeriesShapesVisible(2, false);
+        priceRenderer.setSeriesVisibleInLegend(0, false);
+        priceRenderer.setSeriesVisibleInLegend(1, false);
+        priceRenderer.setSeriesVisibleInLegend(2, false);
+        priceRenderer.setSeriesPaint(0, Color.WHITE);//设置颜色
+        priceRenderer.setSeriesPaint(1, Color.YELLOW);
+        priceRenderer.setSeriesPaint(2, Color.RED);
+
+        // 价格图
+        XYPlot pricePlot = new XYPlot(timeSeriesVO.getPriceCollection(), getDateAxis(), null, priceRenderer);
+        pricePlot.setRangeAxis(0, priceAxis);
+        pricePlot.setRangeAxis(1, incRateAxis);
+        pricePlot.setBackgroundPaint(Color.BLACK);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+
+        TickPanel priceTick = new TickPanel(timeSeriesVO.getPriceRange(), timeSeriesVO.getClose());
+        priceTick.setPreferredSize(new Dimension(30, 1));
+        panel.add(priceTick, BorderLayout.WEST);
+
+        JFreeChart jFreeChart = new JFreeChart(pricePlot);
+        ChartPanel chartPanel = new ChartPanel(jFreeChart);
+        chartPanel.setMouseZoomable(false);
+        panel.add(chartPanel, BorderLayout.CENTER);
+
+        TickPanel incRateTick = new TickPanel(timeSeriesVO.getIncRateRange(), 0);
+        incRateTick.setPreferredSize(new Dimension(30, 1));
+        panel.add(incRateTick, BorderLayout.EAST);
+
+        return panel;
+    }
+
+    private JPanel getVolumeChart() {
+        // 成交量纵轴
+        NumberAxis amountAxis = new NumberAxis();
+        amountAxis.setAutoRange(true);
+
+        // 成交量绘图器
+        XYBarRenderer amountRender = new XYBarRenderer();
+        amountRender.setDrawBarOutline(true);//设置显示边框线
+        amountRender.setBarPainter(new StandardXYBarPainter());//取消渐变效果
+        amountRender.setMargin(0.3);//设置柱形图之间的间隔
+        amountRender.setSeriesPaint(0, Color.YELLOW);//设置柱子内部颜色
+//        amountRender.setSeriesVisibleInLegend(0, false);//设置不显示legend（数据颜色提示)
+        amountRender.setShadowVisible(false);//设置没有阴影
+
+        // 成交量图
+        XYPlot amountPlot = new XYPlot(timeSeriesVO.getAmountCollection(), getDateAxis(), amountAxis, amountRender);
+        amountPlot.setBackgroundPaint(Color.BLACK);
+
+        return new ChartPanel(new JFreeChart("", JFreeChart.DEFAULT_TITLE_FONT, amountPlot, true));
+    }
+
+    private DateAxis getDateAxis() {
         // 横轴
         DateAxis dateAxis = new DateAxis();
         dateAxis.setAutoRange(false);
@@ -43,70 +123,42 @@ public class TimeSeriesChart {
         dateAxis.setTimeline(timeline);
         dateAxis.setTickMarkPosition(DateTickMarkPosition.START);//设置标记的位置
         dateAxis.setStandardTickUnits(DateAxis.createStandardDateTickUnits());//设置标准的时间刻度单位
-        dateAxis.setTickUnit(new DateTickUnit(DateTickUnit.MINUTE, 30));//设置时间刻度的间隔
+        dateAxis.setTickUnit(new DateTickUnit(DateTickUnitType.MINUTE, 30));//设置时间刻度的间隔
         dateAxis.setDateFormatOverride(dateFormat);//设置显示时间的格式
 
-        // 实时价格纵轴
-        NumberAxis yAxis = new NumberAxis();
-        yAxis.setAutoRange(false);//设置不采用自动设置数据范围
-        yAxis.setUpperMargin(10);//设置向上边框距离
-        yAxis.setRange(timeSeriesVO.getPriceRange());//设置y轴数据范围
-
-        // 涨跌幅纵轴
-        NumberAxis avgAxis = new NumberAxis("涨跌幅(%)");
-        avgAxis.setAutoRange(false);
-        avgAxis.setRange(timeSeriesVO.getIncRateRange());
-        avgAxis.setTickUnit(new NumberTickUnit(0.05));
-
-        //设置价格绘图器
-        XYLineAndShapeRenderer priceRenderer = new XYLineAndShapeRenderer();
-        priceRenderer.setBaseItemLabelsVisible(true);
-        priceRenderer.setSeriesShapesVisible(0, false);//设置不显示数据点模型
-        priceRenderer.setSeriesShapesVisible(1, false);
-        priceRenderer.setSeriesShapesVisible(2, false);
-        priceRenderer.setSeriesPaint(0, Color.WHITE);//设置颜色
-        priceRenderer.setSeriesPaint(1, Color.YELLOW);
-        priceRenderer.setSeriesPaint(2, Color.RED);
-
-        // 价格图
-        XYPlot pricePlot = new XYPlot(timeSeriesVO.getPriceCollection(), dateAxis, yAxis, priceRenderer);
-        pricePlot.setRangeAxis(0, yAxis);
-        pricePlot.setRangeAxis(1, avgAxis);
-        pricePlot.setBackgroundPaint(Color.BLACK);
-//        pricePlot.setDomainGridlinesVisible(false);
-//        pricePlot.setRangeGridlinesVisible(false);
-
-        // 成交量纵轴
-        NumberAxis y1Axis = new NumberAxis();
-        y1Axis.setAutoRange(true);
-
-        // 成交量绘图器
-        XYBarRenderer amountRender = new XYBarRenderer();
-        amountRender.setMargin(0.1);//设置柱形图之间的间隔
-        amountRender.setDrawBarOutline(true);//设置显示边框线
-        amountRender.setBarPainter(new StandardXYBarPainter());//取消渐变效果
-        amountRender.setMargin(0.3);//设置柱形图之间的间隔
-        amountRender.setSeriesPaint(0, Color.YELLOW);//设置柱子内部颜色
-        amountRender.setSeriesVisibleInLegend(0, false);//设置不显示legend（数据颜色提示)
-        amountRender.setShadowVisible(false);//设置没有阴影
-
-        // 成交量图
-        XYPlot amountPlot = new XYPlot(timeSeriesVO.getAmountCollection(), null, y1Axis, amountRender);
-        amountPlot.setBackgroundPaint(Color.BLACK);
-//        amountPlot.setDomainGridlinesVisible(false);
-//        amountPlot.setRangeGridlinesVisible(false);
-
-        CombinedDomainXYPlot combinedDomainXYPlot = new CombinedDomainXYPlot(dateAxis);
-        combinedDomainXYPlot.add(pricePlot, 2);
-        combinedDomainXYPlot.add(amountPlot, 1);
-        combinedDomainXYPlot.setGap(10);
-
-        JFreeChart jfreechart = new JFreeChart(combinedDomainXYPlot);
-
-        return new ChartPanel(jfreechart);
+        return dateAxis;
     }
 
-    private static TimeSeriesVO getData(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
+    public JPanel getChart() {
+        JPanel panel = new JPanel();
+
+        GridBagLayout gridBagLayout = new GridBagLayout();
+        panel.setLayout(gridBagLayout);
+
+        JPanel priceChart = getPriceChart();
+        panel.add(priceChart);
+        JPanel volumeChart = getVolumeChart();
+        panel.add(volumeChart);
+
+        GridBagConstraints gridBagConstraints= new GridBagConstraints();
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+
+        gridBagConstraints.gridwidth = 0;
+        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagLayout.setConstraints(priceChart, gridBagConstraints);
+
+        gridBagConstraints.gridwidth = 0;
+        gridBagConstraints.gridheight = 0;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagLayout.setConstraints(volumeChart, gridBagConstraints);
+
+        return panel;
+    }
+
+    private TimeSeriesVO getData(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
         return new TimeSeriesVO(stockTimeSeriesVOList);
     }
 
@@ -115,7 +167,7 @@ public class TimeSeriesChart {
      *
      * @param time 格式: "HH:mm"
      */
-    private static Minute getMinute(String time) {
+    private Minute getMinute(String time) {
         Minute minute;
 
         try {
@@ -128,7 +180,7 @@ public class TimeSeriesChart {
         return minute;
     }
 
-    private static class TimeSeriesVO {
+    private class TimeSeriesVO {
         private double high = Double.MIN_VALUE, low = Double.MAX_VALUE;
 
         private TimeSeriesCollection priceCollection;
@@ -213,8 +265,8 @@ public class TimeSeriesChart {
         Range getIncRateRange() {
             double close = getClose();
 
-            return new Range((getPriceRange().getLowerBound() - close) / close * 100,
-                    (getPriceRange().getUpperBound() - close) / close * 100);
+            return new Range((getPriceRange().getLowerBound() - close) / close,
+                    (getPriceRange().getUpperBound() - close) / close);
         }
     }
 }

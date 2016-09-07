@@ -10,6 +10,13 @@ import java.util.List;
  * 从服务器获取K线图所需数据
  */
 public interface GetKLineDataService {
+
+    /**
+     * 获取5/15/30/60/分钟均线
+     * @param stockCode 股票代码
+     */
+    List<StockKLineVO> getKLineMinute(String stockCode, int interval) throws Exception;
+
     /**
      * 获取日K线数据
      *

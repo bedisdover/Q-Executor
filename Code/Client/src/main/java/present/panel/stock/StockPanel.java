@@ -87,8 +87,6 @@ public class StockPanel extends JPanel {
             }
 
             createCenterPanel("KLinePanel");
-
-            panel.add(centerPanel, BorderLayout.CENTER);
         });
     }
 
@@ -97,7 +95,9 @@ public class StockPanel extends JPanel {
      */
     private void createCenterPanel(final String panelType) {
         SwingUtilities.invokeLater(() -> {
-            panel.remove(centerPanel);
+            if (centerPanel != null) {
+                panel.remove(centerPanel);
+            }
 
             switch (panelType) {
                 case "KLinePanel":
@@ -182,6 +182,7 @@ public class StockPanel extends JPanel {
                     namePanel.setName(stockBasicInfoVO.getName());
                     currentDataPanel.setBasicInfo(stockBasicInfoVO);
                 } catch (Exception e) {
+                    createCenterPanel("ErrorPanel");
                     e.printStackTrace();
                 }
             }

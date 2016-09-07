@@ -30,18 +30,8 @@ public class PriceSharePanel extends CenterPanel {
         panel = this;
         this.stockCode = stockCode;
 
-        init();
+        super.init();
         getData();
-    }
-
-    private void init() {
-        SwingUtilities.invokeLater(() -> {
-            panel.setLayout(new BorderLayout());
-
-            panel.add(new LoadingPanel(), BorderLayout.CENTER);
-
-            panel.revalidate();
-        });
     }
 
     @Override

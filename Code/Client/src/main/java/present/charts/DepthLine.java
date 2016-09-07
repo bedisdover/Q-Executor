@@ -74,7 +74,10 @@ public class DepthLine {
             xylineandshaperenderer.setSeriesShapesVisible(1, false);
         }
 
-        return new ChartPanel(jfreechart);
+        ChartPanel chartPanel =  new ChartPanel(jfreechart);
+        chartPanel.setMouseZoomable(false);
+
+        return chartPanel;
     }
 
     private static TimeSeriesVO getData(List<DeepStockVO> deepStockVOList) {

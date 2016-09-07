@@ -13,14 +13,8 @@ import java.awt.*;
 public class KLinePanel extends CenterPanel {
 
     public KLinePanel(String stockCode) {
-        init();
+        super.init();
         createUIComponents(stockCode);
-    }
-
-    private void init() {
-        SwingUtilities.invokeLater(() -> {
-            setLayout(new BorderLayout());
-        });
     }
 
     private void createUIComponents(String stockCode) {
@@ -34,7 +28,6 @@ public class KLinePanel extends CenterPanel {
     }
 
     @Override
-    public boolean getData() {
-        return true;
+    public void getData() {
     }
 }

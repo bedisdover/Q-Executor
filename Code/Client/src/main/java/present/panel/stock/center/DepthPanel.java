@@ -6,6 +6,7 @@ import present.charts.DepthLine;
 import vo.DeepStockVO;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -14,14 +15,12 @@ import java.util.List;
  * 深度面板
  */
 public class DepthPanel extends CenterPanel {
-    private DepthPanel panel;
-
     private String stockCode;
 
     public DepthPanel(String stockCode) {
-        panel = this;
         this.stockCode = stockCode;
 
+        super.init();
         getData();
     }
 
@@ -50,11 +49,11 @@ public class DepthPanel extends CenterPanel {
 
     private void injectData(List<DeepStockVO> deepStockVOList) {
         SwingUtilities.invokeLater(() -> {
-            panel.removeAll();
-            panel.add(DepthLine.getChart(deepStockVOList));
+            this.removeAll();
+            this.add(DepthLine.getChart(deepStockVOList), BorderLayout.CENTER);
 
-            panel.revalidate();
-            panel.repaint();
+            this.revalidate();
+            this.repaint();
         });
     }
 }

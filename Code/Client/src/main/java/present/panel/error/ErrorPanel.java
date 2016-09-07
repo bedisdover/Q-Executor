@@ -39,8 +39,7 @@ public class ErrorPanel extends CenterPanel {
     }
 
     @Override
-    public boolean getData() {
+    public void getData() {
         // TODO 持续更新
-        return true;
     }
 }

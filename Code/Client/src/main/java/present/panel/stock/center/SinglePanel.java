@@ -12,7 +12,6 @@ import vo.StockInfoByPer;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Y481L on 2016/8/27.
@@ -25,29 +24,16 @@ public class SinglePanel extends CenterPanel {
 
     private String stockCode;
 
-    private LoadingPanel loadingPanel;
-
     public SinglePanel(String stockCode) {
         panel = this;
         this.stockCode = stockCode;
 
-        init();
+        super.init();
         getData();
     }
 
-    private void init() {
-        SwingUtilities.invokeLater(() -> {
-            panel.setLayout(new BorderLayout());
-
-            loadingPanel = new LoadingPanel();
-            panel.add(loadingPanel, BorderLayout.CENTER);
-        });
-    }
-
     @Override
-    public boolean getData() {
-        final boolean[] flag = new boolean[]{true};
-
+    public void getData() {
         SwingWorker worker = new SwingWorker() {
             @Override
             protected Object doInBackground() throws Exception {
@@ -63,7 +49,6 @@ public class SinglePanel extends CenterPanel {
                     stockInfoByPerList = (List) get();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    flag[0] = false;
                 }
 
                 injectData(stockInfoByPerList);
@@ -71,8 +56,6 @@ public class SinglePanel extends CenterPanel {
         };
 
         worker.execute();
-
-        return flag[0];
     }
 
     private void injectData(List stockInfoByPerList) {
@@ -84,7 +67,6 @@ public class SinglePanel extends CenterPanel {
 
             panel.revalidate();
             panel.repaint();
-            System.out.println("SinglePanel.injectData");
         });
     }
 
