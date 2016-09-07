@@ -43,7 +43,6 @@ public class MainFrame extends JFrame{
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.pack();
         this.setFrameAtCenter();
-//        SwingUtilities.invokeLater(() -> this.setResizable(false));
         setMinimumSize(new Dimension(PANEL_W, PANEL_H + MENU_H));
         this.setVisible(true);
     }
@@ -93,23 +92,6 @@ public class MainFrame extends JFrame{
             @Override
             public void menuCanceled(MenuEvent e) {}
         });
-
-//        //大单菜单项
-//        JMenuItem general = this.createMenuItem(
-//                "大单", (e) -> switcher.jump(new GeneralPanel())
-//        );
-//        stock.add(general);
-//        //逐笔菜单项
-//        JMenuItem single = this.createMenuItem(
-//                "逐笔", (e) -> switcher.jump(new SinglePanel())
-//        );
-//        stock.add(single);
-//        //分价菜单项
-//        JMenuItem price = this.createMenuItem(
-//                "分价", (e) -> switcher.jump(new PriceSharePanel())
-//        );
-//        stock.add(price);
-
         bar.add(stock);
 
         //简介菜单
@@ -128,59 +110,33 @@ public class MainFrame extends JFrame{
         });
         bar.add(introduce);
 
+        //账户账单
+        JMenu account = this.createMenu("账户");
+        bar.add(account);
         //登录菜单
-        JMenu login = this.createMenu("登录");
-        login.addMenuListener(new MenuListener() {
-            @Override
-            public void menuSelected(MenuEvent e) {
-                switcher.jump(new LoginPanel(switcher));
-            }
-
-            @Override
-            public void menuDeselected(MenuEvent e) {}
-
-            @Override
-            public void menuCanceled(MenuEvent e) {}
-        });
-        bar.add(login);
+        JMenuItem login = this.createMenuItem("登录");
+        login.addActionListener((e) -> switcher.jump(new LoginPanel(switcher)));
+        account.add(login);
 
         //注册菜单
-        JMenu register = this.createMenu("注册");
-        register.addMenuListener(new MenuListener() {
-            @Override
-            public void menuSelected(MenuEvent e) {
-                switcher.jump(new RegisterPanel(switcher));
-            }
-
-            @Override
-            public void menuDeselected(MenuEvent e) {}
-
-            @Override
-            public void menuCanceled(MenuEvent e) {}
-        });
-        bar.add(register);
+        JMenuItem register = this.createMenuItem("注册");
+        register.addActionListener((e) -> switcher.jump(new RegisterPanel(switcher)));
+        account.add(register);
 
         this.setJMenuBar(bar);
+    }
 
-//        TitlePanel title = new TitlePanel(switcher);
-//        NavPanel nav = new NavPanel(switcher);
-//        this.add(title, BorderLayout.NORTH);
-//        this.add(nav, BorderLayout.WEST);
-
+    private JMenuItem createMenuItem(String name) {
+        JMenuItem item = new JMenuItem(name);
+        item.setPreferredSize(new Dimension(MENU_W, MENU_H));
+        return item;
     }
 
     private JMenu createMenu(String name) {
-        JMenu menu = new JMenu("        " + name);    //文字无法居中，用空格代替...
+        JMenu menu = new JMenu("        " + name);
         menu.setPreferredSize(new Dimension(MENU_W, MENU_H));
         return menu;
     }
-
-//    private JMenuItem createMenuItem(String name, ActionListener listener) {
-//        JMenuItem item = new JMenuItem(name);
-//        item.setPreferredSize(new Dimension(MENU_W, MENU_H));
-//        item.addActionListener(listener);
-//        return item;
-//    }
 
     private void setFrameAtCenter() {
         Toolkit tk = Toolkit.getDefaultToolkit();
