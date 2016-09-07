@@ -1,5 +1,6 @@
 package util;
 
+import jdk.nashorn.api.scripting.JSObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,6 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Vector;
 
 /**
  * Created by Y481L on 2016/8/29.
@@ -48,6 +50,38 @@ public class JsonUtil {
             e.printStackTrace();
         }
         return result;
+    }
+
+    /**
+     *
+     * @param srcKey
+     * @param targetKey
+     * @param key
+     * @param filepath
+     * @return
+     */
+    public static String confirm(String srcKey, String targetKey, String key, String filepath) {
+        Vector<String> keys = new Vector<>();
+        keys.add(srcKey);
+        keys.add(targetKey);
+        List<JSONObject> list = contains(keys, filepath, key);
+        try {
+            return list.get(0).getString(targetKey);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+//        String result = null;
+//        String file = getString(filepath);
+//        try {
+//            JSONArray array = new JSONArray(file);
+//            int length = array.length();
+//
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return result;
     }
 
     /**

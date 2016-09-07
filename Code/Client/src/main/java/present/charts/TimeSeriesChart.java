@@ -147,7 +147,6 @@ public class TimeSeriesChart {
             TimeSeries priceSeries = new TimeSeries("实时价格");
             TimeSeries avgSeries = new TimeSeries("平均价格");
             TimeSeries closeSeries = new TimeSeries("收盘价");
-
             TimeSeries amountSeries = new TimeSeries("成交量");
 
             StockTimeSeriesVO stockVO;

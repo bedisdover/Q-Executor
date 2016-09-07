@@ -1,28 +1,23 @@
 package bl;
 
+import blservice.SelfSelectService;
+import config.MsgInfo;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import vo.NowTimeSelectedStockInfoVO;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import vo.NowTimeSelectedStockInfoVO;
-
-
-import blservice.SelfSelectService;
-import config.MsgInfo;
 
 public class SelfSelectServiceImpl implements SelfSelectService{
 
 	public List<NowTimeSelectedStockInfoVO> getUserSelectedStock(String userName,String password) throws Exception {
 		String url="http://" + Connect.IP + "/getUserSelectedStockClient?userName="+userName+"&password="+password;
 		URL ur=new URL(url);
-		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(ur.openStream(), "utf-8"));
 		String line=reader.readLine();
 		JSONObject json=new JSONObject(line);
 		return getJsonArray(json);
