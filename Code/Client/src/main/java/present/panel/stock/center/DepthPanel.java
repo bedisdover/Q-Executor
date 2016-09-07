@@ -1,7 +1,7 @@
 package present.panel.stock.center;
 
-import bl.GetStockDataServiceImpl;
-import blservice.GetStockDataService;
+import bl.stock.GetStockDataServiceImpl;
+import blservice.stock.GetStockDataService;
 import present.charts.DepthLine;
 import present.panel.stock.StockPanel;
 import vo.DeepStockVO;

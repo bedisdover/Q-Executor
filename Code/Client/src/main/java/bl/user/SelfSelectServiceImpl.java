@@ -1,6 +1,7 @@
-package bl;
+package bl.user;
 
-import blservice.SelfSelectService;
+import bl.Connect;
+import blservice.user.SelfSelectService;
 import config.MsgInfo;
 import org.json.JSONArray;
 import org.json.JSONObject;

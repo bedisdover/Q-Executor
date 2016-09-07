@@ -1,4 +1,4 @@
-package blservice;
+package blservice.user;
 
 import config.MsgInfo;
 

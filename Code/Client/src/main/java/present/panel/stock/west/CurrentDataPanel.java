@@ -1,7 +1,7 @@
 package present.panel.stock.west;
 
-import bl.GetStockDataServiceImpl;
-import blservice.GetStockDataService;
+import bl.stock.GetStockDataServiceImpl;
+import blservice.stock.GetStockDataService;
 import present.panel.stock.MyLabel;
 import present.panel.stock.center.GeneralPanel;
 import present.panel.stock.center.TimeSeriesPanel;

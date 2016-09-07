@@ -1,4 +1,4 @@
-package blservice;
+package blservice.stock;
 
 import java.net.MalformedURLException;
 import java.util.List;

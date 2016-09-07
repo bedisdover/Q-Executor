@@ -1,6 +1,6 @@
-package blservice;
+package blservice.vwap;
 
-import bl.VWAP_Param;
+import bl.vwap.VWAP_Param;
 import vo.VolumeVO;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package present.panel.stock.center;
 
-import bl.GetStockDataServiceImpl;
-import blservice.GetStockDataService;
+import bl.stock.GetStockDataServiceImpl;
+import blservice.stock.GetStockDataService;
 import present.panel.stock.MyTable;
 import present.panel.stock.StockPanel;
 import util.NumberUtil;

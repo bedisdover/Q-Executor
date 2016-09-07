@@ -1,7 +1,7 @@
 package present.panel.stock.center;
 
-import bl.GetStockDataServiceImpl;
-import blservice.GetStockDataService;
+import bl.stock.GetStockDataServiceImpl;
+import blservice.stock.GetStockDataService;
 import present.charts.GeneralPie;
 import present.panel.stock.StockPanel;
 import present.panel.stock.west.CurrentDataPanel;

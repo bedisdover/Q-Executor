@@ -1,7 +1,9 @@
 package bl;
 
+import bl.stock.GetStockDataServiceImpl;
+import bl.user.SelfSelectServiceImpl;
+import bl.user.UserServiceImpl;
 import org.junit.Test;
-import org.omg.PortableInterceptor.HOLDING;
 import vo.HotStockVO;
 
 /**

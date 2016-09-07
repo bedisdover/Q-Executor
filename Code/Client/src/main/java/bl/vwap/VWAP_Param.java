@@ -1,4 +1,4 @@
-package bl;
+package bl.vwap;
 
 /**
  * @author ZhangYF

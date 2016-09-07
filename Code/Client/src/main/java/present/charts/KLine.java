@@ -1,7 +1,7 @@
 package present.charts;
 
-import bl.GetKLineDataServiceImpl;
-import blservice.GetKLineDataService;
+import bl.stock.GetKLineDataServiceImpl;
+import blservice.stock.GetKLineDataService;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.*;

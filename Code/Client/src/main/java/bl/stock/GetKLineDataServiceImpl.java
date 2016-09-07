@@ -1,6 +1,7 @@
-package bl;
+package bl.stock;
 
-import blservice.GetKLineDataService;
+import bl.Connect;
+import blservice.stock.GetKLineDataService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import vo.StockKLineVO;

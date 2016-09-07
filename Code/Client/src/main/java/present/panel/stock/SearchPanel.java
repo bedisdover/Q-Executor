@@ -1,9 +1,9 @@
 package present.panel.stock;
 
-import bl.GetStockDataServiceImpl;
-import bl.SelfSelectServiceImpl;
-import blservice.GetStockDataService;
-import blservice.SelfSelectService;
+import bl.stock.GetStockDataServiceImpl;
+import bl.user.SelfSelectServiceImpl;
+import blservice.stock.GetStockDataService;
+import blservice.user.SelfSelectService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import present.MainFrame;
