@@ -79,7 +79,7 @@ class ParamPanel extends JPanel {
         });
         InputPair name = new InputPair(nameLabel, nameVal);
         //证券名称、证券代码
-        JPanel stock = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, 0));
+        JPanel stock = new JPanel(new FlowLayout(FlowLayout.CENTER, H_GAP, 0));
         stock.add(name);
         stock.add(code);
         box.add(stock);
@@ -94,7 +94,7 @@ class ParamPanel extends JPanel {
         investVal.setEnabled(false);
         InputPair invest = new InputPair(investLabel, investVal);
         //数量（手）、下单金额
-        JPanel amount = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, 0));
+        JPanel amount = new JPanel(new FlowLayout(FlowLayout.CENTER, H_GAP, 0));
         amount.add(quantity);
         amount.add(invest);
         box.add(amount);
@@ -118,7 +118,7 @@ class ParamPanel extends JPanel {
                 parent.updateMsgPanel();
             }
         });
-        JPanel start = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, 0));
+        JPanel start = new JPanel(new FlowLayout(FlowLayout.CENTER, H_GAP, 0));
         start.add(operation);
         JPanel empty = new JPanel();
         empty.setPreferredSize(new Dimension(H_GAP, componentH));
@@ -132,7 +132,7 @@ class ParamPanel extends JPanel {
     }
 
     private JPanel createTimePanel(String name) {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, 0));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, H_GAP, 0));
 
         JLabel label = new JLabel(name);
         label.setFont(font);

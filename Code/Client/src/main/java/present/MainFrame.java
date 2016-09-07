@@ -43,7 +43,6 @@ public class MainFrame extends JFrame{
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.pack();
         this.setFrameAtCenter();
-//        SwingUtilities.invokeLater(() -> this.setResizable(false));
         setMinimumSize(new Dimension(PANEL_W, PANEL_H + MENU_H));
         this.setVisible(true);
     }
@@ -134,17 +133,10 @@ public class MainFrame extends JFrame{
     }
 
     private JMenu createMenu(String name) {
-        JMenu menu = new JMenu("        " + name);    //文字无法居中，用空格代替...
+        JMenu menu = new JMenu("        " + name);
         menu.setPreferredSize(new Dimension(MENU_W, MENU_H));
         return menu;
     }
-
-//    private JMenuItem createMenuItem(String name, ActionListener listener) {
-//        JMenuItem item = new JMenuItem(name);
-//        item.setPreferredSize(new Dimension(MENU_W, MENU_H));
-//        item.addActionListener(listener);
-//        return item;
-//    }
 
     private void setFrameAtCenter() {
         Toolkit tk = Toolkit.getDefaultToolkit();

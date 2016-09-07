@@ -206,8 +206,8 @@ public class SearchPanel extends JPanel {
         Vector<String> header = new Vector<>(4);
         header.addElement("代码");
         header.addElement("股票");
+        header.addElement("价格");
         header.addElement("涨跌额");
-        header.addElement("最新交易日");
         Vector<String> data = new Vector<>();
         hotTableModel = new DefaultTableModel(data, header);
 
@@ -287,8 +287,8 @@ public class SearchPanel extends JPanel {
                         Vector<String> v = new Vector<>(4);
                         v.addElement(vo.getCode());
                         v.addElement(vo.getName());
+                        v.addElement(vo.getCurrentPrice());
                         v.addElement(String.valueOf(vo.getPchange()));
-                        v.addElement(vo.getDate());
                         hotTableModel.addRow(v);
                     }
                     hotTable.setRenderer(new MyRenderer(1), 3);
