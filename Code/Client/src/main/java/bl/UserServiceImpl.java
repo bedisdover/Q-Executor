@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService{
 	public MsgInfo getInfo(String url) throws Exception {
 		MsgInfo info = null;
 		URL ur=new URL(url);
-		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
+		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream(), "utf-8"));
 		String line=reader.readLine();
 		JSONObject jsonArray=new JSONObject(line);
 		info=new MsgInfo(jsonArray.getBoolean("state"),jsonArray.getString("info"),jsonArray.get("object"));

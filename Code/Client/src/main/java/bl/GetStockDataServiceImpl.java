@@ -4,6 +4,7 @@ import blservice.GetStockDataService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import util.StockUtil;
 import vo.*;
 
 import java.io.BufferedReader;
@@ -15,17 +16,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-<<<<<<< HEAD
-=======
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import util.StockUtil;
-import vo.*;
-import blservice.GetStockDataService;
-
->>>>>>> 9adcbb5ca425fbc8f8bd5052247d3497ede48663
 public class GetStockDataServiceImpl implements GetStockDataService{
 
 	public List<StockNowTimeVO> getNowTimeData(String... codeNum) throws Exception {

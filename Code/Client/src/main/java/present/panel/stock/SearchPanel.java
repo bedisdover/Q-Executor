@@ -180,7 +180,7 @@ public class SearchPanel extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-                switcher.jump(new StockPanel((String)self.getValueAt(self.getSelectedRow(), 0)));
+                jumpToStockPanel(self);
             }
         });
 
@@ -214,7 +214,7 @@ public class SearchPanel extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-                switcher.jump(new StockPanel((String)hotTable.getValueAt(hotTable.getSelectedRow(), 0)));
+                jumpToStockPanel(hotTable);
             }
         });
 
@@ -298,5 +298,11 @@ public class SearchPanel extends JPanel {
         };
 
         worker.execute();
+    }
+
+    private void jumpToStockPanel(JTable table) {
+             int row = table.getSelectedRow();
+             row = row < 0 ? 0 : row;
+             switcher.jump(new StockPanel((String)table.getValueAt(row, 0)));
     }
 }

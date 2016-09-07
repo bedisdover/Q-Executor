@@ -17,7 +17,7 @@ public class SelfSelectServiceImpl implements SelfSelectService{
 	public List<NowTimeSelectedStockInfoVO> getUserSelectedStock(String userName,String password) throws Exception {
 		String url="http://121.42.143.164/getUserSelectedStockClient?userName="+userName+"&password="+password;
 		URL ur=new URL(url);
-		BufferedReader reader = new BufferedReader(new InputStreamReader(ur.openStream()));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(ur.openStream(), "utf-8"));
 		String line=reader.readLine();
 		JSONObject json=new JSONObject(line);
 		return getJsonArray(json);
