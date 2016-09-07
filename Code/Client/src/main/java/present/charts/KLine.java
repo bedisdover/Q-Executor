@@ -9,6 +9,7 @@ import org.jfree.chart.plot.CombinedDomainXYPlot;
 import org.jfree.chart.plot.DatasetRenderingOrder;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.*;
+import org.jfree.data.Range;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
@@ -146,16 +147,27 @@ public class KLine {
         //保留成交量数据的集合
         TimeSeriesCollection timeSeriesCollection = kLineVO.getAmountSeriesCollection();
         //设置K线图的画图器，必须申明为final，后面要在匿名内部类里面用到
-        final CandlestickRenderer candlestickRender = new CandlestickRenderer();
+        final CandlestickRenderer candlestickRender = new CandlestickRenderer() {
+            @Override
+            public Paint getItemOutlinePaint(int row, int column) {
+                if (seriesCollection.getCloseValue(row, column) > seriesCollection.getOpenValue(row, column)) {
+                    return Color.RED;
+                } else {
+                    return Color.GREEN;
+                }
+            }
+        } ;
         candlestickRender.setUseOutlinePaint(true); //设置是否使用自定义的边框线，程序自带的边框线的颜色不符合中国股票市场的习惯
         candlestickRender.setAutoWidthMethod(CandlestickRenderer.WIDTHMETHOD_AVERAGE);//设置如何对K线图的宽度进行设定
         candlestickRender.setAutoWidthGap(0.001);//设置各个K线图之间的间隔
+        candlestickRender.setCandleWidth(5);
         candlestickRender.setUpPaint(Color.BLACK);//设置股票上涨的K线图颜色
-        candlestickRender.setDownPaint(Color.CYAN);//设置股票下跌的K线图颜色
+        candlestickRender.setDownPaint(Color.GREEN);//设置股票下跌的K线图颜色
         // FIXME color
-        candlestickRender.setSeriesOutlinePaint(0, Color.RED);
         candlestickRender.setSeriesOutlinePaint(1, Color.GREEN);
-        candlestickRender.setSeriesVisibleInLegend(false);//设置不显示legend（数据颜色提示)
+//        candlestickRender.setSeriesOutlinePaint(0, Color.RED);
+        candlestickRender.setSeriesVisibleInLegend(0, false);//设置不显示legend（数据颜色提示)
+        candlestickRender.setSeriesVisibleInLegend(1, false);//设置不显示legend（数据颜色提示)
 
         //设置x轴，也就是时间轴
         DateAxis x1Axis = new DateAxis();
@@ -171,8 +183,8 @@ public class KLine {
         //设置k线图y轴参数
         NumberAxis y1Axis = new NumberAxis();//设置Y轴，为数值,后面的设置，参考上面的X轴设置
         y1Axis.setAutoRange(false);//不使用自动设定范围
-        y1Axis.setRange(kLineVO.getLow() * 0.9, kLineVO.getHigh() * 1.1);//设定y轴值的范围，比最低值要低一些，比最大值要大一些，这样图形看起来会美观些
-        y1Axis.setTickUnit(new NumberTickUnit((kLineVO.getHigh() * 1.1 - kLineVO.getLow() * 0.9) / 10));//设置刻度显示的密度
+        y1Axis.setRange(kLineVO.getRange());//设定y轴值的范围，比最低值要低一些，比最大值要大一些，这样图形看起来会美观些
+//        y1Axis.setTickUnit(new NumberTickUnit((kLineVO.getHigh() * 1.1 - kLineVO.getLow() * 0.9) / 10));//设置刻度显示的密度
         y1Axis.setUpperMargin(5);//设置向上边框距离
 
         //设置均线图画图器
@@ -204,11 +216,19 @@ public class KLine {
                     return candlestickRender.getDownPaint();
                 }
             }
+
+            @Override
+            public Paint getItemOutlinePaint(int row, int column) {
+                if (seriesCollection.getCloseValue(row, column) > seriesCollection.getOpenValue(row, column)) {
+                    return Color.RED;
+                } else {
+                    return Color.GREEN;
+                }
+            }
         };
         xyBarRender.setMargin(0.1);//设置柱形图之间的间隔
         xyBarRender.setDrawBarOutline(true);//设置显示边框线
         xyBarRender.setBarPainter(new StandardXYBarPainter());//取消渐变效果
-        xyBarRender.setMargin(0.3);//设置柱形图之间的间隔
         xyBarRender.setSeriesPaint(0, Color.BLACK);//设置柱子内部颜色
         xyBarRender.setSeriesPaint(1, Color.GREEN);//设置柱子内部颜色
         xyBarRender.setSeriesOutlinePaint(0, Color.RED);//设置柱子边框颜色
@@ -347,12 +367,10 @@ class KLineVO {
         return avgVolumeCollection;
     }
 
-    double getHigh() {
-        return high;
-    }
+    Range getRange() {
+        double temp = (high - low) * 0.1;
 
-    double getLow() {
-        return low;
+        return new Range(low - temp, high + temp);
     }
 
     Date getStartDate() {

@@ -2,9 +2,9 @@ package present.panel.home;
 
 import present.PanelSwitcher;
 import present.panel.introduce.IntroPanel;
-import present.panel.stock.GeneralPanel;
-import present.panel.stock.PriceSharePanel;
-import present.panel.stock.SinglePanel;
+import present.panel.stock.center.GeneralPanel;
+import present.panel.stock.center.PriceSharePanel;
+import present.panel.stock.center.SinglePanel;
 import present.panel.stock.StockPanel;
 import present.panel.trade.TradePanel;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
@@ -72,18 +72,18 @@ public class NavPanel extends JPanel{
         stock = new CollapsePanel(new SuperButton("股票"), BUTTON_W, BUTTON_H,
                 (e) -> switcher.jump(new StockPanel("sh600000")));
 
-        SubButton general = new SubButton("大单");
-        // FIXME 传入CurrentDataPanel对象
-        general.addActionListener((e) -> switcher.jump(new GeneralPanel("sh600000", null)));
-        stock.addSubButton(general);
-
-        SubButton single = new SubButton("逐笔");
-        single.addActionListener((e) -> switcher.jump(new SinglePanel("sh600000")));
-        stock.addSubButton(single);
-
-        SubButton price = new SubButton("分价");
-        price.addActionListener((e) -> switcher.jump(new PriceSharePanel("sh600000")));
-        stock.addSubButton(price);
+//        SubButton general = new SubButton("大单");
+//        // FIXME 传入CurrentDataPanel对象
+//        general.addActionListener((e) -> switcher.jump(new GeneralPanel("sh600000", null)));
+//        stock.addSubButton(general);
+//
+//        SubButton single = new SubButton("逐笔");
+//        single.addActionListener((e) -> switcher.jump(new SinglePanel("sh600000")));
+//        stock.addSubButton(single);
+//
+//        SubButton price = new SubButton("分价");
+//        price.addActionListener((e) -> switcher.jump(new PriceSharePanel("sh600000")));
+//        stock.addSubButton(price);
 
         stock.setPreferredSize(new Dimension(BUTTON_W, BUTTON_H));
 
