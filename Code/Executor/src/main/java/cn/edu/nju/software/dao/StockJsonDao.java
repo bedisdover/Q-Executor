@@ -148,7 +148,11 @@ public class StockJsonDao {
 
             List<HotStockVO> stockVOList = getStockVOsByJson(array);
             Collections.sort(stockVOList);
-            stockVOs = stockVOList.subList(0,15);
+            if(stockVOList.size()>15){
+            stockVOs = stockVOList.subList(0,15);}
+            else{
+                stockVOs = stockVOList;
+            }
 
             url="http://hq.sinajs.cn/list=";
             for (HotStockVO vo:stockVOs){
