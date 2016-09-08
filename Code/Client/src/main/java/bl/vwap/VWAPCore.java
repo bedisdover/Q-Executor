@@ -1,4 +1,4 @@
-package bl;
+package bl.vwap;
 
 import bl.vwap.VWAP_Param;
 import service.MLForVWAPService;

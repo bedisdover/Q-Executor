@@ -36,7 +36,7 @@ public class VWAP implements VWAPService {
 		return SingletonHolder.instance;
 	}
 
-	public List<VolumeVO> predictVn1(VWAP_Param param) throws Exception{
+	public List<VolumeVO> predictVn(VWAP_Param param) throws Exception{
 		//已交易比例阈值
 		double volThre = 0.8;
 		//时间阈值
@@ -58,10 +58,10 @@ public class VWAP implements VWAPService {
 			stockPnMap.put(param.getStockid(), Pn);
 		}
 		List<Integer> Vn = calcVn(Pn,param);
-		return null;
+		return getVolumeVOList(Vn,TimeUtil.TimeSliceNum);
 	}
 
-	public List<VolumeVO> predictVn(VWAP_Param param) throws Exception{
+	public List<VolumeVO> predictVn1(VWAP_Param param) throws Exception{
 
 		//已交易比例阈值
 		double volThre = 0.8;
@@ -123,13 +123,25 @@ public class VWAP implements VWAPService {
      */
     private List<Integer> calcVn(List<Double> Pn,VWAP_Param param){
         List<Integer> Vn = new ArrayList<Integer>();
-		double pLocal;
-		List<Double> plist;
-		for(int i=param.getStartTimeNode()-1;i<param.getEndTimeNode();i++){
+		double pLocal = 0;
 
+		//深度系数 TODO
+		double deep = 1.0;
+
+		//用户设定的时间段内概率分布
+		List<Double> plist = new ArrayList<Double>();
+		for(int i=param.getTimeNode()-1;i<param.getEndTimeNode();i++){
+			pLocal+=Pn.get(i);
 		}
-        for(int i=0;i<Pn.size();i++){
-            int vi=Double.valueOf(param.getUserVol()*Pn.get(i)).intValue();
+		for(int i=param.getTimeNode()-1;i<param.getEndTimeNode();i++){
+			plist.add(Pn.get(i)/pLocal);
+		}
+		//将计算当前时间片的交易量
+		int currentVol = Double.valueOf(param.getUserVol()*plist.get(0)*deep).intValue();
+		Vn.add(currentVol);
+
+        for(int i=1;i<plist.size();i++){
+            int vi=Double.valueOf((param.getUserVol() - currentVol)*Pn.get(i)).intValue();
             Vn.add(vi);
         }
         return Vn;
@@ -139,13 +151,13 @@ public class VWAP implements VWAPService {
 	/**
 	 * 将预测的交易量加上时间片标记
 	 * @param Vn
-	 * @param timeNum
+	 * @param currnetTimeNode
      * @return
      */
-	private List<VolumeVO> getVolumeVOList(List<Integer> Vn,int timeNum){
+	private List<VolumeVO> getVolumeVOList(List<Integer> Vn,int currnetTimeNode){
 		List<VolumeVO> volumeVOList = new ArrayList<VolumeVO>();
 		for(int i=0;i<Vn.size();i++){
-			String time = TimeUtil.timeNodeToDate(i+1,timeNum);
+			String time = TimeUtil.timeNodeToDate(currnetTimeNode+i);
 			VolumeVO volVO = new VolumeVO(time,Vn.get(i));
 			volumeVOList.add(volVO);
 		}

@@ -15,7 +15,7 @@ public class TimeUtilTest {
     @Test
     public void getCurrentIime() throws Exception {
 
-        System.out.println(TimeUtil.getCurrentIime(48));
+        System.out.println(TimeUtil.getCurrentIime());
     }
 
     @Test
