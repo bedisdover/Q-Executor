@@ -1,10 +1,10 @@
 package present.panel.stock.center;
 
-import bl.GetStockDataServiceImpl;
-import blservice.GetStockDataService;
-import present.panel.loading.LoadingPanel;
+import bl.stock.GetStockDataServiceImpl;
+import blservice.stock.GetStockDataService;
 import present.panel.stock.MyRenderer;
 import present.panel.stock.MyTable;
+import present.panel.stock.StockPanel;
 import util.NumberUtil;
 import util.StockUtil;
 import vo.StockInfoByPer;
@@ -12,7 +12,6 @@ import vo.StockInfoByPer;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Y481L on 2016/8/27.
@@ -25,32 +24,22 @@ public class SinglePanel extends CenterPanel {
 
     private String stockCode;
 
-    private LoadingPanel loadingPanel;
+    private StockPanel stockPanel;
 
-    public SinglePanel(String stockCode) {
+    public SinglePanel(String stockCode, StockPanel stockPanel) {
         panel = this;
         this.stockCode = stockCode;
+        this.stockPanel = stockPanel;
 
-        init();
+        super.init();
         getData();
     }
 
-    private void init() {
-        SwingUtilities.invokeLater(() -> {
-            panel.setLayout(new BorderLayout());
-
-            loadingPanel = new LoadingPanel();
-            panel.add(loadingPanel, BorderLayout.CENTER);
-        });
-    }
-
     @Override
-    public boolean getData() {
-        final boolean[] flag = new boolean[]{true};
-
-        SwingWorker worker = new SwingWorker() {
+    public void getData() {
+        SwingWorker<List<StockInfoByPer>, Void> worker = new SwingWorker<List<StockInfoByPer>, Void>() {
             @Override
-            protected Object doInBackground() throws Exception {
+            protected List<StockInfoByPer> doInBackground() throws Exception {
                 GetStockDataService stockDataService = new GetStockDataServiceImpl();
 
                 return stockDataService.getPerStockInfo(stockCode);
@@ -58,12 +47,12 @@ public class SinglePanel extends CenterPanel {
 
             @Override
             protected void done() {
-                List stockInfoByPerList = null;
+                List<StockInfoByPer> stockInfoByPerList = null;
                 try {
-                    stockInfoByPerList = (List) get();
+                    stockInfoByPerList =  get();
                 } catch (Exception e) {
+                    stockPanel.displayError();
                     e.printStackTrace();
-                    flag[0] = false;
                 }
 
                 injectData(stockInfoByPerList);
@@ -71,8 +60,6 @@ public class SinglePanel extends CenterPanel {
         };
 
         worker.execute();
-
-        return flag[0];
     }
 
     private void injectData(List stockInfoByPerList) {
@@ -84,11 +71,9 @@ public class SinglePanel extends CenterPanel {
 
             panel.revalidate();
             panel.repaint();
-            System.out.println("SinglePanel.injectData");
         });
     }
 
-    @SuppressWarnings("unchecked")
     private JScrollPane createTable(List stockInfoByPerList) {
         //字段名称
         String[] names = {"交易时间", "成交价", "价格变动", "成交量(手)", "成交额(万元)", "买卖盘性质"};

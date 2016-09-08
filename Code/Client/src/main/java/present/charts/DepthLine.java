@@ -46,7 +46,7 @@ public class DepthLine {
         dateAxis.setTimeline(timeline);
         dateAxis.setTickMarkPosition(DateTickMarkPosition.MIDDLE);//设置标记的位置
         dateAxis.setStandardTickUnits(DateAxis.createStandardDateTickUnits());//设置标准的时间刻度单位
-        dateAxis.setTickUnit(new DateTickUnit(DateTickUnit.MINUTE, 30));//设置时间刻度的间隔
+        dateAxis.setTickUnit(new DateTickUnit(DateTickUnitType.MINUTE, 30));//设置时间刻度的间隔
         dateAxis.setDateFormatOverride(new SimpleDateFormat("HH:mm"));//设置显示时间的格式
 
         JFreeChart jfreechart = ChartFactory.createTimeSeriesChart(
@@ -74,7 +74,10 @@ public class DepthLine {
             xylineandshaperenderer.setSeriesShapesVisible(1, false);
         }
 
-        return new ChartPanel(jfreechart);
+        ChartPanel chartPanel = new ChartPanel(jfreechart);
+        chartPanel.setMouseZoomable(false);
+
+        return chartPanel;
     }
 
     private static TimeSeriesVO getData(List<DeepStockVO> deepStockVOList) {
@@ -144,7 +147,11 @@ public class DepthLine {
         Range getRange() {
             double temp = (high - low) * 0.1;
 
-            return new Range(low - temp * 0.1, high + temp);
+            if (temp >= 0) {
+                return new Range(low - temp, high + temp);
+            } else {
+                return new Range(0, 0);
+            }
         }
     }
 }

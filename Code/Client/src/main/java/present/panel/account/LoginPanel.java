@@ -1,9 +1,8 @@
 package present.panel.account;
 
-import bl.UserServiceImpl;
-import blservice.UserService;
+import bl.user.UserServiceImpl;
+import blservice.user.UserService;
 import config.MsgInfo;
-import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 import present.PanelSwitcher;
 import present.component.QPasswordField;
 import present.component.QTextField;
@@ -54,6 +53,7 @@ public class LoginPanel extends JPanel {
     public LoginPanel(PanelSwitcher switcher) {
         this.switcher = switcher;
         this.addComponents();
+        this.setBackground(Color.black);
     }
 
     @Override
@@ -71,7 +71,8 @@ public class LoginPanel extends JPanel {
 
         box.add(Box.createVerticalStrut(PADDING << 1));
         JLabel title = new JLabel("登录");
-        title.setFont(new Font("宋体", Font.PLAIN, 30));
+        title.setFont(new Font("微软雅黑", Font.PLAIN, 28));
+        title.setForeground(Color.WHITE);
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panel.setOpaque(false);
         panel.add(title);
@@ -82,13 +83,10 @@ public class LoginPanel extends JPanel {
         box.add(Box.createVerticalStrut(PADDING));
         box.add(this.wrapComponent(password));
         box.add(Box.createVerticalStrut(PADDING));
-        login.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.green));
         box.add(this.wrapComponent(login));
         box.add(Box.createVerticalStrut(PADDING));
-        register.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.green));
         box.add(this.wrapComponent(register));
         box.add(Box.createVerticalStrut(PADDING));
-        findPW.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.green));
         box.add(this.wrapComponent(findPW));
         box.add(Box.createVerticalStrut(
                 NavPanel.PANEL_H - (HEIGHT + PADDING) * COMPONENT_NUM
@@ -101,7 +99,7 @@ public class LoginPanel extends JPanel {
 
     private JPanel wrapComponent(JComponent c) {
         c.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        c.setFont(new Font("宋体", Font.PLAIN, 22));
+        c.setFont(new Font("等线", Font.PLAIN, 22));
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER));
         panel.add(c);

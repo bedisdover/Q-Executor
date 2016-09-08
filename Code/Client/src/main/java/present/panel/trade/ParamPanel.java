@@ -1,7 +1,7 @@
 package present.panel.trade;
 
-import bl.VWAP;
-import blservice.VWAPService;
+import bl.vwap.VWAP;
+import blservice.vwap.VWAPService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import present.component.TipText;
@@ -42,6 +42,8 @@ class ParamPanel extends JPanel {
         this.componentH = (int)(this.componentW * 0.4);
 
         Box box = Box.createVerticalBox();
+        box.setOpaque(false);
+        box.add(Box.createVerticalStrut(componentH));
 
         //证券代码
         JLabel codeLabel = new JLabel("证券代码");
@@ -80,6 +82,7 @@ class ParamPanel extends JPanel {
         InputPair name = new InputPair(nameLabel, nameVal);
         //证券名称、证券代码
         JPanel stock = new JPanel(new FlowLayout(FlowLayout.CENTER, H_GAP, 0));
+        stock.setOpaque(false);
         stock.add(name);
         stock.add(code);
         box.add(stock);
@@ -95,6 +98,7 @@ class ParamPanel extends JPanel {
         InputPair invest = new InputPair(investLabel, investVal);
         //数量（手）、下单金额
         JPanel amount = new JPanel(new FlowLayout(FlowLayout.CENTER, H_GAP, 0));
+        amount.setOpaque(false);
         amount.add(quantity);
         amount.add(invest);
         box.add(amount);
@@ -119,8 +123,10 @@ class ParamPanel extends JPanel {
             }
         });
         JPanel start = new JPanel(new FlowLayout(FlowLayout.CENTER, H_GAP, 0));
+        start.setOpaque(false);
         start.add(operation);
         JPanel empty = new JPanel();
+        empty.setOpaque(false);
         empty.setPreferredSize(new Dimension(H_GAP, componentH));
         start.add(empty);
         start.add(trigger);
@@ -129,13 +135,16 @@ class ParamPanel extends JPanel {
         this.setLayout(new BorderLayout());
         this.add(box, BorderLayout.CENTER);
         this.setPreferredSize(new Dimension(width, height));
+        this.setBackground(Color.black);
     }
 
     private JPanel createTimePanel(String name) {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, H_GAP, 0));
+        panel.setOpaque(false);
 
         JLabel label = new JLabel(name);
         label.setFont(font);
+        label.setForeground(Color.WHITE);
         label.setPreferredSize(new Dimension(componentW - (H_GAP << 1), componentH));
         panel.add(label);
 
@@ -146,6 +155,7 @@ class ParamPanel extends JPanel {
         panel.add(hour);
 
         JLabel split = new JLabel(":");
+        split.setForeground(Color.white);
         split.setPreferredSize(new Dimension(H_GAP, V_GAP));
         split.setFont(new Font("黑体", Font.BOLD, 15));
         panel.add(split);
@@ -190,10 +200,12 @@ class ParamPanel extends JPanel {
         InputPair(JLabel name, JComponent input) {
             name.setPreferredSize(new Dimension(componentW - (H_GAP << 1), componentH));
             name.setFont(font);
+            name.setForeground(Color.WHITE);
             input.setPreferredSize(new Dimension(componentW + (H_GAP << 1), componentH));
             input.setFont(font);
             this.add(name);
             this.add(input);
+            this.setOpaque(false);
         }
     }
 }

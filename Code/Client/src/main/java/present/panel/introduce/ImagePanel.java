@@ -1,6 +1,5 @@
 package present.panel.introduce;
 
-import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 import present.MainFrame;
 import present.PanelSwitcher;
 import present.component.TextBlock;
@@ -81,7 +80,7 @@ class ImagePanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(
-                new ImageIcon("src/main/resources/images/city4.jpg").getImage(),
+                new ImageIcon("src/main/resources/images/city3.jpg").getImage(),
                 0, 0, this.getWidth(), this.getHeight(), null
         );
     }
@@ -89,8 +88,7 @@ class ImagePanel extends JPanel {
     private JButton createBtn(String text) {
         JButton btn = new JButton(text);
         btn.setPreferredSize(new Dimension(BUTTON_W, BUTTON_H));
-        btn.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.lightBlue));
-        btn.setFont(new Font("宋体", Font.PLAIN, 20));
+        btn.setFont(new Font("等线", Font.PLAIN, 20));
         return btn;
     }
 }

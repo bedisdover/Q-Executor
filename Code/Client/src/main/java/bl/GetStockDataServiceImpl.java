@@ -1,20 +1,21 @@
 package bl;
 
-import blservice.GetStockDataService;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import util.StockUtil;
-import vo.*;
-
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import bl.stock.GetKLineDataServiceImpl;
+import blservice.stock.GetStockDataService;
+
+import vo.*;
+
 
 public class GetStockDataServiceImpl implements GetStockDataService{
 
@@ -25,7 +26,7 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 				StockNowTimeVO stockNowTimeVO=new StockNowTimeVO();
 				String url="http://hq.finance.ifeng.com/q.php?l="+codeNum[i];
 				URL ur=new URL(url);
-				BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream(), "utf-8"));
+				BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
 				String line=reader.readLine();
 				JSONObject jsonArray=new JSONObject(line.substring(11));
 				JSONArray a=(JSONArray)jsonArray.get(codeNum[i]);
@@ -59,7 +60,7 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 				stockNowTimeVO.setSell3amount(a.getDouble(28));
 				stockNowTimeVO.setSell4amount(a.getDouble(29));
 				stockNowTimeVO.setSell5amount(a.getDouble(30));
-				Date dt = new Date(a.getLong(34) * 1000);
+				Date dt = new Date(a.getLong(34));
 				stockNowTimeVO.setTime(dt);
 				stockList.add(stockNowTimeVO);
 			}
@@ -67,10 +68,10 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 	}
 
 	public StockBasicInfoVO getBasicInfo(String codeNum) throws Exception {
-		String url="http://" + Connect.IP + "/BasicComInfo?codeNum=" + codeNum;
+		String url="http://121.42.143.164/BasicComInfo?codeNum=" + codeNum;
 		StockBasicInfoVO stockBasicInfoVO=new StockBasicInfoVO();
 			URL ur=new URL(url);
-			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream(), "utf-8"));
+			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
 			String line=reader.readLine();
 			JSONObject jsonArray=new JSONObject(line);
 			stockBasicInfoVO.setCode(codeNum);
@@ -97,10 +98,10 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 	}
 
 	public List<StockInfoByPrice> getStockInfoByPrice(String codeNum) throws Exception {
-		String url="http://" + Connect.IP + "/StockInfoByPrice?codeNum="+codeNum;
+		String url="http://121.42.143.164/StockInfoByPrice?codeNum="+codeNum;
 		List<StockInfoByPrice> stockList=new ArrayList<StockInfoByPrice>();
 			URL ur=new URL(url);
-			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream(), "utf-8"));
+			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
 			String line=reader.readLine();
 			JSONArray jsonArray=new JSONArray(line);
 			int size=jsonArray.length();
@@ -118,20 +119,20 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 	}
 
 	public List<StockInfoByCom> getComStockInfo(String codeNum) throws Exception {
-		String url="http://" + Connect.IP + "/ComStockInfo?codeNum="+codeNum;
+		String url="http://121.42.143.164/ComStockInfo?codeNum="+codeNum;
 		return getComStock(url); 
 	}
 
 	public List<StockInfoByCom> getComStockInfo(String codeNum, double param) throws Exception {
-		String url="http://" + Connect.IP + "/ComStockInfoParam?codeNum="+codeNum+"&param="+param;
+		String url="http://121.42.143.164/ComStockInfoParam?codeNum="+codeNum+"&param="+param;
 		return getComStock(url);
 	}
 
 	public List<StockInfoByPer> getPerStockInfo(String codeNum) throws Exception {
-		String url="http://" + Connect.IP + "/PerStockInfo?codeNum="+codeNum;
+		String url="http://121.42.143.164/PerStockInfo?codeNum="+codeNum;
 		List<StockInfoByPer> stockList=new ArrayList<StockInfoByPer>();
 			URL ur=new URL(url);
-			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream(), "utf-8"));
+			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
 			String line=reader.readLine();
 			JSONArray jsonArray=new JSONArray(line);
 			int size=jsonArray.length();
@@ -152,10 +153,10 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 	}
 
 	public List<DeepStockVO> getStockDepth(String codeNum) throws Exception {
-		String url="http://" + Connect.IP + "/DeepStock?codeNum="+codeNum;
+		String url="http://121.42.143.164/DeepStock?codeNum="+codeNum;
 		List<DeepStockVO> stockList=new ArrayList<DeepStockVO>();
 		URL ur=new URL(url);
-		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream(), "utf-8"));
+		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
 		String line=reader.readLine();
 		JSONArray jsonArray=new JSONArray(line);
 		int size=jsonArray.length();
@@ -170,67 +171,30 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 	}
 
 	public List<HotStockVO> getHotStock() throws Exception {
-//		String url="http://" + Connect.IP + "/HotStocks";
-//		List<HotStockVO> stockList=new ArrayList<HotStockVO>();
-//		URL ur=new URL(url);
-//		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
-//		String line=reader.readLine();
-//		JSONArray jsonArray=new JSONArray(line);
-//		int size=jsonArray.length();
-//		for(int i=0;i<size;i++){
-//			HotStockVO stockKLineVO=new HotStockVO();
-//			JSONObject jsonObj=jsonArray.getJSONObject(i);
-//			stockKLineVO.setCode(jsonObj.getString("code"));
-//			stockKLineVO.setName(jsonObj.getString("name"));
-//			stockKLineVO.setPchange(jsonObj.getDouble("pchange"));
-//			stockKLineVO.setReason(jsonObj.getString("reason"));
-//			stockKLineVO.setDate(jsonObj.getString("date"));
-//			stockList.add(stockKLineVO);
-//		}
-//	return stockList;
-		List<HotStockVO> stockVOs = new ArrayList<HotStockVO>();
-
-		String date = TimeUtil.getLastworkDate();
-		String url = "http://data.eastmoney.com/DataCenter_V3/stock2016/TradeDetail/pagesize=200,page=1,sortRule=-1,sortType=,startDate="+date+",endDate="+date+",gpfw=0,js=vardata_tab_1.html";
-		String content = getContentFromURL(url);
-		if (content==null){
-			return stockVOs;
+		String url="http://121.42.143.164/HotStocks";
+		List<HotStockVO> stockList=new ArrayList<HotStockVO>();
+		URL ur=new URL(url);
+		BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
+		String line=reader.readLine();
+		JSONArray jsonArray=new JSONArray(line);
+		int size=jsonArray.length();
+		for(int i=0;i<size;i++){
+			HotStockVO stockKLineVO=new HotStockVO();
+			JSONObject jsonObj=jsonArray.getJSONObject(i);
+			stockKLineVO.setCode(jsonObj.getString("code"));
+			stockKLineVO.setName(jsonObj.getString("name"));
+			stockKLineVO.setPchange(jsonObj.getDouble("pchange"));
+			stockKLineVO.setReason(jsonObj.getString("reason"));
+			stockKLineVO.setDate(jsonObj.getString("date"));
+			stockList.add(stockKLineVO);
 		}
-		try {
-//            System.out.println(content);
-//            JSONObject jsonObject = new JSONObject(content.substring(content));
-
-			JSONArray array = new JSONArray(content.substring(content.indexOf("["),content.indexOf("]")+1));
-
-			List<HotStockVO> stockVOList = getStockVOsByJson(array);
-			Collections.sort(stockVOList);
-			int size = stockVOList.size();
-			int end = size >= 15 ? 15 : size;
-			stockVOs = stockVOList.subList(0, end);
-
-			url="http://hq.sinajs.cn/list=";
-			for (HotStockVO vo:stockVOs){
-				String info = getContentFromURL(url+ StockUtil.getCode(vo.getCode()));
-				try {
-					vo.setCurrentPrice(info.split(",")[3]);
-				}catch (Exception e){
-					vo.setCurrentPrice("--");
-					continue;
-				}
-			}
-
-			return stockVOs;
-
-		} catch (JSONException e) {
-			e.printStackTrace();
-			return stockVOs;
-		}
+	return stockList;
 	}
 
 	public List<StockInfoByCom> getComStock(String url) throws Exception{
 		List<StockInfoByCom> stockList=new ArrayList<StockInfoByCom>();
 			URL ur=new URL(url);
-			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream(), "utf-8"));
+			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
 			String line=reader.readLine();
 			JSONArray jsonArray=new JSONArray(line);
 			int size=jsonArray.length();
@@ -246,59 +210,24 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 			}
 		return stockList;
 	}
-
-
-	private List<HotStockVO> getStockVOsByJson(JSONArray array) throws JSONException {
-		List<HotStockVO> result = new ArrayList<HotStockVO>();
-		for (int i = 0 ; i < array.length() ;i++){
-
-			JSONObject object = array.getJSONObject(i);
-			HotStockVO vo = new HotStockVO(object.getString("SCode"),
-					object.getString("SName"),object.getDouble("Chgradio"),
-					object.getString("Ctypedes"),object.getString("Tdate"));
-
-			if (result.contains(vo)){
-				for(HotStockVO obj :result){
-					if (obj.equals(vo)){
-						obj.addReason(vo.getReason());
-					}
-				}
-			}else{
-				result.add(vo);
-			}
-		}
-
-		return result;
-	}
-
-	private String getContentFromURL(String url) {
-
-		try {
-			URL ur = new URL(url);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(ur.openStream(),"GBK"));
-			String line = null;
-			line = reader.readLine();
-			return line;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-//	public static void main(String [] args){
-//		String url="http://" + Connect.IP + "/DeepStock?codeNum=sh600000";
+	
+	public static void main(String [] args){
+//		String url="http://139.196.174.107/KLineMinute?codeNum=sh600000&interval=5";
 //		StockBasicInfoVO stockBasicInfoVO=new StockBasicInfoVO();
 //		try {
 //			URL ur=new URL(url);
 //			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
 //			String line=reader.readLine();
-//			JSONArray jsonArray=new JSONArray(line);
-//			int size=jsonArray.length();
-//			for(int i=0;i<size;i++){
-//				JSONObject jsonObj=jsonArray.getJSONObject(i);
-//				System.out.println(jsonObj.get("time"));
-//			}
+//			
 //			System.out.println(line);
 //		
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		GetKLineDataServiceImpl a=new GetKLineDataServiceImpl();
+//		try {
+//			System.out.println(a.getKLineMinute("sh600000", 10).get(0).getDate());
 //		} catch (Exception e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
@@ -311,5 +240,5 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 //			e.printStackTrace();
 //		}
 //		
-//	}
+	}
 }

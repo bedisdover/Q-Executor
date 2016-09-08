@@ -1,27 +1,30 @@
 package present.panel.stock.center;
 
-import bl.GetStockDataServiceImpl;
-import blservice.GetStockDataService;
+import bl.stock.GetStockDataServiceImpl;
+import blservice.stock.GetStockDataService;
 import present.charts.DepthLine;
+import present.panel.stock.StockPanel;
 import vo.DeepStockVO;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 
 /**
  * Created by song on 16-9-1.
- *
+ * <p>
  * 深度面板
  */
 public class DepthPanel extends CenterPanel {
-    private DepthPanel panel;
-
     private String stockCode;
 
-    public DepthPanel(String stockCode) {
-        panel = this;
-        this.stockCode = stockCode;
+    private StockPanel stockPanel;
 
+    public DepthPanel(String stockCode, StockPanel stockPanel) {
+        this.stockCode = stockCode;
+        this.stockPanel = stockPanel;
+
+        super.init();
         getData();
     }
 
@@ -41,6 +44,7 @@ public class DepthPanel extends CenterPanel {
                     injectData(get());
                 } catch (Exception e) {
                     e.printStackTrace();
+                    stockPanel.displayError();
                 }
             }
         };
@@ -50,11 +54,11 @@ public class DepthPanel extends CenterPanel {
 
     private void injectData(List<DeepStockVO> deepStockVOList) {
         SwingUtilities.invokeLater(() -> {
-            panel.removeAll();
-            panel.add(DepthLine.getChart(deepStockVOList));
+            this.removeAll();
+            this.add(DepthLine.getChart(deepStockVOList), BorderLayout.CENTER);
 
-            panel.revalidate();
-            panel.repaint();
+            this.revalidate();
+            this.repaint();
         });
     }
 }

@@ -1,9 +1,9 @@
 package present.panel.stock;
 
-import bl.GetStockDataServiceImpl;
-import bl.SelfSelectServiceImpl;
-import blservice.GetStockDataService;
-import blservice.SelfSelectService;
+import bl.stock.GetStockDataServiceImpl;
+import bl.user.SelfSelectServiceImpl;
+import blservice.stock.GetStockDataService;
+import blservice.user.SelfSelectService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import present.MainFrame;
@@ -128,7 +128,7 @@ public class SearchPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(
-                new ImageIcon("src/main/resources/images/city5.jpg").getImage(),
+                new ImageIcon("src/main/resources/images/city4.jpg").getImage(),
                 0, 0, this.getWidth(), this.getHeight(), null
         );
     }
@@ -140,7 +140,7 @@ public class SearchPanel extends JPanel {
     private Box createSelfTable() {
         //自选股
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panel.setBackground(new Color(0x2c4cb1));
+//        panel.setBackground(new Color(0x2c4cb1));
         JLabel label = new JLabel("自选股票");
         label.setForeground(Color.WHITE);
         label.setPreferredSize(new Dimension(
@@ -226,9 +226,9 @@ public class SearchPanel extends JPanel {
         ));
 
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panel.setBackground(new Color(0x2c4cb1));
+//        panel.setBackground(new Color(0x2c4cb1));
         JLabel label = new JLabel("热门股票");
-        label.setForeground(Color.WHITE);
+//        label.setForeground(Color.WHITE);
         label.setPreferredSize(new Dimension(
                 PADDING << 2, PADDING << 1
         ));
@@ -246,7 +246,7 @@ public class SearchPanel extends JPanel {
         JPanel up = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         up.setOpaque(false);
         JLabel label1 = new JLabel("请先");
-        label1.setForeground(Color.WHITE);
+//        label1.setForeground(Color.WHITE);
         up.add(label1);
 
         Link link = new Link("登录");
@@ -254,7 +254,7 @@ public class SearchPanel extends JPanel {
         up.add(link);
 
         JLabel label2 = new JLabel("再查看自选股票");
-        label2.setForeground(Color.WHITE);
+//        label2.setForeground(Color.WHITE);
         JPanel down = new JPanel(new FlowLayout(FlowLayout.CENTER));
         down.setOpaque(false);
         down.add(label2);

@@ -18,6 +18,8 @@ import vo.StockTimeSeriesVO;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -43,7 +45,7 @@ public class TimeSeriesChart {
         dateAxis.setTimeline(timeline);
         dateAxis.setTickMarkPosition(DateTickMarkPosition.START);//设置标记的位置
         dateAxis.setStandardTickUnits(DateAxis.createStandardDateTickUnits());//设置标准的时间刻度单位
-        dateAxis.setTickUnit(new DateTickUnit(DateTickUnit.MINUTE, 30));//设置时间刻度的间隔
+        dateAxis.setTickUnit(new DateTickUnit(DateTickUnitType.MINUTE, 30));//设置时间刻度的间隔
         dateAxis.setDateFormatOverride(dateFormat);//设置显示时间的格式
 
         // 实时价格纵轴
@@ -51,11 +53,12 @@ public class TimeSeriesChart {
         yAxis.setAutoRange(false);//设置不采用自动设置数据范围
         yAxis.setUpperMargin(10);//设置向上边框距离
         yAxis.setRange(timeSeriesVO.getPriceRange());//设置y轴数据范围
-
         // 涨跌幅纵轴
-        NumberAxis avgAxis = new NumberAxis("涨跌幅(%)");
+        NumberAxis avgAxis = new NumberAxis();
         avgAxis.setAutoRange(false);
         avgAxis.setRange(timeSeriesVO.getIncRateRange());
+        NumberFormat numberFormat = new DecimalFormat("0.00%");
+        avgAxis.setNumberFormatOverride(numberFormat);
         avgAxis.setTickUnit(new NumberTickUnit(0.05));
 
         //设置价格绘图器
@@ -73,8 +76,6 @@ public class TimeSeriesChart {
         pricePlot.setRangeAxis(0, yAxis);
         pricePlot.setRangeAxis(1, avgAxis);
         pricePlot.setBackgroundPaint(Color.BLACK);
-//        pricePlot.setDomainGridlinesVisible(false);
-//        pricePlot.setRangeGridlinesVisible(false);
 
         // 成交量纵轴
         NumberAxis y1Axis = new NumberAxis();
@@ -93,8 +94,6 @@ public class TimeSeriesChart {
         // 成交量图
         XYPlot amountPlot = new XYPlot(timeSeriesVO.getAmountCollection(), null, y1Axis, amountRender);
         amountPlot.setBackgroundPaint(Color.BLACK);
-//        amountPlot.setDomainGridlinesVisible(false);
-//        amountPlot.setRangeGridlinesVisible(false);
 
         CombinedDomainXYPlot combinedDomainXYPlot = new CombinedDomainXYPlot(dateAxis);
         combinedDomainXYPlot.add(pricePlot, 2);
@@ -147,6 +146,7 @@ public class TimeSeriesChart {
             TimeSeries priceSeries = new TimeSeries("实时价格");
             TimeSeries avgSeries = new TimeSeries("平均价格");
             TimeSeries closeSeries = new TimeSeries("收盘价");
+
             TimeSeries amountSeries = new TimeSeries("成交量");
 
             StockTimeSeriesVO stockVO;
@@ -218,4 +218,3 @@ public class TimeSeriesChart {
         }
     }
 }
-

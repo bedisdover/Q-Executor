@@ -122,13 +122,14 @@ public class TimeUtil {
     public static String getLastworkDate(){
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DATE,-1);
+
+        calendar.add(Calendar.DATE,-1);
         if (calendar.get(Calendar.DAY_OF_WEEK)==Calendar.SUNDAY){
             calendar.add(Calendar.DATE,-2);
         }else if (calendar.get(Calendar.DAY_OF_WEEK)==Calendar.SATURDAY){
             calendar.add(Calendar.DATE,-1);
         }
-
+//        System.out.print(calendar.getTime());
         return dateFormat.format(calendar.getTime());
     }
 

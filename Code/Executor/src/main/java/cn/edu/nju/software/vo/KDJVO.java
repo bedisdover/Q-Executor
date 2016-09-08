@@ -17,16 +17,17 @@ public class KDJVO {
     /**
      * 日期，格式"yyyy-MM-dd"
      */
-    private Date date;
+    private String date;
 
     public KDJVO() {
 
     }
 
-    public KDJVO(double value_K, double value_D, double value_J) {
+    public KDJVO(double value_K, double value_D, double value_J,String date) {
         this.value_K = value_K;
         this.value_D = value_D;
         this.value_J = value_J;
+        this.date = date;
     }
 
     public double getValue_K() {
@@ -51,6 +52,14 @@ public class KDJVO {
 
     public void setValue_J(double value_J) {
         this.value_J = value_J;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     @Override

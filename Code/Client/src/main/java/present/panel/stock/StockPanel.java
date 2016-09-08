@@ -1,9 +1,9 @@
 package present.panel.stock;
 
-import bl.GetStockDataServiceImpl;
-import bl.SelfSelectServiceImpl;
-import blservice.GetStockDataService;
-import blservice.SelfSelectService;
+import bl.stock.GetStockDataServiceImpl;
+import bl.user.SelfSelectServiceImpl;
+import blservice.stock.GetStockDataService;
+import blservice.user.SelfSelectService;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 import present.panel.account.LoginPanel;
 import present.panel.error.ErrorPanel;
@@ -81,14 +81,12 @@ public class StockPanel extends JPanel {
             {
                 currentDataPanel = new CurrentDataPanel(stockCode);
                 JScrollPane scrollPane = new JScrollPane(currentDataPanel);
-                scrollPane.setPreferredSize(new Dimension(200, 1));
+                scrollPane.setPreferredSize(new Dimension(205, 1));
 
                 panel.add(scrollPane, BorderLayout.WEST);
             }
 
             createCenterPanel("KLinePanel");
-
-            panel.add(centerPanel, BorderLayout.CENTER);
         });
     }
 
@@ -97,47 +95,49 @@ public class StockPanel extends JPanel {
      */
     private void createCenterPanel(final String panelType) {
         SwingUtilities.invokeLater(() -> {
-            panel.remove(centerPanel);
+            if (centerPanel != null) {
+                panel.remove(centerPanel);
+            }
 
             switch (panelType) {
                 case "KLinePanel":
                     if (kLinePanel == null) {
-                        kLinePanel = new KLinePanel(stockCode);
+                        kLinePanel = new KLinePanel(stockCode, this);
                     }
 
                     centerPanel = kLinePanel;
                     break;
                 case "TimeSeriesPanel":
                     if (timeSeriesPanel == null) {
-                        timeSeriesPanel = new TimeSeriesPanel(stockCode);
+                        timeSeriesPanel = new TimeSeriesPanel(stockCode, this);
                     }
 
                     centerPanel = timeSeriesPanel;
                     break;
                 case "DepthPanel":
                     if (depthPanel == null) {
-                        depthPanel = new DepthPanel(stockCode);
+                        depthPanel = new DepthPanel(stockCode, this);
                     }
 
                     centerPanel = depthPanel;
                     break;
                 case "GeneralPanel":
                     if (generalPanel == null) {
-                        generalPanel = new GeneralPanel(stockCode, currentDataPanel);
+                        generalPanel = new GeneralPanel(stockCode, currentDataPanel, this);
                     }
 
                     centerPanel = generalPanel;
                     break;
                 case "SinglePanel":
                     if (singlePanel == null) {
-                        singlePanel = new SinglePanel(stockCode);
+                        singlePanel = new SinglePanel(stockCode, this);
                     }
 
                     centerPanel = singlePanel;
                     break;
                 case "PriceSharePanel":
                     if (priceSharePanel == null) {
-                        priceSharePanel = new PriceSharePanel(stockCode);
+                        priceSharePanel = new PriceSharePanel(stockCode, this);
                     }
 
                     centerPanel = priceSharePanel;
@@ -182,12 +182,20 @@ public class StockPanel extends JPanel {
                     namePanel.setName(stockBasicInfoVO.getName());
                     currentDataPanel.setBasicInfo(stockBasicInfoVO);
                 } catch (Exception e) {
+                    createCenterPanel("ErrorPanel");
                     e.printStackTrace();
                 }
             }
         };
 
         worker.execute();
+    }
+
+    /**
+     * 展示错误信息
+     */
+    public void displayError() {
+        createCenterPanel("ErrorPanel");
     }
 
     /**

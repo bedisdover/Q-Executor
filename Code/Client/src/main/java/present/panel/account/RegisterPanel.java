@@ -1,9 +1,8 @@
 package present.panel.account;
 
-import bl.UserServiceImpl;
-import blservice.UserService;
+import bl.user.UserServiceImpl;
+import blservice.user.UserService;
 import config.MsgInfo;
-import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 import present.PanelSwitcher;
 import present.component.QPasswordField;
 import present.component.QTextField;
@@ -65,7 +64,8 @@ public class RegisterPanel extends JPanel{
 
         box.add(Box.createVerticalStrut(PADDING << 1));
         JLabel title = new JLabel("注册");
-        title.setFont(new Font("宋体", Font.PLAIN, 30));
+        title.setFont(new Font("微软雅黑", Font.PLAIN, 28));
+        title.setForeground(Color.WHITE);
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panel.setOpaque(false);
         panel.add(title);
@@ -83,7 +83,6 @@ public class RegisterPanel extends JPanel{
         box.add(this.wrapComponents(confirmPW));
         box.add(Box.createVerticalStrut(PADDING));
         box.add(this.wrapComponents(register));
-        register.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.green));
         box.add(Box.createVerticalStrut(
                 NavPanel.PANEL_H - (HEIGHT + PADDING) * COMPONENT_NUM
         ));
@@ -94,7 +93,7 @@ public class RegisterPanel extends JPanel{
 
     private JPanel wrapComponents(JComponent c) {
         c.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        c.setFont(new Font("宋体", Font.PLAIN, 22));
+        c.setFont(new Font("等线", Font.PLAIN, 22));
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panel.add(c);
         panel.setOpaque(false);

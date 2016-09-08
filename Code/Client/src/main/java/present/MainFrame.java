@@ -26,10 +26,15 @@ public class MainFrame extends JFrame{
 
     private static final int MENU_H = 48;
 
+    private static final Font font = new Font("微软雅黑", Font.PLAIN, 16);
+
     public MainFrame() {
 
         try {
             org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
+//            String[] fonts = GraphicsEnvironment.
+//                    getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+//            for(String s : fonts) System.out.println(s);
         }
         catch (Exception e) {
             System.out.println("Look and feel Exception!");
@@ -40,6 +45,7 @@ public class MainFrame extends JFrame{
     }
 
     private void setAttributes() {
+        this.setIconImage(new ImageIcon("src/main/resources/images/icon.png").getImage());
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.pack();
         this.setFrameAtCenter();
@@ -64,6 +70,7 @@ public class MainFrame extends JFrame{
 
         //交易菜单
         JMenu trade = this.createMenu("交易");
+        trade.setFont(font);
         trade.addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {
@@ -80,6 +87,7 @@ public class MainFrame extends JFrame{
 
         //股票菜单
         JMenu stock = this.createMenu("股票");
+        stock.setFont(font);
         stock.addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {
@@ -96,6 +104,7 @@ public class MainFrame extends JFrame{
 
         //简介菜单
         JMenu introduce = this.createMenu("简介");
+        introduce.setFont(font);
         introduce.addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {
@@ -113,16 +122,20 @@ public class MainFrame extends JFrame{
         //账户账单
         JMenu account = this.createMenu("账户");
         bar.add(account);
+        account.setFont(font);
         //登录菜单
         JMenuItem login = this.createMenuItem("登录");
+        login.setFont(font);
         login.addActionListener((e) -> switcher.jump(new LoginPanel(switcher)));
         account.add(login);
 
         //注册菜单
         JMenuItem register = this.createMenuItem("注册");
+        register.setFont(font);
         register.addActionListener((e) -> switcher.jump(new RegisterPanel(switcher)));
         account.add(register);
 
+        bar.setBackground(Color.black);
         this.setJMenuBar(bar);
     }
 
@@ -133,7 +146,9 @@ public class MainFrame extends JFrame{
     }
 
     private JMenu createMenu(String name) {
-        JMenu menu = new JMenu("        " + name);
+        JMenu menu = new JMenu("    " + name);
+        menu.setBackground(Color.black);
+        menu.setForeground(Color.white);
         menu.setPreferredSize(new Dimension(MENU_W, MENU_H));
         return menu;
     }

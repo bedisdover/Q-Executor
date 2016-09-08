@@ -1,12 +1,13 @@
 package present.panel.stock.center;
 
-import bl.GetStockDataServiceImpl;
-import blservice.GetStockDataService;
+import bl.stock.GetStockDataServiceImpl;
+import blservice.stock.GetStockDataService;
 import present.charts.GeneralPie;
-import present.panel.stock.west.CurrentDataPanel;
 import present.panel.stock.MyLabel;
 import present.panel.stock.MyRenderer;
 import present.panel.stock.MyTable;
+import present.panel.stock.StockPanel;
+import present.panel.stock.west.CurrentDataPanel;
 import util.NumberUtil;
 import vo.StockInfoByCom;
 
@@ -42,9 +43,12 @@ public class GeneralPanel extends CenterPanel {
      */
     private double rangeNum = 0;
 
-    public GeneralPanel(String stockCode, CurrentDataPanel currentDataPanel) {
+    private StockPanel stockPanel;
+
+    public GeneralPanel(String stockCode, CurrentDataPanel currentDataPanel, StockPanel stockPanel) {
         panel = this;
         this.stockCode = stockCode;
+        this.stockPanel = stockPanel;
 
         totalAmount = currentDataPanel.getAmount() / 100;
         totalVolume = currentDataPanel.getVolume();
@@ -54,7 +58,7 @@ public class GeneralPanel extends CenterPanel {
         getData(rangeNum);
     }
 
-    private void init() {
+    protected void init() {
         SwingUtilities.invokeLater(() -> {
             panel.setLayout(new BorderLayout(0, 5));
 
@@ -101,12 +105,9 @@ public class GeneralPanel extends CenterPanel {
             }
 
             {
-                chartPanel = new JPanel(new BorderLayout());
-
-                chartPanel.setPreferredSize(new Dimension(1, 200));
+                chartPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
                 labelBox = Box.createVerticalBox();
-                labelBox.setPreferredSize(new Dimension(400, 1));
 
                 general_amount = new MyLabel("大单成交量: --");
                 total_amount = new MyLabel("总成交量: --");
@@ -189,6 +190,7 @@ public class GeneralPanel extends CenterPanel {
                     injectData(stockInfoByComList);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    stockPanel.displayError();
                 }
             }
         };
@@ -200,12 +202,14 @@ public class GeneralPanel extends CenterPanel {
     private void injectData(List stockInfoByComList) {
         SwingUtilities.invokeLater(() -> {
             chartPanel.removeAll();
-            JPanel chartPanel = GeneralPie.getPieChart(calculateAmount(stockInfoByComList), totalAmount);
-            this.chartPanel.add(chartPanel, BorderLayout.WEST);
+
+            JPanel chart = GeneralPie.getPieChart(calculateAmount(stockInfoByComList), totalAmount);
+            chart.setPreferredSize(new Dimension(200, 200));
+            this.chartPanel.add(chart, BorderLayout.WEST);
             this.chartPanel.add(labelBox, BorderLayout.EAST);
 
             centerPanel.removeAll();
-            centerPanel.add(createTable(stockInfoByComList));
+            centerPanel.add(createTable(stockInfoByComList), BorderLayout.CENTER);
 
             general_amount.setText("大单成交量: " +
                     NumberUtil.transferUnit(calculateAmount(stockInfoByComList)) + "手");

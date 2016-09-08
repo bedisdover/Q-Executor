@@ -1,9 +1,9 @@
 package present.panel.stock.center;
 
-import bl.GetStockDataServiceImpl;
-import blservice.GetStockDataService;
-import present.panel.loading.LoadingPanel;
+import bl.stock.GetStockDataServiceImpl;
+import blservice.stock.GetStockDataService;
 import present.panel.stock.MyTable;
+import present.panel.stock.StockPanel;
 import util.NumberUtil;
 import vo.StockInfoByPrice;
 
@@ -14,6 +14,8 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Y481L on 2016/8/27.
@@ -26,29 +28,32 @@ public class PriceSharePanel extends CenterPanel {
 
     private String stockCode;
 
-    public PriceSharePanel(String stockCode) {
+    private StockPanel stockPanel;
+
+    private JScrollPane scrollPane;
+
+    public PriceSharePanel(String stockCode, StockPanel stockPanel) {
         panel = this;
         this.stockCode = stockCode;
+        this.stockPanel = stockPanel;
 
-        init();
+        super.init();
         getData();
-    }
 
-    private void init() {
-        SwingUtilities.invokeLater(() -> {
-            panel.setLayout(new BorderLayout());
-
-            panel.add(new LoadingPanel(), BorderLayout.CENTER);
-
-            panel.revalidate();
-        });
+//        Timer timer = new Timer();
+//        timer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                repaint();
+//            }
+//        }, 0, 10);
     }
 
     @Override
     public void getData() {
-        SwingWorker worker = new SwingWorker() {
+        SwingWorker<List<StockInfoByPrice>, Void> worker = new SwingWorker<List<StockInfoByPrice>, Void>() {
             @Override
-            protected Object doInBackground() throws Exception {
+            protected List<StockInfoByPrice> doInBackground() throws Exception {
                 GetStockDataService stockDataService = new GetStockDataServiceImpl();
 
                 return stockDataService.getStockInfoByPrice(stockCode);
@@ -57,10 +62,11 @@ public class PriceSharePanel extends CenterPanel {
             @Override
             protected void done() {
                 try {
-                    List stockInfoByPriceList = (List) get();
+                    List<StockInfoByPrice> stockInfoByPriceList = get();
 
                     injectData(stockInfoByPriceList);
                 } catch (Exception e) {
+                    stockPanel.displayError();
                     e.printStackTrace();
                 }
             }
@@ -69,11 +75,17 @@ public class PriceSharePanel extends CenterPanel {
         worker.execute();
     }
 
-    @SuppressWarnings("unchecked")
-    private void injectData(List stockInfoByPriceList) {
+    private void injectData(List<StockInfoByPrice> stockInfoByPriceList) {
         SwingUtilities.invokeLater(() -> {
-            panel.removeAll();
-            panel.add(createTable(stockInfoByPriceList), BorderLayout.CENTER);
+            if (scrollPane == null) {
+                panel.removeAll();
+            } else {
+                panel.remove(scrollPane);
+            }
+
+            scrollPane = createTable(stockInfoByPriceList);
+
+            panel.add(scrollPane, BorderLayout.CENTER);
 
             panel.revalidate();
             panel.repaint();
@@ -113,12 +125,8 @@ public class PriceSharePanel extends CenterPanel {
         //无法拖动表头
         table.getTableHeader().setReorderingAllowed(false);
 
-        JScrollPane scrollPane = new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+        return new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-        scrollPane.setPreferredSize(new Dimension(800, 540));
-
-        return scrollPane;
     }
 
 
@@ -196,7 +204,6 @@ public class PriceSharePanel extends CenterPanel {
                 bar.setForeground(Color.RED);
                 bar.setStringPainted(false);
                 bar.setBorderPainted(true);
-                bar.setPreferredSize(new Dimension(100, 20));
                 MyTableModel tableModel = (MyTableModel) table.getModel();
                 bar.setMaximum((int) (tableModel.getMax() * 100) + 10);
 

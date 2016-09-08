@@ -44,6 +44,7 @@ public class TradePanel extends JPanel {
         this.setLayout(new BorderLayout());
         this.add(up, BorderLayout.NORTH);
         this.add(bottom, BorderLayout.CENTER);
+        this.setBackground(Color.black);
         param.requestFocus();
     }
 

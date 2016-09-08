@@ -1,6 +1,7 @@
 package present.panel.stock.center;
 
 import present.charts.KLine;
+import present.panel.stock.StockPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,15 +13,13 @@ import java.awt.*;
  */
 public class KLinePanel extends CenterPanel {
 
-    public KLinePanel(String stockCode) {
-        init();
-        createUIComponents(stockCode);
-    }
+    private StockPanel stockPanel;
 
-    private void init() {
-        SwingUtilities.invokeLater(() -> {
-            setLayout(new BorderLayout());
-        });
+    public KLinePanel(String stockCode, StockPanel stockPanel) {
+        super.init();
+
+        this.stockPanel = stockPanel;
+        createUIComponents(stockCode);
     }
 
     private void createUIComponents(String stockCode) {
@@ -29,12 +28,12 @@ public class KLinePanel extends CenterPanel {
                 this.add(new KLine().getKLine(stockCode), BorderLayout.CENTER);
             } catch (Exception e) {
                 e.printStackTrace();
+                stockPanel.displayError();
             }
         });
     }
 
     @Override
-    public boolean getData() {
-        return true;
+    public void getData() {
     }
 }
