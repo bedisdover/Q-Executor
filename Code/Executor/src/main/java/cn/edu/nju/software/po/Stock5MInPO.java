@@ -65,4 +65,15 @@ public class Stock5MInPO {
     public void setClose(double close) {
         this.close = close;
     }
+
+    @Override
+    public String toString() {
+        return "Stock5MInPO{" +
+                "time=" + time +
+                ", open=" + open +
+                ", high=" + high +
+                ", low=" + low +
+                ", close=" + close +
+                '}';
+    }
 }

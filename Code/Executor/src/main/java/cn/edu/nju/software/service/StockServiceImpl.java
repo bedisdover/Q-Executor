@@ -8,6 +8,10 @@ import cn.edu.nju.software.model.StockBasicInfo;
 import cn.edu.nju.software.model.StockInfoByCom;
 import cn.edu.nju.software.model.StockInfoByPer;
 
+import cn.edu.nju.software.po.Stock5MInPO;
+import cn.edu.nju.software.utils.JdbcUtil;
+import cn.edu.nju.software.utils.StockUtil;
+import cn.edu.nju.software.utils.StringUtil;
 import cn.edu.nju.software.utils.TimeUtil;
 import cn.edu.nju.software.vo.*;
 
@@ -16,6 +20,10 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -50,30 +58,71 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public List<StockKLineVO> getKLineByMinute(String codeNum, int interval) {
-//        int size = interval/5;
-//        int days = POINTS_NUMS/size + 2;
-//
-//        codeNum =  StockUtil.getCode(codeNum);
-//        int num = Integer.parseInt(codeNum.substring(2))%20;
-//        ArrayList<StockKLineVO> stockKLineVOs = new ArrayList<StockKLineVO>();
-//        String sql = "SELECT date,open,high,low,close,volume,dealMoney FROM "+ StringUtil.HISTORY_5MIN_DATA+num+" WHERE CODE = \""+codeNum+"\" ORDER BY DATE DESC limit "+days*48;
-//
-//        try {
-//            Connection connection = JdbcUtil.getInstance().getConnection();
-//            PreparedStatement statement = connection.prepareStatement(sql);
-//            ResultSet resultSet = statement.executeQuery();
-//            while (resultSet.next()) {
-//
-//                //stockForMLPOs.add(getStockForMLPO(resultSet));
+        int size = interval/5;
+        int days = POINTS_NUMS/(48/size) + 2;
+
+        List<Stock5MInPO> stock5MInPOs = new ArrayList<Stock5MInPO>();
+        codeNum =  StockUtil.getCode(codeNum);
+        int num = Integer.parseInt(codeNum.substring(2))%20;
+        ArrayList<StockKLineVO> stockKLineVOs = new ArrayList<StockKLineVO>();
+        String sql = "SELECT date,open,high,low,close FROM "+ StringUtil.HISTORY_5MIN_DATA+num+" WHERE CODE = \""+codeNum+"\" ORDER BY DATE DESC limit 0,"+days*48;
+
+        try {
+            Connection connection = JdbcUtil.getInstance().getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+
+                Stock5MInPO stock5MInPO = new Stock5MInPO(resultSet.getTimestamp(1),resultSet.getDouble(2),resultSet.getDouble(3),resultSet.getDouble(4),resultSet.getDouble(5));
+                stock5MInPOs.add(stock5MInPO);
+
+                //stockForMLPOs.add(getStockForMLPO(resultSet));
+
+            }
+
+            Collections.reverse(stock5MInPOs);
+//            for (Stock5MInPO po : stock5MInPOs){
+//                System.out.println(po);
 //            }
-//
-//        }catch (SQLException e){
-//            e.printStackTrace();
-//            return stockKLineVOs;
-//        }
-//        Collections.reverse(stockKLineVOs);
-//        return stockKLineVOs;
-        return null;
+            int offset = 0 ;
+            for (int i = 0 ; i < stock5MInPOs.size() ;i++){
+
+                if (TimeUtil.getDateHHmmss(stock5MInPOs.get(i).getTime().getTime()).equals("09:35:00")){
+                    offset = i;
+
+                    break;
+                }
+            }
+            stock5MInPOs = stock5MInPOs.subList(offset,stock5MInPOs.size());
+            for (int i = 0 ; i < stock5MInPOs.size()/size ; i++){
+                double open = stock5MInPOs.get(size*i).getOpen();
+                double high = stock5MInPOs.get(size*i).getHigh();
+                double low = stock5MInPOs.get(size*i).getLow();
+                String date = TimeUtil.getDetailTime(new Date(stock5MInPOs.get(size*i+size-1).getTime().getTime()));
+                double close = stock5MInPOs.get(size*i+size-1).getClose();
+                for (int j = 0 ; j < size ; j++ ){
+                    double highTemp = stock5MInPOs.get(size*i+j).getHigh();
+                    double lowTemp = stock5MInPOs.get(size*i+j).getLow();
+                    if (highTemp>high){
+                        high = highTemp;
+                    }
+                    if (lowTemp<low){
+                        low = lowTemp;
+                    }
+                }
+                stockKLineVOs.add(new StockKLineVO(date,open,high,close,low));
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+            return stockKLineVOs;
+        }
+
+        if (stockKLineVOs.size()<100){
+            return stockKLineVOs;
+        }
+        return stockKLineVOs.subList(stockKLineVOs.size()-100,stockKLineVOs.size());
+
     }
 
     @Override

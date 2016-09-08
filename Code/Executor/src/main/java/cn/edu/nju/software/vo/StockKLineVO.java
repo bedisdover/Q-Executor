@@ -48,6 +48,14 @@ public class StockKLineVO {
         this.turnover = turnover;
     }
 
+    public StockKLineVO(String date, double open, double high, double close, double low) {
+        this.date = date;
+        this.open = open;
+        this.high = high;
+        this.close = close;
+        this.low = low;
+    }
+
     public String getDate() {
         return date;
     }
