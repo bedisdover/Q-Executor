@@ -12,29 +12,25 @@ public class VWAP_Param {
 	//股票代码
 	private String stockid;
 	
-	//
+	//风险偏好
 	private double delta;
 
 	//当前时间段
 	private int timeNode;
+	//开始时间片
+	private int startTimeNode;
+	//结束时间片
+	private int endTimeNode;
 
-	//总时间段数量
-	private int timeSliceNum;
-
-	//是否在规定时间一定全部交易完
-	private boolean tradeAll;
-
-	public VWAP_Param(long userVol, String stockid, double delta, int timeNode, int timeSliceNum, boolean tradeAll) {
+	public VWAP_Param(long userVol, String stockid, double delta, int timeNode, int startTimeNode, int endTimeNode) {
 		this.userVol = userVol;
 		this.stockid = stockid;
 		this.delta = delta;
 		this.timeNode = timeNode;
-		this.timeSliceNum = timeSliceNum;
-		this.tradeAll = tradeAll;
+		this.startTimeNode = startTimeNode;
+		this.endTimeNode = endTimeNode;
 	}
 
-	public VWAP_Param() {
-	}
 
 	public long getUserVol() {
 		return userVol;
@@ -68,19 +64,19 @@ public class VWAP_Param {
 		this.timeNode = timeNode;
 	}
 
-	public int getTimeSliceNum() {
-		return timeSliceNum;
+	public int getStartTimeNode() {
+		return startTimeNode;
 	}
 
-	public void setTimeSliceNum(int timeSliceNum) {
-		this.timeSliceNum = timeSliceNum;
+	public void setStartTimeNode(int startTimeNode) {
+		this.startTimeNode = startTimeNode;
 	}
 
-	public boolean isTradeAll() {
-		return tradeAll;
+	public int getEndTimeNode() {
+		return endTimeNode;
 	}
 
-	public void setTradeAll(boolean tradeAll) {
-		this.tradeAll = tradeAll;
+	public void setEndTimeNode(int endTimeNode) {
+		this.endTimeNode = endTimeNode;
 	}
 }

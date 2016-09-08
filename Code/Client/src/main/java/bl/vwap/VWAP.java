@@ -17,12 +17,47 @@ import java.util.Map;
 
 public class VWAP implements VWAPService {
 
-	
-	Map<String,List<Double>> stockPnMap ;
-	
-	public VWAP(){
+
+	private Map<String,List<Double>>  stockPnMap;
+	private VWAPCore vwapCore;
+
+	private VWAP(){
 		stockPnMap = new HashMap<String,List<Double>>();
-		
+		vwapCore = new VWAPCore();
+	}
+	private static class SingletonHolder
+	{
+		private final static VWAP instance = new VWAP();
+	}
+
+	public static VWAP getInstance()
+	{
+		return SingletonHolder.instance;
+	}
+
+	public List<VolumeVO> predictVn1(VWAP_Param param) throws Exception{
+		//已交易比例阈值
+		double volThre = 0.8;
+		//时间阈值
+		double timrThre = 220.0/240;
+
+		//交易量概率密度
+		List<Double> Pn;
+		if(param.getTimeNode()==param.getStartTimeNode()|| !stockPnMap.containsKey(param.getStockid())){
+			Pn=vwapCore.getStaticPn(param.getStockid());
+			stockPnMap.put(param.getStockid(), Pn);
+		}
+		Pn=stockPnMap.get(param.getStockid());
+		double gama = 0;
+		for(int i = param.getTimeNode()-1;i<Pn.size();i++){
+			gama += Pn.get(i);
+		}
+		if(gama<volThre && 1.0*param.getTimeNode()/TimeUtil.TimeSliceNum <timrThre){
+			Pn = vwapCore.getDynamicPn(Pn,param);
+			stockPnMap.put(param.getStockid(), Pn);
+		}
+		List<Integer> Vn = calcVn(Pn,param);
+		return null;
 	}
 
 	public List<VolumeVO> predictVn(VWAP_Param param) throws Exception{
@@ -54,7 +89,7 @@ public class VWAP implements VWAPService {
         for(int i = param.getTimeNode()-1;i<Pn.size();i++){
             gama += Pn.get(i);
         }
-        if(gama>=volThre || 1.0*param.getTimeNode()/param.getTimeSliceNum() >=timrThre){
+        if(gama>=volThre || 1.0*param.getTimeNode()/TimeUtil.TimeSliceNum >=timrThre){
 
         }else if(param.getTimeNode()>1){
             priceVO = ml.getDynamicPrice(param.getStockid());
@@ -76,7 +111,7 @@ public class VWAP implements VWAPService {
 
 		}
 		List<Integer> Vn = calcVn(Pn,param);
-		return  getVolumeVOList(Vn,param.getTimeSliceNum());
+		return  getVolumeVOList(Vn,TimeUtil.TimeSliceNum);
 	}
 
     /**
@@ -87,6 +122,11 @@ public class VWAP implements VWAPService {
      */
     private List<Integer> calcVn(List<Double> Pn,VWAP_Param param){
         List<Integer> Vn = new ArrayList<Integer>();
+		double pLocal;
+		List<Double> plist;
+		for(int i=param.getStartTimeNode()-1;i<param.getEndTimeNode();i++){
+
+		}
         for(int i=0;i<Pn.size();i++){
             int vi=Double.valueOf(param.getUserVol()*Pn.get(i)).intValue();
             Vn.add(vi);
