@@ -3,8 +3,8 @@ package bl.vwap;
  * @author ZhangYF
  *
  */
+
 import bl.TimeUtil;
-import bl.VWAPCore;
 import blservice.vwap.VWAPService;
 import service.MLForVWAPService;
 import service.MLForVWAPServiceImpl;
