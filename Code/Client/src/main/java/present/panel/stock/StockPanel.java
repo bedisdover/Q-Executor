@@ -1,24 +1,24 @@
 package present.panel.stock;
 
-import bl.GetStockDataServiceImpl;
-import bl.SelfSelectServiceImpl;
-import bl.UserServiceImpl;
-import blservice.GetStockDataService;
-import blservice.SelfSelectService;
-import blservice.UserService;
+import bl.stock.GetStockDataServiceImpl;
+import bl.user.SelfSelectServiceImpl;
+import blservice.stock.GetStockDataService;
+import blservice.user.SelfSelectService;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
-import present.charts.KLine;
+import present.panel.account.LoginPanel;
 import present.panel.error.ErrorPanel;
-import present.panel.loading.LoadingPanel;
-import present.panel.progress.ProgressPanel;
+import present.panel.stock.center.*;
+import present.panel.stock.west.CurrentDataPanel;
+import vo.NowTimeSelectedStockInfoVO;
 import vo.StockBasicInfoVO;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Y481L on 2016/8/25.
@@ -36,11 +36,9 @@ public class StockPanel extends JPanel {
     /**
      * 中部面板
      */
-    private JComponent centerPanel;
+    private CenterPanel centerPanel;
 
-    private JTabbedPane kLinePanel;
-
-    private JPanel timeSeriesPanel, depthPanel, generalPanel, singlePanel, priceSharePanel;
+    private CenterPanel kLinePanel, timeSeriesPanel, depthPanel, generalPanel, singlePanel, priceSharePanel;
 
     private String stockCode;
 
@@ -62,6 +60,14 @@ public class StockPanel extends JPanel {
 
             panel.revalidate();
         });
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                centerPanel.getData();
+            }
+        }, 3000, 3000);
     }
 
     /**
@@ -75,69 +81,69 @@ public class StockPanel extends JPanel {
             {
                 currentDataPanel = new CurrentDataPanel(stockCode);
                 JScrollPane scrollPane = new JScrollPane(currentDataPanel);
-                scrollPane.setPreferredSize(new Dimension(200, 1));
+                scrollPane.setPreferredSize(new Dimension(205, 1));
 
                 panel.add(scrollPane, BorderLayout.WEST);
             }
 
-            try {
-                centerPanel = kLinePanel = new KLine().getKLine(stockCode);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            panel.add(centerPanel, BorderLayout.CENTER);
+            createCenterPanel("KLinePanel");
         });
     }
 
     /**
      * 创建中部面板
      */
-    private void createCenterPanel(String panelType) {
+    private void createCenterPanel(final String panelType) {
         SwingUtilities.invokeLater(() -> {
-            panel.remove(centerPanel);
+            if (centerPanel != null) {
+                panel.remove(centerPanel);
+            }
 
             switch (panelType) {
                 case "KLinePanel":
+                    if (kLinePanel == null) {
+                        kLinePanel = new KLinePanel(stockCode, this);
+                    }
+
                     centerPanel = kLinePanel;
                     break;
                 case "TimeSeriesPanel":
                     if (timeSeriesPanel == null) {
-                        timeSeriesPanel = new TimeSeriesPanel(stockCode);
+                        timeSeriesPanel = new TimeSeriesPanel(stockCode, this);
                     }
 
                     centerPanel = timeSeriesPanel;
                     break;
                 case "DepthPanel":
                     if (depthPanel == null) {
-                        depthPanel = new DepthPanel(stockCode);
+                        depthPanel = new DepthPanel(stockCode, this);
                     }
 
                     centerPanel = depthPanel;
                     break;
                 case "GeneralPanel":
                     if (generalPanel == null) {
-                        generalPanel = new GeneralPanel(stockCode, currentDataPanel);
+                        generalPanel = new GeneralPanel(stockCode, currentDataPanel, this);
                     }
 
                     centerPanel = generalPanel;
                     break;
                 case "SinglePanel":
                     if (singlePanel == null) {
-                        singlePanel = new SinglePanel(stockCode);
+                        singlePanel = new SinglePanel(stockCode, this);
                     }
 
                     centerPanel = singlePanel;
                     break;
                 case "PriceSharePanel":
                     if (priceSharePanel == null) {
-                        priceSharePanel = new PriceSharePanel(stockCode);
+                        priceSharePanel = new PriceSharePanel(stockCode, this);
                     }
 
                     centerPanel = priceSharePanel;
                     break;
                 case "ErrorPanel":
-                    centerPanel = new ErrorPanel();
+                    centerPanel = new ErrorPanel(centerPanel);
                     break;
             }
 
@@ -152,7 +158,7 @@ public class StockPanel extends JPanel {
      * 获取基本数据，用于设置namePanel及currentDataPanel中的BasicInfoPanel
      */
     private void getData() {
-        SwingWorker<StockBasicInfoVO, Void> worker = new SwingWorker<StockBasicInfoVO, Void>() {
+        SwingWorker<StockBasicInfoVO, StockBasicInfoVO> worker = new SwingWorker<StockBasicInfoVO, StockBasicInfoVO>() {
             @Override
             protected StockBasicInfoVO doInBackground() throws Exception {
                 GetStockDataService stockDataService = new GetStockDataServiceImpl();
@@ -176,12 +182,20 @@ public class StockPanel extends JPanel {
                     namePanel.setName(stockBasicInfoVO.getName());
                     currentDataPanel.setBasicInfo(stockBasicInfoVO);
                 } catch (Exception e) {
+                    createCenterPanel("ErrorPanel");
                     e.printStackTrace();
                 }
             }
         };
 
         worker.execute();
+    }
+
+    /**
+     * 展示错误信息
+     */
+    public void displayError() {
+        createCenterPanel("ErrorPanel");
     }
 
     /**
@@ -204,6 +218,7 @@ public class StockPanel extends JPanel {
 
             init();
             createUIComponents();
+            getAllPortrait();
         }
 
         /**
@@ -337,11 +352,82 @@ public class StockPanel extends JPanel {
             portrait.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    SelfSelectService selfSelect = new SelfSelectServiceImpl();
+                    if (!LoginPanel.IS_LOGIN) {
+                        SwingUtilities.invokeLater(() ->
+                                JOptionPane.showConfirmDialog(StockPanel.this, "尚未登录，请先登录", "登录", JOptionPane.CLOSED_OPTION));
 
-                    portrait.setText("取消自选");
+                        return;
+                    }
+
+                    if (portrait.getText().equals("添加自选")) {
+                        addPortrait();
+                    } else {
+                        removePortrait();
+                    }
                 }
             });
+        }
+
+        private void getAllPortrait() {
+            if (LoginPanel.IS_LOGIN) {
+                SwingWorker<List<NowTimeSelectedStockInfoVO>, Void> worker =
+                        new SwingWorker<List<NowTimeSelectedStockInfoVO>, Void>() {
+                            @Override
+                            protected List<NowTimeSelectedStockInfoVO> doInBackground() throws Exception {
+                                SelfSelectService selfSelectService = new SelfSelectServiceImpl();
+
+                                return selfSelectService.getUserSelectedStock(LoginPanel.LOGIN_USER, LoginPanel.LOGIN_PW);
+                            }
+
+                            @Override
+                            protected void done() {
+                                try {
+                                    List<NowTimeSelectedStockInfoVO> stockList = get();
+
+                                    for (NowTimeSelectedStockInfoVO aStockList : stockList) {
+                                        if (aStockList.getGid().equals(stockCode)) {
+                                            portrait.setText("取消自选");
+                                            portrait.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.red));
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        };
+
+                worker.execute();
+            }
+        }
+
+        /**
+         * 添加自选
+         */
+        private void addPortrait() {
+            try {
+                SelfSelectService selfSelect = new SelfSelectServiceImpl();
+                selfSelect.addUserSelectedStock(stockCode, LoginPanel.LOGIN_USER, LoginPanel.LOGIN_PW);
+
+                portrait.setText("取消自选");
+                portrait.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.red));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        /**
+         * 取消自选
+         */
+        private void removePortrait() {
+            try {
+                SelfSelectService selfSelect = new SelfSelectServiceImpl();
+                selfSelect.deleteUserSelectedStock(stockCode, LoginPanel.LOGIN_USER, LoginPanel.LOGIN_PW);
+
+                portrait.setText("添加自选");
+                portrait.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.green));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         private void setButtonStyle(JButton button) {

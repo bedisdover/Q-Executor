@@ -11,8 +11,11 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import bl.stock.GetKLineDataServiceImpl;
+import blservice.stock.GetStockDataService;
+
 import vo.*;
-import blservice.GetStockDataService;
+
 
 public class GetStockDataServiceImpl implements GetStockDataService{
 
@@ -209,19 +212,26 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 	}
 	
 	public static void main(String [] args){
-		String url="http://121.42.143.164/HotStocks";
-		StockBasicInfoVO stockBasicInfoVO=new StockBasicInfoVO();
-		try {
-			URL ur=new URL(url);
-			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
-			String line=reader.readLine();
-			
-			System.out.println(line);
-		
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		String url="http://139.196.174.107/KLineMinute?codeNum=sh600000&interval=5";
+//		StockBasicInfoVO stockBasicInfoVO=new StockBasicInfoVO();
+//		try {
+//			URL ur=new URL(url);
+//			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
+//			String line=reader.readLine();
+//			
+//			System.out.println(line);
+//		
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		GetKLineDataServiceImpl a=new GetKLineDataServiceImpl();
+//		try {
+//			System.out.println(a.getKLineMinute("sh600000", 10).get(0).getDate());
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 //		GetStockDataServiceImpl A=new GetStockDataServiceImpl();
 //		try {
 //			System.out.println(A.getStockDepth("sh600000").get(0).getDeepPrice());

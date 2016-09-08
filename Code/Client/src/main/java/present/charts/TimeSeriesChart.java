@@ -1,19 +1,25 @@
 package present.charts;
 
-import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.*;
+import org.jfree.chart.plot.CombinedDomainXYPlot;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.chart.renderer.xy.StandardXYBarPainter;
+import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.Range;
-import org.jfree.data.time.*;
-import org.jfree.ui.RectangleInsets;
+import org.jfree.data.time.Minute;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
+import present.panel.stock.west.CurrentDataPanel;
+import util.TimeUtil;
 import vo.StockTimeSeriesVO;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,51 +36,71 @@ public class TimeSeriesChart {
     public static JPanel getChart(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
         TimeSeriesVO timeSeriesVO = getData(stockTimeSeriesVOList);
 
+        // 横轴
+        DateAxis dateAxis = new DateAxis();
+        dateAxis.setAutoRange(false);
+        dateAxis.setRange(TimeUtil.getStartTime(), TimeUtil.getEndTime());
+        SegmentedTimeline timeline = SegmentedTimeline.newFifteenMinuteTimeline();
+        timeline.addException(TimeUtil.getInterruptTime().getTime(), TimeUtil.getResumeTime().getTime());
+        dateAxis.setTimeline(timeline);
+        dateAxis.setTickMarkPosition(DateTickMarkPosition.START);//设置标记的位置
+        dateAxis.setStandardTickUnits(DateAxis.createStandardDateTickUnits());//设置标准的时间刻度单位
+        dateAxis.setTickUnit(new DateTickUnit(DateTickUnitType.MINUTE, 30));//设置时间刻度的间隔
+        dateAxis.setDateFormatOverride(dateFormat);//设置显示时间的格式
+
+        // 实时价格纵轴
         NumberAxis yAxis = new NumberAxis();
         yAxis.setAutoRange(false);//设置不采用自动设置数据范围
         yAxis.setUpperMargin(10);//设置向上边框距离
-        yAxis.setLabelFont(new Font("微软雅黑", Font.BOLD, 12));
-        yAxis.setRange(timeSeriesVO.getLow(), timeSeriesVO.getHigh());//设置y轴数据范围
+        yAxis.setRange(timeSeriesVO.getPriceRange());//设置y轴数据范围
+        // 涨跌幅纵轴
+        NumberAxis avgAxis = new NumberAxis();
+        avgAxis.setAutoRange(false);
+        avgAxis.setRange(timeSeriesVO.getIncRateRange());
+        NumberFormat numberFormat = new DecimalFormat("0.00%");
+        avgAxis.setNumberFormatOverride(numberFormat);
+        avgAxis.setTickUnit(new NumberTickUnit(0.05));
 
-        DateAxis dateAxis = new DateAxis();
-        dateAxis.setAutoRange(false);
-        dateAxis.setRange(timeSeriesVO.getStartTime(), timeSeriesVO.getEndTime());
-        SegmentedTimeline timeline = SegmentedTimeline.newFifteenMinuteTimeline();
-        timeline.addException(timeSeriesVO.getInterruptTime().getTime(), timeSeriesVO.getResumeTime().getTime());
-        dateAxis.setTimeline(timeline);
-        dateAxis.setTickMarkPosition(DateTickMarkPosition.MIDDLE);//设置标记的位置
-        dateAxis.setStandardTickUnits(DateAxis.createStandardDateTickUnits());//设置标准的时间刻度单位
-        dateAxis.setTickUnit(new DateTickUnit(DateTickUnit.MINUTE, 30));//设置时间刻度的间隔
-        dateAxis.setDateFormatOverride(dateFormat);//设置显示时间的格式
+        //设置价格绘图器
+        XYLineAndShapeRenderer priceRenderer = new XYLineAndShapeRenderer();
+        priceRenderer.setBaseItemLabelsVisible(true);
+        priceRenderer.setSeriesShapesVisible(0, false);//设置不显示数据点模型
+        priceRenderer.setSeriesShapesVisible(1, false);
+        priceRenderer.setSeriesShapesVisible(2, false);
+        priceRenderer.setSeriesPaint(0, Color.WHITE);//设置颜色
+        priceRenderer.setSeriesPaint(1, Color.YELLOW);
+        priceRenderer.setSeriesPaint(2, Color.RED);
 
-        JFreeChart jfreechart = ChartFactory.createTimeSeriesChart(
-                "", "", "", timeSeriesVO.getTimeSeriesCollection(), true, true, true);
+        // 价格图
+        XYPlot pricePlot = new XYPlot(timeSeriesVO.getPriceCollection(), dateAxis, yAxis, priceRenderer);
+        pricePlot.setRangeAxis(0, yAxis);
+        pricePlot.setRangeAxis(1, avgAxis);
+        pricePlot.setBackgroundPaint(Color.BLACK);
 
-        XYPlot xyplot = (XYPlot) jfreechart.getPlot();
-        xyplot.setBackgroundPaint(Color.BLACK);
-        xyplot.setDomainGridlinesVisible(false);
-        xyplot.setRangeGridlinesVisible(false);
-        xyplot.setDomainGridlinePaint(Color.white);
-        xyplot.setRangeGridlinePaint(Color.white);
-        xyplot.setAxisOffset(new RectangleInsets(5D, 5D, 5D, 5D));
-        xyplot.setDomainCrosshairVisible(true);
-        xyplot.setRangeCrosshairVisible(true);
-        xyplot.setRangeAxis(yAxis);
-        xyplot.setDomainAxis(dateAxis);
+        // 成交量纵轴
+        NumberAxis y1Axis = new NumberAxis();
+        y1Axis.setAutoRange(true);
 
-        XYItemRenderer xyitemrenderer = xyplot.getRenderer();
-        if (xyitemrenderer instanceof XYLineAndShapeRenderer) {
-            XYLineAndShapeRenderer xylineandshaperenderer = (XYLineAndShapeRenderer) xyitemrenderer;
-            xylineandshaperenderer.setBaseShapesVisible(false);
-            xylineandshaperenderer.setBaseShapesFilled(false);
-            xylineandshaperenderer.setBaseStroke(new BasicStroke(1.6f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-            xylineandshaperenderer.setSeriesShapesVisible(0, false);
-            xylineandshaperenderer.setSeriesShapesVisible(1, false);
-        }
+        // 成交量绘图器
+        XYBarRenderer amountRender = new XYBarRenderer();
+        amountRender.setMargin(0.1);//设置柱形图之间的间隔
+        amountRender.setDrawBarOutline(true);//设置显示边框线
+        amountRender.setBarPainter(new StandardXYBarPainter());//取消渐变效果
+        amountRender.setMargin(0.3);//设置柱形图之间的间隔
+        amountRender.setSeriesPaint(0, Color.YELLOW);//设置柱子内部颜色
+        amountRender.setSeriesVisibleInLegend(0, false);//设置不显示legend（数据颜色提示)
+        amountRender.setShadowVisible(false);//设置没有阴影
 
-//        DateAxis dateaxis = (DateAxis) xyplot.getDomainAxis();
-//        dateaxis.setDateFormatOverride(new SimpleDateFormat("HH:mm:ss"));
-//        dateaxis.setPositiveArrowVisible(true);
+        // 成交量图
+        XYPlot amountPlot = new XYPlot(timeSeriesVO.getAmountCollection(), null, y1Axis, amountRender);
+        amountPlot.setBackgroundPaint(Color.BLACK);
+
+        CombinedDomainXYPlot combinedDomainXYPlot = new CombinedDomainXYPlot(dateAxis);
+        combinedDomainXYPlot.add(pricePlot, 2);
+        combinedDomainXYPlot.add(amountPlot, 1);
+        combinedDomainXYPlot.setGap(10);
+
+        JFreeChart jfreechart = new JFreeChart(combinedDomainXYPlot);
 
         return new ChartPanel(jfreechart);
     }
@@ -84,15 +110,15 @@ public class TimeSeriesChart {
     }
 
     /**
-     * 获取时间(精确到秒)
+     * 获取时间(精确到分钟)
      *
-     * @param time 格式: "HH:mm:ss"
+     * @param time 格式: "HH:mm"
      */
     private static Minute getMinute(String time) {
         Minute minute;
 
         try {
-            minute= new Minute(dateFormat.parse(time));
+            minute = new Minute(dateFormat.parse(time));
         } catch (ParseException e) {
             e.printStackTrace();
             return new Minute(new Date());
@@ -104,23 +130,45 @@ public class TimeSeriesChart {
     private static class TimeSeriesVO {
         private double high = Double.MIN_VALUE, low = Double.MAX_VALUE;
 
-        private TimeSeriesCollection timeSeriesCollection;
+        private TimeSeriesCollection priceCollection;
+
+        private TimeSeriesCollection amountCollection;
 
         TimeSeriesVO(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
-            TimeSeries timeSeries1 = new TimeSeries("实时价格");
-            TimeSeries timeSeries2 = new TimeSeries("平均价格");
+            initData(stockTimeSeriesVOList);
+        }
+
+        private double getClose() {
+            return CurrentDataPanel.getClose();
+        }
+
+        private void initData(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
+            TimeSeries priceSeries = new TimeSeries("实时价格");
+            TimeSeries avgSeries = new TimeSeries("平均价格");
+            TimeSeries closeSeries = new TimeSeries("收盘价");
+
+            TimeSeries amountSeries = new TimeSeries("成交量");
 
             StockTimeSeriesVO stockVO;
+            Minute minute;
             for (int i = stockTimeSeriesVOList.size() - 1; i >= 0; i--) {
                 stockVO = stockTimeSeriesVOList.get(i);
 
-                timeSeries1.add(getMinute(stockVO.getTimeLine()), stockVO.getPrice());
-                timeSeries2.add(getMinute(stockVO.getTimeLine()), stockVO.getAvePrice());
+                minute = getMinute(stockVO.getTimeLine());
+                priceSeries.add(minute, stockVO.getPrice());
+                avgSeries.add(minute, stockVO.getAvePrice());
+                closeSeries.add(minute, getClose());
+
+                amountSeries.add(getMinute(stockVO.getTimeLine()), stockVO.getVolume());
             }
 
-            timeSeriesCollection = new TimeSeriesCollection();
-            timeSeriesCollection.addSeries(timeSeries1);
-            timeSeriesCollection.addSeries(timeSeries2);
+            priceCollection = new TimeSeriesCollection();
+            priceCollection.addSeries(priceSeries);
+            priceCollection.addSeries(avgSeries);
+            priceCollection.addSeries(closeSeries);
+
+            amountCollection = new TimeSeriesCollection();
+            amountCollection.addSeries(amountSeries);
 
             calculate(stockTimeSeriesVOList);
         }
@@ -142,45 +190,31 @@ public class TimeSeriesChart {
             }
         }
 
-        TimeSeriesCollection getTimeSeriesCollection() {
-            return timeSeriesCollection;
+        TimeSeriesCollection getPriceCollection() {
+            return priceCollection;
         }
 
-        double getHigh() {
-            return high;
+        TimeSeriesCollection getAmountCollection() {
+            return amountCollection;
         }
 
-        double getLow() {
-            return low;
+        /**
+         * 获取价格范围
+         */
+        Range getPriceRange() {
+            double margin = (high - low) * 0.1;
+
+            return new Range(low - margin, high + margin);
         }
 
-        Date getStartTime() {
-            return getTime("9:30");
-        }
+        /**
+         * 获取涨跌幅范围
+         */
+        Range getIncRateRange() {
+            double close = getClose();
 
-        Date getEndTime() {
-            return getTime("15:00");
-        }
-
-        Date getInterruptTime() {
-            return getTime("11:30");
-        }
-
-        Date getResumeTime() {
-            return getTime("13:00");
-        }
-
-        private Date getTime(String time) {
-            Date date = null;
-
-            try {
-                date = dateFormat.parse(time);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            return date;
+            return new Range((getPriceRange().getLowerBound() - close) / close * 100,
+                    (getPriceRange().getUpperBound() - close) / close * 100);
         }
     }
 }
-

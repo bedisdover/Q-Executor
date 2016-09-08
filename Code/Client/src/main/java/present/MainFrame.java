@@ -26,10 +26,15 @@ public class MainFrame extends JFrame{
 
     private static final int MENU_H = 48;
 
+    private static final Font font = new Font("微软雅黑", Font.PLAIN, 16);
+
     public MainFrame() {
 
         try {
             org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
+//            String[] fonts = GraphicsEnvironment.
+//                    getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+//            for(String s : fonts) System.out.println(s);
         }
         catch (Exception e) {
             System.out.println("Look and feel Exception!");
@@ -40,11 +45,12 @@ public class MainFrame extends JFrame{
     }
 
     private void setAttributes() {
+        this.setIconImage(new ImageIcon("src/main/resources/images/icon.png").getImage());
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setVisible(true);
         this.pack();
-//        this.setResizable(false);
         this.setFrameAtCenter();
+        setMinimumSize(new Dimension(PANEL_W, PANEL_H + MENU_H));
+        this.setVisible(true);
     }
 
     private void addComponents() {
@@ -64,6 +70,7 @@ public class MainFrame extends JFrame{
 
         //交易菜单
         JMenu trade = this.createMenu("交易");
+        trade.setFont(font);
         trade.addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {
@@ -80,6 +87,7 @@ public class MainFrame extends JFrame{
 
         //股票菜单
         JMenu stock = this.createMenu("股票");
+        stock.setFont(font);
         stock.addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {
@@ -92,27 +100,11 @@ public class MainFrame extends JFrame{
             @Override
             public void menuCanceled(MenuEvent e) {}
         });
-
-//        //大单菜单项
-//        JMenuItem general = this.createMenuItem(
-//                "大单", (e) -> switcher.jump(new GeneralPanel())
-//        );
-//        stock.add(general);
-//        //逐笔菜单项
-//        JMenuItem single = this.createMenuItem(
-//                "逐笔", (e) -> switcher.jump(new SinglePanel())
-//        );
-//        stock.add(single);
-//        //分价菜单项
-//        JMenuItem price = this.createMenuItem(
-//                "分价", (e) -> switcher.jump(new PriceSharePanel())
-//        );
-//        stock.add(price);
-
         bar.add(stock);
 
         //简介菜单
         JMenu introduce = this.createMenu("简介");
+        introduce.setFont(font);
         introduce.addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {
@@ -127,59 +119,39 @@ public class MainFrame extends JFrame{
         });
         bar.add(introduce);
 
+        //账户账单
+        JMenu account = this.createMenu("账户");
+        bar.add(account);
+        account.setFont(font);
         //登录菜单
-        JMenu login = this.createMenu("登录");
-        login.addMenuListener(new MenuListener() {
-            @Override
-            public void menuSelected(MenuEvent e) {
-                switcher.jump(new LoginPanel(switcher));
-            }
-
-            @Override
-            public void menuDeselected(MenuEvent e) {}
-
-            @Override
-            public void menuCanceled(MenuEvent e) {}
-        });
-        bar.add(login);
+        JMenuItem login = this.createMenuItem("登录");
+        login.setFont(font);
+        login.addActionListener((e) -> switcher.jump(new LoginPanel(switcher)));
+        account.add(login);
 
         //注册菜单
-        JMenu register = this.createMenu("注册");
-        register.addMenuListener(new MenuListener() {
-            @Override
-            public void menuSelected(MenuEvent e) {
-                switcher.jump(new RegisterPanel(switcher));
-            }
+        JMenuItem register = this.createMenuItem("注册");
+        register.setFont(font);
+        register.addActionListener((e) -> switcher.jump(new RegisterPanel(switcher)));
+        account.add(register);
 
-            @Override
-            public void menuDeselected(MenuEvent e) {}
-
-            @Override
-            public void menuCanceled(MenuEvent e) {}
-        });
-        bar.add(register);
-
+        bar.setBackground(Color.black);
         this.setJMenuBar(bar);
+    }
 
-//        TitlePanel title = new TitlePanel(switcher);
-//        NavPanel nav = new NavPanel(switcher);
-//        this.add(title, BorderLayout.NORTH);
-//        this.add(nav, BorderLayout.WEST);
-
+    private JMenuItem createMenuItem(String name) {
+        JMenuItem item = new JMenuItem(name);
+        item.setPreferredSize(new Dimension(MENU_W, MENU_H));
+        return item;
     }
 
     private JMenu createMenu(String name) {
-        JMenu menu = new JMenu("        " + name);    //文字无法居中，用空格代替...
+        JMenu menu = new JMenu("    " + name);
+        menu.setBackground(Color.black);
+        menu.setForeground(Color.white);
         menu.setPreferredSize(new Dimension(MENU_W, MENU_H));
         return menu;
     }
-
-//    private JMenuItem createMenuItem(String name, ActionListener listener) {
-//        JMenuItem item = new JMenuItem(name);
-//        item.setPreferredSize(new Dimension(MENU_W, MENU_H));
-//        item.addActionListener(listener);
-//        return item;
-//    }
 
     private void setFrameAtCenter() {
         Toolkit tk = Toolkit.getDefaultToolkit();

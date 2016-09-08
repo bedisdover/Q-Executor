@@ -1,5 +1,7 @@
 package present.panel.error;
 
+import present.panel.stock.center.CenterPanel;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -8,11 +10,18 @@ import java.awt.*;
  * <p>
  * 错误页面
  */
-public class ErrorPanel extends JPanel {
+public class ErrorPanel extends CenterPanel {
 
     private JLabel label;
 
-    public ErrorPanel() {
+    /**
+     * 前一个面板
+     */
+    private CenterPanel centerPanel;
+
+    public ErrorPanel(CenterPanel centerPanel) {
+        this.centerPanel = centerPanel;
+
         createUIComponents();
     }
 
@@ -27,5 +36,10 @@ public class ErrorPanel extends JPanel {
             this.add(new JPanel());
             this.repaint();
         });
+    }
+
+    @Override
+    public void getData() {
+        // TODO 持续更新
     }
 }

@@ -16,9 +16,5 @@ public interface MLForVWAPService {
     //返回最新数据下静态预测的48个成交量
     public ArrayList<Integer>   getStaticVol(String stockID);
 
-    //用于计算任务的接口
-    public  void getStaticVol_svm(String stockID);
-    public void getStaticPrice_svm(String stockID);
-    public void getDynamicPrice_svm(String stockID);
 
 }

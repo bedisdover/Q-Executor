@@ -8,12 +8,12 @@ import java.awt.*;
  *
  * 自定义label
  */
-class MyLabel extends JLabel {
-    MyLabel() {
+public class MyLabel extends JLabel {
+    public MyLabel() {
         this.setFont(new Font("微软雅黑", Font.PLAIN, 14));
     }
 
-    MyLabel(String text) {
+    public MyLabel(String text) {
         this.setText(text);
         this.setFont(new Font("微软雅黑", Font.PLAIN, 14));
     }

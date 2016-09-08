@@ -1,6 +1,9 @@
 package present.panel.trade;
 
+import org.jb2011.lnf.beautyeye.ch5_table.BETableHeaderUI;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.Vector;
@@ -46,6 +49,17 @@ class MessagePanel extends JScrollPane {
                 return false;
             }
         };
+        table.setForeground(Color.WHITE);
+        table.setBackground(Color.BLACK);
+//        table.getTableHeader().setForeground(Color.WHITE);
+        table.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getComponent(int n) {
+                Component comp = new JLabel();
+                comp.setBackground(Color.BLACK);
+                return comp;
+            }
+        });
 
         this.setPreferredSize(new Dimension(width, height));
         this.setViewportView(table);
