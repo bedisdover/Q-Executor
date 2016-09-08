@@ -208,25 +208,20 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 		return stockList;
 	}
 	
-//	public static void main(String [] args){
-//		String url="http://121.42.143.164/DeepStock?codeNum=sh600000";
-//		StockBasicInfoVO stockBasicInfoVO=new StockBasicInfoVO();
-//		try {
-//			URL ur=new URL(url);
-//			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
-//			String line=reader.readLine();
-//			JSONArray jsonArray=new JSONArray(line);
-//			int size=jsonArray.length();
-//			for(int i=0;i<size;i++){
-//				JSONObject jsonObj=jsonArray.getJSONObject(i);
-//				System.out.println(jsonObj.get("time"));
-//			}
-//			System.out.println(line);
-//		
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+	public static void main(String [] args){
+		String url="http://121.42.143.164/HotStocks";
+		StockBasicInfoVO stockBasicInfoVO=new StockBasicInfoVO();
+		try {
+			URL ur=new URL(url);
+			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
+			String line=reader.readLine();
+			
+			System.out.println(line);
+		
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 //		GetStockDataServiceImpl A=new GetStockDataServiceImpl();
 //		try {
 //			System.out.println(A.getStockDepth("sh600000").get(0).getDeepPrice());
@@ -235,5 +230,5 @@ public class GetStockDataServiceImpl implements GetStockDataService{
 //			e.printStackTrace();
 //		}
 //		
-//	}
+	}
 }
