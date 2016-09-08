@@ -204,7 +204,11 @@ public class TimeSeriesChart {
         Range getPriceRange() {
             double margin = (high - low) * 0.1;
 
-            return new Range(low - margin, high + margin);
+            if (margin >= 0) {
+                return new Range(low - margin, high + margin);
+            } else {
+                return new Range(0, 0);
+            }
         }
 
         /**

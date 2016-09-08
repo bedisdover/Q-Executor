@@ -22,10 +22,6 @@ public class TradePanel extends JPanel {
 
     MessagePanel msg = new MessagePanel(MSG_PANEL_W, MSG_PANEL_H);
 
-//    private static final int MONITOR_PANEL_W = RT_PANEL_W;
-//
-//    private static final int MONITOR_PANEL_H = MSG_PANEL_H;
-
     public TradePanel() {
         ParamPanel param = new ParamPanel(PARAM_PANEL_W, PARAM_PANEL_H, this);
 
@@ -33,13 +29,11 @@ public class TradePanel extends JPanel {
         timeSeriesPanel.setStockCode("sh600000");
         timeSeriesPanel.setPreferredSize(new Dimension(RT_PANEL_W, RT_PANEL_H));
 
-//        MonitorPanel monitor = new MonitorPanel(MONITOR_PANEL_W, MONITOR_PANEL_H);
         Box up = Box.createHorizontalBox();
         up.add(param);
         up.add(timeSeriesPanel);
         Box bottom = Box.createHorizontalBox();
         bottom.add(msg);
-//        bottom.add(monitor);
 
         this.setLayout(new BorderLayout());
         this.add(up, BorderLayout.NORTH);

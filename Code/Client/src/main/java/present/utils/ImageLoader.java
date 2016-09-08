@@ -20,6 +20,8 @@ public class ImageLoader {
 
     public static Image account_content;
 
+    public static Image search_bg;
+
     public static ImageIcon login_btn;
 
     public static ImageIcon register_btn;
@@ -36,5 +38,6 @@ public class ImageLoader {
         introduce = new ImageIcon("src/main/resources/images/introduce.jpg").getImage();
         account_nav = new ImageIcon("src/main/resources/images/account_nav.jpg").getImage();
         account_content = new ImageIcon("src/main/resources/images/account_content.jpg").getImage();
+        search_bg = new ImageIcon("src/main/resources/images/search_bg.jpg").getImage();
     }
 }

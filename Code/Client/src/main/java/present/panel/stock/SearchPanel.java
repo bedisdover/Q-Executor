@@ -11,6 +11,7 @@ import present.PanelSwitcher;
 import present.component.Link;
 import present.component.TextPlusBtn;
 import present.panel.account.LoginPanel;
+import present.utils.ImageLoader;
 import present.utils.StockJsonInfo;
 import util.JsonUtil;
 import vo.HotStockVO;
@@ -38,9 +39,9 @@ public class SearchPanel extends JPanel {
 
     private static final int TABLE_H = 370;
 
-    private static final int TABLE_W = 290;
+    private static final int TABLE_W = 320;
 
-    private static final Color TABLE_BG = new Color(0xf6f6f6);
+    private static final Color TABLE_BG = new Color(0xfaf3f3);
 
     //字符串切割符
     private static final String spliter = "--";
@@ -88,16 +89,16 @@ public class SearchPanel extends JPanel {
 
         this.setLayout(new BorderLayout());
         this.add(box, BorderLayout.NORTH);
+        this.setBackground(new Color(0xf6f0e4));
     }
 
-//    @Override
-//    protected void paintComponent(Graphics g) {
-//        super.paintComponent(g);
-//        g.drawImage(
-//                new ImageIcon("src/main/resources/images/city4.jpg").getImage(),
-//                0, 0, this.getWidth(), this.getHeight(), null
-//        );
-//    }
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(
+                ImageLoader.search_bg, 0, 0, this.getWidth(), this.getHeight(), null
+        );
+    }
 
     private TextPlusBtn createSearchPanel() {
         TextPlusBtn search = new TextPlusBtn(
@@ -201,7 +202,7 @@ public class SearchPanel extends JPanel {
         JPanel container = new JPanel(new BorderLayout());
         container.add(panel, BorderLayout.SOUTH);
         container.add(pane, BorderLayout.CENTER);
-        return wrapTable(container);
+        return container;
     }
 
     /**
@@ -241,7 +242,7 @@ public class SearchPanel extends JPanel {
         JPanel container = new JPanel(new BorderLayout());
         container.add(panel, BorderLayout.SOUTH);
         container.add(pane, BorderLayout.CENTER);
-        return wrapTable(container);
+        return container;
     }
 
     private JPanel wrapTable(JPanel table) {

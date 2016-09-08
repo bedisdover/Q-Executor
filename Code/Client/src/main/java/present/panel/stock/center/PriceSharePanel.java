@@ -40,13 +40,13 @@ public class PriceSharePanel extends CenterPanel {
         super.init();
         getData();
 
-//        Timer timer = new Timer();
-//        timer.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                repaint();
-//            }
-//        }, 0, 10);
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                repaint();
+            }
+        }, 0, 10);
     }
 
     @Override
