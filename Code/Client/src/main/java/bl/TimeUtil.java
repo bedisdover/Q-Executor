@@ -74,13 +74,12 @@ public class TimeUtil {
     /**
      * 将时间片转化为对应时间
      * @param timeNode 时间片
-     * @param timeNum 时间片数量
      * @return yyyy-MM-dd HH:mm:ss格式时间
      */
-    public static String timeNodeToDate(int timeNode, int timeNum){
+    public static String timeNodeToDate(int timeNode){
         Calendar calendar=Calendar.getInstance();
-        int timeLength = allTimeLength/timeNum;
-        if(timeNode<(timeNum/2)){
+        int timeLength = allTimeLength/TimeSliceNum;
+        if(timeNode<(TimeSliceNum/2)){
             calendar.set(Calendar.HOUR_OF_DAY,9);
             calendar.set(Calendar.MINUTE,30);
             calendar.add(Calendar.MINUTE,timeLength*(timeNode-1));
@@ -88,7 +87,7 @@ public class TimeUtil {
             calendar.set(Calendar.HOUR_OF_DAY,13);
             calendar.set(Calendar.MINUTE,0);
             calendar.set(Calendar.SECOND,1);
-            calendar.add(Calendar.MINUTE,timeLength*(timeNode - timeNum/2 -1));
+            calendar.add(Calendar.MINUTE,timeLength*(timeNode - TimeSliceNum/2 -1));
         }
         DateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = calendar.getTime();
