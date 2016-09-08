@@ -14,16 +14,18 @@ public class Stock5MInPO {
     private double high;
     private double low;
     private double close;
+    private double volume;
 
     public Stock5MInPO() {
     }
 
-    public Stock5MInPO(Timestamp time, double open, double high, double low, double close) {
+    public Stock5MInPO(Timestamp time, double open, double high, double low, double close,double volume) {
         this.time = time;
         this.open = open;
         this.high = high;
         this.low = low;
         this.close = close;
+        this.volume = volume;
     }
 
     public Timestamp getTime() {
@@ -66,6 +68,15 @@ public class Stock5MInPO {
         this.close = close;
     }
 
+
+    public double getVolume() {
+        return volume;
+    }
+
+    public void setVolume(double volume) {
+        this.volume = volume;
+    }
+
     @Override
     public String toString() {
         return "Stock5MInPO{" +
@@ -74,6 +85,7 @@ public class Stock5MInPO {
                 ", high=" + high +
                 ", low=" + low +
                 ", close=" + close +
+                ", volume=" + volume +
                 '}';
     }
 }

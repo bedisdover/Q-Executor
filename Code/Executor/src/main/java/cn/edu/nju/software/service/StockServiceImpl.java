@@ -65,7 +65,7 @@ public class StockServiceImpl implements StockService {
         codeNum =  StockUtil.getCode(codeNum);
         int num = Integer.parseInt(codeNum.substring(2))%20;
         ArrayList<StockKLineVO> stockKLineVOs = new ArrayList<StockKLineVO>();
-        String sql = "SELECT date,open,high,low,close FROM "+ StringUtil.HISTORY_5MIN_DATA+num+" WHERE CODE = \""+codeNum+"\" ORDER BY DATE DESC limit 0,"+days*48;
+        String sql = "SELECT date,open,high,low,close,volume FROM "+ StringUtil.HISTORY_5MIN_DATA+num+" WHERE CODE = \""+codeNum+"\" ORDER BY DATE DESC limit 0,"+days*48;
 
         try {
             Connection connection = JdbcUtil.getInstance().getConnection();
@@ -73,7 +73,7 @@ public class StockServiceImpl implements StockService {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
 
-                Stock5MInPO stock5MInPO = new Stock5MInPO(resultSet.getTimestamp(1),resultSet.getDouble(2),resultSet.getDouble(3),resultSet.getDouble(4),resultSet.getDouble(5));
+                Stock5MInPO stock5MInPO = new Stock5MInPO(resultSet.getTimestamp(1),resultSet.getDouble(2),resultSet.getDouble(3),resultSet.getDouble(4),resultSet.getDouble(5),resultSet.getDouble(6));
                 stock5MInPOs.add(stock5MInPO);
 
                 //stockForMLPOs.add(getStockForMLPO(resultSet));
@@ -99,6 +99,7 @@ public class StockServiceImpl implements StockService {
                 double high = stock5MInPOs.get(size*i).getHigh();
                 double low = stock5MInPOs.get(size*i).getLow();
                 String date = TimeUtil.getDetailTime(new Date(stock5MInPOs.get(size*i+size-1).getTime().getTime()));
+                double volume = 0.0;
                 double close = stock5MInPOs.get(size*i+size-1).getClose();
                 for (int j = 0 ; j < size ; j++ ){
                     double highTemp = stock5MInPOs.get(size*i+j).getHigh();
@@ -109,8 +110,9 @@ public class StockServiceImpl implements StockService {
                     if (lowTemp<low){
                         low = lowTemp;
                     }
+                    volume+=stock5MInPOs.get(size*i+j).getVolume();
                 }
-                stockKLineVOs.add(new StockKLineVO(date,open,high,close,low));
+                stockKLineVOs.add(new StockKLineVO(date,open,high,close,low,volume));
             }
 
         }catch (SQLException e){
