@@ -13,6 +13,7 @@ public interface GetKLineDataService {
 
     /**
      * 获取5/15/30/60/分钟均线
+     * url: /KLineMinute?codeNum=...&interval=5/15/30/60
      * @param stockCode 股票代码
      */
     List<StockKLineVO> getKLineMinute(String stockCode, int interval) throws Exception;

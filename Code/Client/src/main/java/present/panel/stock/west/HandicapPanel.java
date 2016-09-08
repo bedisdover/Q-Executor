@@ -33,7 +33,7 @@ class HandicapPanel extends JPanel {
      */
     private void init() {
         SwingUtilities.invokeLater(() -> {
-            panel.setLayout(new BorderLayout(0, 5));
+            panel.setLayout(new BorderLayout());
             panel.setBackground(new Color(0xeeeeee));
 
             panel.revalidate();
@@ -48,12 +48,12 @@ class HandicapPanel extends JPanel {
             {
                 centerPanel = new CenterPanel();
 
-                panel.add(centerPanel, BorderLayout.CENTER);
+                panel.add(centerPanel, BorderLayout.NORTH);
             }
 
             {
                 southPanel = new SouthPanel();
-                panel.add(southPanel, BorderLayout.SOUTH);
+                panel.add(southPanel, BorderLayout.CENTER);
             }
         });
     }
@@ -86,7 +86,7 @@ class CenterPanel extends JPanel {
     private void init() {
         SwingUtilities.invokeLater(() -> {
             panel.setBackground(new Color(0xeeeeee));
-            panel.setLayout(new BorderLayout(10, 0));
+            panel.setLayout(new GridLayout(0, 2));
 
             panel.revalidate();
         });
@@ -94,33 +94,20 @@ class CenterPanel extends JPanel {
 
     private void createUIComponents() {
         SwingUtilities.invokeLater(() -> {
-            {
-                Box westPanel = Box.createVerticalBox();
+            labelDepth = new MyLabel("深度");
+            labelCommittee = new MyLabel("委比");
+            labelCommission = new MyLabel("委差");
 
-                labelDepth = new MyLabel("深度");
-                labelCommittee = new MyLabel("委比");
-                labelCommission = new MyLabel("委差");
+            depth = new MyLabel(" -- ");
+            commission = new MyLabel(" -- ");
+            committee = new MyLabel(" -- ");
 
-                westPanel.add(labelDepth);
-                westPanel.add(labelCommittee);
-                westPanel.add(labelCommission);
-
-                panel.add(westPanel, BorderLayout.WEST);
-            }
-
-            {
-                Box eastPanel = Box.createVerticalBox();
-
-                depth = new MyLabel(" -- ");
-                commission = new MyLabel(" -- ");
-                committee = new MyLabel(" -- ");
-
-                eastPanel.add(depth);
-                eastPanel.add(commission);
-                eastPanel.add(committee);
-
-                panel.add(eastPanel, BorderLayout.EAST);
-            }
+            panel.add(labelDepth);
+            panel.add(depth);
+            panel.add(labelCommittee);
+            panel.add(committee);
+            panel.add(labelCommission);
+            panel.add(commission);
         });
     }
 
@@ -157,7 +144,7 @@ class SouthPanel extends JPanel {
 
     private void init() {
         SwingUtilities.invokeLater(() -> {
-            panel.setLayout(new BorderLayout(20, 0));
+            panel.setLayout(new GridLayout(0, 3));
             panel.setBackground(new Color(0xeeeeee));
 
             panel.revalidate();
@@ -166,96 +153,86 @@ class SouthPanel extends JPanel {
 
     private void createUIComponents() {
         SwingUtilities.invokeLater(() -> {
+            labelSell5 = new MyLabel("卖五");
+            labelSell4 = new MyLabel("卖四");
+            labelSell3 = new MyLabel("卖三");
+            labelSell2 = new MyLabel("卖二");
+            labelSell1 = new MyLabel("卖一");
+            labelPrice = new MyLabel("成交");
+            labelBuy1 = new MyLabel("买一");
+            labelBuy2 = new MyLabel("买二");
+            labelBuy3 = new MyLabel("买三");
+            labelBuy4 = new MyLabel("买四");
+            labelBuy5 = new MyLabel("买五");
 
-            {
-                Box westBox = Box.createVerticalBox();
+            sell5price = new MyLabel(" -- ");
+            sell4price = new MyLabel(" -- ");
+            sell3price = new MyLabel(" -- ");
+            sell2price = new MyLabel(" -- ");
+            sell1price = new MyLabel(" -- ");
+            price = new MyLabel(" -- ");
+            buy1price = new MyLabel(" -- ");
+            buy2price = new MyLabel(" -- ");
+            buy3price = new MyLabel(" -- ");
+            buy4price = new MyLabel(" -- ");
+            buy5price = new MyLabel(" -- ");
 
-                labelSell5 = new MyLabel("卖五");
-                labelSell4 = new MyLabel("卖四");
-                labelSell3 = new MyLabel("卖三");
-                labelSell2 = new MyLabel("卖二");
-                labelSell1 = new MyLabel("卖一");
-                labelPrice = new MyLabel("成交");
-                labelBuy1 = new MyLabel("买一");
-                labelBuy2 = new MyLabel("买二");
-                labelBuy3 = new MyLabel("买三");
-                labelBuy4 = new MyLabel("买四");
-                labelBuy5 = new MyLabel("买五");
+            sell5amount = new MyLabel(" -- ");
+            sell4amount = new MyLabel(" -- ");
+            sell3amount = new MyLabel(" -- ");
+            sell2amount = new MyLabel(" -- ");
+            sell1amount = new MyLabel(" -- ");
+            amount = new MyLabel(" ");
+            buy1amount = new MyLabel(" -- ");
+            buy2amount = new MyLabel(" -- ");
+            buy3amount = new MyLabel(" -- ");
+            buy4amount = new MyLabel(" -- ");
+            buy5amount = new MyLabel(" -- ");
 
-                westBox.add(labelSell5);
-                westBox.add(labelSell4);
-                westBox.add(labelSell3);
-                westBox.add(labelSell2);
-                westBox.add(labelSell1);
-                westBox.add(labelPrice);
-                westBox.add(labelBuy1);
-                westBox.add(labelBuy2);
-                westBox.add(labelBuy3);
-                westBox.add(labelBuy4);
-                westBox.add(labelBuy5);
+            sell5price.setForeground(ColorUtil.INC_COLOR);
+            sell4price.setForeground(ColorUtil.INC_COLOR);
+            sell3price.setForeground(ColorUtil.INC_COLOR);
+            sell2price.setForeground(ColorUtil.INC_COLOR);
+            sell1price.setForeground(ColorUtil.INC_COLOR);
+            buy1price.setForeground(ColorUtil.DEC_COLOR);
+            buy2price.setForeground(ColorUtil.DEC_COLOR);
+            buy3price.setForeground(ColorUtil.DEC_COLOR);
+            buy4price.setForeground(ColorUtil.DEC_COLOR);
+            buy5price.setForeground(ColorUtil.DEC_COLOR);
 
-                panel.add(westBox, BorderLayout.WEST);
-            }
-
-            {
-                Box centerBox = Box.createVerticalBox();
-
-                sell5price = new MyLabel(" -- ");
-                sell4price = new MyLabel(" -- ");
-                sell3price = new MyLabel(" -- ");
-                sell2price = new MyLabel(" -- ");
-                sell1price = new MyLabel(" -- ");
-                price = new MyLabel(" -- ");
-                buy1price = new MyLabel(" -- ");
-                buy2price = new MyLabel(" -- ");
-                buy3price = new MyLabel(" -- ");
-                buy4price = new MyLabel(" -- ");
-                buy5price = new MyLabel(" -- ");
-
-                centerBox.add(sell5price);
-                centerBox.add(sell4price);
-                centerBox.add(sell3price);
-                centerBox.add(sell2price);
-                centerBox.add(sell1price);
-                centerBox.add(price);
-                centerBox.add(buy1price);
-                centerBox.add(buy2price);
-                centerBox.add(buy3price);
-                centerBox.add(buy4price);
-                centerBox.add(buy5price);
-
-                panel.add(centerBox, BorderLayout.CENTER);
-            }
-
-            {
-                Box eastBox = Box.createVerticalBox();
-
-                sell5amount = new MyLabel(" -- ");
-                sell4amount = new MyLabel(" -- ");
-                sell3amount = new MyLabel(" -- ");
-                sell2amount = new MyLabel(" -- ");
-                sell1amount = new MyLabel(" -- ");
-                amount = new MyLabel(" ");
-                buy1amount = new MyLabel(" -- ");
-                buy2amount = new MyLabel(" -- ");
-                buy3amount = new MyLabel(" -- ");
-                buy4amount = new MyLabel(" -- ");
-                buy5amount = new MyLabel(" -- ");
-
-                eastBox.add(sell5amount);
-                eastBox.add(sell4amount);
-                eastBox.add(sell3amount);
-                eastBox.add(sell2amount);
-                eastBox.add(sell1amount);
-                eastBox.add(amount);
-                eastBox.add(buy1amount);
-                eastBox.add(buy2amount);
-                eastBox.add(buy3amount);
-                eastBox.add(buy4amount);
-                eastBox.add(buy5amount);
-
-                panel.add(eastBox, BorderLayout.EAST);
-            }
+            panel.add(labelSell5);
+            panel.add(sell5price);
+            panel.add(sell5amount);
+            panel.add(labelSell4);
+            panel.add(sell4price);
+            panel.add(sell4amount);
+            panel.add(labelSell3);
+            panel.add(sell3price);
+            panel.add(sell3amount);
+            panel.add(labelSell2);
+            panel.add(sell2price);
+            panel.add(sell2amount);
+            panel.add(labelSell1);
+            panel.add(sell1price);
+            panel.add(sell1amount);
+            panel.add(labelPrice);
+            panel.add(price);
+            panel.add(amount);
+            panel.add(labelBuy1);
+            panel.add(buy1price);
+            panel.add(buy1amount);
+            panel.add(labelBuy2);
+            panel.add(buy2price);
+            panel.add(buy2amount);
+            panel.add(labelBuy3);
+            panel.add(buy3price);
+            panel.add(buy3amount);
+            panel.add(labelBuy4);
+            panel.add(buy4price);
+            panel.add(buy4amount);
+            panel.add(labelBuy5);
+            panel.add(buy5price);
+            panel.add(buy5amount);
         });
     }
 

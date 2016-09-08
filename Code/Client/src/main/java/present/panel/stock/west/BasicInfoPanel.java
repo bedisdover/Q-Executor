@@ -35,7 +35,7 @@ class BasicInfoPanel extends JPanel {
     private void init() {
         SwingUtilities.invokeLater(() -> {
             panel.setBackground(new Color(0xeeeeee));
-            panel.setLayout(new BorderLayout());
+            panel.setLayout(new GridLayout(0, 2));
 
             panel.revalidate();
         });
@@ -43,73 +43,60 @@ class BasicInfoPanel extends JPanel {
 
     private void createUIComponents() {
         SwingUtilities.invokeLater(() -> {
-            {
-                Box westBox = Box.createVerticalBox();
+            labelName = new MyLabel("公司名称");
+            labelIndustry = new MyLabel("股票类型");
+            labelArea = new MyLabel("公司创建地");
+            labelLiquid = new MyLabel("流通股本");
+            labelTotal = new MyLabel("总股本");
+            labelTotalAssets = new MyLabel("总资产");
+            labelLiquidAssets = new MyLabel("流动资产");
+            labelFixedAssets = new MyLabel("固定资产");
+            labelReserved = new MyLabel("公积金");
+            labelReservedPerShare = new MyLabel("每股公积金");
+            labelEps = new MyLabel("每股收益");
+            labelBvps = new MyLabel("每股净资");
+            labelTimeToMarket = new MyLabel("上市时间");
 
-                labelName = new MyLabel("公司名称");
-                labelIndustry = new MyLabel("股票类型");
-                labelArea = new MyLabel("公司创建地");
-                labelLiquid = new MyLabel("流通股本");
-                labelTotal = new MyLabel("总股本");
-                labelTotalAssets = new MyLabel("总资产");
-                labelLiquidAssets = new MyLabel("流动资产");
-                labelFixedAssets = new MyLabel("固定资产");
-                labelReserved = new MyLabel("公积金");
-                labelReservedPerShare = new MyLabel("每股公积金");
-                labelEps = new MyLabel("每股收益");
-                labelBvps = new MyLabel("每股净资");
-                labelTimeToMarket = new MyLabel("上市时间");
+            name = new MyLabel(" -- ");
+            industry = new MyLabel(" -- ");
+            area = new MyLabel(" -- ");
+            liquid = new MyLabel(" -- ");
+            total = new MyLabel(" -- ");
+            totalAssets = new MyLabel(" -- ");
+            liquidAssets = new MyLabel(" -- ");
+            fixedAssets = new MyLabel(" -- ");
+            reserved = new MyLabel(" -- ");
+            reservedPerShare = new MyLabel(" -- ");
+            eps = new MyLabel(" -- ");
+            bvps = new MyLabel(" -- ");
+            timeToMarket = new MyLabel(" -- ");
 
-                westBox.add(labelName);
-                westBox.add(labelIndustry);
-                westBox.add(labelArea);
-                westBox.add(labelLiquid);
-                westBox.add(labelTotal);
-                westBox.add(labelTotalAssets);
-                westBox.add(labelLiquidAssets);
-                westBox.add(labelFixedAssets);
-                westBox.add(labelReserved);
-                westBox.add(labelReservedPerShare);
-                westBox.add(labelEps);
-                westBox.add(labelBvps);
-                westBox.add(labelTimeToMarket);
-
-                panel.add(westBox, BorderLayout.WEST);
-            }
-
-            {
-                Box eastBox = Box.createVerticalBox();
-
-                name = new MyLabel(" -- ");
-                industry = new MyLabel(" -- ");
-                area = new MyLabel(" -- ");
-                liquid = new MyLabel(" -- ");
-                total = new MyLabel(" -- ");
-                totalAssets = new MyLabel(" -- ");
-                liquidAssets = new MyLabel(" -- ");
-                fixedAssets = new MyLabel(" -- ");
-                reserved = new MyLabel(" -- ");
-                reservedPerShare = new MyLabel(" -- ");
-                eps = new MyLabel(" -- ");
-                bvps = new MyLabel(" -- ");
-                timeToMarket = new MyLabel(" -- ");
-
-                eastBox.add(name);
-                eastBox.add(industry);
-                eastBox.add(area);
-                eastBox.add(liquid);
-                eastBox.add(total);
-                eastBox.add(totalAssets);
-                eastBox.add(liquidAssets);
-                eastBox.add(fixedAssets);
-                eastBox.add(reserved);
-                eastBox.add(reservedPerShare);
-                eastBox.add(eps);
-                eastBox.add(bvps);
-                eastBox.add(timeToMarket);
-
-                panel.add(eastBox, BorderLayout.CENTER);
-            }
+            panel.add(labelName);
+            panel.add(name);
+            panel.add(labelIndustry);
+            panel.add(industry);
+            panel.add(labelArea);
+            panel.add(area);
+            panel.add(labelLiquid);
+            panel.add(liquid);
+            panel.add(labelTotal);
+            panel.add(total);
+            panel.add(labelTotalAssets);
+            panel.add(totalAssets);
+            panel.add(labelLiquidAssets);
+            panel.add(liquidAssets);
+            panel.add(labelFixedAssets);
+            panel.add(fixedAssets);
+            panel.add(labelReserved);
+            panel.add(reserved);
+            panel.add(labelReservedPerShare);
+            panel.add(reservedPerShare);
+            panel.add(labelEps);
+            panel.add(eps);
+            panel.add(labelBvps);
+            panel.add(bvps);
+            panel.add(labelTimeToMarket);
+            panel.add(timeToMarket);
         });
     }
 
