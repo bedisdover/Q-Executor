@@ -13,16 +13,12 @@ import java.awt.*;
  */
 public class IntroPanel extends JPanel {
 
-    public IntroPanel(PanelSwitcher switcher) {
-        //标题面板
-        ImagePanel header = new ImagePanel(switcher);
-
-//        //滚动面板里面的view port
-//        Box inner = Box.createVerticalBox();
-//        inner.add(header);
-//        JScrollPane container = new JScrollPane(inner);
-
-        this.setLayout(new BorderLayout());
-        this.add(header, BorderLayout.CENTER);
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(
+                new ImageIcon("src/main/resources/images/introduce.jpg").getImage(),
+                0, 0, this.getWidth(), this.getHeight(), null
+        );
     }
 }

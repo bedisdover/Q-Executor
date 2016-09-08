@@ -4,8 +4,6 @@ import present.PanelSwitcher;
 import present.panel.account.LoginPanel;
 import present.panel.account.RegisterPanel;
 import present.panel.introduce.IntroPanel;
-import present.panel.stock.center.PriceSharePanel;
-import present.panel.stock.center.SinglePanel;
 import present.panel.stock.StockPanel;
 import present.panel.trade.TradePanel;
 
@@ -123,6 +121,6 @@ public class TitlePanel extends JPanel{
         login.addActionListener((e) -> switcher.jump(new LoginPanel(switcher)));
         register.addActionListener((e) -> switcher.jump(new RegisterPanel(switcher)));
         trade.addActionListener((e) -> switcher.jump(new TradePanel()));
-        introduce.addActionListener((e) -> switcher.jump(new IntroPanel(switcher)));
+        introduce.addActionListener((e) -> switcher.jump(new IntroPanel()));
     }
 }

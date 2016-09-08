@@ -34,11 +34,13 @@ public class SearchPanel extends JPanel {
 
     private static final int PADDING = 20;
 
-    private static final int SEARCH_H = (MainFrame.PANEL_H >> 3) - PADDING;
+    private static final int SEARCH_H = 42;
 
-    private static final int TABLE_H = MainFrame.PANEL_H - SEARCH_H - (PADDING << 3);
+    private static final int TABLE_H = 370;
 
-    private static final int TABLE_W = (int)(MainFrame.PANEL_W * 0.4);
+    private static final int TABLE_W = 290;
+
+    private static final Color TABLE_BG = new Color(0xf6f6f6);
 
     //字符串切割符
     private static final String spliter = "--";
@@ -57,6 +59,47 @@ public class SearchPanel extends JPanel {
         this.switcher = switcher;
 
         //搜索
+        TextPlusBtn search = this.createSearchPanel();
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        p.setOpaque(false);
+        p.add(search);
+
+
+        //滚动面板包含表格
+        JPanel container = new JPanel(new FlowLayout(
+                FlowLayout.CENTER, PADDING << 2, 0
+        ));
+        container.setOpaque(false);
+        container.add(createSelfTable());
+        container.add(createHotTable());
+        getData();
+
+        //添加组件到主面板
+        Box box = Box.createVerticalBox();
+        box.setOpaque(false);
+        box.add(Box.createVerticalStrut(PADDING << 2));
+        box.add(search);
+        box.add(Box.createVerticalStrut(PADDING << 1));
+        box.add(container);
+
+        JPanel content = new JPanel(new BorderLayout());
+        content.setOpaque(false);
+        content.add(box, BorderLayout.CENTER);
+
+        this.setLayout(new BorderLayout());
+        this.add(box, BorderLayout.NORTH);
+    }
+
+//    @Override
+//    protected void paintComponent(Graphics g) {
+//        super.paintComponent(g);
+//        g.drawImage(
+//                new ImageIcon("src/main/resources/images/city4.jpg").getImage(),
+//                0, 0, this.getWidth(), this.getHeight(), null
+//        );
+//    }
+
+    private TextPlusBtn createSearchPanel() {
         TextPlusBtn search = new TextPlusBtn(
                 "输入股票名称或股票代码", MainFrame.PANEL_W >> 1, SEARCH_H
         );
@@ -82,7 +125,7 @@ public class SearchPanel extends JPanel {
         });
         //设置下拉提示列表监听
         search.setListClickHandler((text) ->
-            switcher.jump(new StockPanel(text.split(spliter)[0]))
+                switcher.jump(new StockPanel(text.split(spliter)[0]))
         );
         search.setListFocusHandler((field, text) -> field.setText(text.split(spliter)[1]));
         //设置确定按钮监听
@@ -97,54 +140,18 @@ public class SearchPanel extends JPanel {
                 );
             }
         });
-        JPanel p = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        p.setOpaque(false);
-        p.add(search);
-
-
-        //滚动面板包含表格
-        JPanel container = new JPanel(new FlowLayout(
-                FlowLayout.CENTER, PADDING << 2, 0
-        ));
-        container.setOpaque(false);
-        container.add(createSelfTable());
-
-        container.add(createHotTable());
-        getData();
-
-        //添加组件到主面板
-        Box box = Box.createVerticalBox();
-        box.setOpaque(false);
-        box.add(Box.createVerticalStrut(MainFrame.PANEL_W >> 4));
-        box.add(search);
-        box.add(Box.createVerticalStrut(MainFrame.PANEL_W >> 4));
-        box.add(container);
-        box.add(Box.createVerticalStrut(PADDING));
-        this.setLayout(new BorderLayout());
-        this.add(box, BorderLayout.CENTER);
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(
-                new ImageIcon("src/main/resources/images/city4.jpg").getImage(),
-                0, 0, this.getWidth(), this.getHeight(), null
-        );
+        return search;
     }
 
     /**
      * 创建自选股票表格
      * @return 自选股票表格
      */
-    private Box createSelfTable() {
-        //自选股
+    private JPanel createSelfTable() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-//        panel.setBackground(new Color(0x2c4cb1));
         JLabel label = new JLabel("自选股票");
-        label.setForeground(Color.WHITE);
-        label.setPreferredSize(new Dimension(
-                PADDING * 6, PADDING << 1
+        panel.setPreferredSize(new Dimension(
+                TABLE_W - (PADDING << 1), PADDING << 1
         ));
 
         Vector<String> header = new Vector<>(4);
@@ -188,21 +195,20 @@ public class SearchPanel extends JPanel {
 
         JScrollPane pane = new JScrollPane(self);
         pane.setPreferredSize(new Dimension(
-                TABLE_W, TABLE_H - (PADDING << 1)
+                TABLE_W - (PADDING << 2), TABLE_H - (PADDING << 1)
         ));
 
-
-        Box box = Box.createVerticalBox();
-        box.add(pane);
-        box.add(panel);
-        return box;
+        JPanel container = new JPanel(new BorderLayout());
+        container.add(panel, BorderLayout.SOUTH);
+        container.add(pane, BorderLayout.CENTER);
+        return wrapTable(container);
     }
 
     /**
      * 创建热门股票表格
      * @return 热门股票表格
      */
-    private Box createHotTable() {
+    private JPanel createHotTable() {
         Vector<String> header = new Vector<>(4);
         header.addElement("代码");
         header.addElement("股票");
@@ -222,46 +228,70 @@ public class SearchPanel extends JPanel {
 
         JScrollPane pane = new JScrollPane(hotTable);
         pane.setPreferredSize(new Dimension(
-                TABLE_W, TABLE_H - (PADDING << 1)
+                TABLE_W - (PADDING << 2), TABLE_H - (PADDING << 1)
         ));
 
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-//        panel.setBackground(new Color(0x2c4cb1));
         JLabel label = new JLabel("热门股票");
-//        label.setForeground(Color.WHITE);
-        label.setPreferredSize(new Dimension(
-                PADDING << 2, PADDING << 1
+        panel.setPreferredSize(new Dimension(
+                TABLE_W - (PADDING << 1), PADDING << 1
         ));
         panel.add(label);
 
-        Box box = Box.createVerticalBox();
-        box.add(pane);
-        box.add(panel);
-        return box;
+        JPanel container = new JPanel(new BorderLayout());
+        container.add(panel, BorderLayout.SOUTH);
+        container.add(pane, BorderLayout.CENTER);
+        return wrapTable(container);
+    }
+
+    private JPanel wrapTable(JPanel table) {
+        JPanel container = new JPanel(new BorderLayout());
+        container.setBackground(TABLE_BG);
+
+        //北边空白面板
+        JPanel north = new JPanel();
+        north.setOpaque(false);
+        north.setPreferredSize(new Dimension(TABLE_W, PADDING));
+        container.add(north, BorderLayout.NORTH);
+
+        //西边空白面板
+        JPanel west = new JPanel();
+        west.setOpaque(false);
+        west.setPreferredSize(new Dimension(PADDING, TABLE_H - (PADDING << 1)));
+        container.add(west, BorderLayout.WEST);
+
+        //东边空白面板
+        JPanel east = new JPanel();
+        east.setOpaque(false);
+        east.setPreferredSize(new Dimension(PADDING, TABLE_H - (PADDING << 1)));
+        container.add(east, BorderLayout.EAST);
+
+        //南边空白面板
+        JPanel south = new JPanel();
+        south.setOpaque(false);
+        south.setPreferredSize(new Dimension(TABLE_W, PADDING));
+        container.add(south, BorderLayout.SOUTH);
+
+        //中间表格
+        container.add(table, BorderLayout.CENTER);
+
+        return container;
     }
 
     private JPanel createLoginTip() {
         JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
         JPanel up = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         up.setOpaque(false);
         JLabel label1 = new JLabel("请先");
-//        label1.setForeground(Color.WHITE);
         up.add(label1);
 
         Link link = new Link("登录");
         link.setHandler(() -> switcher.jump(new LoginPanel(switcher)));
         up.add(link);
 
-        JLabel label2 = new JLabel("再查看自选股票");
-//        label2.setForeground(Color.WHITE);
-        JPanel down = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        down.setOpaque(false);
-        down.add(label2);
-
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.add(up);
-        panel.add(down);
         panel.setOpaque(false);
         return panel;
     }

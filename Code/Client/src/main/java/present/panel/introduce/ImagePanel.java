@@ -4,6 +4,7 @@ import present.MainFrame;
 import present.PanelSwitcher;
 import present.component.TextBlock;
 import present.panel.trade.TradePanel;
+import present.utils.ImageLoader;
 
 import javax.swing.*;
 import java.awt.*;
@@ -80,8 +81,7 @@ class ImagePanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(
-                new ImageIcon("src/main/resources/images/city3.jpg").getImage(),
-                0, 0, this.getWidth(), this.getHeight(), null
+                ImageLoader.introduce, 0, 0, this.getWidth(), this.getHeight(), null
         );
     }
 

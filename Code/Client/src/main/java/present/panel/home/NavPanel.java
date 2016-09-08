@@ -1,13 +1,10 @@
 package present.panel.home;
 
+import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 import present.PanelSwitcher;
 import present.panel.introduce.IntroPanel;
-import present.panel.stock.center.GeneralPanel;
-import present.panel.stock.center.PriceSharePanel;
-import present.panel.stock.center.SinglePanel;
 import present.panel.stock.StockPanel;
 import present.panel.trade.TradePanel;
-import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -89,7 +86,7 @@ public class NavPanel extends JPanel{
 
         //简介
         introduce = new CollapsePanel(new SuperButton("简介"), BUTTON_W, BUTTON_H,
-                (e) -> switcher.jump(new IntroPanel(switcher)));
+                (e) -> switcher.jump(new IntroPanel()));
         introduce.setPreferredSize(new Dimension(BUTTON_W, BUTTON_H));
     }
 

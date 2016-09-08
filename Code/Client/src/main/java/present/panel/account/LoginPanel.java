@@ -3,7 +3,6 @@ package present.panel.account;
 import bl.UserServiceImpl;
 import blservice.UserService;
 import config.MsgInfo;
-import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 import present.PanelSwitcher;
 import present.component.QPasswordField;
 import present.component.QTextField;
@@ -54,16 +53,6 @@ public class LoginPanel extends JPanel {
     public LoginPanel(PanelSwitcher switcher) {
         this.switcher = switcher;
         this.addComponents();
-        this.setBackground(Color.black);
-    }
-
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(
-                new ImageIcon("src/main/resources/images/city1.jpg").getImage(),
-                0, 0, this.getWidth(), this.getHeight(), null
-        );
     }
 
     private void addComponents() {
@@ -85,10 +74,6 @@ public class LoginPanel extends JPanel {
         box.add(this.wrapComponent(password));
         box.add(Box.createVerticalStrut(PADDING));
         box.add(this.wrapComponent(login));
-        box.add(Box.createVerticalStrut(PADDING));
-        box.add(this.wrapComponent(register));
-        box.add(Box.createVerticalStrut(PADDING));
-        box.add(this.wrapComponent(findPW));
         box.add(Box.createVerticalStrut(
                 NavPanel.PANEL_H - (HEIGHT + PADDING) * COMPONENT_NUM
         ));
