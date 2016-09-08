@@ -16,23 +16,30 @@ public class TimeUtil {
     public static int TimeSliceNum = 48;
     /**
      * 获取当前时间片
-     * @param timeNum 时间片数量
      * @return 当前为第几个时间片，如果不在交易时间段，若在开市前或者中午返回-1，
      * 若在当天交易结束后则返回-2
      */
-    public static int getCurrentIime(int timeNum){
+    public static int getCurrentIime(){
         Calendar calendar = Calendar.getInstance();
+        return timeToNode(calendar);
+    }
 
+    /**
+     * 将calender中的时间转换为对应时间片
+     * @param calendar
+     * @return calendar时间为第几个时间片，如果不在交易时间段，若在开市前或者中午返回-1，
+     * 若在当天交易结束后则返回-2
+     */
+    public static int timeToNode(Calendar calendar){
+        int timeNum = 48;
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
-        hour = 14;
-        minute = 55;
 
         if(hour>=9 && hour<=11){
             if(hour==9 && minute<30){
                 return -1;
             }else if(hour==11 && minute>=30){
-               return -1;
+                return -1;
             }else{
                 return ((hour-9)*60+minute-30)/timeNumTOLength(timeNum)+1;
             }
@@ -44,7 +51,6 @@ public class TimeUtil {
         }else{
             return -1;
         }
-
     }
 
     /**

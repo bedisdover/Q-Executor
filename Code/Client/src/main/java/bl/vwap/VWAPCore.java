@@ -1,4 +1,4 @@
-package bl;
+package bl.vwap;
 
 import service.MLForVWAPService;
 import service.MLForVWAPServiceImpl;
