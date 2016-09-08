@@ -1,9 +1,9 @@
 package present.panel.stock;
 
-import bl.GetStockDataServiceImpl;
-import bl.SelfSelectServiceImpl;
-import blservice.GetStockDataService;
-import blservice.SelfSelectService;
+import bl.stock.GetStockDataServiceImpl;
+import bl.user.SelfSelectServiceImpl;
+import blservice.stock.GetStockDataService;
+import blservice.user.SelfSelectService;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 import present.panel.account.LoginPanel;
 import present.panel.error.ErrorPanel;
@@ -81,7 +81,7 @@ public class StockPanel extends JPanel {
             {
                 currentDataPanel = new CurrentDataPanel(stockCode);
                 JScrollPane scrollPane = new JScrollPane(currentDataPanel);
-                scrollPane.setPreferredSize(new Dimension(200, 1));
+                scrollPane.setPreferredSize(new Dimension(205, 1));
 
                 panel.add(scrollPane, BorderLayout.WEST);
             }

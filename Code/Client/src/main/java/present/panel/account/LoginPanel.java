@@ -1,7 +1,7 @@
 package present.panel.account;
 
-import bl.UserServiceImpl;
-import blservice.UserService;
+import bl.user.UserServiceImpl;
+import blservice.user.UserService;
 import config.MsgInfo;
 import present.PanelSwitcher;
 import present.component.QPasswordField;

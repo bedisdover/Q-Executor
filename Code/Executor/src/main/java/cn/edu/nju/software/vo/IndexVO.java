@@ -11,7 +11,7 @@ public class IndexVO {
     /**
      * 时间，格式："yyyy-MM-dd"
      */
-    private Date date;
+    private String date;
 
     /**
      * 指标数值
@@ -22,16 +22,16 @@ public class IndexVO {
 
     }
 
-    public IndexVO(Date date, double value) {
+    public IndexVO(String date, double value) {
         this.date = date;
         this.value = value;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

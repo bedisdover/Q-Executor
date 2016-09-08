@@ -1,7 +1,7 @@
 package present.panel.trade;
 
-import bl.VWAP;
-import blservice.VWAPService;
+import bl.vwap.VWAP;
+import blservice.vwap.VWAPService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import present.component.TipText;

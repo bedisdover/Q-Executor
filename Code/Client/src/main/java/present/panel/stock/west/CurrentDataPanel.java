@@ -1,9 +1,9 @@
 package present.panel.stock.west;
 
-import bl.GetStockDataServiceImpl;
-import blservice.GetStockDataService;
+import bl.stock.GetStockDataServiceImpl;
+import blservice.stock.GetStockDataService;
 import present.panel.stock.MyLabel;
-import present.panel.stock.center.GeneralPanel;
+import present.panel.stock.center.GeneralPanel_2;
 import present.panel.stock.center.TimeSeriesPanel;
 import present.utils.ColorUtil;
 import util.NumberUtil;
@@ -62,10 +62,9 @@ public class CurrentDataPanel extends JPanel {
      */
     private void init() {
         SwingUtilities.invokeLater(() -> {
-            panel.setLayout(new BorderLayout(0, 5));
-            panel.setPreferredSize(new Dimension(1, 725));
+//            panel.setLayout(new BorderLayout(0, 5));
 
-            panel.revalidate();
+            panel.setLayout(new GridBagLayout());
         });
 
         Timer timer = new Timer();
@@ -82,24 +81,33 @@ public class CurrentDataPanel extends JPanel {
      */
     private void createUIComponents() {
         SwingUtilities.invokeLater(() -> {
+            GridBagConstraints bagConstraints = new GridBagConstraints();
+
+            bagConstraints.gridwidth = 0;
+            bagConstraints.fill = GridBagConstraints.HORIZONTAL;
+            bagConstraints.weightx = 1;
+            bagConstraints.weighty = 0;
             pricePanel = new PricePanel();
-            panel.add(pricePanel, BorderLayout.NORTH);
 
-            {
-                Box centerBox = Box.createVerticalBox();
+            panel.add(pricePanel, bagConstraints);
+            dataPanel = new DataPanel();
+            bagConstraints.gridwidth = GridBagConstraints.REMAINDER;
+            bagConstraints.fill = GridBagConstraints.BOTH;
+            bagConstraints.weighty = 1;
+            panel.add(dataPanel, bagConstraints);
 
-                dataPanel = new DataPanel();
-                centerBox.add(dataPanel);
-                handicapPanel = new HandicapPanel();
-                centerBox.add(handicapPanel);
-
-                panel.add(centerBox, BorderLayout.CENTER);
-            }
+            handicapPanel = new HandicapPanel();
+            bagConstraints.gridwidth = GridBagConstraints.REMAINDER;
+            bagConstraints.fill = GridBagConstraints.BOTH;
+            bagConstraints.weighty = 1;
+            panel.add(handicapPanel, bagConstraints);
 
             basicInfoPanel = new BasicInfoPanel();
-            panel.add(basicInfoPanel, BorderLayout.SOUTH);
+            bagConstraints.gridwidth = GridBagConstraints.REMAINDER;
+            panel.add(basicInfoPanel, bagConstraints);
 
             panel.revalidate();
+            panel.repaint();
         });
     }
 
@@ -155,7 +163,7 @@ public class CurrentDataPanel extends JPanel {
 
     /**
      * @return 成交量
-     * @see GeneralPanel
+     * @see GeneralPanel_2
      */
     public double getAmount() {
         return stockNowTimeVO.getAmount();
@@ -163,7 +171,7 @@ public class CurrentDataPanel extends JPanel {
 
     /**
      * @return 成交额
-     * @see GeneralPanel
+     * @see GeneralPanel_2
      */
     public double getVolume() {
         return stockNowTimeVO.getVolume();
@@ -197,8 +205,7 @@ public class CurrentDataPanel extends JPanel {
         private void init() {
             SwingUtilities.invokeLater(() -> {
                 panel.setBackground(new Color(0xeeeeee));
-                panel.setPreferredSize(new Dimension(1, 80));
-                panel.setLayout(new BorderLayout());
+                panel.setLayout(new GridLayout(2, 1));
 
                 panel.revalidate();
             });
@@ -229,9 +236,7 @@ public class CurrentDataPanel extends JPanel {
                     northPanel.add(incNum);
                     northPanel.add(incRate);
 
-                    panel.add(northPanel, BorderLayout.NORTH);
-
-                    panel.revalidate();
+                    panel.add(northPanel);
                 }
 
                 {
@@ -244,7 +249,7 @@ public class CurrentDataPanel extends JPanel {
 
                     southPanel.add(time);
 
-                    panel.add(southPanel, BorderLayout.SOUTH);
+                    panel.add(southPanel);
                 }
 
                 panel.revalidate();
@@ -303,8 +308,8 @@ public class CurrentDataPanel extends JPanel {
         private void init() {
             SwingUtilities.invokeLater(() -> {
                 panel.setBackground(new Color(0xeeeeee));
-                panel.setPreferredSize(new Dimension(1, 320));
-                panel.setLayout(new BorderLayout());
+
+                panel.setLayout(new GridLayout(0, 2));
 
                 panel.revalidate();
             });
@@ -312,61 +317,48 @@ public class CurrentDataPanel extends JPanel {
 
         private void createUIComponents() {
             SwingUtilities.invokeLater(() -> {
-                {
-                    Box westPanel = Box.createVerticalBox();
+                labelOpen = new MyLabel("今   开");
+                labelClose = new MyLabel("昨   收");
+                labelHigh = new MyLabel("最   高");
+                labelLow = new MyLabel("最   低");
+                labelAmplitude = new MyLabel("振   幅");
+                labelTurnOver = new MyLabel("换手率");
+                labelAmount = new MyLabel("成交量");
+                labelVolume = new MyLabel("成交额");
+                labelPe = new MyLabel("市盈率");
+                labelPb = new MyLabel("市净率");
 
-                    labelOpen = new MyLabel("今   开");
-                    labelClose = new MyLabel("昨   收");
-                    labelHigh = new MyLabel("最   高");
-                    labelLow = new MyLabel("最   低");
-                    labelAmplitude = new MyLabel("振   幅");
-                    labelTurnOver = new MyLabel("换手率");
-                    labelAmount = new MyLabel("成交量");
-                    labelVolume = new MyLabel("成交额");
-                    labelPe = new MyLabel("市盈率");
-                    labelPb = new MyLabel("市净率");
+                open = new MyLabel(" -- ");
+                close = new MyLabel(" -- ");
+                high = new MyLabel(" -- ");
+                low = new MyLabel(" -- ");
+                amplitude = new MyLabel(" -- ");
+                turnOver = new MyLabel(" -- ");
+                amount = new MyLabel(" -- ");
+                volume = new MyLabel(" -- ");
+                pe = new MyLabel(" -- ");
+                pb = new MyLabel(" -- ");
 
-                    westPanel.add(labelOpen);
-                    westPanel.add(labelClose);
-                    westPanel.add(labelHigh);
-                    westPanel.add(labelLow);
-                    westPanel.add(labelAmplitude);
-                    westPanel.add(labelTurnOver);
-                    westPanel.add(labelAmount);
-                    westPanel.add(labelVolume);
-                    westPanel.add(labelPe);
-                    westPanel.add(labelPb);
-
-                    panel.add(westPanel, BorderLayout.WEST);
-                }
-
-                {
-                    Box eastPanel = Box.createVerticalBox();
-
-                    open = new MyLabel(" -- ");
-                    close = new MyLabel(" -- ");
-                    high = new MyLabel(" -- ");
-                    low = new MyLabel(" -- ");
-                    amplitude = new MyLabel(" -- ");
-                    turnOver = new MyLabel(" -- ");
-                    amount = new MyLabel(" -- ");
-                    volume = new MyLabel(" -- ");
-                    pe = new MyLabel(" -- ");
-                    pb = new MyLabel(" -- ");
-
-                    eastPanel.add(open);
-                    eastPanel.add(close);
-                    eastPanel.add(high);
-                    eastPanel.add(low);
-                    eastPanel.add(amplitude);
-                    eastPanel.add(turnOver);
-                    eastPanel.add(amount);
-                    eastPanel.add(volume);
-                    eastPanel.add(pe);
-                    eastPanel.add(pb);
-
-                    panel.add(eastPanel, BorderLayout.EAST);
-                }
+                panel.add(labelOpen);
+                panel.add(open);
+                panel.add(labelClose);
+                panel.add(close);
+                panel.add(labelHigh);
+                panel.add(high);
+                panel.add(labelLow);
+                panel.add(low);
+                panel.add(labelAmplitude);
+                panel.add(amplitude);
+                panel.add(labelTurnOver);
+                panel.add(turnOver);
+                panel.add(labelAmount);
+                panel.add(amount);
+                panel.add(labelVolume);
+                panel.add(volume);
+                panel.add(labelPe);
+                panel.add(pe);
+                panel.add(labelPb);
+                panel.add(pb);
             });
         }
 

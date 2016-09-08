@@ -1,7 +1,7 @@
 package present.panel.stock.center;
 
-import bl.GetTimeSeriesDataServiceImpl;
-import blservice.GetTimeSeriesDataService;
+import bl.stock.GetTimeSeriesDataServiceImpl;
+import blservice.stock.GetTimeSeriesDataService;
 import present.charts.TimeSeriesChart;
 import present.panel.error.ErrorPanel;
 import present.panel.loading.LoadingPanel;

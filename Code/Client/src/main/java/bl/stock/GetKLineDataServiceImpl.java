@@ -1,6 +1,7 @@
-package bl;
+package bl.stock;
 
-import blservice.GetKLineDataService;
+import bl.Connect;
+import blservice.stock.GetKLineDataService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import vo.StockKLineVO;
@@ -18,10 +19,9 @@ import java.util.List;
  */
 public class GetKLineDataServiceImpl implements GetKLineDataService{
 
-	@Override
 	public List<StockKLineVO> getKLineMinute(String stockCode, int interval) throws Exception {
-	    // TODO
-		return null;
+		String url="http://" + Connect.IP + "/KLineMinute?codeNum="+stockCode+"&interval="+interval;
+		return getDate(url);
 	}
 
 	public List<StockKLineVO> getKLineDay(String stockCode) throws Exception {

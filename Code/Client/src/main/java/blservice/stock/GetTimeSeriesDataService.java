@@ -1,4 +1,4 @@
-package blservice;
+package blservice.stock;
 
 import vo.StockTimeSeriesVO;
 

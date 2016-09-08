@@ -1,9 +1,10 @@
-package bl;
+package bl.vwap;
 /**
  * @author ZhangYF
  *
  */
-import blservice.VWAPService;
+import bl.TimeUtil;
+import blservice.vwap.VWAPService;
 import service.MLForVWAPService;
 import service.MLForVWAPServiceImpl;
 import vo.MLForVWAPPriceVO;

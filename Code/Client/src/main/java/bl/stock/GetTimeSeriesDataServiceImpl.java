@@ -1,21 +1,19 @@
-package bl;
+package bl.stock;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import bl.Connect;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import util.NumberUtil;
 import vo.StockTimeSeriesVO;
-import blservice.GetTimeSeriesDataService;
+import blservice.stock.GetTimeSeriesDataService;
 
 
 public class GetTimeSeriesDataServiceImpl implements GetTimeSeriesDataService{
