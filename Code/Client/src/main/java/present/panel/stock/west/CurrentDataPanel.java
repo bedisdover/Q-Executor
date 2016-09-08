@@ -3,7 +3,7 @@ package present.panel.stock.west;
 import bl.stock.GetStockDataServiceImpl;
 import blservice.stock.GetStockDataService;
 import present.panel.stock.MyLabel;
-import present.panel.stock.center.GeneralPanel;
+import present.panel.stock.center.GeneralPanel_2;
 import present.panel.stock.center.TimeSeriesPanel;
 import present.utils.ColorUtil;
 import util.NumberUtil;
@@ -163,7 +163,7 @@ public class CurrentDataPanel extends JPanel {
 
     /**
      * @return 成交量
-     * @see GeneralPanel
+     * @see GeneralPanel_2
      */
     public double getAmount() {
         return stockNowTimeVO.getAmount();
@@ -171,7 +171,7 @@ public class CurrentDataPanel extends JPanel {
 
     /**
      * @return 成交额
-     * @see GeneralPanel
+     * @see GeneralPanel_2
      */
     public double getVolume() {
         return stockNowTimeVO.getVolume();

@@ -14,6 +14,8 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Y481L on 2016/8/27.
@@ -28,6 +30,8 @@ public class PriceSharePanel extends CenterPanel {
 
     private StockPanel stockPanel;
 
+    private JScrollPane scrollPane;
+
     public PriceSharePanel(String stockCode, StockPanel stockPanel) {
         panel = this;
         this.stockCode = stockCode;
@@ -35,6 +39,14 @@ public class PriceSharePanel extends CenterPanel {
 
         super.init();
         getData();
+
+//        Timer timer = new Timer();
+//        timer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                repaint();
+//            }
+//        }, 0, 10);
     }
 
     @Override
@@ -65,8 +77,15 @@ public class PriceSharePanel extends CenterPanel {
 
     private void injectData(List<StockInfoByPrice> stockInfoByPriceList) {
         SwingUtilities.invokeLater(() -> {
-            panel.removeAll();
-            panel.add(createTable(stockInfoByPriceList), BorderLayout.CENTER);
+            if (scrollPane == null) {
+                panel.removeAll();
+            } else {
+                panel.remove(scrollPane);
+            }
+
+            scrollPane = createTable(stockInfoByPriceList);
+
+            panel.add(scrollPane, BorderLayout.CENTER);
 
             panel.revalidate();
             panel.repaint();
@@ -106,12 +125,8 @@ public class PriceSharePanel extends CenterPanel {
         //无法拖动表头
         table.getTableHeader().setReorderingAllowed(false);
 
-        JScrollPane scrollPane = new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+        return new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-        scrollPane.setPreferredSize(new Dimension(800, 540));
-
-        return scrollPane;
     }
 
 
@@ -189,7 +204,6 @@ public class PriceSharePanel extends CenterPanel {
                 bar.setForeground(Color.RED);
                 bar.setStringPainted(false);
                 bar.setBorderPainted(true);
-                bar.setPreferredSize(new Dimension(100, 20));
                 MyTableModel tableModel = (MyTableModel) table.getModel();
                 bar.setMaximum((int) (tableModel.getMax() * 100) + 10);
 

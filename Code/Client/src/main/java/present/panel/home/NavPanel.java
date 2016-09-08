@@ -2,9 +2,6 @@ package present.panel.home;
 
 import present.PanelSwitcher;
 import present.panel.introduce.IntroPanel;
-import present.panel.stock.center.GeneralPanel;
-import present.panel.stock.center.PriceSharePanel;
-import present.panel.stock.center.SinglePanel;
 import present.panel.stock.StockPanel;
 import present.panel.trade.TradePanel;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;

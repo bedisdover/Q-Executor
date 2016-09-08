@@ -3,11 +3,11 @@ package present.panel.stock.center;
 import bl.stock.GetStockDataServiceImpl;
 import blservice.stock.GetStockDataService;
 import present.charts.GeneralPie;
+import present.panel.stock.StockPanel;
+import present.panel.stock.west.CurrentDataPanel;
 import present.panel.stock.MyLabel;
 import present.panel.stock.MyRenderer;
 import present.panel.stock.MyTable;
-import present.panel.stock.StockPanel;
-import present.panel.stock.west.CurrentDataPanel;
 import util.NumberUtil;
 import vo.StockInfoByCom;
 
@@ -20,9 +20,9 @@ import java.util.List;
  * <p>
  * 大单面板
  */
-public class GeneralPanel extends CenterPanel {
+public class GeneralPanel_2 extends CenterPanel {
 
-    private GeneralPanel panel;
+    private GeneralPanel_2 panel;
 
     private String stockCode;
 
@@ -45,7 +45,7 @@ public class GeneralPanel extends CenterPanel {
 
     private StockPanel stockPanel;
 
-    public GeneralPanel(String stockCode, CurrentDataPanel currentDataPanel, StockPanel stockPanel) {
+    public GeneralPanel_2(String stockCode, CurrentDataPanel currentDataPanel, StockPanel stockPanel) {
         panel = this;
         this.stockCode = stockCode;
         this.stockPanel = stockPanel;
@@ -60,7 +60,7 @@ public class GeneralPanel extends CenterPanel {
 
     protected void init() {
         SwingUtilities.invokeLater(() -> {
-            panel.setLayout(new BorderLayout(0, 5));
+            panel.setLayout(new GridBagLayout());
 
             panel.revalidate();
         });
@@ -69,6 +69,7 @@ public class GeneralPanel extends CenterPanel {
     private void createUIComponents() {
         SwingUtilities.invokeLater(() -> {
             JPanel northPanel = new JPanel(new BorderLayout());
+            GridBagConstraints constraints = new GridBagConstraints();
             {
                 // 选项面板
                 JPanel radioPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
@@ -101,13 +102,21 @@ public class GeneralPanel extends CenterPanel {
                 buttonGroup.add(radio900);
                 buttonGroup.add(radio1000);
 
-                northPanel.add(radioPanel, BorderLayout.NORTH);
+//                northPanel.add(radioPanel, BorderLayout.NORTH);
+                constraints.fill = GridBagConstraints.BOTH;
+                constraints.gridwidth = 0;
+                constraints.weightx = 0;
+                constraints.weighty = 0;
+                panel.add(radioPanel, constraints);
             }
 
             {
-                chartPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                chartPanel = new JPanel(new BorderLayout());
+
+                chartPanel.setPreferredSize(new Dimension(1, 200));
 
                 labelBox = Box.createVerticalBox();
+                labelBox.setPreferredSize(new Dimension(400, 1));
 
                 general_amount = new MyLabel("大单成交量: --");
                 total_amount = new MyLabel("总成交量: --");
@@ -127,15 +136,19 @@ public class GeneralPanel extends CenterPanel {
 
                 chartPanel.add(labelBox, BorderLayout.EAST);
 
-                northPanel.add(chartPanel, BorderLayout.CENTER);
+//                northPanel.add(chartPanel, BorderLayout.CENTER);
+                panel.add(chartPanel, constraints);
             }
 
-            panel.add(northPanel, BorderLayout.NORTH);
+//            panel.add(northPanel, BorderLayout.NORTH);
 
             {
                 centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-                panel.add(centerPanel, BorderLayout.CENTER);
+//                panel.add(centerPanel, BorderLayout.CENTER);
+                constraints.weightx = 0;
+                constraints.weighty = 1;
+                panel.add(centerPanel, constraints);
             }
 
             addListeners();
@@ -204,7 +217,6 @@ public class GeneralPanel extends CenterPanel {
             chartPanel.removeAll();
 
             JPanel chart = GeneralPie.getPieChart(calculateAmount(stockInfoByComList), totalAmount);
-            chart.setPreferredSize(new Dimension(200, 200));
             this.chartPanel.add(chart, BorderLayout.WEST);
             this.chartPanel.add(labelBox, BorderLayout.EAST);
 
@@ -270,7 +282,7 @@ public class GeneralPanel extends CenterPanel {
 
         JScrollPane scrollPane = table.createTable();
 
-        scrollPane.setPreferredSize(new Dimension(table.getColumnModel().getTotalColumnWidth() + 28, 300));
+        scrollPane.setPreferredSize(new Dimension(table.getColumnModel().getTotalColumnWidth() + 28, panel.getHeight() - 320));
 
         return scrollPane;
     }
