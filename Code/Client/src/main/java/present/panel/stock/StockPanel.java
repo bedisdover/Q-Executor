@@ -81,7 +81,7 @@ public class StockPanel extends JPanel {
             {
                 currentDataPanel = new CurrentDataPanel(stockCode);
                 JScrollPane scrollPane = new JScrollPane(currentDataPanel);
-                scrollPane.setPreferredSize(new Dimension(200, 1));
+                scrollPane.setPreferredSize(new Dimension(205, 1));
 
                 panel.add(scrollPane, BorderLayout.WEST);
             }
