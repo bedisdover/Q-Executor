@@ -13,10 +13,12 @@ public class TimeUtil {
     private static int allTimeLength = 240;
 
 
+    public static int TimeSliceNum = 48;
     /**
      * 获取当前时间片
      * @param timeNum 时间片数量
-     * @return 当前为第几个时间片，如果不在交易时间段，返回-1
+     * @return 当前为第几个时间片，如果不在交易时间段，若在开市前或者中午返回-1，
+     * 若在当天交易结束后则返回-2
      */
     public static int getCurrentIime(int timeNum){
         Calendar calendar = Calendar.getInstance();
@@ -37,6 +39,8 @@ public class TimeUtil {
         }
         if(hour>=13 && hour <15){
             return ((hour-13)*60+minute)/timeNumTOLength(timeNum)+timeNum/2+1;
+        }else if(hour>=15){
+            return -2;
         }else{
             return -1;
         }

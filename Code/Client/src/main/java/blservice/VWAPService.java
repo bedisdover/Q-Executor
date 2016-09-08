@@ -16,4 +16,5 @@ public interface VWAPService {
      * @throws Exception
      */
     public List<VolumeVO> predictVn(VWAP_Param param) throws Exception;
+
 }
