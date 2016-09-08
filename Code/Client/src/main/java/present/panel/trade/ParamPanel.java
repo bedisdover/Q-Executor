@@ -35,7 +35,7 @@ class ParamPanel extends JPanel {
     //字符串切割符
     private static final String spliter = " : ";
 
-    private VWAPService vwap = new VWAP();
+//    private VWAPService vwap = new VWAP();
 
     ParamPanel(int width, int height, TradePanel parent) {
         this.componentW = ((width >> 1) - 3 * H_GAP) >> 1;

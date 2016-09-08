@@ -19,7 +19,7 @@ public class AccountPanel extends JPanel {
 
     private static final int NAV_H = MainFrame.PANEL_H;
 
-    private static final int NAV_UP_H = 230;
+    static final int NAV_UP_H = 230;
 
     private static final int BUTTON_W = 250;
 
@@ -27,18 +27,17 @@ public class AccountPanel extends JPanel {
 
     private static final int BTN_PADDING = 28;
 
+    private JPanel current = null;
+
     public AccountPanel(PanelSwitcher switcher) {
+        JPanel content = new JPanel(new BorderLayout());
+        content.setOpaque(false);
+        current = new LoginPanel(switcher);
+        content.add(current, BorderLayout.NORTH);
+
         this.setLayout(new BorderLayout());
         this.setOpaque(false);
-        this.add(new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.drawImage(
-                        ImageLoader.account_content, 0, 0, this.getWidth(), this.getHeight(), null
-                );
-            }
-        }, BorderLayout.CENTER);
+        this.add(content, BorderLayout.CENTER);
 
         //导航
         JPanel nav = new JPanel(new BorderLayout()) {
@@ -66,18 +65,24 @@ public class AccountPanel extends JPanel {
         Box btnBox = Box.createVerticalBox();
         btnBox.setOpaque(false);
         btnBox.add(this.createBtnPanel("登录", ImageLoader.login_btn, (e) -> {
-            add(new LoginPanel(switcher), BorderLayout.CENTER);
-            revalidate();
+            content.remove(current);
+            current = new LoginPanel(switcher);
+            content.add(current, BorderLayout.CENTER);
+            content.revalidate();
         }));
         btnBox.add(Box.createVerticalStrut(BTN_PADDING));
         btnBox.add(this.createBtnPanel("注册", ImageLoader.register_btn, (e) -> {
-            add(new RegisterPanel(switcher), BorderLayout.CENTER);
-            revalidate();
+            content.remove(current);
+            current = new RegisterPanel(switcher);
+            content.add(current, BorderLayout.CENTER);
+            content.revalidate();
         }));
         btnBox.add(Box.createVerticalStrut(BTN_PADDING));
         btnBox.add(this.createBtnPanel("找回密码", ImageLoader.findpw_btn, (e) -> {
-            add(new FindPWPanel(switcher), BorderLayout.CENTER);
-            revalidate();
+            content.remove(current);
+            current = new FindPWPanel(switcher);
+            content.add(current, BorderLayout.CENTER);
+            content.revalidate();
         }));
 
         down.add(btnBox, BorderLayout.NORTH);

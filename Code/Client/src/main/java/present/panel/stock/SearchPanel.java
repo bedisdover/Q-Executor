@@ -10,8 +10,8 @@ import present.MainFrame;
 import present.PanelSwitcher;
 import present.component.Link;
 import present.component.TextPlusBtn;
+import present.panel.account.AccountPanel;
 import present.panel.account.LoginPanel;
-import present.utils.ImageLoader;
 import present.utils.StockJsonInfo;
 import util.JsonUtil;
 import vo.HotStockVO;
@@ -92,13 +92,13 @@ public class SearchPanel extends JPanel {
         this.setBackground(new Color(0xf6f0e4));
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(
-                ImageLoader.search_bg, 0, 0, this.getWidth(), this.getHeight(), null
-        );
-    }
+//    @Override
+//    protected void paintComponent(Graphics g) {
+//        super.paintComponent(g);
+//        g.drawImage(
+//                ImageLoader.search_bg, 0, 0, this.getWidth(), this.getHeight(), null
+//        );
+//    }
 
     private TextPlusBtn createSearchPanel() {
         TextPlusBtn search = new TextPlusBtn(
@@ -289,7 +289,7 @@ public class SearchPanel extends JPanel {
         up.add(label1);
 
         Link link = new Link("登录");
-        link.setHandler(() -> switcher.jump(new LoginPanel(switcher)));
+        link.setHandler(() -> switcher.jump(new AccountPanel(switcher)));
         up.add(link);
 
         panel.add(up);

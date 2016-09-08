@@ -36,11 +36,7 @@ public class LoginPanel extends JPanel {
 
     private JButton findPW = new JButton("找回密码");
 
-    private static final int COMPONENT_NUM = 5;
-
-    private static final int WIDTH = 300;
-
-    private static final int HEIGHT = 56;
+    private static final int COMPONENT_NUM = 3;
 
     private static final int PADDING = 20;
 
@@ -59,32 +55,31 @@ public class LoginPanel extends JPanel {
         Box box = Box.createVerticalBox();
         box.setOpaque(false);
 
-        box.add(Box.createVerticalStrut(PADDING << 1));
-        JLabel title = new JLabel("登录");
-        title.setFont(new Font("微软雅黑", Font.PLAIN, 28));
-        title.setForeground(Color.WHITE);
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panel.setOpaque(false);
-        panel.add(title);
-
-        box.add(panel);
-        box.add(Box.createVerticalStrut(PADDING << 1));
+        box.add(Box.createVerticalStrut(AccountPanel.NAV_UP_H));
         box.add(this.wrapComponent(name));
         box.add(Box.createVerticalStrut(PADDING));
         box.add(this.wrapComponent(password));
         box.add(Box.createVerticalStrut(PADDING));
         box.add(this.wrapComponent(login));
         box.add(Box.createVerticalStrut(
-                NavPanel.PANEL_H - (HEIGHT + PADDING) * COMPONENT_NUM
+                NavPanel.PANEL_H - (AccountConst.BUTTON_H + PADDING) * COMPONENT_NUM
         ));
 
         this.addListeners();
         this.setLayout(new BorderLayout());
-        this.add(box);
+        JPanel panel = new JPanel(new FlowLayout(
+                FlowLayout.LEFT, AccountConst.LEFT_PADDING, 0
+        ));
+        panel.setOpaque(false);
+        panel.add(box);
+        this.add(panel, BorderLayout.NORTH);
+        this.setBackground(AccountConst.BACKGROUND);
     }
 
     private JPanel wrapComponent(JComponent c) {
-        c.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        c.setPreferredSize(new Dimension(
+                AccountConst.BUTTON_W, AccountConst.BUTTON_H
+        ));
         c.setFont(new Font("等线", Font.PLAIN, 22));
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER));
