@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
@@ -16,6 +17,27 @@ public class TimeUtilTest {
     public void getCurrentIime() throws Exception {
 
         System.out.println(TimeUtil.getCurrentIime());
+    }
+
+    @Test
+    public void timeToNodeTest(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,10);
+        calendar.set(Calendar.MINUTE,10);
+        assertEquals(TimeUtil.timeToNode(calendar),7);
+
+        calendar.set(Calendar.HOUR_OF_DAY,13);
+        calendar.set(Calendar.MINUTE,1);
+        assertEquals(TimeUtil.timeToNode(calendar),25);
+
+        calendar.set(Calendar.HOUR_OF_DAY,12);
+        calendar.set(Calendar.MINUTE,10);
+        assertEquals(TimeUtil.timeToNode(calendar),-1);
+
+        calendar.set(Calendar.HOUR_OF_DAY,15);
+        calendar.set(Calendar.MINUTE,10);
+        assertEquals(TimeUtil.timeToNode(calendar),-2);
+
     }
 
     @Test
