@@ -36,17 +36,7 @@ class GridBagDemo extends JFrame {
         j8 = new JList(str);
         j9 = new JTextArea();
         j9.setBackground(Color.PINK);//为了看出效果，设置了颜色
-        GridBagLayout layout = new GridBagLayout();
-        this.setLayout(layout);
-        this.add(j1);//把组件添加进jframe
-        this.add(j2);
-        this.add(j3);
-        this.add(j4);
-//        this.add(j5);
-//        this.add(j6);
-//        this.add(j7);
-//        this.add(j8);
-//        this.add(j9);
+        this.setLayout(new GridBagLayout());
         GridBagConstraints s = new GridBagConstraints();//定义一个GridBagConstraints，
         //是用来控制添加进的组件的显示位置
         s.fill = GridBagConstraints.BOTH;
@@ -58,46 +48,45 @@ class GridBagDemo extends JFrame {
         s.gridwidth = 1;//该方法是设置组件水平所占用的格子数，如果为0，就说明该组件是该行的最后一个
         s.weightx = 0;//该方法设置组件水平的拉伸幅度，如果为0就说明不拉伸，不为0就随着窗口增大进行拉伸，0到1之间
         s.weighty = 0;//该方法设置组件垂直的拉伸幅度，如果为0就说明不拉伸，不为0就随着窗口增大进行拉伸，0到1之间
-        layout.setConstraints(j1, s);//设置组件
+//        layout.setConstraints(j1, s);//设置组件
+        this.add(j1, s);//把组件添加进jframe
         s.gridwidth = 1;
         s.weightx = 0;
         s.weighty = 0;
-        layout.setConstraints(j2, s);
+//        layout.setConstraints(j2, s);
+        this.add(j2, s);
         s.gridwidth = 1;
         s.weightx = 0;
         s.weighty = 0;
-        layout.setConstraints(j3, s);
+//        layout.setConstraints(j3, s);
+        this.add(j3, s);
         s.gridwidth = 0;//该方法是设置组件水平所占用的格子数，如果为0，就说明该组件是该行的最后一个
         s.weightx = 0;//不能为1，j4是占了4个格，并且可以横向拉伸，
         //但是如果为1，后面行的列的格也会跟着拉伸,导致j7所在的列也可以拉伸
         //所以应该是跟着j6进行拉伸
         s.weighty = 0;
-        layout.setConstraints(j4, s)
-        ;
+//        layout.setConstraints(j4, s)
+        this.add(j4, s);
         s.gridwidth = 2;
         s.weightx = 0;
         s.weighty = 0;
-        layout.setConstraints(j5, s);
-        ;
+        this.add(j5, s);
         s.gridwidth = 4;
         s.weightx = 1;
         s.weighty = 0;
-        layout.setConstraints(j6, s);
-        ;
+        this.add(j6, s);
         s.gridwidth = 0;
         s.weightx = 0;
         s.weighty = 0;
-        layout.setConstraints(j7, s);
-        ;
+        this.add(j7, s);
         s.gridwidth = 2;
         s.weightx = 0;
         s.weighty = 1;
-        layout.setConstraints(j8, s);
-        ;
+        this.add(j8, s);
         s.gridwidth = 5;
         s.weightx = 0;
         s.weighty = 1;
-        layout.setConstraints(j9, s);
+        this.add(j9, s);
     }
 
     JButton j1;
