@@ -29,7 +29,9 @@ public class TradePanel extends JPanel {
 
     private JPanel timeContainer = new JPanel(new BorderLayout());
 
-    private JPanel empty = new JPanel() {
+    private JPanel msgContainer = new JPanel(new BorderLayout());
+
+    private JPanel empty_time = new JPanel() {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -43,12 +45,26 @@ public class TradePanel extends JPanel {
         }
     };
 
+    private JPanel empty_msg = new JPanel() {
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(
+                    ImageLoader.empty_msg, 0, 0, this.getWidth(), this.getHeight(),
+                    0, 0,
+                    ImageLoader.empty_msg.getWidth(null),
+                    ImageLoader.empty_msg.getHeight(null),
+                    null
+            );
+        }
+    };
+
     public TradePanel() {
         ParamPanel param = new ParamPanel(PARAM_PANEL_W, PARAM_PANEL_H, this);
+
         timeSeriesPanel.setPreferredSize(new Dimension(RT_PANEL_W, RT_PANEL_H));
         timeContainer.setBackground(Color.black);
-        empty.setPreferredSize(new Dimension(RT_PANEL_W, RT_PANEL_H));
-        timeContainer.add(empty, BorderLayout.CENTER);
+        empty_time.setPreferredSize(new Dimension(RT_PANEL_W, RT_PANEL_H));
+        timeContainer.add(empty_time, BorderLayout.CENTER);
 
         Box up = Box.createHorizontalBox();
         up.add(param);
@@ -66,7 +82,7 @@ public class TradePanel extends JPanel {
     }
 
     void updateTimeSeriesPanel(String code) {
-        timeContainer.remove(empty);
+        timeContainer.remove(empty_time);
         timeContainer.add(timeSeriesPanel, BorderLayout.CENTER);
         timeSeriesPanel.setStockCode(code);
     }

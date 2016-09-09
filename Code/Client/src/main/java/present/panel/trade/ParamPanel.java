@@ -193,13 +193,21 @@ class ParamPanel extends JPanel {
 
                 VWAP vwap = VWAP.getInstance();
                 Calendar s = Calendar.getInstance();
-                s.set(0, 0, 0,
-                        Integer.parseInt(start.getHour()),
+                s.set(
+                        Calendar.HOUR_OF_DAY,
+                        Integer.parseInt(start.getHour())
+                );
+                s.set(
+                        Calendar.MINUTE,
                         Integer.parseInt(start.getMinute())
                 );
                 Calendar e = Calendar.getInstance();
-                e.set(0, 0, 0,
-                        Integer.parseInt(end.getHour()),
+                e.set(
+                        Calendar.HOUR_OF_DAY,
+                        Integer.parseInt(end.getHour())
+                );
+                s.set(
+                        Calendar.MINUTE,
                         Integer.parseInt(end.getMinute())
                 );
                 Calendar now = Calendar.getInstance();

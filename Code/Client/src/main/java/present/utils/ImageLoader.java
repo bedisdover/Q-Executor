@@ -24,6 +24,8 @@ public class ImageLoader {
 
     public static Image empty_time_series;
 
+    public static Image empty_msg;
+
     public static ImageIcon login_btn;
 
     public static ImageIcon register_btn;
@@ -42,5 +44,6 @@ public class ImageLoader {
         account_content = new ImageIcon("src/main/resources/images/account_content.jpg").getImage();
         search_bg = new ImageIcon("src/main/resources/images/search_bg.jpg").getImage();
         empty_time_series = new ImageIcon("src/main/resources/images/empty_time_series.jpg").getImage();
+        empty_msg = new ImageIcon("src/main/resources/images/empty_strategy.jpg").getImage();
     }
 }
