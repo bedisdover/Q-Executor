@@ -1,19 +1,29 @@
 package present.panel.trade;
 
+import bl.GetStockDataServiceImpl;
+import bl.TimeUtil;
 import bl.vwap.VWAP;
-import blservice.vwap.VWAPService;
+import bl.vwap.VWAP_Param;
+import blservice.stock.GetStockDataService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import present.component.TipText;
 import present.utils.StockJsonInfo;
 import util.JsonUtil;
+import vo.StockNowTimeVO;
+import vo.VolumeVO;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Y481L on 2016/8/28.
@@ -34,8 +44,6 @@ class ParamPanel extends JPanel {
 
     //字符串切割符
     private static final String spliter = " : ";
-
-//    private VWAPService vwap = new VWAP();
 
     ParamPanel(int width, int height, TradePanel parent) {
         this.componentW = ((width >> 1) - 3 * H_GAP) >> 1;
@@ -87,15 +95,39 @@ class ParamPanel extends JPanel {
         stock.add(code);
         box.add(stock);
 
-        //数量（手）
-        JLabel quantityLabel = new JLabel("数量/手");
-        JTextField quanVal = new JTextField();
-        InputPair quantity = new InputPair(quantityLabel, quanVal);
         //下单金额
         JLabel investLabel = new JLabel("下单金额");
         JTextField investVal = new JTextField();
         investVal.setEnabled(false);
         InputPair invest = new InputPair(investLabel, investVal);
+        //数量（手）
+        JLabel quantityLabel = new JLabel("数量/手");
+        JTextField quanVal = new JTextField();
+        InputPair quantity = new InputPair(quantityLabel, quanVal);
+        GetStockDataService service = new GetStockDataServiceImpl();
+        quanVal.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                super.keyReleased(e);
+                String text = quanVal.getText();
+                try {
+                    int num = Integer.parseInt(text);
+                    String code = codeText.getText();
+                    if (code.isEmpty()) {
+                        JOptionPane.showMessageDialog(ParamPanel.this, "请输入股票名称");
+                    }else {
+                        List<StockNowTimeVO> data = service.getNowTimeData(code);
+//                        data.get(0).getPrice()
+                    }
+                } catch (NumberFormatException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(ParamPanel.this, "交易数量应该为整数");
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(ParamPanel.this, "网络异常");
+                }
+            }
+        });
+
         //数量（手）、下单金额
         JPanel amount = new JPanel(new FlowLayout(FlowLayout.CENTER, H_GAP, 0));
         amount.setOpaque(false);
@@ -119,7 +151,24 @@ class ParamPanel extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-                parent.updateMsgPanel();
+                VWAP vwap = VWAP.getInstance();
+                Calendar start = Calendar.getInstance();
+                start.set(0, 0, 0, 9, 10);
+                Calendar end = Calendar.getInstance();
+                end.set(0, 0, 0, 10, 30);
+                VWAP_Param parm = new VWAP_Param(
+                        Long.parseLong(quanVal.getText()),
+                        codeText.getText(),
+                        0.4, TimeUtil.getCurrentIime(),
+                        TimeUtil.timeToNode(start),
+                        TimeUtil.timeToNode(end)
+                );
+                try {
+                    List<VolumeVO> result = vwap.predictVn(parm);
+                    parent.updateMsgPanel(result);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
             }
         });
         JPanel start = new JPanel(new FlowLayout(FlowLayout.CENTER, H_GAP, 0));

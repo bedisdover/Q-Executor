@@ -2,9 +2,12 @@ package present.panel.trade;
 
 import present.MainFrame;
 import present.panel.stock.center.TimeSeriesPanel;
+import vo.VolumeVO;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 public class TradePanel extends JPanel {
 
@@ -42,8 +45,8 @@ public class TradePanel extends JPanel {
         param.requestFocus();
     }
 
-    public void updateMsgPanel() {
-        msg.update();
+    public void updateMsgPanel(List<VolumeVO> result) {
+        msg.update(result);
     }
 
 }
