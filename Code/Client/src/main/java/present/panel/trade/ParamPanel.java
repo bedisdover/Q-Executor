@@ -174,64 +174,32 @@ class ParamPanel extends JPanel {
                     return;
                 }
 
-                GetStockDataService service = new GetStockDataServiceImpl();
-                double price;
-                try {
-                    List<StockNowTimeVO> data = service.getNowTimeData(codeText.getText());
-                    price = data.get(0).getPrice();
-                    price = NumberUtil.round(price);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    JOptionPane.showMessageDialog(ParamPanel.this, "网络异常");
-                    return;
-                }
-                double money = Integer.parseInt(quanVal.getText()) * price;
-                int isOK = JOptionPane.showConfirmDialog(ParamPanel.this, "此次交易共计需要" + money + "元，确定进行吗？");
-                if (isOK != JOptionPane.OK_OPTION) {
-                    return;
+                if (operationVal.getSelectedItem().equals("买")) {
+                    GetStockDataService service = new GetStockDataServiceImpl();
+                    double price;
+                    try {
+                        List<StockNowTimeVO> data = service.getNowTimeData(codeText.getText());
+                        price = data.get(0).getPrice();
+                        price = NumberUtil.round(price);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        JOptionPane.showMessageDialog(ParamPanel.this, "网络异常");
+                        return;
+                    }
+                    double money = Integer.parseInt(quanVal.getText()) * price;
+                    int isOK = JOptionPane.showConfirmDialog(ParamPanel.this, "此次交易共计需要" + money + "元，确定进行吗？");
+                    if (isOK != JOptionPane.OK_OPTION) {
+                        return;
+                    }
+                } else {
+                    int isOk = JOptionPane.showConfirmDialog(ParamPanel.this, "确认卖出吗");
+                    if (isOk != JOptionPane.OK_OPTION) {
+                        return ;
+                    }
                 }
 
-                VWAP vwap = VWAP.getInstance();
-                Calendar s = Calendar.getInstance();
-                s.set(
-                        Calendar.HOUR_OF_DAY,
-                        Integer.parseInt(start.getHour())
-                );
-                s.set(
-                        Calendar.MINUTE,
-                        Integer.parseInt(start.getMinute())
-                );
-                Calendar e = Calendar.getInstance();
-                e.set(
-                        Calendar.HOUR_OF_DAY,
-                        Integer.parseInt(end.getHour())
-                );
-                s.set(
-                        Calendar.MINUTE,
-                        Integer.parseInt(end.getMinute())
-                );
-                Calendar now = Calendar.getInstance();
-                now.set(2016, 9, 9, 10, 0);
-                //TODO 确定delta的值
-                System.out.println(quanVal.getText());
-                System.out.println(codeText.getText());
-                System.out.println(0.4);
-                System.out.println(TimeUtil.timeToNode(now));
-                System.out.println(TimeUtil.timeToNode(s));
-                System.out.println(TimeUtil.timeToNode(e));
-                VWAP_Param param = new VWAP_Param(
-                        Long.parseLong(quanVal.getText()),
-                        codeText.getText(),
-                        0.4, TimeUtil.timeToNode(now),
-                        TimeUtil.timeToNode(s),
-                        TimeUtil.timeToNode(e)
-                );
-                try {
-                    List<VolumeVO> result = vwap.predictVn(param);
-                    parent.updateMsgPanel(result, String.valueOf(operationVal.getSelectedItem()));
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
+                calculate();
+                parent.generatingMsg();
             }
         });
 
@@ -308,6 +276,70 @@ class ParamPanel extends JPanel {
             JOptionPane.showMessageDialog(this, "请输入有效开始时间");
             return false;
         }
+    }
+
+    /**
+     * 计算交易策略
+     */
+    private void calculate() {
+        SwingWorker<List<VolumeVO>, Void> worker = new SwingWorker<List<VolumeVO>, Void>() {
+            @Override
+            protected List<VolumeVO> doInBackground() throws Exception {
+                VWAP vwap = VWAP.getInstance();
+                Calendar s = Calendar.getInstance();
+                s.set(
+                        Calendar.HOUR_OF_DAY,
+                        Integer.parseInt(start.getHour())
+                );
+                s.set(
+                        Calendar.MINUTE,
+                        Integer.parseInt(start.getMinute())
+                );
+                Calendar e = Calendar.getInstance();
+                e.set(
+                        Calendar.HOUR_OF_DAY,
+                        Integer.parseInt(end.getHour())
+                );
+                s.set(
+                        Calendar.MINUTE,
+                        Integer.parseInt(end.getMinute())
+                );
+                Calendar now = Calendar.getInstance();
+                //TODO 应该获取当前时间
+                now.set(2016, 9, 9, 10, 0);
+                //TODO 确定delta的值
+                VWAP_Param param = new VWAP_Param(
+                        Long.parseLong(quanVal.getText()),
+                        codeText.getText(),
+                        0.4, TimeUtil.timeToNode(now),
+                        TimeUtil.timeToNode(s),
+                        TimeUtil.timeToNode(e)
+                );
+                try {
+                    return vwap.predictVn(param);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    List<VolumeVO> result = get();
+                    if(result == null) {
+                        JOptionPane.showMessageDialog(ParamPanel.this, "网络异常");
+                        return;
+                    }
+                    parent.updateMsgPanel(result, String.valueOf(operationVal.getSelectedItem()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(ParamPanel.this, "网络异常");
+                }
+            }
+        };
+
+        worker.execute();
     }
 
     private class InputPair extends JPanel {

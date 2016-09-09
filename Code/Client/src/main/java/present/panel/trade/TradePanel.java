@@ -1,6 +1,7 @@
 package present.panel.trade;
 
 import present.MainFrame;
+import present.panel.loading.LoadingPanel;
 import present.panel.stock.center.TimeSeriesPanel;
 import present.utils.ImageLoader;
 import vo.VolumeVO;
@@ -31,6 +32,8 @@ public class TradePanel extends JPanel {
 
     private JPanel msgContainer = new JPanel(new BorderLayout());
 
+    private JPanel loading = new LoadingPanel();
+
     private JPanel empty_time = new JPanel() {
         @Override
         protected void paintComponent(Graphics g) {
@@ -46,18 +49,19 @@ public class TradePanel extends JPanel {
     };
 
     private JPanel empty_msg = new JPanel() {
-        protected void paintComponent(Graphics g) {
+        public void paintComponent(Graphics g) {
             super.paintComponent(g);
-            Image img = new ImageIcon("src/main/resources/images/loading.gif").getImage();
             g.drawImage(
-                    img, 0, 0, this.getWidth(), this.getHeight(),
+                    ImageLoader.empty_msg, 0, 0, this.getWidth(), this.getHeight(),
                     0, 0,
-                    img.getWidth(null),
-                    img.getHeight(null),
+                    ImageLoader.empty_msg.getWidth(null),
+                    ImageLoader.empty_msg.getHeight(null),
                     null
             );
         }
     };
+
+    private JPanel currentMsg = empty_msg;
 
     public TradePanel() {
         ParamPanel param = new ParamPanel(PARAM_PANEL_W, PARAM_PANEL_H, this);
@@ -79,10 +83,26 @@ public class TradePanel extends JPanel {
         this.add(msgContainer, BorderLayout.CENTER);
     }
 
+    void stopCalculate() {
+        msgContainer.remove(msg);
+        msgContainer.remove(loading);
+        msgContainer.add(empty_msg, BorderLayout.CENTER);
+        msgContainer.revalidate();
+    }
+
+    void generatingMsg() {
+        msgContainer.remove(empty_msg);
+        msgContainer.remove(msg);
+        msgContainer.add(loading, BorderLayout.CENTER);
+        msgContainer.revalidate();
+    }
+
     void updateMsgPanel(List<VolumeVO> result, String type) {
         msgContainer.remove(empty_msg);
+        msgContainer.remove(loading);
         msgContainer.add(msg, BorderLayout.CENTER);
         msg.update(result, type);
+        msgContainer.revalidate();
     }
 
     void updateTimeSeriesPanel(String code) {
