@@ -61,23 +61,26 @@ public class TradePanel extends JPanel {
     public TradePanel() {
         ParamPanel param = new ParamPanel(PARAM_PANEL_W, PARAM_PANEL_H, this);
 
-        timeSeriesPanel.setPreferredSize(new Dimension(RT_PANEL_W, RT_PANEL_H));
-        timeContainer.setBackground(Color.black);
         empty_time.setPreferredSize(new Dimension(RT_PANEL_W, RT_PANEL_H));
+        timeContainer.setPreferredSize(new Dimension(RT_PANEL_W, RT_PANEL_H));
         timeContainer.add(empty_time, BorderLayout.CENTER);
+
+        empty_msg.setPreferredSize(new Dimension(MSG_PANEL_W, MSG_PANEL_H));
+        msgContainer.setPreferredSize(new Dimension(MSG_PANEL_W, MSG_PANEL_H));
+        msgContainer.add(empty_msg, BorderLayout.CENTER);
 
         Box up = Box.createHorizontalBox();
         up.add(param);
         up.add(timeContainer);
-        Box bottom = Box.createHorizontalBox();
-        bottom.add(msg);
 
         this.setLayout(new BorderLayout());
         this.add(up, BorderLayout.NORTH);
-        this.add(bottom, BorderLayout.CENTER);
+        this.add(msgContainer, BorderLayout.CENTER);
     }
 
     void updateMsgPanel(List<VolumeVO> result, String type) {
+        msgContainer.remove(empty_msg);
+        msgContainer.add(msg, BorderLayout.CENTER);
         msg.update(result, type);
     }
 
