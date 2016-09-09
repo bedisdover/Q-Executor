@@ -10,6 +10,7 @@ import present.panel.home.NavPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -97,10 +98,9 @@ public class RegisterPanel extends JPanel{
     }
 
     private void addBtnListener() {
-        register.addMouseListener(new MouseAdapter() {
+        AbstractAction action = new AbstractAction() {
             @Override
-            public void mouseReleased(MouseEvent e) {
-                super.mouseReleased(e);
+            public void actionPerformed(ActionEvent e) {
                 //验证密码和确认密码是否一致
                 String pw = new String(password.getPassword());
                 String pwConfirm = new String(confirmPW.getPassword());
@@ -116,13 +116,23 @@ public class RegisterPanel extends JPanel{
                     );
                     JOptionPane.showMessageDialog(RegisterPanel.this, result.getInfo());
                     if (result.isState()) {
-                        switcher.jump(new LoginPanel(switcher));
+                        switcher.jump(new AccountPanel(switcher));
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(RegisterPanel.this, "网络异常");
                 }
             }
+        };
+        register.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                action.actionPerformed(null);
+            }
         });
+
+        confirmPW.getInputMap().put(KeyStroke.getKeyStroke('\n'), "register");
+        confirmPW.getActionMap().put("register", action);
     }
 }

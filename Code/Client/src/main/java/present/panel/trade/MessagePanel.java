@@ -1,12 +1,13 @@
 package present.panel.trade;
 
-import org.jb2011.lnf.beautyeye.ch5_table.BETableHeaderUI;
+import vo.VolumeVO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.Vector;
+import java.util.*;
+import java.util.List;
 
 /**
  * Created by Y481L on 2016/8/28.
@@ -65,7 +66,7 @@ class MessagePanel extends JScrollPane {
         this.setViewportView(table);
     }
 
-    public void update() {
+    public void update(List<VolumeVO> result) {
         vData.clear();
         tableModel.fireTableDataChanged();
     }
