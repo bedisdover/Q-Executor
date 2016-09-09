@@ -2,7 +2,7 @@ package present.panel.stock.center;
 
 import bl.stock.GetStockDataServiceImpl;
 import blservice.stock.GetStockDataService;
-import present.charts.GeneralPie;
+import present.charts.PieFactory;
 import present.panel.stock.MyLabel;
 import present.panel.stock.MyRenderer;
 import present.panel.stock.MyTable;
@@ -203,10 +203,10 @@ public class GeneralPanel extends CenterPanel {
         SwingUtilities.invokeLater(() -> {
             chartPanel.removeAll();
 
-            JPanel chart = GeneralPie.getPieChart(calculateAmount(stockInfoByComList), totalAmount);
-            chart.setPreferredSize(new Dimension(200, 200));
-            this.chartPanel.add(chart, BorderLayout.WEST);
-            this.chartPanel.add(labelBox, BorderLayout.EAST);
+//            JPanel chart = PieFactory.getPieChart(calculateAmount(stockInfoByComList), totalAmount);
+//            chart.setPreferredSize(new Dimension(200, 200));
+//            this.chartPanel.add(chart, BorderLayout.WEST);
+//            this.chartPanel.add(labelBox, BorderLayout.EAST);
 
             centerPanel.removeAll();
             centerPanel.add(createTable(stockInfoByComList), BorderLayout.CENTER);

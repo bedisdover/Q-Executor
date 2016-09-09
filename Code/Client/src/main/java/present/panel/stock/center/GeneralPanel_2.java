@@ -2,7 +2,7 @@ package present.panel.stock.center;
 
 import bl.stock.GetStockDataServiceImpl;
 import blservice.stock.GetStockDataService;
-import present.charts.GeneralPie;
+import present.charts.PieFactory;
 import present.panel.stock.StockPanel;
 import present.panel.stock.west.CurrentDataPanel;
 import present.panel.stock.MyLabel;
@@ -68,8 +68,8 @@ public class GeneralPanel_2 extends CenterPanel {
 
     private void createUIComponents() {
         SwingUtilities.invokeLater(() -> {
-            JPanel northPanel = new JPanel(new BorderLayout());
             GridBagConstraints constraints = new GridBagConstraints();
+            constraints.fill = GridBagConstraints.BOTH;
             {
                 // 选项面板
                 JPanel radioPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
@@ -102,12 +102,15 @@ public class GeneralPanel_2 extends CenterPanel {
                 buttonGroup.add(radio900);
                 buttonGroup.add(radio1000);
 
-//                northPanel.add(radioPanel, BorderLayout.NORTH);
-                constraints.fill = GridBagConstraints.BOTH;
-                constraints.gridwidth = 0;
+                constraints.gridwidth = 1;
                 constraints.weightx = 0;
                 constraints.weighty = 0;
                 panel.add(radioPanel, constraints);
+
+                constraints.gridwidth = 0;
+                constraints.weightx = 1;
+                constraints.weighty = 0;
+                panel.add(new JPanel(), constraints);
             }
 
             {
@@ -136,19 +139,29 @@ public class GeneralPanel_2 extends CenterPanel {
 
                 chartPanel.add(labelBox, BorderLayout.EAST);
 
-//                northPanel.add(chartPanel, BorderLayout.CENTER);
+                constraints.gridwidth = 1;
+                constraints.weightx = 0;
+                constraints.weighty = 0;
                 panel.add(chartPanel, constraints);
+
+                constraints.gridwidth = 0;
+                constraints.weightx = 1;
+                constraints.weighty = 0;
+                panel.add(new JPanel(), constraints);
             }
 
-//            panel.add(northPanel, BorderLayout.NORTH);
-
             {
-                centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                centerPanel = new JPanel(new BorderLayout());
 
-//                panel.add(centerPanel, BorderLayout.CENTER);
+                constraints.gridwidth = 1;
                 constraints.weightx = 0;
                 constraints.weighty = 1;
                 panel.add(centerPanel, constraints);
+
+                constraints.gridwidth = 0;
+                constraints.weightx = 1;
+                constraints.weighty = 1;
+                panel.add(new JPanel(), constraints);
             }
 
             addListeners();
@@ -216,9 +229,13 @@ public class GeneralPanel_2 extends CenterPanel {
         SwingUtilities.invokeLater(() -> {
             chartPanel.removeAll();
 
-            JPanel chart = GeneralPie.getPieChart(calculateAmount(stockInfoByComList), totalAmount);
+            String[] titles = new String[]{"大单", "其它"};
+            double[] values = new double[]{calculateAmount(stockInfoByComList), totalAmount};
+            JPanel chart = PieFactory.getPieChart(titles, values);
+
+
             this.chartPanel.add(chart, BorderLayout.WEST);
-            this.chartPanel.add(labelBox, BorderLayout.EAST);
+            this.chartPanel.add(labelBox, BorderLayout.CENTER);
 
             centerPanel.removeAll();
             centerPanel.add(createTable(stockInfoByComList), BorderLayout.CENTER);
@@ -257,6 +274,19 @@ public class GeneralPanel_2 extends CenterPanel {
         return Math.round(result * 100) / 100;
     }
 
+    /**
+     * 计算买盘、卖盘、中性盘的成交量
+     */
+    private double[] calculateSell(List<StockInfoByCom> stockInfoByComList) {
+        double[] result = new double[]{0, 0, 0};
+
+        for (StockInfoByCom stockInfoByCom : stockInfoByComList) {
+            result[stockInfoByCom.getTypeNum()] += stockInfoByCom.getVolume();
+        }
+
+        return result;
+    }
+
     private JScrollPane createTable(List<StockInfoByCom> stockInfoByComList) {
         //字段名称
         String[] names = {"交易时间", "成交价", "价格变动", "成交量(手)", "成交额(万元)", "买卖盘性质"};
@@ -280,10 +310,6 @@ public class GeneralPanel_2 extends CenterPanel {
         // 渲染“价格变动”的颜色
         table.setRenderer(new MyRenderer(2, 5));
 
-        JScrollPane scrollPane = table.createTable();
-
-        scrollPane.setPreferredSize(new Dimension(table.getColumnModel().getTotalColumnWidth() + 28, panel.getHeight() - 320));
-
-        return scrollPane;
+        return table.createTable();
     }
 }

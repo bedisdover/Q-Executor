@@ -123,7 +123,7 @@ public class StockPanel extends JPanel {
                     break;
                 case "GeneralPanel":
                     if (generalPanel == null) {
-                        generalPanel = new GeneralPanel(stockCode, currentDataPanel, this);
+                        generalPanel = new GeneralPanel_2(stockCode, currentDataPanel, this);
                     }
 
                     centerPanel = generalPanel;
