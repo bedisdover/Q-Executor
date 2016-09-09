@@ -32,7 +32,22 @@ public class SinglePanel extends CenterPanel {
         this.stockPanel = stockPanel;
 
         super.init();
+
         getData();
+    }
+
+    private void createUIComponents() {
+        SwingUtilities.invokeLater(() -> {
+            panel.setLayout(new GridBagLayout());
+            GridBagConstraints constraints = new GridBagConstraints();
+
+            constraints.gridwidth = 1;
+            constraints.weightx = 1;
+            constraints.weighty = 1;
+            panel.add(new JPanel(), constraints);
+
+
+        });
     }
 
     @Override
@@ -64,6 +79,9 @@ public class SinglePanel extends CenterPanel {
 
     private void injectData(List stockInfoByPerList) {
         SwingUtilities.invokeLater(() -> {
+            if (panel.getLayout() instanceof GridBagLayout) {
+
+            }
             JScrollPane scrollPane = createTable(stockInfoByPerList);
 
             panel.removeAll();

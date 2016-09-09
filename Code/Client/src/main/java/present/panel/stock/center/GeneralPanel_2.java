@@ -3,11 +3,11 @@ package present.panel.stock.center;
 import bl.stock.GetStockDataServiceImpl;
 import blservice.stock.GetStockDataService;
 import present.charts.PieFactory;
-import present.panel.stock.StockPanel;
-import present.panel.stock.west.CurrentDataPanel;
 import present.panel.stock.MyLabel;
 import present.panel.stock.MyRenderer;
 import present.panel.stock.MyTable;
+import present.panel.stock.StockPanel;
+import present.panel.stock.west.CurrentDataPanel;
 import util.NumberUtil;
 import vo.StockInfoByCom;
 
@@ -70,6 +70,7 @@ public class GeneralPanel_2 extends CenterPanel {
         SwingUtilities.invokeLater(() -> {
             GridBagConstraints constraints = new GridBagConstraints();
             constraints.fill = GridBagConstraints.BOTH;
+
             {
                 // 选项面板
                 JPanel radioPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
@@ -103,6 +104,11 @@ public class GeneralPanel_2 extends CenterPanel {
                 buttonGroup.add(radio1000);
 
                 constraints.gridwidth = 1;
+                constraints.weightx = 1;
+                constraints.weighty = 0;
+                panel.add(new JPanel(), constraints);
+
+                constraints.gridwidth = 10;
                 constraints.weightx = 0;
                 constraints.weighty = 0;
                 panel.add(radioPanel, constraints);
@@ -137,9 +143,12 @@ public class GeneralPanel_2 extends CenterPanel {
                 labelBox.add(new MyLabel("  "));
                 labelBox.add(total_volume);
 
-                chartPanel.add(labelBox, BorderLayout.EAST);
-
                 constraints.gridwidth = 1;
+                constraints.weightx = 0;
+                constraints.weighty = 0;
+                panel.add(new JPanel(), constraints);
+
+                constraints.gridwidth = 10;
                 constraints.weightx = 0;
                 constraints.weighty = 0;
                 panel.add(chartPanel, constraints);
@@ -154,6 +163,11 @@ public class GeneralPanel_2 extends CenterPanel {
                 centerPanel = new JPanel(new BorderLayout());
 
                 constraints.gridwidth = 1;
+                constraints.weightx = 0;
+                constraints.weighty = 1;
+                panel.add(new JPanel(), constraints);
+
+                constraints.gridwidth = 10;
                 constraints.weightx = 0;
                 constraints.weighty = 1;
                 panel.add(centerPanel, constraints);
@@ -233,9 +247,13 @@ public class GeneralPanel_2 extends CenterPanel {
             double[] values = new double[]{calculateAmount(stockInfoByComList), totalAmount};
             JPanel chart = PieFactory.getPieChart(titles, values);
 
+            String[] titles_1 = new String[]{"买盘", "卖盘", "中性盘"};
+            double[] values_1 = calculateSell(stockInfoByComList);
+            JPanel chart_1 = PieFactory.getPieChart(titles_1, values_1);
 
-            this.chartPanel.add(chart, BorderLayout.WEST);
-            this.chartPanel.add(labelBox, BorderLayout.CENTER);
+            chartPanel.add(chart, BorderLayout.WEST);
+            chartPanel.add(labelBox, BorderLayout.CENTER);
+            chartPanel.add(chart_1, BorderLayout.EAST);
 
             centerPanel.removeAll();
             centerPanel.add(createTable(stockInfoByComList), BorderLayout.CENTER);
