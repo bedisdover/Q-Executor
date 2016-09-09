@@ -65,12 +65,12 @@ class MessagePanel extends JScrollPane {
         this.setViewportView(table);
     }
 
-    public void update(List<VolumeVO> result) {
+    public void update(List<VolumeVO> result, String type) {
         vData.clear();
         for (VolumeVO vo : result) {
             Vector<String> data = new Vector<>();
             data.addElement(vo.getTime());
-            data.addElement("买");
+            data.addElement(type);
             data.addElement("交易了" + vo.getVolume() + "股");
             tableModel.addRow(data);
             System.out.println(vo.getTime());

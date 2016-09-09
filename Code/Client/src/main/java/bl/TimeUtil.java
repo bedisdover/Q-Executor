@@ -140,4 +140,14 @@ public class TimeUtil {
         return (time >= start1 && time <= end1) ||
                 (time >= start2 && time <= end2);
     }
+
+    /**
+     * 验证时间是否有效
+     * @param hour 小时
+     * @param minute 分钟
+     * @return boolean
+     */
+    public static boolean isTimeValid(int hour, int minute) {
+        return hour >= 0 && hour < 24 && minute >= 0 && minute <= 59;
+    }
 }
