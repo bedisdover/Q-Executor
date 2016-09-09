@@ -65,7 +65,7 @@ public class StockPanel extends JPanel {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                centerPanel.getData();
+//                centerPanel.getData();
             }
         }, 3000, 3000);
     }
