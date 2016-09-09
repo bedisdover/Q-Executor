@@ -74,9 +74,13 @@ public class TimeUtil {
     /**
      * 将时间片转化为对应时间
      * @param timeNode 时间片
-     * @return yyyy-MM-dd HH:mm:ss格式时间
+     * @return yyyy-MM-dd HH:mm:ss格式时间 如果超出范围返回null
      */
     public static String timeNodeToDate(int timeNode){
+        if(timeNode>TimeSliceNum){
+            return null;
+        }
+
         Calendar calendar=Calendar.getInstance();
         int timeLength = allTimeLength/TimeSliceNum;
         if(timeNode<(TimeSliceNum/2)){
