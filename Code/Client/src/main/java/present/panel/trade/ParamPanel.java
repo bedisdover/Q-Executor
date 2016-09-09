@@ -1,7 +1,7 @@
 package present.panel.trade;
 
-import bl.GetStockDataServiceImpl;
 import bl.TimeUtil;
+import bl.stock.GetStockDataServiceImpl;
 import bl.vwap.VWAP;
 import bl.vwap.VWAP_Param;
 import blservice.stock.GetStockDataService;
@@ -16,8 +16,6 @@ import vo.VolumeVO;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Vector;
@@ -47,6 +45,9 @@ class ParamPanel extends JPanel {
     //字符串切割符
     private static final String spliter = " : ";
 
+    //股票名称文本框
+    private TipText nameVal;
+
     //股票代码文本框
     private JTextField codeText = new JTextField();
 
@@ -61,6 +62,12 @@ class ParamPanel extends JPanel {
 
     //结束时间输入框
     private TimePanel end;
+
+    //启动计算按钮
+    private JButton trigger;
+
+    //终止计算按钮
+    private JButton stop;
 
     //参数面板的父容器
     private TradePanel parent;
@@ -121,7 +128,7 @@ class ParamPanel extends JPanel {
 
         //股票名称
         JLabel nameLabel = new JLabel("股票名称");
-        TipText nameVal = new TipText(componentW << 1, componentH);
+        nameVal = new TipText(componentW << 1, componentH);
         nameVal.setMatcher((key) -> {
             Vector<String> v = new Vector<>();
             List<JSONObject> list = JsonUtil.contains(
@@ -164,48 +171,45 @@ class ParamPanel extends JPanel {
      */
     private JPanel createBtnPanel() {
         //启动计算
-        JButton trigger = new JButton("开始计算");
+        trigger = new JButton("开始计算");
         trigger.setPreferredSize(new Dimension(componentW - H_GAP, componentH));
-        trigger.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent event) {
-                super.mouseReleased(event);
-                if (!checkComplete()) {
+        trigger.addActionListener((e) -> {
+            if (!checkComplete()) {
+                return;
+            }
+
+            if (operationVal.getSelectedItem().equals("买")) {
+                GetStockDataService service = new GetStockDataServiceImpl();
+                double price;
+                try {
+                    List<StockNowTimeVO> data = service.getNowTimeData(codeText.getText());
+                    price = data.get(0).getPrice();
+                    price = NumberUtil.round(price);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(ParamPanel.this, "网络异常");
                     return;
                 }
-
-                if (operationVal.getSelectedItem().equals("买")) {
-                    GetStockDataService service = new GetStockDataServiceImpl();
-                    double price;
-                    try {
-                        List<StockNowTimeVO> data = service.getNowTimeData(codeText.getText());
-                        price = data.get(0).getPrice();
-                        price = NumberUtil.round(price);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        JOptionPane.showMessageDialog(ParamPanel.this, "网络异常");
-                        return;
-                    }
-                    double money = Integer.parseInt(quanVal.getText()) * price;
-                    int isOK = JOptionPane.showConfirmDialog(ParamPanel.this, "此次交易共计需要" + money + "元，确定进行吗？");
-                    if (isOK != JOptionPane.OK_OPTION) {
-                        return;
-                    }
-                } else {
-                    int isOk = JOptionPane.showConfirmDialog(ParamPanel.this, "确认卖出吗");
-                    if (isOk != JOptionPane.OK_OPTION) {
-                        return ;
-                    }
+                double money = Integer.parseInt(quanVal.getText()) * price;
+                int isOK = JOptionPane.showConfirmDialog(ParamPanel.this, "此次交易共计需要" + money + "元，确定进行吗？");
+                if (isOK != JOptionPane.OK_OPTION) {
+                    return;
                 }
-
-                calculate();
-                parent.generatingMsg();
+            } else {
+                int isOk = JOptionPane.showConfirmDialog(ParamPanel.this, "确认卖出吗");
+                if (isOk != JOptionPane.OK_OPTION) {
+                    return ;
+                }
             }
+
+            disableComponents();
+            calculate();
+            parent.generatingMsg();
         });
 
         //结束计算
-        JButton end = new JButton("结束计算");
-        end.setPreferredSize(new Dimension(componentW - H_GAP, componentH));
+        stop = new JButton("结束计算");
+        stop.setPreferredSize(new Dimension(componentW - H_GAP, componentH));
 
         JPanel left = new JPanel();
         left.setOpaque(false);
@@ -220,8 +224,26 @@ class ParamPanel extends JPanel {
         panel.add(left);
         panel.add(trigger);
         panel.add(center);
-        panel.add(end);
+        panel.add(stop);
         return panel;
+    }
+
+    private void disableComponents() {
+        nameVal.setEnabled(false);
+        quanVal.setEnabled(false);
+        start.setEnabled(false);
+        end.setEnabled(false);
+        trigger.setEnabled(false);
+        stop.setEnabled(false);
+    }
+
+    private void enableComponents() {
+        nameVal.setEnabled(true);
+        quanVal.setEnabled(true);
+        start.setEnabled(true);
+        end.setEnabled(true);
+        trigger.setEnabled(true);
+        stop.setEnabled(true);
     }
 
     private boolean checkComplete() {
@@ -329,6 +351,7 @@ class ParamPanel extends JPanel {
                     List<VolumeVO> result = get();
                     if(result == null) {
                         JOptionPane.showMessageDialog(ParamPanel.this, "网络异常");
+                        enableComponents();
                         return;
                     }
                     parent.updateMsgPanel(result, String.valueOf(operationVal.getSelectedItem()));
@@ -336,6 +359,7 @@ class ParamPanel extends JPanel {
                     e.printStackTrace();
                     JOptionPane.showMessageDialog(ParamPanel.this, "网络异常");
                 }
+                enableComponents();
             }
         };
 
@@ -403,6 +427,12 @@ class ParamPanel extends JPanel {
 
         String getMinute() {
             return minute.getText();
+        }
+
+        @Override
+        public void setEnabled(boolean enabled) {
+            hour.setEnabled(enabled);
+            minute.setEnabled(enabled);
         }
     }
 }
