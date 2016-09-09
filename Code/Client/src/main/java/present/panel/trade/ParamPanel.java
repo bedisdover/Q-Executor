@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import present.component.TipText;
 import present.utils.StockJsonInfo;
 import util.JsonUtil;
+import util.NumberUtil;
 import vo.StockNowTimeVO;
 import vo.VolumeVO;
 
@@ -20,10 +21,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Vector;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Y481L on 2016/8/28.
@@ -117,7 +116,9 @@ class ParamPanel extends JPanel {
                         JOptionPane.showMessageDialog(ParamPanel.this, "请输入股票名称");
                     }else {
                         List<StockNowTimeVO> data = service.getNowTimeData(code);
-//                        data.get(0).getPrice()
+                        investVal.setText(String.valueOf(
+                                NumberUtil.round(data.get(0).getPrice() * num
+                        )));
                     }
                 } catch (NumberFormatException ex) {
                     ex.printStackTrace();
@@ -156,7 +157,7 @@ class ParamPanel extends JPanel {
                 start.set(0, 0, 0, 9, 10);
                 Calendar end = Calendar.getInstance();
                 end.set(0, 0, 0, 10, 30);
-                VWAP_Param parm = new VWAP_Param(
+                VWAP_Param param = new VWAP_Param(
                         Long.parseLong(quanVal.getText()),
                         codeText.getText(),
                         0.4, TimeUtil.getCurrentIime(),
@@ -164,7 +165,7 @@ class ParamPanel extends JPanel {
                         TimeUtil.timeToNode(end)
                 );
                 try {
-                    List<VolumeVO> result = vwap.predictVn(parm);
+                    List<VolumeVO> result = vwap.predictVn(param);
                     parent.updateMsgPanel(result);
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -197,8 +198,7 @@ class ParamPanel extends JPanel {
         label.setPreferredSize(new Dimension(componentW - (H_GAP << 1), componentH));
         panel.add(label);
 
-        JComboBox<String> hour = new JComboBox<>();
-        initHourBox(hour);
+        JTextField hour = new JTextField();
         hour.setFont(font);
         hour.setPreferredSize(new Dimension(componentW + (H_GAP << 1), componentH));
         panel.add(hour);
@@ -209,8 +209,7 @@ class ParamPanel extends JPanel {
         split.setFont(new Font("黑体", Font.BOLD, 15));
         panel.add(split);
 
-        JComboBox<String> minute = new JComboBox<>();
-        initMinuteBox(minute);
+        JTextField minute = new JTextField();
         minute.setFont(font);
         minute.setPreferredSize(new Dimension(componentW, componentH));
         panel.add(minute);
