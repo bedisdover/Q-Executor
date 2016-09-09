@@ -93,11 +93,10 @@ public class TimeUtil {
             calendar.set(Calendar.SECOND,1);
             calendar.add(Calendar.MINUTE,timeLength*(timeNode - TimeSliceNum/2 -1));
         }
-        DateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date date = calendar.getTime();
         String time = df.format(date);
-        time = time.substring(0,time.length()-2);
-        time = time+"05";
+
         return time;
     }
 

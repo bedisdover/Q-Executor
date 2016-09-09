@@ -50,13 +50,13 @@ public class TimeUtilTest {
         Date date = new Date();
         String day = df.format(date);
         System.out.println(TimeUtil.timeNodeToDate(1));
-        assertEquals(true,TimeUtil.timeNodeToDate(1).matches(day+" 09:30:\\d{2}"));
+        assertEquals(true,TimeUtil.timeNodeToDate(1).matches(day+" 09:30"));
         System.out.println(TimeUtil.timeNodeToDate(22));
-        assertEquals(true,TimeUtil.timeNodeToDate(22).matches(day+" 11:15:\\d{2}"));
+        assertEquals(true,TimeUtil.timeNodeToDate(22).matches(day+" 11:15"));
         System.out.println(TimeUtil.timeNodeToDate(25));
-        assertEquals(true,TimeUtil.timeNodeToDate(25).matches(day+" 13:00:\\d{2}"));
+        assertEquals(true,TimeUtil.timeNodeToDate(25).matches(day+" 13:00"));
         System.out.println(TimeUtil.timeNodeToDate(48));
-        assertEquals(true,TimeUtil.timeNodeToDate(48).matches(day+" 14:55:\\d{2}"));
+        assertEquals(true,TimeUtil.timeNodeToDate(48).matches(day+" 14:55"));
         System.out.println(TimeUtil.timeNodeToDate(50));
         assertEquals(null,TimeUtil.timeNodeToDate(50));
 
