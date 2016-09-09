@@ -11,7 +11,7 @@ import java.util.List;
 
 public class TradePanel extends JPanel {
 
-    private static final int PARAM_PANEL_W = 380;
+    private static final int PARAM_PANEL_W = 420;
 
     private static final int PARAM_PANEL_H = 380;
 

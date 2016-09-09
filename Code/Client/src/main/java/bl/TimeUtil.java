@@ -125,4 +125,19 @@ public class TimeUtil {
 
         return dateFormat.format(calendar.getTime());
     }
+
+    /**
+     * 判断时间是否股票处于交易时间之内，采用24小时制
+     * 交易时间 9:30 - 11: 30, 13:00 - 15:00
+     * @param hour 小时
+     * @param minute 分钟
+     * @return
+     */
+    public static boolean isAtTradeTime(int hour, int minute) {
+        int start1 = 9 * 60 + 30, end1 = 11 * 60 + 30;
+        int start2 = 13 * 60, end2 = 15 * 60;
+        int time = hour * 60 + minute;
+        return (time >= start1 && time <= end1) ||
+                (time >= start2 && time <= end2);
+    }
 }

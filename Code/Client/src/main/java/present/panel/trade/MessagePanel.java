@@ -6,8 +6,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by Y481L on 2016/8/28.
@@ -36,12 +36,12 @@ class MessagePanel extends JScrollPane {
         //表格数据
         vData = new Vector<>();
         tableModel = new DefaultTableModel(vData, header);
-        Vector<String> test = new Vector<>();   //测试数据
-        test.add("10:07:43");
-        test.add("交易");
-        test.add("下单成功，500单");
-        for (int i = 0; i < 15; i++)
-            tableModel.addRow(test);
+//        Vector<String> test = new Vector<>();   //测试数据
+//        test.add("10:07:43");
+//        test.add("交易");
+//        test.add("下单成功，500单");
+//        for (int i = 0; i < 15; i++)
+//            tableModel.addRow(test);
 
         table = new JTable(tableModel) {
             private static final long serialVersionUID = 1L;
@@ -52,7 +52,6 @@ class MessagePanel extends JScrollPane {
         };
         table.setForeground(Color.WHITE);
         table.setBackground(Color.BLACK);
-//        table.getTableHeader().setForeground(Color.WHITE);
         table.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
             @Override
             public Component getComponent(int n) {
@@ -68,6 +67,16 @@ class MessagePanel extends JScrollPane {
 
     public void update(List<VolumeVO> result) {
         vData.clear();
+        for (VolumeVO vo : result) {
+            Vector<String> data = new Vector<>();
+            data.addElement(vo.getTime());
+            data.addElement("买");
+            data.addElement("交易了" + vo.getVolume() + "股");
+            tableModel.addRow(data);
+            System.out.println(vo.getTime());
+            System.out.println(vo.getVolume());
+        }
+        System.out.println(result.size());
         tableModel.fireTableDataChanged();
     }
 }
