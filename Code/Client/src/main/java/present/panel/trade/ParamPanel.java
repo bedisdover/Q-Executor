@@ -213,6 +213,12 @@ class ParamPanel extends JPanel {
                 Calendar now = Calendar.getInstance();
                 now.set(2016, 9, 9, 10, 0);
                 //TODO 确定delta的值
+                System.out.println(quanVal.getText());
+                System.out.println(codeText.getText());
+                System.out.println(0.4);
+                System.out.println(TimeUtil.timeToNode(now));
+                System.out.println(TimeUtil.timeToNode(s));
+                System.out.println(TimeUtil.timeToNode(e));
                 VWAP_Param param = new VWAP_Param(
                         Long.parseLong(quanVal.getText()),
                         codeText.getText(),

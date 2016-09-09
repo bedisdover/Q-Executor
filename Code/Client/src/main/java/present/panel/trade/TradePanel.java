@@ -48,11 +48,12 @@ public class TradePanel extends JPanel {
     private JPanel empty_msg = new JPanel() {
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
+            Image img = new ImageIcon("src/main/resources/images/loading.gif").getImage();
             g.drawImage(
-                    ImageLoader.empty_msg, 0, 0, this.getWidth(), this.getHeight(),
+                    img, 0, 0, this.getWidth(), this.getHeight(),
                     0, 0,
-                    ImageLoader.empty_msg.getWidth(null),
-                    ImageLoader.empty_msg.getHeight(null),
+                    img.getWidth(null),
+                    img.getHeight(null),
                     null
             );
         }
