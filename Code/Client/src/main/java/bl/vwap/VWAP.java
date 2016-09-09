@@ -57,8 +57,9 @@ public class VWAP implements VWAPService {
 			Pn = vwapCore.getDynamicPn(Pn,param);
 			stockPnMap.put(param.getStockid(), Pn);
 		}
+
 		List<Integer> Vn = calcVn(Pn,param);
-		return getVolumeVOList(Vn,TimeUtil.TimeSliceNum);
+		return getVolumeVOList(Vn,param.getTimeNode());
 	}
 
 	public List<VolumeVO> predictVn1(VWAP_Param param) throws Exception{
@@ -136,14 +137,23 @@ public class VWAP implements VWAPService {
 		for(int i=param.getTimeNode()-1;i<param.getEndTimeNode();i++){
 			plist.add(Pn.get(i)/pLocal);
 		}
+
 		//将计算当前时间片的交易量
 		int currentVol = Double.valueOf(param.getUserVol()*plist.get(0)*deep).intValue();
 		Vn.add(currentVol);
 
         for(int i=1;i<plist.size();i++){
-            int vi=Double.valueOf((param.getUserVol() - currentVol)*Pn.get(i)).intValue();
+            int vi=Double.valueOf(param.getUserVol()*plist.get(i)).intValue();
             Vn.add(vi);
         }
+
+		System.out.println(plist);
+		System.out.println(Vn);
+		int sumv=0;
+		for(int v:Vn){
+			sumv+=v;
+		}
+		System.out.println(sumv);
         return Vn;
     }
 
