@@ -1,6 +1,6 @@
 package present.panel.stock.west;
 
-import present.panel.stock.MyLabel;
+import present.component.MyLabel;
 import present.utils.ColorUtil;
 import util.NumberUtil;
 import vo.StockNowTimeVO;

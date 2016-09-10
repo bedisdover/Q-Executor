@@ -2,9 +2,9 @@ package present.panel.stock.center;
 
 import bl.stock.GetStockDataServiceImpl;
 import blservice.stock.GetStockDataService;
-import com.sun.org.apache.xpath.internal.SourceTreeManager;
-import present.panel.stock.MyRenderer;
-import present.panel.stock.MyTable;
+import present.component.MyProgressPanel;
+import present.component.MyRenderer;
+import present.component.MyTable;
 import present.panel.stock.StockPanel;
 import util.NumberUtil;
 import util.StockUtil;
@@ -117,7 +117,9 @@ public class SinglePanel extends CenterPanel {
                     JPanel toolPanel = new JPanel();
 
                     toolPanel.add(new JLabel("当日时间线 → "));
-                    toolPanel.add(createSlider(stockInfoByPerList.get(0).getTime()));
+
+//                    toolPanel.add(createSlider(stockInfoByPerList.get(0).getTime()));
+                    toolPanel.add(new MyProgressPanel(this));
 
                     panel.add(toolPanel, BorderLayout.NORTH);
                 }

@@ -15,8 +15,9 @@ import org.jfree.data.Range;
 import org.jfree.data.time.*;
 import org.jfree.data.time.ohlc.OHLCSeries;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
-import present.charts.util.MyChartPanel;
-import present.charts.util.MyTimeline;
+import present.component.chart.MyChartPanel;
+import present.component.chart.MyPanel;
+import present.component.chart.MyTimeline;
 import present.utils.ColorUtil;
 import util.NumberUtil;
 import util.TimeUtil;
@@ -231,11 +232,8 @@ public class KLine {
         final CandlestickRenderer candlestickRender = new CandlestickRenderer() {
             @Override
             public Paint getItemOutlinePaint(int row, int column) {
-                if (seriesCollection.getCloseValue(row, column) > seriesCollection.getOpenValue(row, column)) {
-                    return ColorUtil.INC_COLOR;
-                } else {
-                    return ColorUtil.DEC_COLOR;
-                }
+                return ColorUtil.getColorByComparing(seriesCollection.getCloseValue(row, column),
+                        seriesCollection.getOpenValue(row, column));
             }
         };
         candlestickRender.setUseOutlinePaint(true); //设置是否使用自定义的边框线，程序自带的边框线的颜色不符合中国股票市场的习惯
@@ -286,11 +284,8 @@ public class KLine {
 
             @Override
             public Paint getItemOutlinePaint(int row, int column) {
-                if (seriesCollection.getCloseValue(row, column) > seriesCollection.getOpenValue(row, column)) {
-                    return ColorUtil.INC_COLOR;
-                } else {
-                    return ColorUtil.DEC_COLOR;
-                }
+                return ColorUtil.getColorByComparing(seriesCollection.getCloseValue(row, column),
+                        seriesCollection.getOpenValue(row, column));
             }
         };
         xyBarRender.setMargin(0.3);//设置柱形图之间的间隔
@@ -333,7 +328,8 @@ public class KLine {
 
     /**
      * 创建时间轴
-     * @param kLineVO K线所需数据
+     *
+     * @param kLineVO   K线所需数据
      * @param kLineType K线类型
      */
     private DateAxis createDateAxis(KLineVO kLineVO, int kLineType) {

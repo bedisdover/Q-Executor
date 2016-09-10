@@ -1,3 +1,5 @@
+package swing;
+
 import org.jfree.chart.*;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.PlotOrientation;
@@ -71,7 +73,7 @@ public class MouseListenerDemo extends ApplicationFrame implements ChartMouseLis
     }
 
     public static void main(String[] paramArrayOfString) {
-        MouseListenerDemo localMouseListenerDemo = new MouseListenerDemo("JFreeChart: MouseListenerDemo.java");
+        MouseListenerDemo localMouseListenerDemo = new MouseListenerDemo("JFreeChart: swing.MouseListenerDemo.java");
         localMouseListenerDemo.pack();
         RefineryUtilities.centerFrameOnScreen(localMouseListenerDemo);
         localMouseListenerDemo.setVisible(true);

@@ -5,6 +5,6 @@ package present.charts;
  *
  * 抽象各个chart中的数据
  */
-abstract class ChartVO {
+public abstract class ChartVO {
     public abstract String getText(int itemIndex);
 }

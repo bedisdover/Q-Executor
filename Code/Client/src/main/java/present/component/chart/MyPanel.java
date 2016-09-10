@@ -1,9 +1,10 @@
-package present.charts;
+package present.component.chart;
 
 import org.jfree.chart.ChartMouseEvent;
 import org.jfree.chart.entity.ChartEntity;
-import present.charts.util.MyChartMouseAdapter;
-import present.charts.util.MyChartPanel;
+import present.charts.ChartVO;
+import present.component.chart.MyChartMouseAdapter;
+import present.component.chart.MyChartPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,14 +14,14 @@ import java.awt.*;
  * <p>
  * 装载chartPanel和相应的textPanel(用于显示鼠标划过的数据信息)
  */
-class MyPanel extends JPanel {
+public class MyPanel extends JPanel {
     private JLabel labelText;
 
     private MyChartPanel chartPanel;
 
     private ChartVO chartVO;
 
-    MyPanel(MyChartPanel chartPanel, ChartVO chartVO) {
+    public MyPanel(MyChartPanel chartPanel, ChartVO chartVO) {
         this.chartPanel = chartPanel;
         this.chartVO = chartVO;
 
