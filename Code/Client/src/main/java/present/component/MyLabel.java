@@ -1,4 +1,4 @@
-package present.panel.stock;
+package present.component;
 
 import javax.swing.*;
 import java.awt.*;

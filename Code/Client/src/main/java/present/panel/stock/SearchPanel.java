@@ -9,6 +9,8 @@ import org.json.JSONObject;
 import present.MainFrame;
 import present.PanelSwitcher;
 import present.component.Link;
+import present.component.MyRenderer;
+import present.component.MyTable;
 import present.component.TextPlusBtn;
 import present.panel.account.AccountPanel;
 import present.panel.account.LoginPanel;

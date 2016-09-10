@@ -2,7 +2,7 @@ package present.panel.stock.center;
 
 import bl.stock.GetStockDataServiceImpl;
 import blservice.stock.GetStockDataService;
-import present.panel.stock.MyTable;
+import present.component.MyTable;
 import present.panel.stock.StockPanel;
 import present.panel.stock.west.CurrentDataPanel;
 import present.utils.ColorUtil;

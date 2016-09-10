@@ -1,4 +1,4 @@
-package present.charts.util;
+package present.component.chart;
 
 import org.jfree.chart.axis.SegmentedTimeline;
 

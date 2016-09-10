@@ -1,3 +1,5 @@
+package swing;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -33,12 +35,12 @@ public class SliderTest extends JFrame {
         slider.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                System.out.println("SliderTest.mouseEntered");
+                System.out.println("swing.SliderTest.mouseEntered");
             }
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.out.println("SliderTest.mouseClicked");
+                System.out.println("swing.SliderTest.mouseClicked");
             }
         });
 
