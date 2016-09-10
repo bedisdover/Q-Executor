@@ -182,8 +182,6 @@ class ParamPanel extends JPanel {
                 return;
             }
 
-            System.out.println(start.getMinute());
-
             if (operationVal.getSelectedItem().equals("买")) {
                 GetStockDataService service = new GetStockDataServiceImpl();
                 double price;
@@ -289,14 +287,33 @@ class ParamPanel extends JPanel {
             return false;
         }
 
-        return checkTime(start) && checkTime(end);
+        return checkTime(start, end);
     }
 
-    private boolean checkTime(TimePanel time) {
-        String hour = time.getHour();
-        String minute = time.getMinute();
+    private boolean checkTime(TimePanel start, TimePanel end) {
+        String hour1 = start.getHour();
+        String minute1 = start.getMinute();
+        String hour2 = end.getHour();
+        String minute2 = end.getMinute();
+
+        if (!(checkTimeValid(hour1, minute1) && checkTimeValid(hour2, minute2))) {
+            return false;
+        }
+
+        if(!TimeUtil.isLessThan(
+                Integer.parseInt(hour1), Integer.parseInt(minute1),
+                Integer.parseInt(hour2), Integer.parseInt(minute2)
+        )) {
+            JOptionPane.showMessageDialog(parent, "开始时间应该小于结束时间");
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean checkTimeValid(String hour, String minute) {
         if (hour.isEmpty() || minute.isEmpty()) {
-            JOptionPane.showMessageDialog(parent, "请填写时间");
+            JOptionPane.showMessageDialog(parent, "请填写交易时间");
             return false;
         }
 
@@ -304,7 +321,7 @@ class ParamPanel extends JPanel {
             int hourInt = Integer.parseInt(hour);
             int minuteInt = Integer.parseInt(minute);
             if (!TimeUtil.isTimeValid(hourInt, minuteInt)) {
-                JOptionPane.showMessageDialog(parent, "请输入有效开始时间");
+                JOptionPane.showMessageDialog(parent, "请输入有效时间");
                 return false;
             }
             if (!TimeUtil.isAtTradeTime(hourInt, minuteInt)) {
@@ -314,7 +331,7 @@ class ParamPanel extends JPanel {
             return true;
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(parent, "请输入有效开始时间");
+            JOptionPane.showMessageDialog(parent, "请输入有效时间");
             return false;
         }
     }
