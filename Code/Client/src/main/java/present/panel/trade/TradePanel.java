@@ -135,6 +135,7 @@ public class TradePanel extends JPanel {
     }
 
     private void start() {
+        loading.setProcess(0);
         percent = 1;
         task = new Timer(800, (e) -> {
             loading.setProcess(percent);
@@ -144,7 +145,6 @@ public class TradePanel extends JPanel {
     }
 
     private void stop() {
-        loading.setProcess(0);
         task.stop();
     }
 
