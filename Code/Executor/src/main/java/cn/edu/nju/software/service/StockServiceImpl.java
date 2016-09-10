@@ -59,7 +59,7 @@ public class StockServiceImpl implements StockService {
     @Override
     public List<StockKLineVO> getKLineByMinute(String codeNum, int interval) {
         int size = interval/5;
-        int days = POINTS_NUMS/(48/size) + 2;
+        int days = POINTS_NUMS/(48/size) + 1;
 
         List<Stock5MInPO> stock5MInPOs = new ArrayList<Stock5MInPO>();
         codeNum =  StockUtil.getCode(codeNum);
@@ -120,10 +120,8 @@ public class StockServiceImpl implements StockService {
             return stockKLineVOs;
         }
 
-        if (stockKLineVOs.size()<100){
-            return stockKLineVOs;
-        }
-        return stockKLineVOs.subList(stockKLineVOs.size()-100,stockKLineVOs.size());
+
+        return stockKLineVOs;
 
     }
 
