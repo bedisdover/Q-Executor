@@ -1,24 +1,17 @@
 package present.charts;
 
-import org.jfree.chart.ChartMouseEvent;
-import org.jfree.chart.ChartMouseListener;
-import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.*;
-import org.jfree.chart.entity.ChartEntity;
 import org.jfree.chart.plot.CombinedDomainXYPlot;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.StandardXYBarPainter;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.chart.title.TextTitle;
 import org.jfree.data.Range;
 import org.jfree.data.time.Minute;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
-import present.charts.listener.MyChartMouseAdapter;
-import present.charts.listener.MyChartMouseListener;
-import present.charts.listener.MyChartPanel;
+import present.charts.util.MyChartPanel;
 import present.panel.stock.west.CurrentDataPanel;
 import util.NumberUtil;
 import util.TimeUtil;
@@ -30,7 +23,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -108,45 +100,7 @@ public class TimeSeriesChart {
         combinedDomainXYPlot.add(amountPlot, 1);
         combinedDomainXYPlot.setGap(10);
 
-        JPanel textPanel = new JPanel();
-        JLabel labelText = new JLabel(" ");
-        labelText.setFont(new Font("微软雅黑", Font.PLAIN, 12));
-        textPanel.add(labelText);
-
-        JFreeChart jFreeChart = new JFreeChart(combinedDomainXYPlot);
-        MyChartPanel chartPanel = new MyChartPanel(jFreeChart);
-        chartPanel.addChartMouseListener(new MyChartMouseAdapter() {
-            @Override
-            public void chartMouseExited(ChartMouseEvent event) {
-                SwingUtilities.invokeLater(() -> labelText.setText(" "));
-            }
-
-            @Override
-            public void chartMouseMoved(ChartMouseEvent event) {
-                int xPos = event.getTrigger().getX();
-                int yPos = event.getTrigger().getY();
-                chartPanel.setHorizontalAxisTrace(true);
-                chartPanel.setVerticalAxisTrace(true);
-                ChartEntity chartEntity = chartPanel.getEntityForPoint(xPos, yPos);
-
-                String[] info = chartEntity.toString().split(" ");
-                try {
-                    int item = Integer.parseInt(info[6].substring(0, info[6].length() - 1));
-
-                    SwingUtilities.invokeLater(() -> labelText.setText(timeSeriesVO.getText(item)));
-                } catch (IndexOutOfBoundsException e) {
-                    // 鼠标划过非图线区域引起数组越界异常,无需处理
-                }
-            }
-        });
-
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.add(textPanel, BorderLayout.NORTH);
-        panel.add(chartPanel, BorderLayout.CENTER);
-        panel.revalidate();
-        panel.repaint();
-
-        return panel;
+        return new MyPanel(new MyChartPanel(new JFreeChart(combinedDomainXYPlot)), timeSeriesVO);
     }
 
     private static TimeSeriesVO getData(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
@@ -171,7 +125,7 @@ public class TimeSeriesChart {
         return minute;
     }
 
-    private static class TimeSeriesVO {
+    private static class TimeSeriesVO extends ChartVO {
         private double high = Double.MIN_VALUE, low = Double.MAX_VALUE;
 
         private TimeSeries priceSeries, avgSeries, amountSeries;
@@ -182,13 +136,16 @@ public class TimeSeriesChart {
 
         private double close;
 
-        TimeSeriesVO(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
-            close = CurrentDataPanel.getClose();
+        private List<StockTimeSeriesVO> stockTimeSeriesVOList;
 
-            initData(stockTimeSeriesVOList);
+        TimeSeriesVO(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
+            this.stockTimeSeriesVOList = stockTimeSeriesVOList;
+
+            close = CurrentDataPanel.getClose();
+            initData();
         }
 
-        private void initData(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
+        private void initData() {
             priceSeries = new TimeSeries("实时价格");
             avgSeries = new TimeSeries("平均价格");
             TimeSeries closeSeries = new TimeSeries("收盘价");
@@ -205,7 +162,7 @@ public class TimeSeriesChart {
                 avgSeries.add(minute, stockVO.getAvePrice());
                 closeSeries.add(minute, close);
 
-                amountSeries.add(getMinute(stockVO.getTimeLine()), stockVO.getVolume());
+                amountSeries.add(minute, stockVO.getVolume());
             }
 
             priceCollection = new TimeSeriesCollection();
@@ -268,10 +225,12 @@ public class TimeSeriesChart {
         /**
          * 获取某一时刻的数据
          */
-        String getText(int itemIndex) {
+        public String getText(int itemIndex) {
             double price = (double) priceSeries.getDataItem(itemIndex).getValue();
             double incNum = price - close;
             double amount = (double) amountSeries.getDataItem(itemIndex).getValue();
+
+            System.out.println(stockTimeSeriesVOList.get(itemIndex));
 
             return getTime(itemIndex) + "  价格:" + price +
                     "  涨跌:" + NumberUtil.round(incNum) + "(" + NumberUtil.getPercent(incNum / close) + ")" +
@@ -283,15 +242,7 @@ public class TimeSeriesChart {
          * @return 格式: yyyy-MM-dd HH:mm:ss
          */
         String getTime(int itemIndex) {
-            Date date = new Date(priceSeries.getDataItem(itemIndex).getPeriod().getStart().getTime() * 1000);
-            Date date1 = new Date(priceSeries.getDataItem(itemIndex).getPeriod().getStart().getTime());
-            Date date2 = new Date(priceSeries.getDataItem(itemIndex).getPeriod().getStart().getTime() * 1000 * 1000);
-
-            System.out.println(date);
-            System.out.println(date1);
-            System.out.println(date2);
-
-            return TimeUtil.getDetailTime(date);
+            return TimeUtil.getDateHHmmss(priceSeries.getDataItem(itemIndex).getPeriod().getFirstMillisecond());
         }
     }
 }

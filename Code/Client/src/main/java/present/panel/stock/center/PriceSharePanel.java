@@ -4,6 +4,8 @@ import bl.stock.GetStockDataServiceImpl;
 import blservice.stock.GetStockDataService;
 import present.panel.stock.MyTable;
 import present.panel.stock.StockPanel;
+import present.panel.stock.west.CurrentDataPanel;
+import present.utils.ColorUtil;
 import util.NumberUtil;
 import vo.StockInfoByPrice;
 
@@ -83,9 +85,30 @@ public class PriceSharePanel extends CenterPanel {
                 panel.remove(scrollPane);
             }
 
-            scrollPane = createTable(stockInfoByPriceList);
-
-            panel.add(scrollPane, BorderLayout.CENTER);
+//            panel.setLayout(new GridBagLayout());
+//
+//            GridBagConstraints constraints = new GridBagConstraints();
+//
+//            constraints.gridwidth = 1;
+//            constraints.weightx = 1;
+//            constraints.weighty = 1;
+//            panel.add(new JPanel(), constraints);
+//
+//            constraints.gridwidth = 5;
+//            constraints.weightx = 1;
+//            constraints.weighty = 1;
+//            panel.add(createTable(stockInfoByPriceList), constraints);
+//
+//            constraints.gridwidth = 0;
+//            constraints.weightx = 1;
+//            constraints.weighty = 0;
+//            panel.add(new JPanel(), constraints);
+//
+//            constraints.gridwidth = 0;
+//            constraints.weightx = 0;
+//            constraints.weighty = 1;
+//            panel.add(new JPanel(), constraints);
+            panel.add(createTable(stockInfoByPriceList), BorderLayout.WEST);
 
             panel.revalidate();
             panel.repaint();
@@ -102,12 +125,8 @@ public class PriceSharePanel extends CenterPanel {
         for (int i = 0; i < stockInfoByPriceList.size(); i++) {
             temp = stockInfoByPriceList.get(i);
 
-            if (temp.getPrice() == 0) {
-                stockInfoByPriceList.remove(i);
-                continue;
-            }
-
-            data[i] = new Object[]{
+            // 倒序显示数据
+            data[data.length - i - 1] = new Object[]{
                     temp.getPrice(),
                     (int) temp.getTrunover(),
                     NumberUtil.transferUnit(temp.getPercent() * 100) + "%",
@@ -118,15 +137,19 @@ public class PriceSharePanel extends CenterPanel {
         MyTableModel model = new MyTableModel(names, data);
         MyTable table = new MyTable(model);
         //插入单元格元素，采用自定义元素
-        new ProgressBarColumn(table, 3);
+        new ProgressBarColumn(table, 3, CurrentDataPanel.getClose());
         table.getColumnModel().getColumn(3).setPreferredWidth(600);
         //无法修改表头大小
         table.getTableHeader().setResizingAllowed(false);
         //无法拖动表头
         table.getTableHeader().setReorderingAllowed(false);
 
-        return new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+        scrollPane = new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        scrollPane.setPreferredSize(new Dimension(800, 500));
+
+        return scrollPane;
     }
 
 
@@ -193,7 +216,14 @@ public class PriceSharePanel extends CenterPanel {
     private class ProgressBarColumn extends AbstractCellEditor implements TableCellEditor, TableCellRenderer {
         private JProgressBar bar;
 
-        ProgressBarColumn(JTable table, int column) {
+        /**
+         * 上一个成交日的收盘价
+         */
+        private double close;
+
+        ProgressBarColumn(JTable table, int column, double close) {
+            this.close = close;
+
             init(table, column);
         }
 
@@ -201,7 +231,7 @@ public class PriceSharePanel extends CenterPanel {
             SwingUtilities.invokeLater(() -> {
                 bar = new JProgressBar();
                 bar.setBackground(Color.WHITE);
-                bar.setForeground(Color.RED);
+                bar.setBorder(BorderFactory.createMatteBorder(5, 0, 5, 5, Color.WHITE));
                 bar.setStringPainted(false);
                 bar.setBorderPainted(true);
                 MyTableModel tableModel = (MyTableModel) table.getModel();
@@ -227,6 +257,11 @@ public class PriceSharePanel extends CenterPanel {
         public Component getTableCellRendererComponent(
                 JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             bar.setValue((int) ((double) value * 100));
+
+            // 获取当前行的价格
+            double temp = (double) table.getValueAt(row, 0);
+
+            bar.setForeground(ColorUtil.getColorByComparing(temp, close));
 
             return bar;
         }

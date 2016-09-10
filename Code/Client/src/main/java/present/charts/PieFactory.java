@@ -21,7 +21,7 @@ public class PieFactory {
     public static JPanel getPieChart(String[] titles, double[] values) {
         JPanel panel = new ChartPanel(createPieChart(titles, values));
 
-        panel.setPreferredSize(new Dimension(300, 1));
+        panel.setPreferredSize(new Dimension(300, 100));
 
         return panel;
     }

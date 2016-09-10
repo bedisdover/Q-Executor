@@ -13,6 +13,9 @@ public class StockKLineVO {
     private double high;
     private double close;
     private double low;
+    /**
+     * 成交量,单位'手'
+     */
     private double volume;
     private double price_change;
     private double p_change;
