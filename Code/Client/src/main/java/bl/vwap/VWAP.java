@@ -47,15 +47,17 @@ public class VWAP implements VWAPService {
 		if(param.getTimeNode()==param.getStartTimeNode()|| !stockPnMap.containsKey(param.getStockid())){
 			Pn=vwapCore.getStaticPn(param.getStockid());
 			stockPnMap.put(param.getStockid(), Pn);
-		}
-		Pn=stockPnMap.get(param.getStockid());
-		double gama = 0;
-		for(int i = param.getTimeNode()-1;i<Pn.size();i++){
-			gama += Pn.get(i);
-		}
-		if(gama<volThre && 1.0*param.getTimeNode()/TimeUtil.TimeSliceNum <timrThre){
-			Pn = vwapCore.getDynamicPn(Pn,param);
-			stockPnMap.put(param.getStockid(), Pn);
+		}else{
+			Pn=stockPnMap.get(param.getStockid());
+			double gama = 0;
+			for(int i = param.getTimeNode()-1;i<Pn.size();i++){
+				gama += Pn.get(i);
+			}
+
+			if(gama<volThre && 1.0*param.getTimeNode()/TimeUtil.TimeSliceNum <timrThre){
+				Pn = vwapCore.getDynamicPn(Pn,param);
+				stockPnMap.put(param.getStockid(), Pn);
+			}
 		}
 
 		List<Integer> Vn = calcVn(Pn,param);
@@ -77,10 +79,13 @@ public class VWAP implements VWAPService {
 
 		//用户设定的时间段内概率分布
 		List<Double> plist = new ArrayList<Double>();
-		for(int i=param.getTimeNode()-1;i<param.getEndTimeNode();i++){
+		if(param.getTimeNode()<0){
+			param.setTimeNode(param.getStartTimeNode());
+		}
+		for(int i=param.getTimeNode()-1;i<param.getEndTimeNode()-1;i++){
 			pLocal+=Pn.get(i);
 		}
-		for(int i=param.getTimeNode()-1;i<param.getEndTimeNode();i++){
+		for(int i=param.getTimeNode()-1;i<param.getEndTimeNode()-1;i++){
 			plist.add(Pn.get(i)/pLocal);
 		}
 
