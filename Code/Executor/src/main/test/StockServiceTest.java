@@ -25,4 +25,10 @@ public class StockServiceTest {
             System.out.println(vo);
         }
     }
+
+    @Test
+    public void testGetMinKInfo2(){
+        List<StockKLineVO> stockKLineVOs = stockService.getKLineByMinute("sh600000",5);
+            System.out.println(stockKLineVOs.size());
+    }
 }
