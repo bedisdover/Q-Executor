@@ -3,6 +3,7 @@ package present.panel.trade;
 import vo.VolumeVO;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
@@ -39,6 +40,15 @@ class MessagePanel extends JScrollPane {
         };
         table.setForeground(Color.WHITE);
         table.setBackground(Color.BLACK);
+        table.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getComponent(int n) {
+                JLabel label = new JLabel();
+                label.setBackground(Color.BLACK);
+                label.setForeground(Color.WHITE);
+                return label;
+            }
+        });
 
         this.setPreferredSize(new Dimension(width, height));
         this.setViewportView(table);
@@ -50,7 +60,7 @@ class MessagePanel extends JScrollPane {
             Vector<String> data = new Vector<>();
             data.addElement(vo.getTime());
             data.addElement(type);
-            data.addElement("交易了" + vo.getVolume() + "股");
+            data.addElement("建议交易" + vo.getVolume() + "股");
             tableModel.addRow(data);
         }
         tableModel.fireTableDataChanged();

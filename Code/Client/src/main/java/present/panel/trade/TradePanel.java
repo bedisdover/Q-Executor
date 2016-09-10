@@ -84,24 +84,31 @@ public class TradePanel extends JPanel {
     }
 
     void stopCalculate() {
-        msgContainer.remove(msg);
-        msgContainer.remove(loading);
-        msgContainer.add(empty_msg, BorderLayout.CENTER);
-        msgContainer.revalidate();
+        jump(msg, loading, empty_msg);
     }
 
     void generatingMsg() {
-        msgContainer.remove(empty_msg);
-        msgContainer.remove(msg);
-        msgContainer.add(loading, BorderLayout.CENTER);
-        msgContainer.revalidate();
+        jump(empty_msg, msg, loading);
     }
 
     void updateMsgPanel(List<VolumeVO> result, String type) {
-        msgContainer.remove(empty_msg);
-        msgContainer.remove(loading);
-        msgContainer.add(msg, BorderLayout.CENTER);
+        jump(empty_msg, loading, msg);
         msg.update(result, type);
+    }
+
+    /**
+     * 不明确从哪个面板跳转而来，跳到to面板
+     * @param from1 目前可能显示的面板
+     * @param from2 目前可能显示的面板
+     * @param to    要跳转到的面板
+     */
+    private void jump(JComponent from1, JComponent from2, JComponent to) {
+        from1.setVisible(false);
+        msgContainer.remove(from1);
+        from2.setVisible(false);
+        msgContainer.remove(from2);
+        to.setVisible(true);
+        msgContainer.add(to, BorderLayout.CENTER);
         msgContainer.revalidate();
     }
 

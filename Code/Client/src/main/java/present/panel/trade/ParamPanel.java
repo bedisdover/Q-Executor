@@ -19,6 +19,7 @@ import java.awt.*;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Y481L on 2016/8/28.
@@ -71,6 +72,9 @@ class ParamPanel extends JPanel {
 
     //参数面板的父容器
     private TradePanel parent;
+
+    //后台计算线程
+    private Calculation calculation;
 
     ParamPanel(int width, int height, TradePanel parent) {
         this.parent = parent;
@@ -178,6 +182,8 @@ class ParamPanel extends JPanel {
                 return;
             }
 
+            System.out.println(start.getMinute());
+
             if (operationVal.getSelectedItem().equals("买")) {
                 GetStockDataService service = new GetStockDataServiceImpl();
                 double price;
@@ -187,22 +193,23 @@ class ParamPanel extends JPanel {
                     price = NumberUtil.round(price);
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    JOptionPane.showMessageDialog(ParamPanel.this, "网络异常");
+                    JOptionPane.showMessageDialog(parent, "网络异常");
                     return;
                 }
                 double money = Integer.parseInt(quanVal.getText()) * price;
-                int isOK = JOptionPane.showConfirmDialog(ParamPanel.this, "此次交易共计需要" + money + "元，确定进行吗？");
-                if (isOK != JOptionPane.OK_OPTION) {
+                int isOK = JOptionPane.showConfirmDialog(parent, "此次交易共计需要" + money + "元，确定进行吗？");
+                if (isOK != JOptionPane.YES_OPTION) {
                     return;
                 }
             } else {
-                int isOk = JOptionPane.showConfirmDialog(ParamPanel.this, "确认卖出吗");
+                int isOk = JOptionPane.showConfirmDialog(parent, "确认卖出吗");
                 if (isOk != JOptionPane.OK_OPTION) {
                     return ;
                 }
             }
 
             disableComponents();
+            stop.setEnabled(true);
             calculate();
             parent.generatingMsg();
         });
@@ -210,6 +217,18 @@ class ParamPanel extends JPanel {
         //结束计算
         stop = new JButton("结束计算");
         stop.setPreferredSize(new Dimension(componentW - H_GAP, componentH));
+        stop.setEnabled(false);
+        stop.addActionListener((e) -> {
+            int isOk = JOptionPane.showConfirmDialog(parent, "确定终止计算吗？");
+            if (isOk != JOptionPane.YES_OPTION) {
+                return;
+            }
+
+            parent.stopCalculate();
+            enableComponents();
+            stop.setEnabled(false);
+            calculation.cancel(true);
+        });
 
         JPanel left = new JPanel();
         left.setOpaque(false);
@@ -231,42 +250,42 @@ class ParamPanel extends JPanel {
     private void disableComponents() {
         nameVal.setEnabled(false);
         quanVal.setEnabled(false);
+        operationVal.setEnabled(false);
         start.setEnabled(false);
         end.setEnabled(false);
         trigger.setEnabled(false);
-        stop.setEnabled(false);
     }
 
     private void enableComponents() {
         nameVal.setEnabled(true);
         quanVal.setEnabled(true);
+        operationVal.setEnabled(true);
         start.setEnabled(true);
         end.setEnabled(true);
         trigger.setEnabled(true);
-        stop.setEnabled(true);
     }
 
     private boolean checkComplete() {
         if (codeText.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "请填写股票名称");
+            JOptionPane.showMessageDialog(parent, "请填写股票名称");
             return false;
         }
 
         String quantity = quanVal.getText();
         if (quantity.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "请填写交易数量");
+            JOptionPane.showMessageDialog(parent, "请填写交易数量");
             return false;
         }
 
         try {
             int num = Integer.parseInt(quantity);
             if(num <= 0) {
-                JOptionPane.showMessageDialog(this, "交易数量应该为正整数");
+                JOptionPane.showMessageDialog(parent, "交易数量应该为正整数");
                 return false;
             }
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "交易数量应该为正整数");
+            JOptionPane.showMessageDialog(parent, "交易数量应该为正整数");
             return false;
         }
 
@@ -277,7 +296,7 @@ class ParamPanel extends JPanel {
         String hour = time.getHour();
         String minute = time.getMinute();
         if (hour.isEmpty() || minute.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "请填写时间");
+            JOptionPane.showMessageDialog(parent, "请填写时间");
             return false;
         }
 
@@ -285,17 +304,17 @@ class ParamPanel extends JPanel {
             int hourInt = Integer.parseInt(hour);
             int minuteInt = Integer.parseInt(minute);
             if (!TimeUtil.isTimeValid(hourInt, minuteInt)) {
-                JOptionPane.showMessageDialog(this, "请输入有效开始时间");
+                JOptionPane.showMessageDialog(parent, "请输入有效开始时间");
                 return false;
             }
             if (!TimeUtil.isAtTradeTime(hourInt, minuteInt)) {
-                JOptionPane.showMessageDialog(this, "输入时间不在交易时间内");
+                JOptionPane.showMessageDialog(parent, "输入时间不在交易时间内");
                 return false;
             }
             return true;
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "请输入有效开始时间");
+            JOptionPane.showMessageDialog(parent, "请输入有效开始时间");
             return false;
         }
     }
@@ -304,66 +323,8 @@ class ParamPanel extends JPanel {
      * 计算交易策略
      */
     private void calculate() {
-        SwingWorker<List<VolumeVO>, Void> worker = new SwingWorker<List<VolumeVO>, Void>() {
-            @Override
-            protected List<VolumeVO> doInBackground() throws Exception {
-                VWAP vwap = VWAP.getInstance();
-                Calendar s = Calendar.getInstance();
-                s.set(
-                        Calendar.HOUR_OF_DAY,
-                        Integer.parseInt(start.getHour())
-                );
-                s.set(
-                        Calendar.MINUTE,
-                        Integer.parseInt(start.getMinute())
-                );
-                Calendar e = Calendar.getInstance();
-                e.set(
-                        Calendar.HOUR_OF_DAY,
-                        Integer.parseInt(end.getHour())
-                );
-                s.set(
-                        Calendar.MINUTE,
-                        Integer.parseInt(end.getMinute())
-                );
-                Calendar now = Calendar.getInstance();
-                //TODO 应该获取当前时间
-                now.set(2016, 9, 9, 10, 0);
-                //TODO 确定delta的值
-                VWAP_Param param = new VWAP_Param(
-                        Long.parseLong(quanVal.getText()),
-                        codeText.getText(),
-                        0.4, TimeUtil.timeToNode(now),
-                        TimeUtil.timeToNode(s),
-                        TimeUtil.timeToNode(e)
-                );
-                try {
-                    return vwap.predictVn(param);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                try {
-                    List<VolumeVO> result = get();
-                    if(result == null) {
-                        JOptionPane.showMessageDialog(ParamPanel.this, "网络异常");
-                        enableComponents();
-                        return;
-                    }
-                    parent.updateMsgPanel(result, String.valueOf(operationVal.getSelectedItem()));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    JOptionPane.showMessageDialog(ParamPanel.this, "网络异常");
-                }
-                enableComponents();
-            }
-        };
-
-        worker.execute();
+        calculation = new Calculation();
+        calculation.execute();
     }
 
     private class InputPair extends JPanel {
@@ -433,6 +394,64 @@ class ParamPanel extends JPanel {
         public void setEnabled(boolean enabled) {
             hour.setEnabled(enabled);
             minute.setEnabled(enabled);
+        }
+    }
+
+    private class Calculation extends SwingWorker<List<VolumeVO>, Void> {
+
+        @Override
+        protected List<VolumeVO> doInBackground() throws Exception {
+            VWAP vwap = VWAP.getInstance();
+            Calendar s = Calendar.getInstance();
+            s.set(
+                    Calendar.HOUR_OF_DAY,
+                    Integer.parseInt(start.getHour())
+            );
+            s.set(
+                    Calendar.MINUTE,
+                    Integer.parseInt(start.getMinute())
+            );
+            Calendar e = Calendar.getInstance();
+            e.set(
+                    Calendar.HOUR_OF_DAY,
+                    Integer.parseInt(end.getHour())
+            );
+            s.set(
+                    Calendar.MINUTE,
+                    Integer.parseInt(end.getMinute())
+            );
+            Calendar now = Calendar.getInstance();
+            //TODO 应该获取当前时间
+            now.set(2016, 9, 9, 10, 0);
+            //TODO 确定delta的值
+            VWAP_Param param = new VWAP_Param(
+                    Long.parseLong(quanVal.getText()),
+                    codeText.getText(),
+                    0.4, TimeUtil.timeToNode(now),
+                    TimeUtil.timeToNode(s),
+                    TimeUtil.timeToNode(e)
+            );
+            return vwap.predictVn(param);
+        }
+
+        @Override
+        protected void done() {
+            try {
+                List<VolumeVO> result = get();
+                if(result == null) {
+                    JOptionPane.showMessageDialog(parent, "网络异常");
+                    enableComponents();
+                    return;
+                }
+                parent.updateMsgPanel(result, String.valueOf(operationVal.getSelectedItem()));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(parent, "网络异常");
+            }
+            enableComponents();
+            stop.setEnabled(false);
         }
     }
 }

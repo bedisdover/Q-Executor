@@ -1,5 +1,7 @@
 package present;
 
+import present.panel.trade.TradePanel;
+
 import javax.swing.*;
 
 /**
@@ -19,7 +21,12 @@ public class PanelSwitcher {
      */
     private JPanel current;
 
-    PanelSwitcher(JPanel container, JPanel current) {
+    /**
+     * 交易面板
+     */
+    private TradePanel tradePanel = new TradePanel();
+
+    private PanelSwitcher(JPanel container, JPanel current) {
         this.container = container;
         this.current = current;
     }
@@ -32,12 +39,21 @@ public class PanelSwitcher {
         if(current.getClass() == to.getClass()) return;
 
         container.remove(current);
-        container.add(to);
-        current = to;
+        current.setVisible(false);
+        if(to instanceof TradePanel) {
+            container.add(tradePanel);
+            current = tradePanel;
+            tradePanel.setVisible(true);
+        }else {
+            container.add(to);
+            current = to;
+            to.setVisible(true);
+        }
+
         container.revalidate();
     }
 
-    public void setCurrent(JPanel current) {
+    void setCurrent(JPanel current) {
         this.current = current;
     }
 }
