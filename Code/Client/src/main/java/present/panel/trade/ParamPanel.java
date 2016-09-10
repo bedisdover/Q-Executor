@@ -8,6 +8,7 @@ import blservice.stock.GetStockDataService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import present.component.TipText;
+import present.panel.account.QuestionnairePanel;
 import present.utils.StockJsonInfo;
 import util.JsonUtil;
 import util.NumberUtil;
@@ -440,11 +441,11 @@ class ParamPanel extends JPanel {
             Calendar now = Calendar.getInstance();
             //TODO 应该获取当前时间
             now.set(2016, 9, 9, 10, 0);
-            //TODO 确定delta的值
             VWAP_Param param = new VWAP_Param(
                     Long.parseLong(quanVal.getText()),
                     codeText.getText(),
-                    0.4, TimeUtil.timeToNode(now),
+                    QuestionnairePanel.risk,
+                    TimeUtil.timeToNode(now),
                     TimeUtil.timeToNode(s),
                     TimeUtil.timeToNode(e)
             );
