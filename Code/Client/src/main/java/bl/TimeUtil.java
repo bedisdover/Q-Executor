@@ -155,4 +155,18 @@ public class TimeUtil {
     public static boolean isTimeValid(int hour, int minute) {
         return hour >= 0 && hour < 24 && minute >= 0 && minute <= 59;
     }
+
+    /**
+     * 比较两个时间的大小
+     * @param hour1 时间1的小时
+     * @param minute1 时间1的分钟
+     * @param hour2 时间2的小时
+     * @param minute2 时间2的分钟
+     * @return
+     */
+    public static boolean isLessThan(int hour1, int minute1, int hour2, int minute2) {
+        int time1 = hour1 * 60 + minute1;
+        int time2 = hour2 * 60 + minute2;
+        return time1 < time2;
+    }
 }

@@ -1,7 +1,7 @@
 package present.panel.trade;
 
 import present.MainFrame;
-import present.panel.loading.LoadingPanel;
+import present.panel.loading.CalculatingPanel;
 import present.panel.stock.center.TimeSeriesPanel;
 import present.utils.ImageLoader;
 import vo.VolumeVO;
@@ -32,7 +32,7 @@ public class TradePanel extends JPanel {
 
     private JPanel msgContainer = new JPanel(new BorderLayout());
 
-    private JPanel loading = new LoadingPanel();
+    private CalculatingPanel loading = new CalculatingPanel(MSG_PANEL_W, MSG_PANEL_H);
 
     private JPanel empty_time = new JPanel() {
         @Override
@@ -48,6 +48,11 @@ public class TradePanel extends JPanel {
         }
     };
 
+    //当前计算进度
+    private int percent = 1;
+
+    private Timer task = null;
+
     private JPanel empty_msg = new JPanel() {
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -60,8 +65,6 @@ public class TradePanel extends JPanel {
             );
         }
     };
-
-    private JPanel currentMsg = empty_msg;
 
     public TradePanel() {
         ParamPanel param = new ParamPanel(PARAM_PANEL_W, PARAM_PANEL_H, this);
@@ -84,16 +87,29 @@ public class TradePanel extends JPanel {
     }
 
     void stopCalculate() {
+        stop();
         jump(msg, loading, empty_msg);
     }
 
     void generatingMsg() {
         jump(empty_msg, msg, loading);
+        loading.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        start();
     }
 
     void updateMsgPanel(List<VolumeVO> result, String type) {
-        jump(empty_msg, loading, msg);
-        msg.update(result, type);
+        loading.setProcess(99);
+        stop();
+
+        SwingUtilities.invokeLater(() -> {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            jump(empty_msg, loading, msg);
+            msg.update(result, type);
+        });
     }
 
     /**
@@ -116,6 +132,20 @@ public class TradePanel extends JPanel {
         timeContainer.remove(empty_time);
         timeContainer.add(timeSeriesPanel, BorderLayout.CENTER);
         timeSeriesPanel.setStockCode(code);
+    }
+
+    private void start() {
+        percent = 1;
+        task = new Timer(800, (e) -> {
+            loading.setProcess(percent);
+            percent += 1;
+        });
+        task.start();
+    }
+
+    private void stop() {
+        loading.setProcess(0);
+        task.stop();
     }
 
 }
