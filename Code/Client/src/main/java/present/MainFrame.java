@@ -17,7 +17,7 @@ import java.awt.event.MouseEvent;
  */
 public class MainFrame extends JFrame{
 
-    public static final int PANEL_W = 1000;
+    public static final int PANEL_W = 1100;
 
     public static final int PANEL_H = 650;
 

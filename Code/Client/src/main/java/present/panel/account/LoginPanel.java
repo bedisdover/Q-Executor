@@ -6,11 +6,10 @@ import config.MsgInfo;
 import present.PanelSwitcher;
 import present.component.QPasswordField;
 import present.component.QTextField;
-import present.panel.home.NavPanel;
+import present.component.VerticalBox;
 import present.panel.stock.SearchPanel;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -20,7 +19,7 @@ import java.awt.event.MouseEvent;
  *
  * 用户登录界面
  */
-public class LoginPanel extends JPanel {
+public class LoginPanel extends VerticalBox {
 
     private UserService service = new UserServiceImpl();
 
@@ -36,8 +35,6 @@ public class LoginPanel extends JPanel {
 
     private JButton findPW = new JButton("找回密码");
 
-    private static final int COMPONENT_NUM = 3;
-
     private static final int PADDING = 20;
 
     public static String LOGIN_USER = null;
@@ -48,44 +45,15 @@ public class LoginPanel extends JPanel {
 
     public LoginPanel(PanelSwitcher switcher) {
         this.switcher = switcher;
-        this.addComponents();
-    }
 
-    private void addComponents() {
-        Box box = Box.createVerticalBox();
-        box.setOpaque(false);
-
-        box.add(Box.createVerticalStrut(AccountPanel.NAV_UP_H));
-        box.add(this.wrapComponent(name));
-        box.add(Box.createVerticalStrut(PADDING));
-        box.add(this.wrapComponent(password));
-        box.add(Box.createVerticalStrut(PADDING));
-        box.add(this.wrapComponent(login));
-        box.add(Box.createVerticalStrut(
-                NavPanel.PANEL_H - (AccountConst.BUTTON_H + PADDING) * COMPONENT_NUM
-        ));
+        super.addStrut(AccountPanel.NAV_UP_H);
+        super.addItem(name);
+        super.addStrut(PADDING);
+        super.addItem(password);
+        super.addStrut(PADDING);
+        super.addItem(login);
 
         this.addListeners();
-        this.setLayout(new BorderLayout());
-        JPanel panel = new JPanel(new FlowLayout(
-                FlowLayout.LEFT, AccountConst.LEFT_PADDING, 0
-        ));
-        panel.setOpaque(false);
-        panel.add(box);
-        this.add(panel, BorderLayout.NORTH);
-        this.setBackground(AccountConst.BACKGROUND);
-    }
-
-    private JPanel wrapComponent(JComponent c) {
-        c.setPreferredSize(new Dimension(
-                AccountConst.BUTTON_W, AccountConst.BUTTON_H
-        ));
-        c.setFont(new Font("等线", Font.PLAIN, 22));
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        panel.add(c);
-        panel.setOpaque(false);
-        return panel;
     }
 
     private void addListeners() {
@@ -127,7 +95,7 @@ public class LoginPanel extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-                switcher.jump(new RegisterPanel(switcher));
+                switcher.jump(new RegisterPanel());
             }
         });
 
@@ -135,7 +103,7 @@ public class LoginPanel extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-                switcher.jump(new FindPWPanel(switcher));
+                switcher.jump(new FindPWPanel());
             }
         });
     }
