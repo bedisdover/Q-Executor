@@ -1,4 +1,4 @@
-package present.charts.listener;
+package present.charts.util;
 
 import org.jfree.chart.ChartMouseEvent;
 import org.jfree.chart.ChartMouseListener;
@@ -19,6 +19,9 @@ import java.awt.geom.Point2D;
 public class MyChartPanel extends ChartPanel {
     public MyChartPanel(JFreeChart chart) {
         super(chart);
+
+        // 禁用鼠标缩放
+        setMouseZoomable(false);
     }
 
     /**

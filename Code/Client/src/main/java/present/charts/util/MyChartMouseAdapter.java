@@ -1,4 +1,4 @@
-package present.charts.listener;
+package present.charts.util;
 
 import org.jfree.chart.ChartMouseEvent;
 
