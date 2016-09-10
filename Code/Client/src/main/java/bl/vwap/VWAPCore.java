@@ -1,15 +1,10 @@
 package bl.vwap;
 
-import bl.vwap.VWAP_Param;
-import service.MLForVWAPService;
-import service.MLForVWAPServiceImpl;
+import blservice.vwap.MLForVWAPService;
 import vo.MLForVWAPPriceVO;
-import vo.VolumeVO;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by ZhangYF on 2016/9/8.

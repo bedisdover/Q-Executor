@@ -292,6 +292,7 @@ class ParamPanel extends JPanel {
     }
 
     private boolean checkTime(TimePanel start, TimePanel end) {
+        //TODO 检测当前时间是否小于开始时间
         String hour1 = start.getHour();
         String minute1 = start.getMinute();
         String hour2 = end.getHour();
@@ -438,14 +439,14 @@ class ParamPanel extends JPanel {
                     Calendar.MINUTE,
                     Integer.parseInt(end.getMinute())
             );
-            Calendar now = Calendar.getInstance();
-            //TODO 应该获取当前时间
-            now.set(2016, 9, 9, 10, 0);
+//            Calendar now = TimeUtil.getCurrentIime();
+//            //TODO 应该获取当前时间
+//            now.set(2016, 9, 9, 10, 0);
             VWAP_Param param = new VWAP_Param(
                     Long.parseLong(quanVal.getText()),
                     codeText.getText(),
                     QuestionnairePanel.risk,
-                    TimeUtil.timeToNode(now),
+                    TimeUtil.getCurrentIime(),
                     TimeUtil.timeToNode(s),
                     TimeUtil.timeToNode(e)
             );
