@@ -39,10 +39,12 @@ public class TimeUtil {
             if(hour==9 && minute<30){
                 return -1;
             }else if(hour==11 && minute>30){
-                return -1;
+                return 25;
             }else{
                 return ((hour-9)*60+minute-30)/timeNumTOLength(timeNum)+1;
             }
+        }else if(hour == 12){
+            return 25;
         }
         if(hour>=13 && hour <15){
             return ((hour-13)*60+minute)/timeNumTOLength(timeNum)+timeNum/2+1;

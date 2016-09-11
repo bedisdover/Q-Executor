@@ -9,9 +9,9 @@ public class VolumeVO {
     private String time;
 
     //预测用户交易量
-    private int volume;
+    private long volume;
 
-    public VolumeVO(String time, int volume) {
+    public VolumeVO(String time, long volume) {
         this.time = time;
         this.volume = volume;
     }
@@ -24,11 +24,11 @@ public class VolumeVO {
         this.time = time;
     }
 
-    public int getVolume() {
+    public long getVolume() {
         return volume;
     }
 
-    public void setVolume(int volume) {
+    public void setVolume(long volume) {
         this.volume = volume;
     }
 }
