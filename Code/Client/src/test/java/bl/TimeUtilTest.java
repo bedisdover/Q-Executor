@@ -35,7 +35,7 @@ public class TimeUtilTest {
         calendar.set(Calendar.HOUR_OF_DAY,12);
         calendar.set(Calendar.MINUTE,10);
 //        System.out.println(TimeUtil.timeToNode(calendar)+" 12:10");
-        assertEquals(TimeUtil.timeToNode(calendar),-1);
+        assertEquals(TimeUtil.timeToNode(calendar),25);
 
         calendar.set(Calendar.HOUR_OF_DAY,15);
         calendar.set(Calendar.MINUTE,10);

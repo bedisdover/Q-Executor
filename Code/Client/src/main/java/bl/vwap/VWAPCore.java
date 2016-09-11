@@ -1,6 +1,5 @@
 package bl.vwap;
 
-import blservice.vwap.MLForVWAPService;
 import vo.MLForVWAPPriceVO;
 
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import java.util.List;
  */
 public class VWAPCore {
 
-    private MLForVWAPService ml = null;
+    private blservice.vwap.MLForVWAPService ml = null;
 
     public VWAPCore(){
         //TODO 获得机器学习接口

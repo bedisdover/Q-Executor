@@ -439,14 +439,22 @@ class ParamPanel extends JPanel {
                     Calendar.MINUTE,
                     Integer.parseInt(end.getMinute())
             );
-//            Calendar now = TimeUtil.getCurrentIime();
-//            //TODO 应该获取当前时间
-//            now.set(2016, 9, 9, 10, 0);
+            System.out.println(start.getHour());
+            System.out.println(start.getMinute());
+            System.out.println(end.getHour());
+            System.out.println(end.getMinute());
+
+            System.out.println(TimeUtil.timeToNode(s));
+            System.out.println(TimeUtil.timeToNode(e));
+
+            Calendar now = Calendar.getInstance();
+            //TODO 应该获取当前时间
+            now.set(2016, 9, 9, 10, 0);
             VWAP_Param param = new VWAP_Param(
                     Long.parseLong(quanVal.getText()),
                     codeText.getText(),
                     QuestionnairePanel.risk,
-                    TimeUtil.getCurrentIime(),
+                    TimeUtil.timeToNode(now),
                     TimeUtil.timeToNode(s),
                     TimeUtil.timeToNode(e)
             );

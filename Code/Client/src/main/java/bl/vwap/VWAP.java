@@ -6,9 +6,6 @@ package bl.vwap;
 
 import bl.TimeUtil;
 import blservice.vwap.VWAPService;
-import service.MLForVWAPService;
-import service.MLForVWAPServiceImpl;
-import vo.MLForVWAPPriceVO;
 import vo.VolumeVO;
 
 import java.util.ArrayList;
@@ -42,6 +39,11 @@ public class VWAP implements VWAPService {
 		//时间阈值
 		double timrThre = 220.0/240;
 
+		if(param.getTimeNode()<param.getStartTimeNode()||param.getTimeNode()>=param.getEndTimeNode()){
+			param.setTimeNode(param.getStartTimeNode());
+		}
+		System.out.println("start:"+param.getStartTimeNode());
+		System.out.println("end:"+param.getEndTimeNode());
 		//交易量概率密度
 		List<Double> Pn;
 		if(param.getTimeNode()==param.getStartTimeNode()|| !stockPnMap.containsKey(param.getStockid())){
@@ -49,18 +51,21 @@ public class VWAP implements VWAPService {
 			stockPnMap.put(param.getStockid(), Pn);
 		}else{
 			Pn=stockPnMap.get(param.getStockid());
-			double gama = 0;
-			for(int i = param.getTimeNode()-1;i<Pn.size();i++){
-				gama += Pn.get(i);
+
+			if(param.getTimeNode()!=25){
+				double gama = 0;
+				for(int i = param.getTimeNode()-1;i<Pn.size();i++){
+					gama += Pn.get(i);
+				}
+				if(gama<volThre && 1.0*param.getTimeNode()/TimeUtil.TimeSliceNum <timrThre){
+					Pn = vwapCore.getDynamicPn(Pn,param);
+					stockPnMap.put(param.getStockid(), Pn);
+				}
 			}
 
-			if(gama<volThre && 1.0*param.getTimeNode()/TimeUtil.TimeSliceNum <timrThre){
-				Pn = vwapCore.getDynamicPn(Pn,param);
-				stockPnMap.put(param.getStockid(), Pn);
-			}
 		}
 
-		List<Integer> Vn = calcVn(Pn,param);
+		List<Long> Vn = calcVn(Pn,param);
 		return getVolumeVOList(Vn,param.getTimeNode());
 	}
 
@@ -70,8 +75,8 @@ public class VWAP implements VWAPService {
      * @param param
      * @return
      */
-    private List<Integer> calcVn(List<Double> Pn,VWAP_Param param){
-        List<Integer> Vn = new ArrayList<Integer>();
+    private List<Long> calcVn(List<Double> Pn,VWAP_Param param){
+        List<Long> Vn = new ArrayList<Long>();
 		double pLocal = 0;
 
 		//深度系数 TODO
@@ -89,19 +94,21 @@ public class VWAP implements VWAPService {
 			plist.add(Pn.get(i)/pLocal);
 		}
 
+		long volSum=0;
 		//将计算当前时间片的交易量
-		int currentVol = Double.valueOf(param.getUserVol()*plist.get(0)*deep).intValue();
+		long currentVol = Double.valueOf(param.getUserVol()*plist.get(0)*deep).intValue();
 		Vn.add(currentVol);
 
-        for(int i=1;i<plist.size();i++){
-            int vi=Double.valueOf(param.getUserVol()*plist.get(i)).intValue();
+        for(int i=1;i<plist.size()-1;i++){
+            long vi=Double.valueOf(param.getUserVol()*plist.get(i)).intValue();
+			volSum+=vi;
             Vn.add(vi);
         }
-
+		Vn.add(param.getUserVol()-volSum);
 		System.out.println(plist);
 		System.out.println(Vn);
 		int sumv=0;
-		for(int v:Vn){
+		for(long v:Vn){
 			sumv+=v;
 		}
 		System.out.println(sumv);
@@ -115,7 +122,7 @@ public class VWAP implements VWAPService {
 	 * @param currnetTimeNode
      * @return
      */
-	private List<VolumeVO> getVolumeVOList(List<Integer> Vn,int currnetTimeNode){
+	private List<VolumeVO> getVolumeVOList(List<Long> Vn, int currnetTimeNode){
 		List<VolumeVO> volumeVOList = new ArrayList<VolumeVO>();
 		for(int i=0;i<Vn.size();i++){
 			String time = TimeUtil.timeNodeToDate(currnetTimeNode+i);
