@@ -1,5 +1,8 @@
 package bl.time;
 
+import blservice.time.TimeService;
+
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -20,7 +23,15 @@ public class TimeUtil {
      * 若在当天交易结束后则返回-2
      */
     public static int getCurrentIime(){
-        Calendar calendar = Calendar.getInstance();
+        TimeService time = new TimeBlImpl();
+        Calendar calendar = null;
+        try {
+            calendar = time.getCurrentTime();
+        } catch (IOException e) {
+            e.printStackTrace();
+            calendar = Calendar.getInstance();
+            return timeToNode(calendar);
+        }
         return timeToNode(calendar);
     }
 
