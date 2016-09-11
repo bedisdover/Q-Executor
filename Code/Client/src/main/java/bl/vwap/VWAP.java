@@ -105,7 +105,10 @@ public class VWAP implements VWAPService {
 			volSum+=vi;
             Vn.add(vi);
         }
-		Vn.add(param.getUserVol()-volSum);
+		if(plist.size()>1){
+			Vn.add(param.getUserVol()-volSum);
+		}
+
 		System.out.println(plist);
 		System.out.println(Vn);
 		int sumv=0;
