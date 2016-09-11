@@ -69,7 +69,10 @@ public class ImageLoader {
 
     public static Image baseBar;
 
-    public static Image progressBar;
+    /**
+     * 进度条三部分
+     */
+    public static Image progressBar_head, progressBar_body, progressBar_tail;
 
     public static Image hotTip;
 
@@ -114,7 +117,9 @@ public class ImageLoader {
 
         try {
             baseBar = ImageIO.read(new File("src/main/resources/images/bar.png"));
-            progressBar = ImageIO.read(new File("src/main/resources/images/progressBar.png"));
+            progressBar_head = ImageIO.read(new File("src/main/resources/images/progressBar_head.png"));
+            progressBar_body = ImageIO.read(new File("src/main/resources/images/progressBar_body.png"));
+            progressBar_tail = ImageIO.read(new File("src/main/resources/images/progressBar_tail.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -17,7 +17,7 @@ public class MyProgressPanel extends JPanel {
     /**
      * 进度条长度
      */
-    private final int TOTAL_LENGTH = 340;
+    private final int TOTAL_LENGTH = 310;
 
     /**
      * 进度条最大值
@@ -89,7 +89,7 @@ public class MyProgressPanel extends JPanel {
      * 设置进度条位置(占总长度的比例)
      */
     public void setPercent(double percent) {
-        progressBar.setValue((int) (percent * MAX_VALUE));
+        progressBar.setValue(percent);
     }
 
     /**
@@ -174,8 +174,8 @@ public class MyProgressPanel extends JPanel {
             });
         }
 
-        void setValue(int value) {
-
+        void setValue(double percent) {
+            markLocation = (int) (percent * (TOTAL_LENGTH - 10));
         }
 
         @Override
@@ -185,8 +185,12 @@ public class MyProgressPanel extends JPanel {
             Graphics2D graphics2D = (Graphics2D) g;
             graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-            graphics2D.drawImage(ImageLoader.baseBar, 0, 0, 340, 20, null);
-            graphics2D.drawImage(ImageLoader.progressBar, 5, 3, 167, 14, null);
+            // 330 / 100 = 3.3;
+            graphics2D.drawImage(ImageLoader.baseBar, 0, 0, TOTAL_LENGTH, 20, null);
+
+            graphics2D.drawImage(ImageLoader.progressBar_head, 5, 3, 6, 14, null);
+            graphics2D.drawImage(ImageLoader.progressBar_body, 11, 3, (markLocation - 12), 14, null);
+            graphics2D.drawImage(ImageLoader.progressBar_tail, markLocation - 1, 3, 6, 14, null);
         }
     }
 }
