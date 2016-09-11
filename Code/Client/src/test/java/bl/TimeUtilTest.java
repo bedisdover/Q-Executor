@@ -22,10 +22,10 @@ public class TimeUtilTest {
     @Test
     public void timeToNodeTest(){
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY,10);
-        calendar.set(Calendar.MINUTE,10);
+        calendar.set(Calendar.HOUR_OF_DAY,9);
+        calendar.set(Calendar.MINUTE,30);
 //        System.out.println(TimeUtil.timeToNode(calendar)+" 10:10");
-        assertEquals(TimeUtil.timeToNode(calendar),9);
+        assertEquals(TimeUtil.timeToNode(calendar),1);
 
         calendar.set(Calendar.HOUR_OF_DAY,11);
         calendar.set(Calendar.MINUTE,0);

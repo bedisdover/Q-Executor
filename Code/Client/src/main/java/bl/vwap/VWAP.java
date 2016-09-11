@@ -98,6 +98,7 @@ public class VWAP implements VWAPService {
 		//将计算当前时间片的交易量
 		long currentVol = Double.valueOf(param.getUserVol()*plist.get(0)*deep).intValue();
 		Vn.add(currentVol);
+		volSum+=currentVol;
 
         for(int i=1;i<plist.size()-1;i++){
             long vi=Double.valueOf(param.getUserVol()*plist.get(i)).intValue();
