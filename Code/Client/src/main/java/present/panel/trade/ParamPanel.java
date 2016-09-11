@@ -1,6 +1,6 @@
 package present.panel.trade;
 
-import bl.TimeUtil;
+import bl.time.TimeUtil;
 import bl.stock.GetStockDataServiceImpl;
 import bl.vwap.VWAP;
 import bl.vwap.VWAP_Param;

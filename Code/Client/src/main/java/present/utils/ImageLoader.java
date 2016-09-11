@@ -1,7 +1,10 @@
 package present.utils;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by song on 16-8-26.
@@ -54,6 +57,10 @@ public class ImageLoader {
 
     public static ImageIcon question7_2;
 
+    public static Image baseBar;
+
+    public static Image progressBar;
+
     static {
         increase = new ImageIcon("src/main/resources/images/increase.png");
         decrease = new ImageIcon("src/main/resources/images/decrease.png");
@@ -79,5 +86,12 @@ public class ImageLoader {
         question6_2 = new ImageIcon("src/main/resources/images/question6-2.png");
         question7_1 = new ImageIcon("src/main/resources/images/question7-1.png");
         question7_2 = new ImageIcon("src/main/resources/images/question7-2.png");
+
+        try {
+            baseBar = ImageIO.read(new File("src/main/resources/images/bar.png"));
+            progressBar = ImageIO.read(new File("src/main/resources/images/progressBar.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
