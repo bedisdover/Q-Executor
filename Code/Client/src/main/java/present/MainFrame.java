@@ -19,7 +19,7 @@ public class MainFrame extends JFrame{
 
     public static final int PANEL_W = 1100;
 
-    public static final int PANEL_H = 650;
+    public static final int PANEL_H = 680;
 
     private static final int MENU_W = 100;
 

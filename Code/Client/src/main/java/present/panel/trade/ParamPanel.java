@@ -300,15 +300,17 @@ class ParamPanel extends JPanel {
         String hour2 = end.getHour();
         String minute2 = end.getMinute();
 
+        //判断时间是否合法
         if (!(checkTimeValid(hour1, minute1) && checkTimeValid(hour2, minute2))) {
             return false;
         }
 
-        if(!TimeUtil.isLessThan(
-                Integer.parseInt(hour1), Integer.parseInt(minute1),
-                Integer.parseInt(hour2), Integer.parseInt(minute2)
-        )) {
-            JOptionPane.showMessageDialog(parent, "开始时间应该小于结束时间");
+        int h1 = Integer.parseInt(hour1), m1 = Integer.parseInt(minute1);
+        int h2 = Integer.parseInt(hour2), m2 = Integer.parseInt(minute2);
+
+        //判断结束时间是否至少大于开始时间一个时间片（5分钟）
+        if(h2 * 60 + m2 - h1 * 60 - m1 <= 5) {
+            JOptionPane.showMessageDialog(parent, "开始时间应该小于结束时间，且两个间隔应大于5分钟");
             return false;
         }
 

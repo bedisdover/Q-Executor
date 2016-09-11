@@ -59,9 +59,21 @@ public class ImageLoader {
 
     public static ImageIcon question7_2;
 
+    public static Image pre_enter;
+
+    public static Image pre_exit;
+
+    public static Image next_enter;
+
+    public static Image next_exit;
+
     public static Image baseBar;
 
     public static Image progressBar;
+
+    public static Image hotTip;
+
+    public static Image selfTip;
 
     static {
         increase = new ImageIcon("src/main/resources/images/increase.png");
@@ -91,6 +103,14 @@ public class ImageLoader {
         question6_2 = new ImageIcon("src/main/resources/images/question6-2.png");
         question7_1 = new ImageIcon("src/main/resources/images/question7-1.png");
         question7_2 = new ImageIcon("src/main/resources/images/question7-2.png");
+
+        pre_enter = new ImageIcon("src/main/resources/images/pre_enter.png").getImage();
+        pre_exit = new ImageIcon("src/main/resources/images/pre_exit.png").getImage();
+        next_enter = new ImageIcon("src/main/resources/images/next_enter.png").getImage();
+        next_exit = new ImageIcon("src/main/resources/images/next_exit.png").getImage();
+
+        hotTip = new ImageIcon("src/main/resources/images/hotTip.png").getImage();
+        selfTip = new ImageIcon("src/main/resources/images/selfTip.png").getImage();
 
         try {
             baseBar = ImageIO.read(new File("src/main/resources/images/bar.png"));

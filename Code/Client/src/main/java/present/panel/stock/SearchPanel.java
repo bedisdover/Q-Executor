@@ -8,12 +8,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import present.MainFrame;
 import present.PanelSwitcher;
-import present.component.Link;
-import present.component.MyRenderer;
-import present.component.MyTable;
-import present.component.TextPlusBtn;
+import present.component.*;
 import present.panel.account.AccountPanel;
 import present.panel.account.LoginPanel;
+import present.panel.loading.LoadingPanel;
+import present.utils.ImageLoader;
 import present.utils.StockJsonInfo;
 import util.JsonUtil;
 import vo.HotStockVO;
@@ -43,6 +42,12 @@ public class SearchPanel extends JPanel {
 
     private static final int TABLE_W = 320;
 
+    //一个股票信息面板的宽度
+    private static final int CARD_W = 200;
+
+    //一个股票信息面板的高度
+    private static final int CARD_H = 200;
+
     private static final Color TABLE_BG = new Color(0xfaf3f3);
 
     //字符串切割符
@@ -58,8 +63,25 @@ public class SearchPanel extends JPanel {
 
     private MyTable hotTable;
 
+    private JPanel hotStockInfo;
+
+    private JPanel selfStockInfo;
+
+    private JPanel loading;
+
+    //用户没有自选股票信息时展示
+    private JPanel emptySelfStockPanel = new JPanel() {
+
+    };
+
+    //用户没有登录时展示
+    private JPanel informLoginPanel = new JPanel() {
+
+    };
+
     public SearchPanel(PanelSwitcher switcher) {
         this.switcher = switcher;
+
 
         //搜索
         TextPlusBtn search = this.createSearchPanel();
@@ -67,15 +89,88 @@ public class SearchPanel extends JPanel {
         p.setOpaque(false);
         p.add(search);
 
-
-        //滚动面板包含表格
-        JPanel container = new JPanel(new FlowLayout(
-                FlowLayout.CENTER, PADDING << 2, 0
+        //热门股票信息
+        hotStockInfo = new JPanel(new FlowLayout(
+                FlowLayout.CENTER, 0, 0
         ));
-        container.setOpaque(false);
-        container.add(createSelfTable());
-        container.add(createHotTable());
+        hotStockInfo.setOpaque(false);
+        loading = new LoadingPanel();
+        loading.setOpaque(false);
+        loading.setPreferredSize(
+                new Dimension(CARD_W, CARD_H)
+        );
+        hotStockInfo.add(loading);
         getData();
+
+        //自选股票信息
+        selfStockInfo = new JPanel(new FlowLayout(
+                FlowLayout.CENTER, 0, 0
+        ));
+        selfStockInfo.setOpaque(false);
+        if (LoginPanel.IS_LOGIN) {
+            try {
+                List<NowTimeSelectedStockInfoVO> list = self.getUserSelectedStock(
+                        LoginPanel.LOGIN_USER, LoginPanel.LOGIN_PW
+                );
+                List<JPanel> cards = new ArrayList<>();
+
+                if(list.size() == 0) {
+                    emptySelfStockPanel.setOpaque(false);
+                    emptySelfStockPanel.setPreferredSize(
+                            new Dimension(CARD_W, CARD_H)
+                    );
+                    selfStockInfo.add(emptySelfStockPanel);
+                } else {
+                    list.forEach((vo) -> cards.add(new StockInfoCard(
+                            vo.getName(), vo.getGid(),
+                            String.valueOf(vo.getNowPri()),
+                            vo.getIncrease(),
+                            CARD_W, CARD_H
+                    )));
+                    System.out.println(cards.size());
+                    CardsPanel panel = new CardsPanel(
+                            cards, ImageLoader.selfTip
+                    );
+                    selfStockInfo.add(panel);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "网络异常");
+            }
+        } else {
+            informLoginPanel.setOpaque(false);
+            informLoginPanel.setPreferredSize(
+                    new Dimension(CARD_W, CARD_H)
+            );
+            selfStockInfo.add(informLoginPanel);
+        }
+
+
+//        //滚动面板包含表格
+//        JPanel container = new JPanel(new FlowLayout(
+//                FlowLayout.CENTER, PADDING << 2, 0
+//        ));
+//        container.setOpaque(false);
+//        container.add(createSelfTable());
+//        container.add(createHotTable());
+
+
+
+//        List<JPanel> panels1 = new ArrayList<>();
+//        for(int i = 0; i < 8; ++i) {
+//            panels1.add(new StockInfoCard(i));
+//        }
+//        CardsPanel test1 = new CardsPanel(panels1);
+//        JPanel p1 = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+//        p1.add(test1);
+//
+//        List<JPanel> panels2 = new ArrayList<>();
+//        for(int i = 0; i < 4; ++i) {
+//            panels2.add(new StockInfoCard(i));
+//        }
+//        CardsPanel test2 = new CardsPanel(panels2);
+//        JPanel p2 = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+//        p2.add(test2);
 
         //添加组件到主面板
         Box box = Box.createVerticalBox();
@@ -83,7 +178,9 @@ public class SearchPanel extends JPanel {
         box.add(Box.createVerticalStrut(PADDING << 2));
         box.add(search);
         box.add(Box.createVerticalStrut(PADDING << 1));
-        box.add(container);
+        box.add(hotStockInfo);
+        box.add(Box.createVerticalStrut(PADDING));
+        box.add(selfStockInfo);
 
         JPanel content = new JPanel(new BorderLayout());
         content.setOpaque(false);
@@ -91,7 +188,8 @@ public class SearchPanel extends JPanel {
 
         this.setLayout(new BorderLayout());
         this.add(box, BorderLayout.NORTH);
-        this.setBackground(new Color(0xf6f0e4));
+//        this.setBackground(new Color(0xf6f0e4));
+        this.setBackground(new Color(0x233333));
     }
 
 //    @Override
@@ -307,27 +405,33 @@ public class SearchPanel extends JPanel {
                     return hotStocks.getHotStock();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return new ArrayList<>();
+                    throw e;
                 }
             }
 
             @Override
             protected void done() {
-                super.done();
                 try {
                     List<HotStockVO> hotDatas = get();
-                    for (HotStockVO vo : hotDatas) {
-                        Vector<String> v = new Vector<>(4);
-                        v.addElement(vo.getCode());
-                        v.addElement(vo.getName());
-                        v.addElement(vo.getCurrentPrice());
-                        v.addElement(String.valueOf(vo.getPchange()));
-                        hotTableModel.addRow(v);
-                    }
-                    hotTable.setRenderer(new MyRenderer(1), 3);
-                    hotTableModel.fireTableDataChanged();
+                    List<JPanel> cards = new ArrayList<>();
+                    hotDatas.forEach((vo) ->
+                        cards.add(new StockInfoCard(
+                                vo.getName(), vo.getCode(),
+                                vo.getCurrentPrice(),
+                                vo.getPchange(),
+                                CARD_W, CARD_H
+                        ))
+                    );
+                    CardsPanel panel = new CardsPanel(
+                            cards, ImageLoader.hotTip
+                    );
+                    PanelSwitcher.jump(
+                            hotStockInfo, loading, panel
+                    );
+
                 } catch (Exception e) {
                     e.printStackTrace();
+                    JOptionPane.showMessageDialog(SearchPanel.this, "网络异常");
                 }
             }
         };

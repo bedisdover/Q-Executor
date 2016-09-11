@@ -62,8 +62,6 @@ public class PanelSwitcher {
      * return 当前显示的面板
      */
     public static JComponent jump(JPanel container, JComponent from, JComponent to) {
-        if(from.getClass() == to.getClass()) return from;
-
         from.setVisible(false);
         container.remove(from);
 
