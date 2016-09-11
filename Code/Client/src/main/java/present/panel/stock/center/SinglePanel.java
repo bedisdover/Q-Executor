@@ -85,7 +85,9 @@ public class SinglePanel extends CenterPanel implements ProgressListener {
 
     private void injectData(List<StockInfoByPer> stockInfoByPerList) {
         SwingUtilities.invokeLater(() -> {
-            panel.remove(scrollPane);
+            if (scrollPane != null) {
+                panel.remove(scrollPane);
+            }
 
             progress.setPercent(getTimePercent(stockInfoByPerList.get(0).getTime()));
 
