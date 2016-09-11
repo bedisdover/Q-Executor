@@ -1,7 +1,10 @@
 package present.utils;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by song on 16-8-26.
@@ -24,7 +27,9 @@ public class ImageLoader {
 
     public static Image empty_time_series;
 
-    public static Image empty_msg;
+    public static Image empty_result;
+
+    public static Image timer;
 
     public static ImageIcon login_btn;
 
@@ -54,20 +59,27 @@ public class ImageLoader {
 
     public static ImageIcon question7_2;
 
+    public static Image baseBar;
+
+    public static Image progressBar;
+
     static {
         increase = new ImageIcon("src/main/resources/images/increase.png");
         decrease = new ImageIcon("src/main/resources/images/decrease.png");
         dull = new ImageIcon("src/main/resources/images/dull.png");
+
         login_btn = new ImageIcon("src/main/resources/images/login.png");
         register_btn = new ImageIcon("src/main/resources/images/register.png");
         findpw_btn = new ImageIcon("src/main/resources/images/findpw.png");
         questionnair_btn = new ImageIcon("src/main/resources/images/questionnair.png");
+
         introduce = new ImageIcon("src/main/resources/images/introduce.jpg").getImage();
         account_nav = new ImageIcon("src/main/resources/images/account_nav.jpg").getImage();
         account_content = new ImageIcon("src/main/resources/images/account_content.jpg").getImage();
         search_bg = new ImageIcon("src/main/resources/images/search_bg.jpg").getImage();
         empty_time_series = new ImageIcon("src/main/resources/images/empty_time_series.jpg").getImage();
-        empty_msg = new ImageIcon("src/main/resources/images/empty_strategy.jpg").getImage();
+        empty_result = new ImageIcon("src/main/resources/images/empty_strategy.jpg").getImage();
+        timer = new ImageIcon("src/main/resources/images/timer.png").getImage();
 
         question1 = new ImageIcon("src/main/resources/images/question1.png");
         question2 = new ImageIcon("src/main/resources/images/question2.png");
@@ -79,5 +91,12 @@ public class ImageLoader {
         question6_2 = new ImageIcon("src/main/resources/images/question6-2.png");
         question7_1 = new ImageIcon("src/main/resources/images/question7-1.png");
         question7_2 = new ImageIcon("src/main/resources/images/question7-2.png");
+
+        try {
+            baseBar = ImageIO.read(new File("src/main/resources/images/bar.png"));
+            progressBar = ImageIO.read(new File("src/main/resources/images/progressBar.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

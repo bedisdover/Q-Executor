@@ -12,28 +12,43 @@ import java.util.List;
 
 public class TradePanel extends JPanel {
 
+    //参数面板宽度
     private static final int PARAM_PANEL_W = 420;
 
+    //参数面板高度
     private static final int PARAM_PANEL_H = 380;
 
-    private static final int RT_PANEL_W = MainFrame.PANEL_W - PARAM_PANEL_W;
+    //分时面板宽度
+    private static final int TIME_SERIES_W = MainFrame.PANEL_W - PARAM_PANEL_W;
 
-    private static final int RT_PANEL_H = PARAM_PANEL_H;
+    //分时面板高度
+    private static final int TIME_SERIES_H = PARAM_PANEL_H;
 
-    private static final int MSG_PANEL_W = PARAM_PANEL_W;
+    //结果面板宽度
+    private static final int RESULT_PANEL_W = PARAM_PANEL_W;
 
-    private static final int MSG_PANEL_H = MainFrame.PANEL_H - PARAM_PANEL_H;
+    //结果面板高度
+    private static final int RESULT_PANEL_H = MainFrame.PANEL_H - PARAM_PANEL_H;
 
-    private MessagePanel msg = new MessagePanel(MSG_PANEL_W, MSG_PANEL_H);
+    //计时面板宽度
+    private static final int TIME_PANEL_W = 100;
 
+    //结果面板
+    private ResultPanel resultPanel = new ResultPanel(RESULT_PANEL_W, RESULT_PANEL_H);
+
+    //分时面板
     private TimeSeriesPanel timeSeriesPanel = new TimeSeriesPanel();
 
+    //分时面板容器
     private JPanel timeContainer = new JPanel(new BorderLayout());
 
-    private JPanel msgContainer = new JPanel(new BorderLayout());
+    //结果面板容器
+    private JPanel resultContainer = new JPanel(new BorderLayout());
 
-    private CalculatingPanel loading = new CalculatingPanel(MSG_PANEL_W, MSG_PANEL_H);
+    //加载效果显示面板
+    private CalculatingPanel loading = new CalculatingPanel(RESULT_PANEL_W, RESULT_PANEL_H);
 
+    //空白分时面板
     private JPanel empty_time = new JPanel() {
         @Override
         protected void paintComponent(Graphics g) {
@@ -48,67 +63,139 @@ public class TradePanel extends JPanel {
         }
     };
 
+    //分时面板显示的股票的股票代码
+    private String stockCode;
+
     //当前计算进度
     private int percent = 1;
 
+    //刷新进度条线程
     private Timer task = null;
 
-    private JPanel empty_msg = new JPanel() {
+    //空白结果面板
+    private JPanel empty_result = new JPanel() {
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
             g.drawImage(
-                    ImageLoader.empty_msg, 0, 0, this.getWidth(), this.getHeight(),
+                    ImageLoader.empty_result, 0, 0, this.getWidth(), this.getHeight(),
                     0, 0,
-                    ImageLoader.empty_msg.getWidth(null),
-                    ImageLoader.empty_msg.getHeight(null),
+                    ImageLoader.empty_result.getWidth(null),
+                    ImageLoader.empty_result.getHeight(null),
                     null
             );
         }
     };
 
-    public TradePanel() {
-        ParamPanel param = new ParamPanel(PARAM_PANEL_W, PARAM_PANEL_H, this);
 
-        empty_time.setPreferredSize(new Dimension(RT_PANEL_W, RT_PANEL_H));
-        timeContainer.setPreferredSize(new Dimension(RT_PANEL_W, RT_PANEL_H));
+    //刷新结果剩余时间
+    private int timeToUpdate = UPDATE_GAP;
+
+    //刷新间隔
+    private static final int UPDATE_GAP = 300;
+
+    //刷新频率
+    private static final int FREQUENCY = 1000;
+
+    //时间相对于计时面板的横坐标
+    private static final int TIME_X = 42;
+
+    //时间相对于计时面板的纵坐标
+    private static final int TIME_Y = 214;
+
+    //计时面板
+    private JPanel timerPanel = new JPanel() {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Image img = ImageLoader.timer;
+            g.drawImage(
+                    img, 0, 0, img.getWidth(null), img.getHeight(null), null
+            );
+            g.setFont(new Font("等线", Font.ITALIC, 20));
+            g.setColor(Color.GREEN);
+            g.drawString(String.valueOf(timeToUpdate), TIME_X, TIME_Y);
+        }
+    };
+
+    //计时线程
+    private Timer timer = new Timer(FREQUENCY, (e) -> {
+        --timeToUpdate;
+        timerPanel.repaint();
+
+        if(timeToUpdate <= 0) {
+            update();
+        }
+    });
+
+    //参数面板
+    private ParamPanel param;
+
+    public TradePanel() {
+        //参数面板
+        param = new ParamPanel(PARAM_PANEL_W, PARAM_PANEL_H, this);
+
+        //设置空白分时面板
+        empty_time.setPreferredSize(new Dimension(TIME_SERIES_W, TIME_SERIES_H));
+        timeContainer.setPreferredSize(new Dimension(TIME_SERIES_W, TIME_SERIES_H));
         timeContainer.add(empty_time, BorderLayout.CENTER);
 
-        empty_msg.setPreferredSize(new Dimension(MSG_PANEL_W, MSG_PANEL_H));
-        msgContainer.setPreferredSize(new Dimension(MSG_PANEL_W, MSG_PANEL_H));
-        msgContainer.add(empty_msg, BorderLayout.CENTER);
+        //设置空白结果面板
+        empty_result.setPreferredSize(new Dimension(RESULT_PANEL_W, RESULT_PANEL_H));
+        resultContainer.setPreferredSize(new Dimension(RESULT_PANEL_W, RESULT_PANEL_H));
+        resultContainer.add(empty_result, BorderLayout.CENTER);
 
+        //计时面板
+        timerPanel.setPreferredSize(new Dimension(TIME_PANEL_W, RESULT_PANEL_H));
+
+        //将参数面板和分时面板添加到整个面板上方
         Box up = Box.createHorizontalBox();
         up.add(param);
         up.add(timeContainer);
 
+        //将结果面板添加到整个面板下方
         this.setLayout(new BorderLayout());
         this.add(up, BorderLayout.NORTH);
-        this.add(msgContainer, BorderLayout.CENTER);
+        this.add(resultContainer, BorderLayout.CENTER);
     }
 
-    void stopCalculate() {
-        stop();
-        jump(msg, loading, empty_msg);
+    void stopUpdate() {
+        timer.stop();
+        timeToUpdate = UPDATE_GAP;
+        resultContainer.remove(timerPanel);
+        resultContainer.revalidate();
     }
 
-    void generatingMsg() {
-        jump(empty_msg, msg, loading);
+    void generatingResult() {
+        jump(empty_result, resultPanel, loading);
         loading.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         start();
     }
 
-    void updateMsgPanel(List<VolumeVO> result, String type) {
+    void updateResultPanel(List<VolumeVO> result, String type) {
         loading.setProcess(99);
         stop();
 
         SwingUtilities.invokeLater(() -> {
             try {
-                Thread.sleep(2000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            jump(empty_msg, loading, msg);
-            msg.update(result, type);
+
+            if(result == null) {
+                jump(resultPanel, loading, empty_result);
+                return ;
+            }
+
+            jump(empty_result, loading, resultPanel);
+            this.resultPanel.update(result, type);
+            //计时面板，显示下一次刷新剩余时间
+            resultContainer.add(timerPanel, BorderLayout.WEST);
+            resultContainer.revalidate();
+            //开始计时线程，显示还有多久再次刷新
+            if(!timer.isRunning()) {
+                timer.restart();
+            }
         });
     }
 
@@ -120,15 +207,16 @@ public class TradePanel extends JPanel {
      */
     private void jump(JComponent from1, JComponent from2, JComponent to) {
         from1.setVisible(false);
-        msgContainer.remove(from1);
+        resultContainer.remove(from1);
         from2.setVisible(false);
-        msgContainer.remove(from2);
+        resultContainer.remove(from2);
         to.setVisible(true);
-        msgContainer.add(to, BorderLayout.CENTER);
-        msgContainer.revalidate();
+        resultContainer.add(to, BorderLayout.CENTER);
+        resultContainer.revalidate();
     }
 
     void updateTimeSeriesPanel(String code) {
+        stockCode = code;
         timeContainer.remove(empty_time);
         timeContainer.add(timeSeriesPanel, BorderLayout.CENTER);
         timeSeriesPanel.setStockCode(code);
@@ -146,6 +234,21 @@ public class TradePanel extends JPanel {
 
     private void stop() {
         task.stop();
+    }
+
+    /**
+     * 刷新结果面板和分时面板
+     */
+    private void update() {
+        //刷新分时面板
+        timeSeriesPanel.setStockCode(stockCode);
+
+        //刷新结果面板
+        generatingResult();
+        param.calculate();
+
+        //重新开始计时
+        timeToUpdate = UPDATE_GAP;
     }
 
 }

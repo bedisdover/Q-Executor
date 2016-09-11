@@ -70,7 +70,10 @@ public class CardsPanel extends JPanel {
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
                 --page;
-                JPanel to = page > 0 ? createBothPanel(cards, size) :
+                JPanel to = page > 0 ?
+                        createBothPanel(cards.subList(
+                                page * PAGE_CARD_NUM, (page + 1) * PAGE_CARD_NUM
+                        ), PAGE_CARD_NUM) :
                         createNextPanel(cards, size);
                 current = PanelSwitcher.jump(
                         container, current, to
@@ -139,6 +142,7 @@ public class CardsPanel extends JPanel {
      * 创建多行卡片信息面板
      * @pre cards列表不为空
      * @param cards 卡片信息列表
+     * @param size  卡片信息列表大小
      * @return 卡片面板
      */
     private JPanel createMutiLines(List<JPanel> cards, int size) {

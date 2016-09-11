@@ -14,13 +14,13 @@ import java.util.Vector;
  *
  * 交易面板的消息面板
  */
-class MessagePanel extends JScrollPane {
+class ResultPanel extends JScrollPane {
 
     private Vector<String> vData;
 
     private DefaultTableModel tableModel;
 
-    MessagePanel(int width, int height) {
+    ResultPanel(int width, int height) {
 
         //表格表头
         Vector<String> header = new Vector<>();

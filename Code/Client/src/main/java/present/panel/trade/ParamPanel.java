@@ -1,6 +1,6 @@
 package present.panel.trade;
 
-import bl.TimeUtil;
+import bl.time.TimeUtil;
 import bl.stock.GetStockDataServiceImpl;
 import bl.vwap.VWAP;
 import bl.vwap.VWAP_Param;
@@ -20,7 +20,6 @@ import java.awt.*;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Vector;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Y481L on 2016/8/28.
@@ -68,14 +67,11 @@ class ParamPanel extends JPanel {
     //启动计算按钮
     private JButton trigger;
 
-    //终止计算按钮
-    private JButton stop;
+    //终止刷新按钮
+    private JButton stopUpdate;
 
     //参数面板的父容器
     private TradePanel parent;
-
-    //后台计算线程
-    private Calculation calculation;
 
     ParamPanel(int width, int height, TradePanel parent) {
         this.parent = parent;
@@ -98,6 +94,14 @@ class ParamPanel extends JPanel {
     }
 
     /**
+     * 计算交易策略
+     */
+    void calculate() {
+        Calculation calculation = new Calculation();
+        calculation.execute();
+    }
+
+    /**
      * 生成股票数量输入面板
      * @return JPanel
      */
@@ -105,8 +109,8 @@ class ParamPanel extends JPanel {
         //投资方向
         JLabel operationLabel = new JLabel("投资方向");
         operationVal = new JComboBox<>();
-        operationVal.addItem("买");
         operationVal.addItem("卖");
+        operationVal.addItem("买");
         InputPair operation = new InputPair(operationLabel, operationVal);
         //数量（手）
         JLabel quantityLabel = new JLabel("数量/股");
@@ -208,25 +212,22 @@ class ParamPanel extends JPanel {
             }
 
             disableComponents();
-            stop.setEnabled(true);
+            parent.generatingResult();
             calculate();
-            parent.generatingMsg();
         });
 
         //结束计算
-        stop = new JButton("结束计算");
-        stop.setPreferredSize(new Dimension(componentW - H_GAP, componentH));
-        stop.setEnabled(false);
-        stop.addActionListener((e) -> {
-            int isOk = JOptionPane.showConfirmDialog(parent, "确定终止计算吗？");
+        stopUpdate = new JButton("停止刷新");
+        stopUpdate.setPreferredSize(new Dimension(componentW - H_GAP, componentH));
+        stopUpdate.setEnabled(false);
+        stopUpdate.addActionListener((e) -> {
+            int isOk = JOptionPane.showConfirmDialog(parent, "确定停止刷新吗？");
             if (isOk != JOptionPane.YES_OPTION) {
                 return;
             }
 
-            parent.stopCalculate();
-            enableComponents();
-            stop.setEnabled(false);
-            calculation.cancel(true);
+            parent.stopUpdate();
+            stopUpdate.setEnabled(false);
         });
 
         JPanel left = new JPanel();
@@ -242,7 +243,7 @@ class ParamPanel extends JPanel {
         panel.add(left);
         panel.add(trigger);
         panel.add(center);
-        panel.add(stop);
+        panel.add(stopUpdate);
         return panel;
     }
 
@@ -253,6 +254,7 @@ class ParamPanel extends JPanel {
         start.setEnabled(false);
         end.setEnabled(false);
         trigger.setEnabled(false);
+        stopUpdate.setEnabled(false);
     }
 
     private void enableComponents() {
@@ -336,14 +338,6 @@ class ParamPanel extends JPanel {
             JOptionPane.showMessageDialog(parent, "请输入有效时间");
             return false;
         }
-    }
-
-    /**
-     * 计算交易策略
-     */
-    private void calculate() {
-        calculation = new Calculation();
-        calculation.execute();
     }
 
     private class InputPair extends JPanel {
@@ -456,22 +450,20 @@ class ParamPanel extends JPanel {
 
         @Override
         protected void done() {
+            List<VolumeVO> result = null;
             try {
-                List<VolumeVO> result = get();
-                if(result == null) {
-                    JOptionPane.showMessageDialog(parent, "网络异常");
-                    enableComponents();
-                    return;
-                }
-                parent.updateMsgPanel(result, String.valueOf(operationVal.getSelectedItem()));
-            } catch (InterruptedException e) {
+                result = get();
+                parent.updateResultPanel(result, String.valueOf(operationVal.getSelectedItem()));
+                enableComponents();
+                stopUpdate.setEnabled(true);
+            } catch (Exception e) {
                 e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(parent, "网络异常");
+                JOptionPane.showMessageDialog(parent, "网络异常或者该股票结果不可计算");
+                parent.updateResultPanel(result, String.valueOf(operationVal.getSelectedItem()));
+                enableComponents();
+                stopUpdate.setEnabled(false);
             }
-            enableComponents();
-            stop.setEnabled(false);
+
         }
     }
 }

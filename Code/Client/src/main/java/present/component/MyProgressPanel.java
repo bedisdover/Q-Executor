@@ -1,5 +1,7 @@
 package present.component;
 
+import present.utils.ImageLoader;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -15,7 +17,7 @@ public class MyProgressPanel extends JPanel {
     /**
      * 进度条长度
      */
-    private final int TOTAL_LENGTH = 300;
+    private final int TOTAL_LENGTH = 340;
 
     /**
      * 进度条最大值
@@ -35,7 +37,7 @@ public class MyProgressPanel extends JPanel {
 
     private ProgressListener observer;
 
-    private JProgressBar progressBar;
+    private CoverPanel progressBar;
 
     public MyProgressPanel(ProgressListener observer) {
         this.observer = observer;
@@ -55,24 +57,9 @@ public class MyProgressPanel extends JPanel {
     private void createUIComponents() {
         SwingUtilities.invokeLater(() -> {
             {
-                JPanel northPanel = new JPanel();
-                OverlayLayout overlayLayout = new OverlayLayout(northPanel);
-                northPanel.setLayout(overlayLayout);
+                progressBar = new CoverPanel();
 
-                JPanel progressPanel = new JPanel(new BorderLayout());
-                progressPanel.setBorder(BorderFactory.createMatteBorder(10, 5, 0, 5, new Color(0, 0, 0, 0)));
-
-                progressBar = new JProgressBar(0, MAX_VALUE);
-                progressPanel.add(progressBar);
-
-                northPanel.add(progressPanel);
-
-                CoverPanel coverPanel = new CoverPanel();
-                // 左右与progressPanel对齐
-                coverPanel.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, new Color(0, 0, 0, 0)));
-                northPanel.add(coverPanel);
-
-                add(northPanel);
+                add(progressBar);
             }
 
             {
@@ -107,6 +94,7 @@ public class MyProgressPanel extends JPanel {
 
     /**
      * 获得鼠标所在位置占总长度的比例
+     *
      * @param mouse_x 鼠标所在位置(以左边为起点)
      */
     private double getMousePercent(int mouse_x) {
@@ -125,6 +113,8 @@ public class MyProgressPanel extends JPanel {
          */
         private JLabel mark;
 
+        private int markLocation;
+
         CoverPanel() {
             panel = this;
             init();
@@ -136,8 +126,9 @@ public class MyProgressPanel extends JPanel {
             SwingUtilities.invokeLater(() -> {
                 panel.setLayout(null);
                 panel.setBackground(new Color(0, 0, 0, 0));
-
-                mark = new JLabel(new ImageIcon("src/main/resources/images/bookmarks.png"));
+//                mark = new JLabel(new ImageIcon("src/main/resources/images/bookmarks.png"));
+                mark = new JLabel();
+                mark.setBackground(Color.BLACK);
                 mark.setBounds(0, 0, MARK_WIDTH, MARK_HEIGHT);
 
                 panel.add(mark);
@@ -157,6 +148,8 @@ public class MyProgressPanel extends JPanel {
                 panel.addMouseMotionListener(new MouseAdapter() {
                     @Override
                     public void mouseMoved(MouseEvent e) {
+                        markLocation = e.getX();
+
                         setMarkLocation(e.getX());
                     }
                 });
@@ -165,6 +158,7 @@ public class MyProgressPanel extends JPanel {
 
         /**
          * 设置标记位置
+         *
          * @param mouse_x 鼠标所在位置
          */
         private void setMarkLocation(int mouse_x) {
@@ -174,8 +168,25 @@ public class MyProgressPanel extends JPanel {
                 mark.setToolTipText(observer.getToolTipText(getMousePercent(mouse_x)));
 
                 observer.valueChanged(getMousePercent(mouse_x));
+
+                panel.setBackground(new Color(0, 0, 0, 0));
                 panel.repaint();
             });
+        }
+
+        void setValue(int value) {
+
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            Graphics2D graphics2D = (Graphics2D) g;
+            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            graphics2D.drawImage(ImageLoader.baseBar, 0, 0, 340, 20, null);
+            graphics2D.drawImage(ImageLoader.progressBar, 5, 3, 167, 14, null);
         }
     }
 }

@@ -4,7 +4,7 @@ package bl.vwap;
  *
  */
 
-import bl.TimeUtil;
+import bl.time.TimeUtil;
 import blservice.vwap.VWAPService;
 import vo.VolumeVO;
 
