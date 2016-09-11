@@ -1,7 +1,7 @@
 package bl.stock;
 
 import bl.Connect;
-import bl.TimeUtil;
+import bl.time.TimeUtil;
 import blservice.stock.GetStockDataService;
 import org.json.JSONArray;
 import org.json.JSONException;

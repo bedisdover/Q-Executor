@@ -1,4 +1,4 @@
-package bl;
+package bl.time;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
