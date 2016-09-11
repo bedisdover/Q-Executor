@@ -21,6 +21,12 @@ public class TimeUtilTest {
 
     @Test
     public void timeToNodeTest(){
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 9);
+        c.set(Calendar.MINUTE, 30);
+        assertEquals(TimeUtil.timeToNode(c), 1);
+        System.out.println(TimeUtil.timeToNode(c));
+
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY,10);
         calendar.set(Calendar.MINUTE,10);

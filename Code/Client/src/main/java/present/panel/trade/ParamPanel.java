@@ -435,17 +435,10 @@ class ParamPanel extends JPanel {
                     Calendar.HOUR_OF_DAY,
                     Integer.parseInt(end.getHour())
             );
-            s.set(
+            e.set(
                     Calendar.MINUTE,
                     Integer.parseInt(end.getMinute())
             );
-            System.out.println(start.getHour());
-            System.out.println(start.getMinute());
-            System.out.println(end.getHour());
-            System.out.println(end.getMinute());
-
-            System.out.println(TimeUtil.timeToNode(s));
-            System.out.println(TimeUtil.timeToNode(e));
 
             Calendar now = Calendar.getInstance();
             //TODO 应该获取当前时间
