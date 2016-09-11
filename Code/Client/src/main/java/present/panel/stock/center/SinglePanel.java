@@ -29,6 +29,8 @@ public class SinglePanel extends CenterPanel implements ProgressListener {
 
     private StockPanel stockPanel;
 
+    private JPanel toolPanel;
+
     private MyProgressPanel progress;
 
     private JScrollPane scrollPane;
@@ -39,20 +41,21 @@ public class SinglePanel extends CenterPanel implements ProgressListener {
         this.stockPanel = stockPanel;
 
         super.init();
+        createUIComponents();
 
         getData();
     }
 
     private void createUIComponents() {
-        JPanel toolPanel = new JPanel();
+        SwingUtilities.invokeLater(() -> {
+            toolPanel = new JPanel();
 
-        toolPanel.add(new JLabel("当日时间线 → "));
+            toolPanel.add(new JLabel("当日时间线 → "));
 
-        progress = new MyProgressPanel(this);
+            progress = new MyProgressPanel(this);
 
-        toolPanel.add(progress);
-
-        panel.add(toolPanel, BorderLayout.NORTH);
+            toolPanel.add(progress);
+        });
     }
 
 
@@ -85,11 +88,10 @@ public class SinglePanel extends CenterPanel implements ProgressListener {
 
     private void injectData(List<StockInfoByPer> stockInfoByPerList) {
         SwingUtilities.invokeLater(() -> {
-            if (scrollPane != null) {
-                panel.remove(scrollPane);
-            }
+            panel.removeAll();
 
             progress.setPercent(getTimePercent(stockInfoByPerList.get(0).getTime()));
+            panel.add(toolPanel, BorderLayout.NORTH);
 
             scrollPane = createTable(stockInfoByPerList);
             panel.add(scrollPane, BorderLayout.CENTER);
