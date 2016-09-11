@@ -175,10 +175,12 @@ public class TimeUtil {
 
             if (temp < HOUR_SIZE << 1) {// 9:30~11:30
                 return temp / (HOUR_SIZE << 2);
-            } else if (temp > HOUR_SIZE * 3.5){// 13:00~15:00
-                return temp / (HOUR_SIZE << 1) - 0.75;
-            } else {// 11:30~13:00
+            } else if (temp >= HOUR_SIZE << 1 && temp <= HOUR_SIZE * 3.5){// 11:30~13:00
                 return 0.5;
+            } else if (temp > HOUR_SIZE * 3.5 && temp < HOUR_SIZE * 5.5){// 13:00~15:00
+                return (temp - HOUR_SIZE * 3.5) / (HOUR_SIZE << 1);
+            } else {
+                return 1;
             }
         } catch (ParseException e) {
             e.printStackTrace();
