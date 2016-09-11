@@ -78,6 +78,10 @@ public class ImageLoader {
 
     public static Image selfTip;
 
+    public static Image loginTip;
+
+    public static Image emptySelf;
+
     static {
         increase = new ImageIcon("src/main/resources/images/increase.png");
         decrease = new ImageIcon("src/main/resources/images/decrease.png");
@@ -114,6 +118,8 @@ public class ImageLoader {
 
         hotTip = new ImageIcon("src/main/resources/images/hotTip.png").getImage();
         selfTip = new ImageIcon("src/main/resources/images/selfTip.png").getImage();
+        loginTip = new ImageIcon("src/main/resources/images/loginTip.jpg").getImage();
+        emptySelf = new ImageIcon("src/main/resources/images/empty_self.jpg").getImage();
 
         try {
             baseBar = ImageIO.read(new File("src/main/resources/images/bar.png"));

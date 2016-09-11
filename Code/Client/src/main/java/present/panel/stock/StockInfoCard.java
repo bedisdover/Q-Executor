@@ -2,13 +2,15 @@ package present.panel.stock;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Created by Y481L on 2016/9/11.
  *
  * 股票信息卡片面板
  */
-public class StockInfoCard extends JPanel {
+class StockInfoCard extends JPanel {
 
     private static final Font font = new Font("等线", Font.PLAIN, 16);
 
@@ -16,14 +18,18 @@ public class StockInfoCard extends JPanel {
 
     private static final Color VAL_COLOR = Color.CYAN;
 
+    private static final Color bg = new Color(0xff9700);
+
     /**
      *
      * @param name 股票名称
      * @param code 股票代码
      * @param price 股票价格
      * @param change 股票涨跌幅
+     * @param width 面板宽度
+     * @param height 面板高度
      */
-    public StockInfoCard(String name, String code, String price,
+    StockInfoCard(String name, String code, String price,
                          double change, int width, int height) {
         Box box = Box.createVerticalBox();
         box.setOpaque(false);
@@ -41,7 +47,29 @@ public class StockInfoCard extends JPanel {
         this.setLayout(new BorderLayout());
         this.add(box, BorderLayout.CENTER);
         this.setPreferredSize(new Dimension(width, height));
-        this.setBackground(new Color(0xff9700));
+        this.setBackground(bg);
+    }
+
+    void addListener(MouseAdapter adapter) {
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                adapter.mouseReleased(e);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                setBackground(Color.BLACK);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                setBackground(bg);
+            }
+        });
     }
 
     private JPanel createLine( String key, String val) {
@@ -71,7 +99,7 @@ public class StockInfoCard extends JPanel {
         } else if(value == 0) {
             valLabel.setForeground(Color.BLACK);
         } else {
-            valLabel.setForeground(new Color(0xFF5843));
+            valLabel.setForeground(new Color(0xFF0000));
         }
         JPanel panel = new JPanel(new FlowLayout(
                 FlowLayout.CENTER, 10, 0

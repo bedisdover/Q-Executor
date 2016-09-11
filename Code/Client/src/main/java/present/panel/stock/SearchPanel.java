@@ -42,6 +42,10 @@ public class SearchPanel extends JPanel {
 
     private static final int TABLE_W = 320;
 
+    private static final int PANEL_W = 900;
+
+    private static final int PNAEL_H = 240;
+
     //一个股票信息面板的宽度
     private static final int CARD_W = 200;
 
@@ -71,12 +75,28 @@ public class SearchPanel extends JPanel {
 
     //用户没有自选股票信息时展示
     private JPanel emptySelfStockPanel = new JPanel() {
-
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Image img = ImageLoader.emptySelf;
+            g.drawImage(
+                    img, 0, 0, this.getWidth(), this.getHeight(),
+                    0, 0, img.getWidth(null), img.getHeight(null), null
+            );
+        }
     };
 
     //用户没有登录时展示
     private JPanel informLoginPanel = new JPanel() {
-
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Image img = ImageLoader.loginTip;
+            g.drawImage(
+                    img, 0, 0, this.getWidth(), this.getHeight(),
+                    0, 0, img.getWidth(null), img.getHeight(null), null
+            );
+        }
     };
 
     public SearchPanel(PanelSwitcher switcher) {
@@ -117,16 +137,26 @@ public class SearchPanel extends JPanel {
                 if(list.size() == 0) {
                     emptySelfStockPanel.setOpaque(false);
                     emptySelfStockPanel.setPreferredSize(
-                            new Dimension(CARD_W, CARD_H)
+                            new Dimension(PANEL_W, PNAEL_H)
                     );
                     selfStockInfo.add(emptySelfStockPanel);
                 } else {
-                    list.forEach((vo) -> cards.add(new StockInfoCard(
-                            vo.getName(), vo.getGid(),
-                            String.valueOf(vo.getNowPri()),
-                            vo.getIncrease(),
-                            CARD_W, CARD_H
-                    )));
+                    list.forEach((vo) -> {
+                        StockInfoCard card = new StockInfoCard(
+                                vo.getName(), vo.getGid(),
+                                String.valueOf(vo.getNowPri()),
+                                vo.getIncrease(),
+                                CARD_W, CARD_H
+                        );
+                        card.addListener(new MouseAdapter() {
+                            @Override
+                            public void mouseReleased(MouseEvent e) {
+                                super.mouseReleased(e);
+                                switcher.jump(new StockPanel(vo.getGid()));
+                            }
+                        });
+                        cards.add(card);
+                    });
                     System.out.println(cards.size());
                     CardsPanel panel = new CardsPanel(
                             cards, ImageLoader.selfTip
@@ -140,7 +170,7 @@ public class SearchPanel extends JPanel {
         } else {
             informLoginPanel.setOpaque(false);
             informLoginPanel.setPreferredSize(
-                    new Dimension(CARD_W, CARD_H)
+                    new Dimension(PANEL_W, PNAEL_H)
             );
             selfStockInfo.add(informLoginPanel);
         }
@@ -414,14 +444,22 @@ public class SearchPanel extends JPanel {
                 try {
                     List<HotStockVO> hotDatas = get();
                     List<JPanel> cards = new ArrayList<>();
-                    hotDatas.forEach((vo) ->
-                        cards.add(new StockInfoCard(
+                    hotDatas.forEach((vo) -> {
+                        StockInfoCard card = new StockInfoCard(
                                 vo.getName(), vo.getCode(),
                                 vo.getCurrentPrice(),
                                 vo.getPchange(),
                                 CARD_W, CARD_H
-                        ))
-                    );
+                        );
+                        card.addListener(new MouseAdapter() {
+                            @Override
+                            public void mouseReleased(MouseEvent e) {
+                                super.mouseReleased(e);
+                                switcher.jump(new StockPanel(vo.getCode()));
+                            }
+                        });
+                        cards.add(card);
+                    });
                     CardsPanel panel = new CardsPanel(
                             cards, ImageLoader.hotTip
                     );
