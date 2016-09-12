@@ -15,6 +15,8 @@ import org.jfree.data.Range;
 import org.jfree.data.time.*;
 import org.jfree.data.time.ohlc.OHLCSeries;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
+import org.jfree.ui.RectangleEdge;
+import org.jfree.ui.TextAnchor;
 import present.component.chart.MyChartPanel;
 import present.component.chart.MyPanel;
 import present.component.chart.MyTimeline;
@@ -25,9 +27,10 @@ import vo.StockKLineVO;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -41,37 +44,37 @@ public class KLine {
     /**
      * 5分钟K线
      */
-    private static final int KLINE5MINUTE = 0;
+    public static final int KLINE5MINUTE = 0;
 
     /**
      * 15分钟K线
      */
-    private static final int KLINE15MINUTE = 1;
+    public static final int KLINE15MINUTE = 1;
 
     /**
      * 30分钟K线
      */
-    private static final int KLINE30MINUTE = 2;
+    public static final int KLINE30MINUTE = 2;
 
     /**
      * 60分钟K线
      */
-    private static final int KLINE60MINUTE = 3;
+    public static final int KLINE60MINUTE = 3;
 
     /**
      * 日K线
      */
-    private static final int KLINE_DAY = 4;
+    public static final int KLINE_DAY = 4;
 
     /**
      * 周K线
      */
-    private static final int KLINE_WEEK = 5;
+    public static final int KLINE_WEEK = 5;
 
     /**
      * 月K线
      */
-    private static final int KLINE_MONTH = 6;
+    public static final int KLINE_MONTH = 6;
 
     private GetKLineDataService kLineDataService = new GetKLineDataServiceImpl();
 
@@ -272,6 +275,7 @@ public class KLine {
         plot1.setRenderer(1, lineAndShapeRenderer);
         plot1.setBackgroundPaint(Color.BLACK);
         plot1.setDatasetRenderingOrder(DatasetRenderingOrder.FORWARD);
+        plot1.setDomainGridlinesVisible(false);//不显示网格
 
         XYBarRenderer xyBarRender = new XYBarRenderer() {
             public Paint getItemPaint(int i, int j) {//匿名内部类用来处理当日的成交量柱形图的颜色与K线图的颜色保持一致
@@ -317,6 +321,7 @@ public class KLine {
         plot2.setDataset(1, kLineVO.getAvgVolumeCollection());
         plot2.setRenderer(1, lineAndShapeRenderer2);
         plot2.setBackgroundPaint(Color.BLACK);
+        plot2.setDomainGridlinesVisible(false);//不显示网格
 
         CombinedDomainXYPlot combineddomainxyplot = new CombinedDomainXYPlot(dateAxis);//建立一个恰当的联合图形区域对象，以x轴为共享轴
         combineddomainxyplot.add(plot1, 2);//添加图形区域对象，后面的数字是计算这个区域对象应该占据多大的区域2/3
@@ -334,19 +339,48 @@ public class KLine {
      */
     private DateAxis createDateAxis(KLineVO kLineVO, int kLineType) {
         //设置x轴，也就是时间轴
-        DateAxis dateAxis = new DateAxis();
-//        dateAxis.setAutoRange(false);//设置不采用自动设置时间范围
-//        dateAxis.setRange(kLineVO.getStartDate(), kLineVO.getEndDate());//设置时间范围，注意时间的最大值要比已有的时间最大值要多一天
-//        dateAxis.setTimeline(SegmentedTimeline.newFifteenMinuteTimeline());
-//        dateAxis.setTimeline(SegmentedTimeline.newMondayThroughFridayTimeline());//设置时间线显示的规则，用这个方法就摒除掉了周六和周日这些没有交易的日期，使图形看上去连续
-        SegmentedTimeline timeline = SegmentedTimeline.newMondayThroughFridayTimeline();
-        dateAxis.setTimeline(MyTimeline.getTimeLineFor5Minute());
-//        timeline.addException();
-        dateAxis.setAutoTickUnitSelection(true);//设置不采用自动选择刻度值
-//        dateAxis.setTickUnit(getTickUnit(type));
-//        dateAxis.setTickMarkPosition(DateTickMarkPosition.MIDDLE);//设置标记的位置
-//        dateAxis.setStandardTickUnits(DateAxis.createStandardDateTickUnits());//设置标准的时间刻度单位
-//        dateAxis.setDateFormatOverride(new SimpleDateFormat("yyyy-MM-dd"));//设置显示时间的格式
+        DateAxis dateAxis = new DateAxis() {
+            protected List<DateTick> refreshTicksHorizontal(Graphics2D g2, Rectangle2D dataArea, RectangleEdge edge) {
+                List ticks = super.refreshTicksHorizontal(g2, dataArea, edge);
+
+                Map<String, DateTick> newTicks = new HashMap<>();
+                for (Object tick1 : ticks) {
+                    //在这里可以添加删除时间轴刻度，添加时间轴刻度时要对时间格式进行转换:
+                    //DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'CST' yyyy", Locale.US);
+                    DateTick tick = (DateTick) tick1;
+                    if (kLineType == KLINE60MINUTE) {
+                        System.out.println(tick.getDate());
+                    }
+                    newTicks.put(tick.getText(), new DateTick(tick.getDate(), tick.getText(), TextAnchor.TOP_CENTER, TextAnchor.TOP_RIGHT, 0));
+                }
+
+                return Collections.list(Collections.enumeration(newTicks.values()));
+            }
+        };
+
+        if (kLineType >= KLINE_DAY) {
+            dateAxis.setAutoRange(false);
+            dateAxis.setRange(kLineVO.getStartDate(), kLineVO.getEndDate());
+            dateAxis.setAutoTickUnitSelection(false);
+            dateAxis.setTimeline(SegmentedTimeline.newMondayThroughFridayTimeline());
+            dateAxis.setTickMarkPosition(DateTickMarkPosition.MIDDLE);//设置标记的位置
+            dateAxis.setTickUnit(getTickUnit(kLineType));
+            dateAxis.setStandardTickUnits(DateAxis.createStandardDateTickUnits());//设置标准的时间刻度单位
+            dateAxis.setDateFormatOverride(new SimpleDateFormat("yyyy-MM-dd"));
+        } else {
+            dateAxis.setAutoRange(false);//设置不采用自动设置时间范围
+            if (kLineType == KLINE5MINUTE) {
+                dateAxis.setRange(new Date(116, 8, 2, 13, 0), new Date(116, 8, 2, 15, 0));
+            } else {
+                dateAxis.setRange(kLineVO.getStartTime(), kLineVO.getEndTime());
+            }
+            dateAxis.setTimeline(MyTimeline.getTimeLine(kLineType));
+//            timeline.addException();
+//            dateAxis.setAutoTickUnitSelection(true);//设置不采用自动选择刻度值
+            dateAxis.setTickMarkPosition(DateTickMarkPosition.MIDDLE);//设置标记的位置
+//            dateAxis.setStandardTickUnits(DateAxis.createStandardDateTickUnits());//设置标准的时间刻度单位
+            dateAxis.setDateFormatOverride(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));//设置显示时间的格式
+        }
 
         return dateAxis;
     }
@@ -354,18 +388,18 @@ public class KLine {
     /**
      * 获取时间间隔
      *
-     * @param type K线类型
+     * @param kLineType K线类型
      */
-    private DateTickUnit getTickUnit(String type) {
+    private DateTickUnit getTickUnit(int kLineType) {
         DateTickUnit dateTickUnit = null;
-        switch (type) {
-            case "month":
+        switch (kLineType) {
+            case KLINE_MONTH:
                 dateTickUnit = new DateTickUnit(DateTickUnitType.MONTH, 8);
                 break;
-            case "week":
+            case KLINE_WEEK:
                 dateTickUnit = new DateTickUnit(DateTickUnitType.DAY, 80);
                 break;
-            case "day":
+            case KLINE_DAY:
                 dateTickUnit = new DateTickUnit(DateTickUnitType.DAY, 20);
                 break;
         }
@@ -390,8 +424,11 @@ public class KLine {
 
         private double high = Double.MIN_VALUE, low = Double.MAX_VALUE;
 
+        private int kLineType;
+
         KLineVO(List<StockKLineVO> stockKLineVOList, int kLineType) {
             this.stockKLineVOList = stockKLineVOList;
+            this.kLineType = kLineType;
 
             OHLCSeries ohlcSeries = new OHLCSeries("");
             TimeSeries amountSeries = new TimeSeries("");
@@ -493,17 +530,55 @@ public class KLine {
         }
 
         Range getRange() {
-            double temp = (high - low) * 0.1;
+            if (high > low) {
+                double temp = (high - low) * 0.1;
 
-            return new Range(low - temp, high + temp);
+                return new Range(low - temp, high + temp);
+            } else {
+                return new Range(0, 0);
+            }
         }
 
+        /**
+         * 日/周/月调用
+         */
         Date getStartDate() {
             return TimeUtil.getDayBefore(stockKLineVOList.get(0).getDate());
         }
 
+        /**
+         * 日/周/月调用
+         */
         Date getEndDate() {
             return TimeUtil.getDayAfter(stockKLineVOList.get(stockKLineVOList.size() - 1).getDate());
+        }
+
+        /**
+         * 分钟线调用
+         */
+        Date getStartTime() {
+            Date date = null;
+            try {
+                date = TimeUtil.getDetailTime(stockKLineVOList.get(0).getDate());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            return date;
+        }
+
+        /**
+         * 分钟线调用
+         */
+        Date getEndTime() {
+            Date date = null;
+            try {
+                date = TimeUtil.getDetailTime(stockKLineVOList.get(stockKLineVOList.size() - 1).getDate());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            return date;
         }
 
         public String getText(int item) {

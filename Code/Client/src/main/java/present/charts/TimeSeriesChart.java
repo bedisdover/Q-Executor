@@ -11,20 +11,27 @@ import org.jfree.data.Range;
 import org.jfree.data.time.Minute;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.text.TextUtilities;
+import org.jfree.ui.RectangleEdge;
 import present.component.chart.MyChartPanel;
+import present.component.chart.MyNumberAxis;
 import present.component.chart.MyPanel;
 import present.panel.stock.west.CurrentDataPanel;
+import present.utils.ColorUtil;
 import util.NumberUtil;
 import util.TimeUtil;
 import vo.StockTimeSeriesVO;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -51,12 +58,12 @@ public class TimeSeriesChart {
         dateAxis.setDateFormatOverride(dateFormat);//设置显示时间的格式
 
         // 实时价格纵轴
-        NumberAxis yAxis = new NumberAxis();
+        NumberAxis yAxis = new MyNumberAxis(timeSeriesVO.getClose());
         yAxis.setAutoRange(false);//设置不采用自动设置数据范围
         yAxis.setUpperMargin(10);//设置向上边框距离
         yAxis.setRange(timeSeriesVO.getPriceRange());//设置y轴数据范围
         // 涨跌幅纵轴
-        NumberAxis avgAxis = new NumberAxis();
+        NumberAxis avgAxis = new MyNumberAxis(0);
         avgAxis.setAutoRange(false);
         avgAxis.setRange(timeSeriesVO.getIncRateRange());
         NumberFormat numberFormat = new DecimalFormat("0.00%");
@@ -231,15 +238,18 @@ public class TimeSeriesChart {
             double incNum = price - close;
             double amount = (double) amountSeries.getDataItem(itemIndex).getValue();
 
-            System.out.println(stockTimeSeriesVOList.get(itemIndex));
-
             return getTime(itemIndex) + "  价格:" + price +
                     "  涨跌:" + NumberUtil.round(incNum) + "(" + NumberUtil.getPercent(incNum / close) + ")" +
                     "  成交量:" + NumberUtil.transferUnit(amount / 100) + "手";
         }
 
+        double getClose() {
+            return close;
+        }
+
         /**
          * 获取精确时间
+         *
          * @return 格式: yyyy-MM-dd HH:mm:ss
          */
         String getTime(int itemIndex) {
