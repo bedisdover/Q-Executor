@@ -39,13 +39,18 @@ public class VWAP implements VWAPService {
 		//时间阈值
 		double timrThre = 220.0/240;
 
-		if(param.getUserVol()==0){
-			return null;
-		}
-
 		if(param.getTimeNode()<param.getStartTimeNode()||param.getTimeNode()>=param.getEndTimeNode()){
 			param.setTimeNode(param.getStartTimeNode());
 		}
+
+		if(param.getUserVol()==0){
+			return null;
+		}else if(param.getUserVol()<=500){
+			List<Long> Vn = new ArrayList<Long>();
+			Vn.add(param.getUserVol());
+			return getVolumeVOList(Vn,param.getTimeNode());
+		}
+
 		System.out.println("start:"+param.getStartTimeNode());
 		System.out.println("current:"+param.getTimeNode());
 		System.out.println("end:"+param.getEndTimeNode());
