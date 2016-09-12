@@ -39,10 +39,15 @@ public class VWAP implements VWAPService {
 		//时间阈值
 		double timrThre = 220.0/240;
 
+		if(param.getUserVol()==0){
+			return null;
+		}
+
 		if(param.getTimeNode()<param.getStartTimeNode()||param.getTimeNode()>=param.getEndTimeNode()){
 			param.setTimeNode(param.getStartTimeNode());
 		}
 		System.out.println("start:"+param.getStartTimeNode());
+		System.out.println("current:"+param.getTimeNode());
 		System.out.println("end:"+param.getEndTimeNode());
 		//交易量概率密度
 		List<Double> Pn;

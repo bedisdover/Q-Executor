@@ -60,6 +60,8 @@ public class TimeUtilTest {
         assertEquals(true,TimeUtil.timeNodeToDate(1).matches(day+" 09:30"));
         System.out.println(TimeUtil.timeNodeToDate(22));
         assertEquals(true,TimeUtil.timeNodeToDate(22).matches(day+" 11:15"));
+        System.out.println(TimeUtil.timeNodeToDate(24));
+        assertEquals(true,TimeUtil.timeNodeToDate(24).matches(day+" 11:25"));
         System.out.println(TimeUtil.timeNodeToDate(25));
         assertEquals(true,TimeUtil.timeNodeToDate(25).matches(day+" 13:00"));
         System.out.println(TimeUtil.timeNodeToDate(48));

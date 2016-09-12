@@ -108,7 +108,7 @@ public class TimeUtil {
 
         Calendar calendar=Calendar.getInstance();
         int timeLength = allTimeLength/TimeSliceNum;
-        if(timeNode<(TimeSliceNum/2)){
+        if(timeNode<=(TimeSliceNum/2)){
             calendar.set(Calendar.HOUR_OF_DAY,9);
             calendar.set(Calendar.MINUTE,30);
             calendar.add(Calendar.MINUTE,timeLength*(timeNode-1));

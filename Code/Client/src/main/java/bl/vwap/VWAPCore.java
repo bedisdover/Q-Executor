@@ -26,6 +26,7 @@ public class VWAPCore {
     public List<Double> getStaticPn(String stockid) throws Exception{
         //TODO 异常处理
         List<Integer> Vn = ml.getStaticVol(stockid);
+        System.out.println("Vn:"+Vn);
         return initPn(Vn);
     }
 
