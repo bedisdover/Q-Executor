@@ -43,6 +43,7 @@ public class VWAP implements VWAPService {
 			param.setTimeNode(param.getStartTimeNode());
 		}
 		System.out.println("start:"+param.getStartTimeNode());
+		System.out.println("current:"+param.getTimeNode());
 		System.out.println("end:"+param.getEndTimeNode());
 		//交易量概率密度
 		List<Double> Pn;
