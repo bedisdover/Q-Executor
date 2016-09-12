@@ -17,6 +17,16 @@ public class TimeUtil {
 
 
     public static int TimeSliceNum = 48;
+
+
+    public static int getCurrentHour() {
+        return Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+    }
+
+    public static int getCurrentMin() {
+        return Calendar.getInstance().get(Calendar.MINUTE);
+    }
+
     /**
      * 获取当前时间片
      * @return 当前为第几个时间片，如果不在交易时间段，若在开市前或者中午返回-1，
@@ -159,6 +169,10 @@ public class TimeUtil {
                 (time >= start2 && time <= end2);
     }
 
+    public static boolean isAfterTradeTime(int hour, int minute) {
+        return !isLessThan(hour, minute, 15, 0);
+    }
+
     /**
      * 验证时间是否有效
      * @param hour 小时
@@ -177,7 +191,7 @@ public class TimeUtil {
      * @param minute2 时间2的分钟
      * @return
      */
-    public static boolean isLessThan(int hour1, int minute1, int hour2, int minute2) {
+    private static boolean isLessThan(int hour1, int minute1, int hour2, int minute2) {
         int time1 = hour1 * 60 + minute1;
         int time2 = hour2 * 60 + minute2;
         return time1 < time2;

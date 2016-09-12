@@ -1,7 +1,7 @@
 package present.panel.trade;
 
-import bl.time.TimeUtil;
 import bl.stock.GetStockDataServiceImpl;
+import bl.time.TimeUtil;
 import bl.vwap.VWAP;
 import bl.vwap.VWAP_Param;
 import blservice.stock.GetStockDataService;
@@ -18,6 +18,7 @@ import vo.VolumeVO;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -294,19 +295,28 @@ class ParamPanel extends JPanel {
     }
 
     private boolean checkTime(TimePanel start, TimePanel end) {
-        //TODO 检测当前时间是否小于开始时间
+        int nowHour = TimeUtil.getCurrentHour();
+        int nowMin = TimeUtil.getCurrentMin();
+
         String hour1 = start.getHour();
         String minute1 = start.getMinute();
         String hour2 = end.getHour();
         String minute2 = end.getMinute();
+        int h1 = Integer.parseInt(hour1), m1 = Integer.parseInt(minute1);
+        int h2 = Integer.parseInt(hour2), m2 = Integer.parseInt(minute2);
+
+        if (TimeUtil.isAfterTradeTime(nowHour, nowMin)) {
+            JOptionPane.showMessageDialog(this, "已经过了交易时间,明天再来");
+            return false;
+        }
+
+        //TODO 检测当前时间是否小于开始时间
 
         //判断时间是否合法
         if (!(checkTimeValid(hour1, minute1) && checkTimeValid(hour2, minute2))) {
             return false;
         }
 
-        int h1 = Integer.parseInt(hour1), m1 = Integer.parseInt(minute1);
-        int h2 = Integer.parseInt(hour2), m2 = Integer.parseInt(minute2);
 
         //判断结束时间是否至少大于开始时间一个时间片（5分钟）
         if(h2 * 60 + m2 - h1 * 60 - m1 <= 5) {
@@ -436,14 +446,11 @@ class ParamPanel extends JPanel {
                     Integer.parseInt(end.getMinute())
             );
 
-            Calendar now = Calendar.getInstance();
-            //TODO 应该获取当前时间
-            now.set(2016, 9, 9, 10, 0);
             VWAP_Param param = new VWAP_Param(
                     Long.parseLong(quanVal.getText()),
                     codeText.getText(),
                     QuestionnairePanel.risk,
-                    TimeUtil.timeToNode(now),
+                    TimeUtil.getCurrentIime(),
                     TimeUtil.timeToNode(s),
                     TimeUtil.timeToNode(e)
             );
