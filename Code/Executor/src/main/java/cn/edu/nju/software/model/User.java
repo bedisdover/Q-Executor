@@ -18,6 +18,10 @@ public class User {
     private String nickName;
     private String password;
     private String mail;
+
+    //存储找回密码随机片段
+    private String randomFindPassword;
+
     //存放股票代码字段
     private String select_stockNum;
 
@@ -79,5 +83,13 @@ public class User {
 
     public void setSelect_stockNum(String select_stockNum) {
         this.select_stockNum = select_stockNum;
+    }
+
+    public String getRandomFindPassword() {
+        return randomFindPassword;
+    }
+
+    public void setRandomFindPassword(String randomFindPassword) {
+        this.randomFindPassword = randomFindPassword;
     }
 }

@@ -39,10 +39,17 @@
   <bean id="local" class="com.mchange.v2.c3p0.ComboPooledDataSource"
         destroy-method="close">
     <property name="driverClass" value="com.mysql.jdbc.Driver"/>
-    <property name="jdbcUrl" value="jdbc:mysql://121.42.143.164:3306/q_executor"/>
+    <!--<property name="jdbcUrl" value="jdbc:mysql://121.42.143.164:3306/q_executor"/>-->
 
-    <property name="user" value="admin"/>
-    <property name="password" value="NJU_2016"/>
+    <!--<property name="user" value="admin"/>-->
+    <!--<property name="password" value="NJU_2016"/>-->
+    <!--<property name="maxPoolSize" value="40"/>-->
+    <!--<property name="minPoolSize" value="1"/>-->
+    <!--<property name="initialPoolSize" value="1"/>-->
+    <!--<property name="maxIdleTime" value="20"/>-->
+    <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/nba"/>
+    <property name="user" value="root"/>
+    <property name="password" value="556689"/>
     <property name="maxPoolSize" value="40"/>
     <property name="minPoolSize" value="1"/>
     <property name="initialPoolSize" value="1"/>
