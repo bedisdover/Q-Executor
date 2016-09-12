@@ -20,12 +20,6 @@ public class MyProgressPanel extends JPanel {
     private final int TOTAL_LENGTH = 310;
 
     /**
-     * 进度条最大值
-     * 设为10000,精度比默认100高
-     */
-    private final int MAX_VALUE = 10000;
-
-    /**
      * 书签宽度
      */
     private final int MARK_WIDTH = 15;
@@ -126,10 +120,8 @@ public class MyProgressPanel extends JPanel {
             SwingUtilities.invokeLater(() -> {
                 panel.setLayout(null);
                 panel.setBackground(new Color(0, 0, 0, 0));
-//                mark = new JLabel(new ImageIcon("src/main/resources/images/bookmarks.png"));
-                mark = new JLabel();
-                mark.setBackground(Color.BLACK);
-                mark.setBounds(0, 0, MARK_WIDTH, MARK_HEIGHT);
+                mark = new JLabel(ImageLoader.mark);
+                mark.setBounds(markLocation, 0, MARK_WIDTH, MARK_HEIGHT);
 
                 panel.add(mark);
                 panel.repaint();
@@ -141,16 +133,18 @@ public class MyProgressPanel extends JPanel {
                 panel.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
+                        if (e.getX() <= markLocation) {
 
+                        }
                     }
                 });
 
                 panel.addMouseMotionListener(new MouseAdapter() {
                     @Override
                     public void mouseMoved(MouseEvent e) {
-                        markLocation = e.getX();
+                        int location = e.getX() > markLocation ? markLocation : e.getX();
 
-                        setMarkLocation(e.getX());
+                        setMarkLocation(location);
                     }
                 });
             });
@@ -159,17 +153,15 @@ public class MyProgressPanel extends JPanel {
         /**
          * 设置标记位置
          *
-         * @param mouse_x 鼠标所在位置
+         * @param location 鼠标所在位置
          */
-        private void setMarkLocation(int mouse_x) {
+        private void setMarkLocation(int location) {
             SwingUtilities.invokeLater(() -> {
-                //FIXME 无法刷新
-                mark.setBounds(mouse_x, 0, MARK_WIDTH, MARK_HEIGHT);
-                mark.setToolTipText(observer.getToolTipText(getMousePercent(mouse_x)));
+                mark.setBounds(location, 0, MARK_WIDTH, MARK_HEIGHT);
+                mark.setToolTipText(observer.getToolTipText(getMousePercent(location)));
 
-                observer.valueChanged(getMousePercent(mouse_x));
+                observer.valueChanged(getMousePercent(location));
 
-                panel.setBackground(new Color(0, 0, 0, 0));
                 panel.repaint();
             });
         }
@@ -185,12 +177,24 @@ public class MyProgressPanel extends JPanel {
             Graphics2D graphics2D = (Graphics2D) g;
             graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-            // 330 / 100 = 3.3;
             graphics2D.drawImage(ImageLoader.baseBar, 0, 0, TOTAL_LENGTH, 20, null);
-
-            graphics2D.drawImage(ImageLoader.progressBar_head, 5, 3, 6, 14, null);
-            graphics2D.drawImage(ImageLoader.progressBar_body, 11, 3, (markLocation - 12), 14, null);
-            graphics2D.drawImage(ImageLoader.progressBar_tail, markLocation - 1, 3, 6, 14, null);
+            // progressBar长度167px，高14px，左侧6px，右侧6px
+            if (markLocation <= 6) {
+                graphics2D.drawImage(ImageLoader.progressBar,
+                        5, 3, markLocation, 17, 0, 0, markLocation, 14, null);
+            } else if (markLocation <= TOTAL_LENGTH - 10 - 6){
+                graphics2D.drawImage(ImageLoader.progressBar,
+                        5, 3, 11, 17, 0, 0, 6, 14, null);
+                graphics2D.drawImage(ImageLoader.progressBar, 11, 3, markLocation + 5, 17,
+                        6, 0, 7, 14, null);
+            } else {
+                graphics2D.drawImage(ImageLoader.progressBar,
+                        5, 3, 11, 17, 0, 0, 6, 14, null);
+                graphics2D.drawImage(ImageLoader.progressBar, 11, 3, TOTAL_LENGTH - 11, 17,
+                        6, 0, 7, 14, null);
+                graphics2D.drawImage(ImageLoader.progressBar,
+                        TOTAL_LENGTH - 11, 3, TOTAL_LENGTH - 5, 17, 161, 0, 167, 14, null);
+            }
         }
     }
 }
