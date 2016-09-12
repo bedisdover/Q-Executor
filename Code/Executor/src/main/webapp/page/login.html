@@ -63,7 +63,7 @@
                 data: form.serialize(),
                 success: function (data) {
                     if (data.state == true) {
-                        if (document.referrer == '') {
+                        if (document.referrer == ''||document.referrer == 'findpw.html') {
                             top.location = '../';
                         } else {
                             top.location = document.referrer;
