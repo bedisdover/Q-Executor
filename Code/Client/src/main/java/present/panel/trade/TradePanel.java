@@ -171,6 +171,14 @@ public class TradePanel extends JPanel {
         start();
     }
 
+    //剩余交易量
+    private long remain;
+
+    /**
+     * 刷新结果面板
+     * @param result 交易预测结果
+     * @param type   交易类型
+     */
     void updateResultPanel(List<VolumeVO> result, String type) {
         loading.setProcess(99);
         stop();
@@ -186,6 +194,18 @@ public class TradePanel extends JPanel {
                 jump(resultPanel, loading, empty_result);
                 return ;
             }
+
+            if(result.size() == 0) {
+                jump(resultPanel, loading, empty_result);
+                return ;
+            }
+
+            //计算剩余交易量
+            long sum = 0;
+            for (VolumeVO vo : result) {
+                sum += vo.getVolume();
+            }
+            remain = sum - result.get(0).getVolume();
 
             jump(empty_result, loading, resultPanel);
             this.resultPanel.update(result, type);
@@ -245,7 +265,7 @@ public class TradePanel extends JPanel {
 
         //刷新结果面板
         generatingResult();
-        param.calculate();
+        param.calculate(remain);
 
         //重新开始计时
         timeToUpdate = UPDATE_GAP;
