@@ -20,6 +20,8 @@ class ResultPanel extends JScrollPane {
 
     private DefaultTableModel tableModel;
 
+    private static final int ROW_HEIGHT = 30;
+
     ResultPanel(int width, int height) {
 
         //表格表头
@@ -49,6 +51,8 @@ class ResultPanel extends JScrollPane {
                 return label;
             }
         });
+        table.setFont(new Font("等线", Font.PLAIN, 13));
+        table.setRowHeight(ROW_HEIGHT);
 
         this.setPreferredSize(new Dimension(width, height));
         this.setViewportView(table);

@@ -91,7 +91,7 @@ public class TradePanel extends JPanel {
     private int timeToUpdate = UPDATE_GAP;
 
     //刷新间隔
-    private static final int UPDATE_GAP = 300;
+    private static final int UPDATE_GAP = 3;
 
     //刷新频率
     private static final int FREQUENCY = 1000;
@@ -184,11 +184,11 @@ public class TradePanel extends JPanel {
         stop();
 
         SwingUtilities.invokeLater(() -> {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
 
             if(result == null) {
                 jump(resultPanel, loading, empty_result);
