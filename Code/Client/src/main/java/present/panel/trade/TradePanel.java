@@ -161,6 +161,7 @@ public class TradePanel extends JPanel {
     void stopUpdate() {
         timer.stop();
         timeToUpdate = UPDATE_GAP;
+        timerPanel.setVisible(false);
         resultContainer.remove(timerPanel);
         resultContainer.revalidate();
     }
@@ -184,19 +185,21 @@ public class TradePanel extends JPanel {
         stop();
 
         SwingUtilities.invokeLater(() -> {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
 
             if(result == null) {
                 jump(resultPanel, loading, empty_result);
+                param.stopUpdate();
                 return ;
             }
 
             if(result.size() == 0) {
                 jump(resultPanel, loading, empty_result);
+                param.stopUpdate();
                 return ;
             }
 
@@ -210,6 +213,7 @@ public class TradePanel extends JPanel {
             jump(empty_result, loading, resultPanel);
             this.resultPanel.update(result, type);
             //计时面板，显示下一次刷新剩余时间
+            timerPanel.setVisible(true);
             resultContainer.add(timerPanel, BorderLayout.WEST);
             resultContainer.revalidate();
             //开始计时线程，显示还有多久再次刷新
