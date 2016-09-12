@@ -1,6 +1,7 @@
 package cn.edu.nju.software.controller;
 
 import cn.edu.nju.software.service.MLForVWAPService;
+import cn.edu.nju.software.service.MLForVWAPServiceImpl;
 import cn.edu.nju.software.vo.MLForVWAPPriceVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,13 +12,13 @@ import java.util.List;
 
 /**
  * Created by song on 16-9-9.
- *
+ * <p>
  * VWAP相关
  */
 @Controller
 public class MLForVWAPController {
-    @Resource
-    MLForVWAPService mlForVWAPService;
+
+    private MLForVWAPService mlForVWAPService;
 
     /**
      * 最新数据下动态预测的均价
@@ -25,6 +26,8 @@ public class MLForVWAPController {
     @RequestMapping("/dynamicPrice")
     @ResponseBody
     public MLForVWAPPriceVO getDynamicPrice(String stockID) {
+        mlForVWAPService = MLForVWAPServiceImpl.getInstance();
+
         return mlForVWAPService.getDynamicPrice(stockID);
     }
 
@@ -34,6 +37,8 @@ public class MLForVWAPController {
     @RequestMapping("/staticVol")
     @ResponseBody
     public List<Integer> getStaticVol(String stockID) {
+        mlForVWAPService = MLForVWAPServiceImpl.getInstance();
+
         return mlForVWAPService.getStaticVol(stockID);
     }
 }
