@@ -39,6 +39,10 @@ public class VWAP implements VWAPService {
 		//时间阈值
 		double timrThre = 220.0/240;
 
+		if(param.getUserVol()==0){
+			return null;
+		}
+
 		if(param.getTimeNode()<param.getStartTimeNode()||param.getTimeNode()>=param.getEndTimeNode()){
 			param.setTimeNode(param.getStartTimeNode());
 		}
