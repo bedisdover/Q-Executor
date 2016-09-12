@@ -91,7 +91,7 @@ public class TradePanel extends JPanel {
     private int timeToUpdate = UPDATE_GAP;
 
     //刷新间隔
-    private static final int UPDATE_GAP = 3;
+    private static final int UPDATE_GAP = 300;
 
     //刷新频率
     private static final int FREQUENCY = 1000;
@@ -161,6 +161,7 @@ public class TradePanel extends JPanel {
     void stopUpdate() {
         timer.stop();
         timeToUpdate = UPDATE_GAP;
+        timerPanel.setVisible(false);
         resultContainer.remove(timerPanel);
         resultContainer.revalidate();
     }
@@ -192,11 +193,13 @@ public class TradePanel extends JPanel {
 
             if(result == null) {
                 jump(resultPanel, loading, empty_result);
+                param.stopUpdate();
                 return ;
             }
 
             if(result.size() == 0) {
                 jump(resultPanel, loading, empty_result);
+                param.stopUpdate();
                 return ;
             }
 
@@ -210,6 +213,7 @@ public class TradePanel extends JPanel {
             jump(empty_result, loading, resultPanel);
             this.resultPanel.update(result, type);
             //计时面板，显示下一次刷新剩余时间
+            timerPanel.setVisible(true);
             resultContainer.add(timerPanel, BorderLayout.WEST);
             resultContainer.revalidate();
             //开始计时线程，显示还有多久再次刷新

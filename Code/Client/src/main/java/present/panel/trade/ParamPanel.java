@@ -105,6 +105,14 @@ class ParamPanel extends JPanel {
     }
 
     /**
+     * 停止刷新结果面板和分时图
+     */
+    void stopUpdate() {
+        parent.stopUpdate();
+        stopUpdate.setEnabled(false);
+    }
+
+    /**
      * 生成股票数量输入面板
      * @return JPanel
      */
@@ -229,8 +237,7 @@ class ParamPanel extends JPanel {
                 return;
             }
 
-            parent.stopUpdate();
-            stopUpdate.setEnabled(false);
+            stopUpdate();
         });
 
         JPanel left = new JPanel();
@@ -320,18 +327,17 @@ class ParamPanel extends JPanel {
             return false;
         }
 
-        //TODO debug
-//        //判断当前时间是否已经过了交易时间
-//        if (TimeUtil.isAfterTradeTime(nowHour, nowMin)) {
-//            JOptionPane.showMessageDialog(parent, "已经过了交易时间,明天再来");
-//            return false;
-//        }
-//
-//        //判断当前时间是否小于结束时间
-//        if (!TimeUtil.isLessThan(nowHour, nowMin, h2, m2)) {
-//            JOptionPane.showMessageDialog(parent, "结束时间应该大于当前时间");
-//            return false;
-//        }
+        //判断当前时间是否已经过了交易时间
+        if (TimeUtil.isAfterTradeTime(nowHour, nowMin)) {
+            JOptionPane.showMessageDialog(parent, "已经过了交易时间,明天再来");
+            return false;
+        }
+
+        //判断当前时间是否小于结束时间
+        if (!TimeUtil.isLessThan(nowHour, nowMin, h2, m2)) {
+            JOptionPane.showMessageDialog(parent, "结束时间应该大于当前时间");
+            return false;
+        }
 
         //判断结束时间是否至少大于开始时间一个时间片（5分钟）
         if(h2 * 60 + m2 - h1 * 60 - m1 <= 5) {
@@ -469,17 +475,17 @@ class ParamPanel extends JPanel {
                     Calendar.MINUTE,
                     Integer.parseInt(end.getMinute())
             );
-            //TODO debug
-            Calendar now = Calendar.getInstance();
-            now.set(Calendar.HOUR_OF_DAY, 10);
-            now.set(Calendar.MINUTE, 0);
+
+//            Calendar now = Calendar.getInstance();
+//            now.set(Calendar.HOUR_OF_DAY, 10);
+//            now.set(Calendar.MINUTE, 0);
 
             VWAP_Param param = new VWAP_Param(
                     quantity,
                     codeText.getText(),
                     QuestionnairePanel.risk,
                     TimeUtil.timeToNode(
-                           now
+                          new TimeBlImpl().getCurrentTime()
                     ),
                     TimeUtil.timeToNode(s),
                     TimeUtil.timeToNode(e)
