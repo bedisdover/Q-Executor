@@ -22,8 +22,6 @@ public class NightFactoryML implements ServletContextListener {
     private Timer timer;
     private static final long PERIOD_DAY = 24 * 60 * 60 * 1000;
 
-
-
     public void contextDestroyed(ServletContextEvent event) {
         timer.cancel();
         event.getServletContext().log("timer destroyed!");
@@ -38,8 +36,6 @@ public class NightFactoryML implements ServletContextListener {
         calendar.set(Calendar.MINUTE, 2);
         calendar.set(Calendar.SECOND, 0);
         Date date = calendar.getTime();
-
-        System.out.println("NightFactoryML.contextInitialized");
 
         timer.schedule(MLForVWAPServiceImpl.getInstance(), date, PERIOD_DAY);
 

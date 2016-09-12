@@ -4,9 +4,6 @@ import present.PanelSwitcher;
 import present.panel.account.LoginPanel;
 import present.panel.account.RegisterPanel;
 import present.panel.introduce.IntroPanel;
-import present.panel.stock.GeneralPanel;
-import present.panel.stock.PriceSharePanel;
-import present.panel.stock.SinglePanel;
 import present.panel.stock.StockPanel;
 import present.panel.trade.TradePanel;
 
@@ -67,8 +64,8 @@ public class TitlePanel extends JPanel{
         //股票导航菜单
         JMenuBar bar = new JMenuBar();
 //        stock.add(initMenuItem("大单", (e) -> switcher.jump(new GeneralPanel("sh600000"))));
-        stock.add(initMenuItem("逐笔", (e) -> switcher.jump(new SinglePanel("sh600000"))));
-        stock.add(initMenuItem("分价", (e) -> switcher.jump(new PriceSharePanel("sh600000"))));
+//        stock.add(initMenuItem("逐笔", (e) -> switcher.jump(new SinglePanel("sh600000"))));
+//        stock.add(initMenuItem("分价", (e) -> switcher.jump(new PriceSharePanel("sh600000"))));
         stock.addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {
@@ -122,8 +119,8 @@ public class TitlePanel extends JPanel{
 
     private void setButtonHandler() {
         login.addActionListener((e) -> switcher.jump(new LoginPanel(switcher)));
-        register.addActionListener((e) -> switcher.jump(new RegisterPanel(switcher)));
+        register.addActionListener((e) -> switcher.jump(new RegisterPanel()));
         trade.addActionListener((e) -> switcher.jump(new TradePanel()));
-        introduce.addActionListener((e) -> switcher.jump(new IntroPanel(switcher)));
+        introduce.addActionListener((e) -> switcher.jump(new IntroPanel()));
     }
 }

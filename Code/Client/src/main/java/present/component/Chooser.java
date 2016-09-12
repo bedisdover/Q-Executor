@@ -214,7 +214,7 @@ public class Chooser extends JPanel{
         private void updateDate() {
             center.setText(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH) + 1));
         }
-        // listener for control label.
+        // util for control label.
         class MyMouseAdapter extends MouseAdapter{
             
             JLabel label;

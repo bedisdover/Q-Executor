@@ -14,8 +14,8 @@ import java.util.ArrayList;
  * Created by admin on 2016/8/20.
  */
 public class MLForVWAPServiceTest {
-    @Resource
-    MLForVWAPService ml_service;
+
+
 
     @Test
     public void testStaticService(){
@@ -54,6 +54,7 @@ public class MLForVWAPServiceTest {
 
 
         StockMLService allStockService=new StockMLServiceImpl();
+        MLForVWAPService ml_service=MLForVWAPServiceImpl.getInstance();
 
         //测试向VWAP传递静态成交量
         String all_stock[]=allStockService.getStocksNeedCal();

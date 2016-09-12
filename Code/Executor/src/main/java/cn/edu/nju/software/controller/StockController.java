@@ -32,6 +32,11 @@ public class StockController {
         return stockService.getStockNowTime(codeNum);
     }
 
+    @RequestMapping("/KLineMinute")
+    @ResponseBody
+    public List<StockKLineVO> getKLineByMinute(String codeNum, int interval) {
+        return stockService.getKLineByMinute(codeNum, interval);
+    }
 
     @RequestMapping("/KLineDay")
     @ResponseBody
@@ -113,5 +118,41 @@ public class StockController {
     public List<HotStockVO> getHotStocks(){
 
         return stockService.getHotStocks();
+    }
+
+    /**
+     * KDJ指标
+     */
+    @RequestMapping("/KDJ")
+    @ResponseBody
+    public List<KDJVO> getKDJ(String codeNum) {
+        return stockService.getKDJ(codeNum);
+    }
+
+    /**
+     * RSI指标
+     */
+    @RequestMapping("RSI")
+    @ResponseBody
+    public List<IndexVO> getRSI(String codeNum) {
+        return stockService.getRSI(codeNum);
+    }
+
+    /**
+     * MACD指标
+     */
+    @RequestMapping("/MACD")
+    @ResponseBody
+    public List<IndexVO> getMACD(String codeNum) {
+        return stockService.getMACD(codeNum);
+    }
+
+    /**
+     * 乖离率
+     */
+    @RequestMapping("/BIAS")
+    @ResponseBody
+    public List<IndexVO> getBIAS(String codeNum) {
+        return stockService.getBIAS(codeNum);
     }
 }

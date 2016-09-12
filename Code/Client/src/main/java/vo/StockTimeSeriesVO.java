@@ -12,17 +12,10 @@ public class StockTimeSeriesVO {
     private String timeLine;
     //价格
     private double price;
+    //成交量
+    private double volume;
     //均价
     private double avePrice;
-
-    public StockTimeSeriesVO() {
-    }
-
-    public StockTimeSeriesVO(String timeLine, double price, double avePrice) {
-        this.timeLine = timeLine;
-        this.price = price;
-        this.avePrice = avePrice;
-    }
 
     public String getTimeLine() {
         return timeLine;
@@ -46,6 +39,14 @@ public class StockTimeSeriesVO {
 
     public void setAvePrice(double avePrice) {
         this.avePrice = avePrice;
+    }
+
+    public void setVolume(double volume) {
+        this.volume = volume;
+    }
+
+    public double getVolume() {
+        return volume;
     }
 
     @Override

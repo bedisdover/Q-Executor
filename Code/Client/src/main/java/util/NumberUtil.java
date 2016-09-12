@@ -36,4 +36,31 @@ public class NumberUtil {
     public static String transferUnit(double number) {
         return transferUnit(number, 2);
     }
+
+    /**
+     * 默认保留两位小数
+     */
+    public static double round(double number) {
+        return round(number, 2);
+    }
+
+    /**
+     * 保留小数
+     */
+    public static double round(double number, int round) {
+        double temp = Math.pow(10, round);
+        return Math.round(number * temp) / temp;
+    }
+
+    /**
+     * 获取小数的百分数形式, 默认保留两位小数
+     * @return 0.00334 ---> 0.33%
+     */
+    public static String getPercent(double number) {
+        return getPercent(number, 2);
+    }
+
+    public static String getPercent(double number, int round) {
+        return round(number * 100, round) + "%";
+    }
 }

@@ -59,6 +59,10 @@ public class StockInfoByCom {
         return mapping[type];
     }
 
+    public int getTypeNum() {
+        return type;
+    }
+
     public void setType(int type) {
         this.type = type;
     }

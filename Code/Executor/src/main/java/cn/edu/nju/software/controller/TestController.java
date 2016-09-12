@@ -1,6 +1,7 @@
 package cn.edu.nju.software.controller;
 
 import cn.edu.nju.software.service.MLForVWAPService;
+import cn.edu.nju.software.service.MLForVWAPServiceImpl;
 import cn.edu.nju.software.service.StockMLService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
  */
 @Controller
 public class TestController {
-    @Resource
+
     MLForVWAPService mlForVWAPService;
 
     @Resource
@@ -25,6 +26,7 @@ public class TestController {
     @RequestMapping("/testVolume")
     @ResponseBody
     public String testVolume() {
+        mlForVWAPService= MLForVWAPServiceImpl.getInstance();
         String all_stock[] = stockMLService.getStocksNeedCal();
 
         String result = "";
@@ -36,7 +38,6 @@ public class TestController {
                 result += "index: " + (i + 1) + " " + list.get(i) + "\n";
             }
         }
-
         return result;
     }
 

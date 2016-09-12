@@ -1,7 +1,5 @@
 package present.component;
 
-import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -25,7 +23,6 @@ public class TextPlusBtn extends JPanel {
         text.setPreferredSize(new Dimension(textW, height));
 
         search = new JButton("搜索");
-        search.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.blue));
         int searchW = width - textW;
         search.setPreferredSize(new Dimension(searchW, height));
 
