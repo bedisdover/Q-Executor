@@ -174,7 +174,7 @@ public class TimeUtil {
             long temp = dateFormat.parse(time).getTime() - dateFormat.parse("09:30:00").getTime();
 
             if (temp < HOUR_SIZE << 1) {// 9:30~11:30
-                return temp / (HOUR_SIZE << 2);
+                return (double) temp / (HOUR_SIZE << 2);
             } else if (temp >= HOUR_SIZE << 1 && temp <= HOUR_SIZE * 3.5){// 11:30~13:00
                 return 0.5;
             } else if (temp > HOUR_SIZE * 3.5 && temp < HOUR_SIZE * 5.5){// 13:00~15:00
@@ -187,6 +187,18 @@ public class TimeUtil {
         }
 
         return 0;
+    }
+
+    /**
+     * 通过占交易时长的比例获得时间
+     * 交易时长：9:30~11:30 +++ 13:00~15:00 共4小时
+     *
+     * @param percent 占比
+     * @return 0.25 ---> 10:30:00, 0.75 ---> 14:00:00
+     */
+    public static Date getDateByPercent(double percent) {
+        // TODO
+        return new Date();
     }
 
     private static Date getTime(String time) {

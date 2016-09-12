@@ -22,7 +22,7 @@ public class ProgressTest extends JFrame {
                 super.paintComponent(g);
 
                 g.drawImage(ImageLoader.baseBar, 0, 0, 340, 20, null);
-                g.drawImage(ImageLoader.progressBar_body, 5, 3, 167, 14, null);
+                g.drawImage(ImageLoader.progressBar, 5, 3, 167, 14, null);
             }
         };
         panel.setLayout(null);
