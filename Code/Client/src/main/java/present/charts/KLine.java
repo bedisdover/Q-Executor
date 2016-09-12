@@ -424,11 +424,8 @@ public class KLine {
 
         private double high = Double.MIN_VALUE, low = Double.MAX_VALUE;
 
-        private int kLineType;
-
         KLineVO(List<StockKLineVO> stockKLineVOList, int kLineType) {
             this.stockKLineVOList = stockKLineVOList;
-            this.kLineType = kLineType;
 
             OHLCSeries ohlcSeries = new OHLCSeries("");
             TimeSeries amountSeries = new TimeSeries("");
