@@ -1,22 +1,16 @@
 package bl.vwap;
 
-import bl.vwap.VWAP_Param;
-import service.MLForVWAPService;
-import service.MLForVWAPServiceImpl;
 import vo.MLForVWAPPriceVO;
-import vo.VolumeVO;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by ZhangYF on 2016/9/8.
  */
 public class VWAPCore {
 
-    private MLForVWAPService ml = null;
+    private blservice.vwap.MLForVWAPService ml = null;
 
     public VWAPCore(){
         //TODO 获得机器学习接口
@@ -32,6 +26,7 @@ public class VWAPCore {
     public List<Double> getStaticPn(String stockid) throws Exception{
         //TODO 异常处理
         List<Integer> Vn = ml.getStaticVol(stockid);
+        System.out.println("Vn:"+Vn);
         return initPn(Vn);
     }
 

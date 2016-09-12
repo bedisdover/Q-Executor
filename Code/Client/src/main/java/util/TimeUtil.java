@@ -12,6 +12,12 @@ import java.util.Date;
  * Change everywhere
  */
 public class TimeUtil {
+
+    /**
+     * 1小时的毫秒数
+     */
+    public static final long HOUR_SIZE = 3600000L;
+
     public static long getTimeLong(String date) {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -138,7 +144,6 @@ public class TimeUtil {
         return calendar.getTime();
     }
 
-
     public static Date getStartTime() {
         return getTime("9:29");
     }
@@ -153,6 +158,47 @@ public class TimeUtil {
 
     public static Date getResumeTime() {
         return getTime("13:01");
+    }
+
+    /**
+     * 获得最新交易时间占整个交易日区间的比例
+     *
+     * @param time 最新交易时间点,以有数据为准,格式:"HH:mm:ss"
+     * @return 占比
+     * @see present.panel.stock.center.SinglePanel#getTimePercent(String)
+     */
+    public static double getTimePercent(String time) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+
+        try {
+            long temp = dateFormat.parse(time).getTime() - dateFormat.parse("09:30:00").getTime();
+
+            if (temp < HOUR_SIZE << 1) {// 9:30~11:30
+                return (double) temp / (HOUR_SIZE << 2);
+            } else if (temp >= HOUR_SIZE << 1 && temp <= HOUR_SIZE * 3.5){// 11:30~13:00
+                return 0.5;
+            } else if (temp > HOUR_SIZE * 3.5 && temp < HOUR_SIZE * 5.5){// 13:00~15:00
+                return (temp - HOUR_SIZE * 3.5) / (HOUR_SIZE << 1);
+            } else {
+                return 1;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    /**
+     * 通过占交易时长的比例获得时间
+     * 交易时长：9:30~11:30 +++ 13:00~15:00 共4小时
+     *
+     * @param percent 占比
+     * @return 0.25 ---> 10:30:00, 0.75 ---> 14:00:00
+     */
+    public static Date getDateByPercent(double percent) {
+        // TODO
+        return new Date();
     }
 
     private static Date getTime(String time) {

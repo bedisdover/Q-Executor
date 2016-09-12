@@ -65,7 +65,7 @@ public class StockPanel extends JPanel {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                centerPanel.getData();
+//                centerPanel.getData();
             }
         }, 3000, 3000);
     }
@@ -123,7 +123,7 @@ public class StockPanel extends JPanel {
                     break;
                 case "GeneralPanel":
                     if (generalPanel == null) {
-                        generalPanel = new GeneralPanel_2(stockCode, currentDataPanel, this);
+                        generalPanel = new GeneralPanel(stockCode, currentDataPanel, this);
                     }
 
                     centerPanel = generalPanel;

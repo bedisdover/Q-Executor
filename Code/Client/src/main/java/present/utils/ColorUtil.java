@@ -64,4 +64,16 @@ public class ColorUtil {
             return ImageLoader.dull;
         }
     }
+
+    /**
+     * 比较value和base的大小,获得相应颜色
+     * @param value 比较值
+     * @param base 基准值,通常为收盘价
+     * @return value >  base ---> INC_COLOR
+     *         value <  base ---> DEC_COLOR
+     *         value == base ---> DULL_COLOR
+     */
+    public static Color getColorByComparing(double value, double base) {
+        return getTextColor(value - base);
+    }
 }

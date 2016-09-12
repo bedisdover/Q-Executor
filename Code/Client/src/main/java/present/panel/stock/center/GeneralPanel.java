@@ -3,11 +3,12 @@ package present.panel.stock.center;
 import bl.stock.GetStockDataServiceImpl;
 import blservice.stock.GetStockDataService;
 import present.charts.PieFactory;
-import present.panel.stock.MyLabel;
-import present.panel.stock.MyRenderer;
-import present.panel.stock.MyTable;
+import present.component.MyLabel;
+import present.component.MyRenderer;
+import present.component.MyTable;
 import present.panel.stock.StockPanel;
 import present.panel.stock.west.CurrentDataPanel;
+import present.utils.ColorUtil;
 import util.NumberUtil;
 import vo.StockInfoByCom;
 
@@ -32,9 +33,9 @@ public class GeneralPanel extends CenterPanel {
 
     private JLabel general_amount, general_volume, total_amount, total_volume;
 
-    private JPanel chartPanel, centerPanel;
+    private JLabel sell, buy, dull;
 
-    private Box labelBox;
+    private JPanel chartPanel, textPanel, tablePanel;
 
     private double totalAmount, totalVolume;
 
@@ -60,7 +61,7 @@ public class GeneralPanel extends CenterPanel {
 
     protected void init() {
         SwingUtilities.invokeLater(() -> {
-            panel.setLayout(new BorderLayout(0, 5));
+            panel.setLayout(new GridBagLayout());
 
             panel.revalidate();
         });
@@ -68,7 +69,9 @@ public class GeneralPanel extends CenterPanel {
 
     private void createUIComponents() {
         SwingUtilities.invokeLater(() -> {
-            JPanel northPanel = new JPanel(new BorderLayout());
+            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.fill = GridBagConstraints.BOTH;
+
             {
                 // 选项面板
                 JPanel radioPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
@@ -101,41 +104,109 @@ public class GeneralPanel extends CenterPanel {
                 buttonGroup.add(radio900);
                 buttonGroup.add(radio1000);
 
-                northPanel.add(radioPanel, BorderLayout.NORTH);
+                constraints.gridwidth = 1;
+                constraints.weightx = 1;
+                constraints.weighty = 0;
+                panel.add(new JPanel(), constraints);
+
+                constraints.gridwidth = 10;
+                constraints.weightx = 0;
+                constraints.weighty = 0;
+                panel.add(radioPanel, constraints);
+
+                constraints.gridwidth = 0;
+                constraints.weightx = 0;
+                constraints.weighty = 0;
+                panel.add(new JPanel(), constraints);
             }
 
             {
-                chartPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                chartPanel = new JPanel(new GridLayout(1, 2, 10, 0));
 
-                labelBox = Box.createVerticalBox();
+                constraints.gridwidth = 1;
+                constraints.weightx = 0;
+                constraints.weighty = 1;
+                panel.add(new JPanel(), constraints);
+
+                constraints.gridwidth = 15;
+                constraints.weightx = 0;
+                constraints.weighty = 1;
+                panel.add(chartPanel, constraints);
+
+                constraints.gridwidth = 0;
+                constraints.weightx = 1;
+                constraints.weighty = 1;
+                panel.add(new JPanel(), constraints);
+            }
+
+            {
+                textPanel = new JPanel(new GridLayout(1, 2));
+
+                JPanel amountPanel = new JPanel(new GridLayout(2, 2));
+                // 左侧边框设为30px,将文字整体移向中部
+                amountPanel.setBorder(BorderFactory.createMatteBorder(0, 30, 0, 0, new Color(0, 0, 0, 0)));
 
                 general_amount = new MyLabel("大单成交量: --");
                 total_amount = new MyLabel("总成交量: --");
                 general_volume = new MyLabel("大单成交额: --");
                 total_volume = new MyLabel("总成交额: --");
 
-                labelBox.add(new MyLabel("  "));
-                labelBox.add(new MyLabel("  "));
-                labelBox.add(general_amount);
-                labelBox.add(new MyLabel("  "));
-                labelBox.add(total_amount);
-                labelBox.add(new MyLabel("  "));
-                labelBox.add(new MyLabel("  "));
-                labelBox.add(general_volume);
-                labelBox.add(new MyLabel("  "));
-                labelBox.add(total_volume);
+                amountPanel.add(general_amount);
+                amountPanel.add(total_amount);
+                amountPanel.add(general_volume);
+                amountPanel.add(total_volume);
 
-                chartPanel.add(labelBox, BorderLayout.EAST);
+                JPanel handicapPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-                northPanel.add(chartPanel, BorderLayout.CENTER);
+                handicapPanel.add(new JLabel("买盘:"));
+                buy = new JLabel();
+                buy.setForeground(ColorUtil.DEC_COLOR);
+                handicapPanel.add(buy);
+                handicapPanel.add(new JLabel("卖盘:"));
+                sell = new JLabel();
+                sell.setForeground(ColorUtil.INC_COLOR);
+                handicapPanel.add(sell);
+                handicapPanel.add(new JLabel("中性盘:"));
+                dull = new JLabel();
+                dull.setForeground(ColorUtil.DULL_COLOR);
+                handicapPanel.add(dull);
+
+                textPanel.add(amountPanel);
+                textPanel.add(handicapPanel);
+
+                constraints.gridwidth = 1;
+                constraints.weightx = 0;
+                constraints.weighty = 0;
+                panel.add(new JPanel(), constraints);
+
+                constraints.gridwidth = 15;
+                constraints.weightx = 0;
+                constraints.weighty = 0;
+                panel.add(textPanel, constraints);
+
+                constraints.gridwidth = 0;
+                constraints.weightx = 1;
+                constraints.weighty = 0;
+                panel.add(new JPanel(), constraints);
             }
 
-            panel.add(northPanel, BorderLayout.NORTH);
-
             {
-                centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                tablePanel = new JPanel(new BorderLayout());
 
-                panel.add(centerPanel, BorderLayout.CENTER);
+                constraints.gridwidth = 1;
+                constraints.weightx = 0;
+                constraints.weighty = 1;
+                panel.add(new JPanel(), constraints);
+
+                constraints.gridwidth = 15;
+                constraints.weightx = 0;
+                constraints.weighty = 1;
+                panel.add(tablePanel, constraints);
+
+                constraints.gridwidth = 0;
+                constraints.weightx = 1;
+                constraints.weighty = 1;
+                panel.add(new JPanel(), constraints);
             }
 
             addListeners();
@@ -165,6 +236,7 @@ public class GeneralPanel extends CenterPanel {
 
     /**
      * 获取大单数据
+     *
      * @param filterNum 筛选条件，成交量的范围
      */
     private void getData(double filterNum) {
@@ -203,22 +275,30 @@ public class GeneralPanel extends CenterPanel {
         SwingUtilities.invokeLater(() -> {
             chartPanel.removeAll();
 
-//            JPanel chart = PieFactory.getPieChart(calculateAmount(stockInfoByComList), totalAmount);
-//            chart.setPreferredSize(new Dimension(200, 200));
-//            this.chartPanel.add(chart, BorderLayout.WEST);
-//            this.chartPanel.add(labelBox, BorderLayout.EAST);
+            String[] titles = new String[]{"大单", "其它"};
+            double[] values = new double[]{calculateAmount(stockInfoByComList), totalAmount};
+            JPanel chart = PieFactory.getPieChart(titles, values);
 
-            centerPanel.removeAll();
-            centerPanel.add(createTable(stockInfoByComList), BorderLayout.CENTER);
+            String[] titles_1 = new String[]{"买盘", "卖盘", "中性盘"};
+            double[] values_1 = calculateSell(stockInfoByComList);
+            JPanel chart_1 = PieFactory.getPieChart(titles_1, values_1);
+
+            chartPanel.add(chart, BorderLayout.WEST);
+            chartPanel.add(chart_1, BorderLayout.CENTER);
+
+            tablePanel.removeAll();
+            tablePanel.add(createTable(stockInfoByComList), BorderLayout.CENTER);
 
             general_amount.setText("大单成交量: " +
                     NumberUtil.transferUnit(calculateAmount(stockInfoByComList)) + "手");
             general_volume.setText("大单成交额: " +
                     NumberUtil.transferUnit(calculateVolume(stockInfoByComList)) + "元");
-
-
             total_amount.setText("总成交量: " + NumberUtil.transferUnit(totalAmount) + "手");
             total_volume.setText("总成交额: " + NumberUtil.transferUnit(totalVolume) + "元");
+
+            buy.setText(NumberUtil.transferUnit(values_1[0]));
+            sell.setText(NumberUtil.transferUnit(values_1[1]));
+            dull.setText(NumberUtil.transferUnit(values_1[2]));
 
             panel.revalidate();
             panel.repaint();
@@ -245,6 +325,19 @@ public class GeneralPanel extends CenterPanel {
         return Math.round(result * 100) / 100;
     }
 
+    /**
+     * 计算买盘、卖盘、中性盘的成交量
+     */
+    private double[] calculateSell(List<StockInfoByCom> stockInfoByComList) {
+        double[] result = new double[]{0, 0, 0};
+
+        for (StockInfoByCom stockInfoByCom : stockInfoByComList) {
+            result[stockInfoByCom.getTypeNum()] += stockInfoByCom.getVolume();
+        }
+
+        return result;
+    }
+
     private JScrollPane createTable(List<StockInfoByCom> stockInfoByComList) {
         //字段名称
         String[] names = {"交易时间", "成交价", "价格变动", "成交量(手)", "成交额(万元)", "买卖盘性质"};
@@ -268,10 +361,6 @@ public class GeneralPanel extends CenterPanel {
         // 渲染“价格变动”的颜色
         table.setRenderer(new MyRenderer(2, 5));
 
-        JScrollPane scrollPane = table.createTable();
-
-        scrollPane.setPreferredSize(new Dimension(table.getColumnModel().getTotalColumnWidth() + 28, 300));
-
-        return scrollPane;
+        return table.createTable();
     }
 }

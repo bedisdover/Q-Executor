@@ -1,6 +1,5 @@
 package present.charts;
 
-import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.*;
 import org.jfree.chart.plot.CombinedDomainXYPlot;
@@ -12,7 +11,10 @@ import org.jfree.data.Range;
 import org.jfree.data.time.Minute;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
+import present.component.chart.MyChartPanel;
+import present.component.chart.MyPanel;
 import present.panel.stock.west.CurrentDataPanel;
+import util.NumberUtil;
 import util.TimeUtil;
 import vo.StockTimeSeriesVO;
 
@@ -59,7 +61,6 @@ public class TimeSeriesChart {
         avgAxis.setRange(timeSeriesVO.getIncRateRange());
         NumberFormat numberFormat = new DecimalFormat("0.00%");
         avgAxis.setNumberFormatOverride(numberFormat);
-        avgAxis.setTickUnit(new NumberTickUnit(0.05));
 
         //设置价格绘图器
         XYLineAndShapeRenderer priceRenderer = new XYLineAndShapeRenderer();
@@ -100,9 +101,7 @@ public class TimeSeriesChart {
         combinedDomainXYPlot.add(amountPlot, 1);
         combinedDomainXYPlot.setGap(10);
 
-        JFreeChart jfreechart = new JFreeChart(combinedDomainXYPlot);
-
-        return new ChartPanel(jfreechart);
+        return new MyPanel(new MyChartPanel(new JFreeChart(combinedDomainXYPlot)), timeSeriesVO);
     }
 
     private static TimeSeriesVO getData(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
@@ -127,27 +126,32 @@ public class TimeSeriesChart {
         return minute;
     }
 
-    private static class TimeSeriesVO {
+    private static class TimeSeriesVO extends ChartVO {
         private double high = Double.MIN_VALUE, low = Double.MAX_VALUE;
+
+        private TimeSeries priceSeries, avgSeries, amountSeries;
 
         private TimeSeriesCollection priceCollection;
 
         private TimeSeriesCollection amountCollection;
 
+        private double close;
+
+        private List<StockTimeSeriesVO> stockTimeSeriesVOList;
+
         TimeSeriesVO(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
-            initData(stockTimeSeriesVOList);
+            this.stockTimeSeriesVOList = stockTimeSeriesVOList;
+
+            close = CurrentDataPanel.getClose();
+            initData();
         }
 
-        private double getClose() {
-            return CurrentDataPanel.getClose();
-        }
-
-        private void initData(List<StockTimeSeriesVO> stockTimeSeriesVOList) {
-            TimeSeries priceSeries = new TimeSeries("实时价格");
-            TimeSeries avgSeries = new TimeSeries("平均价格");
+        private void initData() {
+            priceSeries = new TimeSeries("实时价格");
+            avgSeries = new TimeSeries("平均价格");
             TimeSeries closeSeries = new TimeSeries("收盘价");
 
-            TimeSeries amountSeries = new TimeSeries("成交量");
+            amountSeries = new TimeSeries("成交量");
 
             StockTimeSeriesVO stockVO;
             Minute minute;
@@ -157,9 +161,9 @@ public class TimeSeriesChart {
                 minute = getMinute(stockVO.getTimeLine());
                 priceSeries.add(minute, stockVO.getPrice());
                 avgSeries.add(minute, stockVO.getAvePrice());
-                closeSeries.add(minute, getClose());
+                closeSeries.add(minute, close);
 
-                amountSeries.add(getMinute(stockVO.getTimeLine()), stockVO.getVolume());
+                amountSeries.add(minute, stockVO.getVolume());
             }
 
             priceCollection = new TimeSeriesCollection();
@@ -215,10 +219,31 @@ public class TimeSeriesChart {
          * 获取涨跌幅范围
          */
         Range getIncRateRange() {
-            double close = getClose();
+            return new Range((getPriceRange().getLowerBound() - close) / close,
+                    (getPriceRange().getUpperBound() - close) / close);
+        }
 
-            return new Range((getPriceRange().getLowerBound() - close) / close * 100,
-                    (getPriceRange().getUpperBound() - close) / close * 100);
+        /**
+         * 获取某一时刻的数据
+         */
+        public String getText(int itemIndex) {
+            double price = (double) priceSeries.getDataItem(itemIndex).getValue();
+            double incNum = price - close;
+            double amount = (double) amountSeries.getDataItem(itemIndex).getValue();
+
+            System.out.println(stockTimeSeriesVOList.get(itemIndex));
+
+            return getTime(itemIndex) + "  价格:" + price +
+                    "  涨跌:" + NumberUtil.round(incNum) + "(" + NumberUtil.getPercent(incNum / close) + ")" +
+                    "  成交量:" + NumberUtil.transferUnit(amount / 100) + "手";
+        }
+
+        /**
+         * 获取精确时间
+         * @return 格式: yyyy-MM-dd HH:mm:ss
+         */
+        String getTime(int itemIndex) {
+            return TimeUtil.getDateHHmmss(priceSeries.getDataItem(itemIndex).getPeriod().getFirstMillisecond());
         }
     }
 }

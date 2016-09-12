@@ -40,13 +40,7 @@ class TickPanel extends JPanel {
             for (double tick : ticks) {
                 JLabel label = new JLabel();
 
-                if (tick > base) {
-                    label.setForeground(ColorUtil.INC_COLOR);
-                } else if (tick < base) {
-                    label.setForeground(ColorUtil.DEC_COLOR);
-                } else {
-                    label.setForeground(ColorUtil.DULL_COLOR);
-                }
+                label.setForeground(ColorUtil.getColorByComparing(tick, base));
 
                 label.setText(NumberUtil.round(tick) + "");
                 label.setFont(font);

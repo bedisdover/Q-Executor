@@ -119,7 +119,7 @@ public class TitlePanel extends JPanel{
 
     private void setButtonHandler() {
         login.addActionListener((e) -> switcher.jump(new LoginPanel(switcher)));
-        register.addActionListener((e) -> switcher.jump(new RegisterPanel(switcher)));
+        register.addActionListener((e) -> switcher.jump(new RegisterPanel()));
         trade.addActionListener((e) -> switcher.jump(new TradePanel()));
         introduce.addActionListener((e) -> switcher.jump(new IntroPanel()));
     }
