@@ -1,6 +1,7 @@
 package present.panel.trade;
 
 import bl.stock.GetStockDataServiceImpl;
+import bl.time.TimeBlImpl;
 import bl.time.TimeUtil;
 import bl.vwap.VWAP;
 import bl.vwap.VWAP_Param;
@@ -17,8 +18,8 @@ import vo.VolumeVO;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -96,9 +97,10 @@ class ParamPanel extends JPanel {
 
     /**
      * 计算交易策略
+     * @param quantity 交易总量
      */
-    void calculate() {
-        Calculation calculation = new Calculation();
+    void calculate(long quantity) {
+        Calculation calculation = new Calculation(quantity);
         calculation.execute();
     }
 
@@ -214,7 +216,7 @@ class ParamPanel extends JPanel {
 
             disableComponents();
             parent.generatingResult();
-            calculate();
+            calculate(Long.parseLong(quanVal.getText()));
         });
 
         //结束计算
@@ -295,8 +297,16 @@ class ParamPanel extends JPanel {
     }
 
     private boolean checkTime(TimePanel start, TimePanel end) {
-        int nowHour = TimeUtil.getCurrentHour();
-        int nowMin = TimeUtil.getCurrentMin();
+        Calendar now;
+        try {
+            now = new TimeBlImpl().getCurrentTime();
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(parent, "网络异常");
+            return false;
+        }
+        int nowHour = now.get(Calendar.HOUR_OF_DAY);
+        int nowMin = now.get(Calendar.MINUTE);
 
         String hour1 = start.getHour();
         String minute1 = start.getMinute();
@@ -305,18 +315,22 @@ class ParamPanel extends JPanel {
         int h1 = Integer.parseInt(hour1), m1 = Integer.parseInt(minute1);
         int h2 = Integer.parseInt(hour2), m2 = Integer.parseInt(minute2);
 
-        if (TimeUtil.isAfterTradeTime(nowHour, nowMin)) {
-            JOptionPane.showMessageDialog(this, "已经过了交易时间,明天再来");
-            return false;
-        }
-
-        //TODO 检测当前时间是否小于开始时间
-
         //判断时间是否合法
         if (!(checkTimeValid(hour1, minute1) && checkTimeValid(hour2, minute2))) {
             return false;
         }
 
+        //判断当前时间是否已经过了交易时间
+        if (TimeUtil.isAfterTradeTime(nowHour, nowMin)) {
+            JOptionPane.showMessageDialog(parent, "已经过了交易时间,明天再来");
+            return false;
+        }
+
+        //判断当前时间是否小于结束时间
+        if (!TimeUtil.isLessThan(nowHour, nowMin, h2, m2)) {
+            JOptionPane.showMessageDialog(parent, "结束时间应该大于当前时间");
+            return false;
+        }
 
         //判断结束时间是否至少大于开始时间一个时间片（5分钟）
         if(h2 * 60 + m2 - h1 * 60 - m1 <= 5) {
@@ -423,6 +437,15 @@ class ParamPanel extends JPanel {
     }
 
     private class Calculation extends SwingWorker<List<VolumeVO>, Void> {
+        private long quantity;
+
+        /**
+         *
+         * @param quantity 交易总量
+         */
+        Calculation(long quantity) {
+            this.quantity = quantity;
+        }
 
         @Override
         protected List<VolumeVO> doInBackground() throws Exception {
@@ -447,10 +470,12 @@ class ParamPanel extends JPanel {
             );
 
             VWAP_Param param = new VWAP_Param(
-                    Long.parseLong(quanVal.getText()),
+                    quantity,
                     codeText.getText(),
                     QuestionnairePanel.risk,
-                    TimeUtil.getCurrentIime(),
+                    TimeUtil.timeToNode(
+                            new TimeBlImpl().getCurrentTime()
+                    ),
                     TimeUtil.timeToNode(s),
                     TimeUtil.timeToNode(e)
             );
@@ -459,16 +484,19 @@ class ParamPanel extends JPanel {
 
         @Override
         protected void done() {
-            List<VolumeVO> result = null;
             try {
-                result = get();
-                parent.updateResultPanel(result, String.valueOf(operationVal.getSelectedItem()));
+                List<VolumeVO> result = get();
+                parent.updateResultPanel(
+                        result, String.valueOf(operationVal.getSelectedItem())
+                );
                 enableComponents();
                 stopUpdate.setEnabled(true);
             } catch (Exception e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(parent, "网络异常或者该股票结果不可计算");
-                parent.updateResultPanel(result, String.valueOf(operationVal.getSelectedItem()));
+                parent.updateResultPanel(
+                        null, String.valueOf(operationVal.getSelectedItem())
+                );
                 enableComponents();
                 stopUpdate.setEnabled(false);
             }

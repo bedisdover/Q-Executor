@@ -67,12 +67,11 @@ public class ImageLoader {
 
     public static Image next_exit;
 
+    public static ImageIcon mark;
+
     public static Image baseBar;
 
-    /**
-     * 进度条三部分
-     */
-    public static Image progressBar_head, progressBar_body, progressBar_tail;
+    public static Image progressBar;
 
     public static Image hotTip;
 
@@ -122,10 +121,9 @@ public class ImageLoader {
         emptySelf = new ImageIcon("src/main/resources/images/empty_self.jpg").getImage();
 
         try {
+            mark = new ImageIcon("src/main/resources/images/bookmarks.png");
             baseBar = ImageIO.read(new File("src/main/resources/images/bar.png"));
-            progressBar_head = ImageIO.read(new File("src/main/resources/images/progressBar_head.png"));
-            progressBar_body = ImageIO.read(new File("src/main/resources/images/progressBar_body.png"));
-            progressBar_tail = ImageIO.read(new File("src/main/resources/images/progressBar_tail.png"));
+            progressBar = ImageIO.read(new File("src/main/resources/images/progressBar.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
