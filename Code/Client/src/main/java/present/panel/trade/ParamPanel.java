@@ -105,6 +105,14 @@ class ParamPanel extends JPanel {
     }
 
     /**
+     * 停止刷新结果面板和分时图
+     */
+    void stopUpdate() {
+        parent.stopUpdate();
+        stopUpdate.setEnabled(false);
+    }
+
+    /**
      * 生成股票数量输入面板
      * @return JPanel
      */
@@ -229,8 +237,7 @@ class ParamPanel extends JPanel {
                 return;
             }
 
-            parent.stopUpdate();
-            stopUpdate.setEnabled(false);
+            stopUpdate();
         });
 
         JPanel left = new JPanel();
@@ -469,12 +476,16 @@ class ParamPanel extends JPanel {
                     Integer.parseInt(end.getMinute())
             );
 
+//            Calendar now = Calendar.getInstance();
+//            now.set(Calendar.HOUR_OF_DAY, 10);
+//            now.set(Calendar.MINUTE, 0);
+
             VWAP_Param param = new VWAP_Param(
                     quantity,
                     codeText.getText(),
                     QuestionnairePanel.risk,
                     TimeUtil.timeToNode(
-                            new TimeBlImpl().getCurrentTime()
+                          new TimeBlImpl().getCurrentTime()
                     ),
                     TimeUtil.timeToNode(s),
                     TimeUtil.timeToNode(e)

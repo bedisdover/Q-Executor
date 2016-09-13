@@ -4,6 +4,8 @@ import org.jfree.chart.axis.SegmentedTimeline;
 
 import java.util.Date;
 
+import static present.charts.KLine.KLINE60MINUTE;
+
 /**
  * Created by song on 16-9-10.
  * <p>
@@ -29,17 +31,31 @@ public class MyTimeline {
      *
      * @return
      */
-    public static SegmentedTimeline getTimeLineFor5Minute() {
-        SegmentedTimeline timeline = new SegmentedTimeline(SegmentedTimeline.MINUTE_SEGMENT_SIZE, 1351, 89);
+    public static SegmentedTimeline getTimeLine(int kLineType) {
+
+        if (kLineType == KLINE60MINUTE) {
+            return getTimeLineFor60Minute();
+        }
+//        SegmentedTimeline timeline = new SegmentedTimeline(SegmentedTimeline.MINUTE_SEGMENT_SIZE, 1351, 89);
+//        timeline.setStartTime(SegmentedTimeline.firstMondayAfter1900() + 780 * SegmentedTimeline.MINUTE_SEGMENT_SIZE);
+        SegmentedTimeline timeline = new SegmentedTimeline(SegmentedTimeline.MINUTE_SEGMENT_SIZE, 331, 539);
 //        SegmentedTimeline timeline = new SegmentedTimeline(SegmentedTimeline.MINUTE_SEGMENT_SIZE, 121, 89);
-//        timeline.setBaseTimeline(SegmentedTimeline.newFifteenMinuteTimeline());
-        timeline.setStartTime(SegmentedTimeline.firstMondayAfter1900() + 780 * SegmentedTimeline.MINUTE_SEGMENT_SIZE);
-        timeline.setBaseTimeline(getBaseLine());
+        timeline.setBaseTimeline(SegmentedTimeline.newMondayThroughFridayTimeline());
+//        timeline.setBaseTimeline(getBaseLine());
 //        long time = new Date(2016, 8, 1, 15, 0).getTime();
 //        timeline.addException(time, time + 12 * 60 * SegmentedTimeline.MINUTE_SEGMENT_SIZE);
 //        timeline.setStartTime(SegmentedTimeline.firstMondayAfter1900() + 570 * SegmentedTimeline.MINUTE_SEGMENT_SIZE);
 //        timeline.setStartTime(new Date(2016, 8, 2, 9, 30, 0).getTime());
 
+
+        return timeline;
+    }
+
+    private static SegmentedTimeline getTimeLineFor60Minute() {
+        SegmentedTimeline timeline = new SegmentedTimeline(SegmentedTimeline.FIFTEEN_MINUTE_SEGMENT_SIZE, 30, 18);
+        timeline.setBaseTimeline(SegmentedTimeline.newMondayThroughFridayTimeline());
+        timeline.addException(new Date(2016, 9, 3));
+        timeline.addException(new Date(2016, 9, 4));
 
         return timeline;
     }

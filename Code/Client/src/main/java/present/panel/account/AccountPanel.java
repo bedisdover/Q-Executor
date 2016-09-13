@@ -51,8 +51,11 @@ public class AccountPanel extends JPanel {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
+                Image img = ImageLoader.account_nav;
+                int w = this.getWidth();
+                int h = this.getHeight();
                 g.drawImage(
-                        ImageLoader.account_nav, 0, 0, this.getWidth(), this.getHeight(), null
+                        img , 0, 0, w, h, null
                 );
             }
         };
@@ -67,6 +70,9 @@ public class AccountPanel extends JPanel {
         //导航栏下方面板
         JPanel down = new JPanel(new BorderLayout());
         down.setOpaque(false);
+        down.setPreferredSize(new Dimension(
+                NAV_W, MainFrame.PANEL_H - NAV_UP_H
+        ));
         //导航栏按钮面板
         down.add(createBtnBox(content, switcher), BorderLayout.NORTH);
         nav.add(down, BorderLayout.CENTER);

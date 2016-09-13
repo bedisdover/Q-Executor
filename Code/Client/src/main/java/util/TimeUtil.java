@@ -66,6 +66,11 @@ public class TimeUtil {
         return dateFormat.format(date);
     }
 
+    public static Date getDetailTime(String date) throws ParseException {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return dateFormat.parse(date);
+    }
+
     public static Date getDate(String string) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
