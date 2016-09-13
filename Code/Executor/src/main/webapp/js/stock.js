@@ -4,6 +4,8 @@
  * stock相关操作，包含当前数据，基本数据，自选股、最近浏览等
  */
 
+var ip = 'http://139.196.174.107';
+
 /**
  * 股票ID
  */
@@ -16,6 +18,7 @@ var id = '';
 var display_num = 5;
 
 $(function () {
+    hotStock.getData();
     id = getUrlParam('id');
     if (id == null) {
         top.location = '404.html';
@@ -366,10 +369,19 @@ var brower_history = {
     }
 };
 
-var industry = {
-    industry_list : {
-        '生物制药': 'swzy'
+var hotStock = {
+    getData: function() {
+        jQuery.ajax({
+            url: ip + '/HotStocks',
+            type: 'get',
+            success: function(data) {
+                console.log(data);
+            }
+        })
     },
+    show: function() {
+
+    }
 };
 
 /**

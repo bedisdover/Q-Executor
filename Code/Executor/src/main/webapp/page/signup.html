@@ -10,49 +10,49 @@
 </head>
 <body>
 <div class="container">
-	<div class="row top-padding bottom-padding">
-		<div class="page-header text-center">
-			<h3>注册</h3>
-		</div>
-	</div>
+    <div class="row top-padding bottom-padding">
+        <div class="page-header text-center">
+            <h3>注册</h3>
+        </div>
+    </div>
 
-	<form id="form">
-		<div class="row top-padding bottom-padding">
-			<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-				<input type="email" name="mail" class="form-control" placeholder="邮箱" id="mail">
-			</div>
-		</div>
+    <form id="form">
+        <div class="row top-padding bottom-padding">
+            <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
+                <input type="email" name="mail" class="form-control" placeholder="邮箱" id="mail">
+            </div>
+        </div>
 
-		<div class="row top-padding bottom-padding">
-			<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-				<input type="text" name="userName" class="form-control" placeholder="用户名" id="userName" >
-			</div>
-		</div>
+        <div class="row top-padding bottom-padding">
+            <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
+                <input type="text" name="userName" class="form-control" placeholder="用户名" id="userName">
+            </div>
+        </div>
 
-		<div class="row top-padding bottom-padding">
-			<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-				<input type="text" name="nickName" class="form-control" placeholder="昵称" id="nickName">
-			</div>
-		</div>
+        <div class="row top-padding bottom-padding">
+            <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
+                <input type="text" name="nickName" class="form-control" placeholder="昵称" id="nickName">
+            </div>
+        </div>
 
-		<div class="row top-padding bottom-padding">
-			<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-				<input type="password" name="password" class="form-control" placeholder="密码" id="password">
-			</div>
-		</div>
+        <div class="row top-padding bottom-padding">
+            <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
+                <input type="password" name="password" class="form-control" placeholder="密码" id="password">
+            </div>
+        </div>
 
-		<div class="row top-padding bottom-padding">
-			<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-				<input type="password" class="form-control" placeholder="确认密码" id="confirmPassword">
-			</div>
-		</div>
+        <div class="row top-padding bottom-padding">
+            <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
+                <input type="password" class="form-control" placeholder="确认密码" id="confirmPassword">
+            </div>
+        </div>
 
-		<div class="row top-padding bottom-padding">
-			<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
-				<button type="button" class="btn btn-primary btn-block" id="register">注册</button>
-			</div>
-		</div>
-	</form>
+        <div class="row top-padding bottom-padding">
+            <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
+                <button type="button" class="btn btn-primary btn-block" id="register">注册</button>
+            </div>
+        </div>
+    </form>
 </div>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
@@ -63,13 +63,25 @@
         $('#nickName').off('focusout');
     });
 
+    $('#form').on('keypress', function (e) {
+        if (e.which == 13) {
+            register();
+        }
+    });
+
     $('#register').on('click', function () {
-        if ($('#form').find('.error').length == 0) {
+        register();
+    });
+
+    function register() {
+        var form = $('#form');
+
+        if ($(form).find('.error').length == 0 && $('#password').val().trim() != '') {
             jQuery.ajax({
                 url: '/register',
                 type: 'post',
                 dataType: 'json',
-                data: $('#form').serialize(),
+                data: $(form).serialize(),
                 success: function (data) {
                     if (data.state == true) {
                         top.location = '../';
@@ -79,7 +91,7 @@
                 }
             });
         }
-    });
+    }
 </script>
 </body>
 </html>

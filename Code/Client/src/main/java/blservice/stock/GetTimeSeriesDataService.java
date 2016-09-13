@@ -16,5 +16,13 @@ public interface GetTimeSeriesDataService {
      * @return 分时数据
      * @throws Exception 
      */
+<<<<<<< HEAD:Code/Client/src/main/java/blservice/GetTimeSeriesDataService.java
+
+
     List<StockTimeSeriesVO> getData(String codeNum) throws Exception;
+
+
+=======
+    List<StockTimeSeriesVO> getData(String codeNum) throws Exception;
+>>>>>>> origin/develop:Code/Client/src/main/java/blservice/stock/GetTimeSeriesDataService.java
 }

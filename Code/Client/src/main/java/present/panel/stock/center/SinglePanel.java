@@ -50,11 +50,11 @@ public class SinglePanel extends CenterPanel implements ProgressListener {
         SwingUtilities.invokeLater(() -> {
             toolPanel = new JPanel();
 
-            toolPanel.add(new JLabel("当日时间线 → "));
-
-            progress = new MyProgressPanel(this);
-
-            toolPanel.add(progress);
+//            toolPanel.add(new JLabel("当日时间线 → "));
+//
+//            progress = new MyProgressPanel(this);
+//
+//            toolPanel.add(progress);
         });
     }
 
@@ -90,8 +90,8 @@ public class SinglePanel extends CenterPanel implements ProgressListener {
         SwingUtilities.invokeLater(() -> {
             panel.removeAll();
 
-            progress.setPercent(getTimePercent(stockInfoByPerList.get(0).getTime()));
-            panel.add(toolPanel, BorderLayout.NORTH);
+//            progress.setPercent(getTimePercent(stockInfoByPerList.get(0).getTime()));
+//            panel.add(toolPanel, BorderLayout.NORTH);
 
             scrollPane = createTable(stockInfoByPerList);
             panel.add(scrollPane, BorderLayout.CENTER);

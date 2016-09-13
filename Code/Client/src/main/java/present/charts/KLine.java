@@ -88,10 +88,10 @@ public class KLine {
         this.stockCode = stockCode;
         tabbedPane = new JTabbedPane();
 
-        getKLineMinute(5);
-        getKLineMinute(15);
-        getKLineMinute(30);
-        getKLineMinute(60);
+//        getKLineMinute(5);
+//        getKLineMinute(15);
+//        getKLineMinute(30);
+//        getKLineMinute(60);
         getKLineDay();
         getKLineWeek();
         getKLineMonth();
@@ -424,11 +424,8 @@ public class KLine {
 
         private double high = Double.MIN_VALUE, low = Double.MAX_VALUE;
 
-        private int kLineType;
-
         KLineVO(List<StockKLineVO> stockKLineVOList, int kLineType) {
             this.stockKLineVOList = stockKLineVOList;
-            this.kLineType = kLineType;
 
             OHLCSeries ohlcSeries = new OHLCSeries("");
             TimeSeries amountSeries = new TimeSeries("");

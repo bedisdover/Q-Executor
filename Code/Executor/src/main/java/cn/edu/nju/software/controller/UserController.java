@@ -111,7 +111,7 @@ public class UserController {
 
     /**
      *
-     * @param session
+     * @param userName
      * @param num (邮件里面所带的URL后面跟的参数,前端捕获后需要传递过来)
      * @param password(用户所需要修改的新密码)
      * @return  MsgInfo
@@ -122,22 +122,11 @@ public class UserController {
      */
     @RequestMapping("/modifyPassword")
     @ResponseBody
-    public MsgInfo modifyPassword(HttpSession session,String num,String password){
+    public MsgInfo modifyPassword(String userName,String num,String password){
 
-        if(null == num){
-            return new MsgInfo(false,"链接错误");
-        }else  if(null == password ){
-            return  new MsgInfo(false,"密码错误");
-        }
 
-        String userName =(String) session.getAttribute(num);
-        if(userName == null){
-            return new MsgInfo(false,"该链接已经失效,请重新生成链接");
-        }
 
-        session.setAttribute(num,null);
-
-       return userService.updatePassword(userName,SHA256.encrypt(password));
+       return userService.modifyPassword(userName,num,SHA256.encrypt(password));
 
     }
 
@@ -162,4 +151,7 @@ public class UserController {
         }
         return new MsgInfo(true,"已登录",tem);
     }
+
+    // TODO 添加logout方法
+    // TODO: 16-9-13  发送邮件后仍可使用原密码登录
 }

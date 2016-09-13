@@ -52,8 +52,18 @@
 <script src="../js/jquery.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
 <script src="../js/check.js"></script>
-<script type="text/javascript">
+<script>
+    $('form').on('keypress', function(e) {
+        if (e.which == 13) {
+            login();
+        }
+    });
+
     $('#login').on('click', function () {
+        login();
+    });
+
+    function login() {
         var form = $('#form');
         if (form.find('.error').length == 0) {
             jQuery.ajax({
@@ -63,7 +73,7 @@
                 data: form.serialize(),
                 success: function (data) {
                     if (data.state == true) {
-                        if (document.referrer == '') {
+                        if (document.referrer == '' || document.referrer.indexOf('findpw.html') != -1) {
                             top.location = '../';
                         } else {
                             top.location = document.referrer;
@@ -77,7 +87,7 @@
                 }
             });
         }
-    });
+    }
 </script>
 </body>
 </html>
