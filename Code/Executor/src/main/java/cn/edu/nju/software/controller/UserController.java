@@ -151,4 +151,7 @@ public class UserController {
         }
         return new MsgInfo(true,"已登录",tem);
     }
+
+    // TODO 添加logout方法
+    // TODO: 16-9-13  发送邮件后仍可使用原密码登录
 }
