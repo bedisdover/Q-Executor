@@ -130,6 +130,16 @@ public class UserController {
 
     }
 
+    @RequestMapping("/logout")
+    @ResponseBody
+    public MsgInfo logout(HttpSession session){
+
+
+        session.setAttribute("user",null);
+        return new MsgInfo(true,"成功登录");
+    }
+
+
     /**
      *
      * @param session
