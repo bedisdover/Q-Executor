@@ -91,7 +91,7 @@ public class TradePanel extends JPanel {
     private int timeToUpdate = UPDATE_GAP;
 
     //刷新间隔
-    private static final int UPDATE_GAP = 300;
+    private static final int UPDATE_GAP = 3;
 
     //刷新频率
     private static final int FREQUENCY = 1000;
