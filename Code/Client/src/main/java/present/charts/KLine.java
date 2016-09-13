@@ -88,10 +88,10 @@ public class KLine {
         this.stockCode = stockCode;
         tabbedPane = new JTabbedPane();
 
-        getKLineMinute(5);
-        getKLineMinute(15);
-        getKLineMinute(30);
-        getKLineMinute(60);
+//        getKLineMinute(5);
+//        getKLineMinute(15);
+//        getKLineMinute(30);
+//        getKLineMinute(60);
         getKLineDay();
         getKLineWeek();
         getKLineMonth();
