@@ -130,6 +130,16 @@ public class UserController {
 
     }
 
+    @RequestMapping("/logout")
+    @ResponseBody
+    public MsgInfo logout(HttpSession session){
+
+
+        session.setAttribute("user",null);
+        return new MsgInfo(true,"成功登录");
+    }
+
+
     /**
      *
      * @param session
@@ -151,7 +161,4 @@ public class UserController {
         }
         return new MsgInfo(true,"已登录",tem);
     }
-
-    // TODO 添加logout方法
-    // TODO: 16-9-13  发送邮件后仍可使用原密码登录
 }
