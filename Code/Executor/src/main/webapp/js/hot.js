@@ -5,6 +5,16 @@
  */
 
 $(function() {
-    
+    hotStock.getData();
 });
 
+var hotStock = {
+    getData: function() {
+        jQuery.ajax({
+            url: '/HotStocks',
+            success: function(data) {
+                console.log(data);
+            }
+        });
+    }
+};

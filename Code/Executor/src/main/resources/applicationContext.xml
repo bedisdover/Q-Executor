@@ -40,12 +40,10 @@
         destroy-method="close">
     <property name="driverClass" value="com.mysql.jdbc.Driver"/>
 
-    <property name="jdbcUrl" value="jdbc:mysql://139.196.174.107:3306/q_executor"/>
+    <property name="jdbcUrl" value="jdbc:mysql://112.74.95.45:3306/q_executor"/>
 
     <property name="user" value="admin"/>
     <property name="password" value="NJU_2016"/>
-
-
 
     <property name="maxPoolSize" value="40"/>
     <property name="minPoolSize" value="1"/>
