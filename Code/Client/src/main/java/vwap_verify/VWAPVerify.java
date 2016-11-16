@@ -1,8 +1,12 @@
 package vwap_verify;
 
+import bl.vwap.VWAP;
+import bl.vwap.VWAP_Param;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,32 +20,45 @@ public class VWAPVerify {
                                                 "600193","600523","600657",
                                                 "600116","600165","600862"};
 
-    public boolean setTime(String stockid,Date date){
+    private static final long userVolArray[] = {  1234,1234,1234,
+                                            1234,1234,1234,
+                                            1234,1234,1234,
+                                            1234,1234,1234};
 
-        return false;
+    public List<Long> getVWAPDayVol(String stockid,long userVol1,Date date){
+
+        VWAP vwap = VWAP.getInstance();
+        List<Long> volList = new ArrayList<>();
+        long userVol = userVol1;
+        for(int i=1;i<=48;i++){
+            VWAP_Param param = new VWAP_Param(userVol,stockid,1.0,i,1,48);
+            try {
+                long currentVol = vwap.getVWAPVol(param,date);
+                userVol = userVol - currentVol;
+                volList.add(currentVol);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return volList;
     }
+    public List<Long> getActualDayVol(String stockid,Date date){
 
-    public int getCurVol(String stockid,int i){
-
-        return 0;
-    }
-    public List<Integer> getVWAPDayVol(String stockid,Date date){
-
-        setTime(stockid,date);
 
         return null;
     }
-    public List<Integer> getActualDayVol(String stockid,Date date){
+    public List<Long> getUniformDayVol(long userVol){
+        List<Long> result = new ArrayList<>();
+        long vol = userVol/48;
+        long sum = 0;
+        for(int i = 0;i<47;i++){
+            result.add(vol);
+            sum += vol;
+        }
+        result.add(userVol-sum);
 
-        setTime(stockid,date);
-
-        return null;
-    }
-    public List<Integer> getUniformDayVol(String stockid, Date date){
-
-        setTime(stockid,date);
-
-        return null;
+        return result;
     }
 
     private List<Double> getPriceList(String stockid, Date date){
@@ -50,6 +67,7 @@ public class VWAPVerify {
     }
     public void process(){
         String stockid;
+        long userVol;
 
         for(int i = 0;i<stockList.length;i++){
             String out = "";
@@ -58,9 +76,10 @@ public class VWAPVerify {
             Date date = new Date();
             //TODO
             out += date.toString()+":";
-            List<Integer> vwapVolList = getVWAPDayVol(stockid,date);
-            List<Integer> uniformVolList = getUniformDayVol(stockid,date);
-            List<Integer> actualVolList = getActualDayVol(stockid,date);
+            userVol = userVolArray[i];
+            List<Long> vwapVolList = getVWAPDayVol(stockid,userVol,date);
+            List<Long> uniformVolList = getUniformDayVol(userVol);
+            List<Long> actualVolList = getActualDayVol(stockid,date);
 
             List<Double> priceList = getPriceList(stockid,date);
 
@@ -74,7 +93,7 @@ public class VWAPVerify {
             savefile(out);
         }
     }
-    private double getAvgPrice(List<Integer> vol,List<Double> price){
+    private double getAvgPrice(List<Long> vol,List<Double> price){
         double sumPrice = 0;
         double avgPrice;
         long volsum = 0;

@@ -97,7 +97,7 @@ public class VWAP implements VWAPService {
 		//交易量概率密度
 		List<Double> Pn;
 		if(param.getTimeNode()==param.getStartTimeNode()|| !stockPnMap.containsKey(param.getStockid())){
-			Pn=vwapCore.getStaticPn(param.getStockid());
+			Pn=vwapCore.getStaticPn(param.getStockid(),date);
 			stockPnMap.put(param.getStockid(), Pn);
 		}else{
 			Pn=stockPnMap.get(param.getStockid());
@@ -108,7 +108,7 @@ public class VWAP implements VWAPService {
 					gama += Pn.get(i);
 				}
 				if(gama<volThre && 1.0*param.getTimeNode()/TimeUtil.TimeSliceNum <timrThre){
-					Pn = vwapCore.getDynamicPn(Pn,param);
+					Pn = vwapCore.getDynamicPn(Pn,param,date);
 					stockPnMap.put(param.getStockid(), Pn);
 				}
 			}

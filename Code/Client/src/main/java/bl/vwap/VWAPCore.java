@@ -3,6 +3,7 @@ package bl.vwap;
 import vo.MLForVWAPPriceVO;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,6 +31,13 @@ public class VWAPCore {
         return initPn(Vn);
     }
 
+    public List<Double> getStaticPn(String stockid,Date date) throws Exception{
+        //TODO 异常处理
+        List<Integer> Vn = ml.getStaticVol(stockid);
+        System.out.println("Vn:"+Vn);
+        return initPn(Vn);
+    }
+
     /**
      * 获得动态预测的所有时间段概率分布
      * @param pList
@@ -38,6 +46,23 @@ public class VWAPCore {
      * @throws Exception
      */
     public List<Double> getDynamicPn(List<Double> pList,VWAP_Param param) throws Exception{
+        //TODO 异常处理
+        MLForVWAPPriceVO priceVO = ml.getDynamicPrice(param.getStockid());
+        List<Double> wList = priceVO.getPriceList();
+        double Wp = 0;
+        try {
+            Wp = calcWp(pList, wList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("时间段分割不一致,预测出错");
+            return pList;
+        }
+        List<Double> signal=calcSignal(wList, Wp);
+        pList = updatePn(pList, signal, param);
+        return pList;
+    }
+
+    public List<Double> getDynamicPn(List<Double> pList,VWAP_Param param,Date date) throws Exception{
         //TODO 异常处理
         MLForVWAPPriceVO priceVO = ml.getDynamicPrice(param.getStockid());
         List<Double> wList = priceVO.getPriceList();
