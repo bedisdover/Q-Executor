@@ -15,7 +15,7 @@ public interface StockDataService {
      * @param date
      * @return
      */
-    public List<Long> getVolList(String stockid,Date date);
+    public List<Double> getVolList(String stockid,Date date);
 
     /**
      * 获得某天各时间段的股票交易价格
