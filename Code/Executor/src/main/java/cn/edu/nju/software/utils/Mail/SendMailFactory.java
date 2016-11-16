@@ -15,7 +15,7 @@ public class SendMailFactory {
 
     }
 
-    public static MsgInfo sendMail(String receiver,String UrlNum){
+    public static MsgInfo sendMail(String receiver,String userName,String UrlNum){
         try{
             MailSenderInfo mailInfo = new MailSenderInfo();
             mailInfo.setMailServerHost("smtp.163.com");
@@ -35,8 +35,9 @@ public class SendMailFactory {
             StringBuffer buffer = new StringBuffer();
             buffer.append("亲爱的用户：\n");
             buffer.append("您好！感谢您使用Q_executor服务，您正在进行邮箱密码找回验证，请点击下方链接进行密码修改\n");
-            String tem = "http://localhost:8080/findPassword.html?num="+UrlNum;
+            String tem = "http://www.fivedreamer.com/page/findpw.html?userName="+userName+"&num="+UrlNum;
             buffer.append(tem+"\n");
+            buffer.append("若无法点击链接,请复制链接地址到浏览器中进行打开"+"\n");
             buffer.append("Q_executor帐号团队"+"\n");
             buffer.append(new Date().toLocaleString());
             mailInfo.setContent(buffer.toString());

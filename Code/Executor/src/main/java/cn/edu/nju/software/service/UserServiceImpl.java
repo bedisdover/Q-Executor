@@ -53,11 +53,14 @@ public class UserServiceImpl implements  UserService {
         }
 
         try{
-            SendMailFactory.sendMail(tem.getMail(),SHA256.encrypt(randomNum));
+            SendMailFactory.sendMail(tem.getMail(),tem.getUserName(),SHA256.encrypt(randomNum));
         }catch (Exception e){
             e.printStackTrace();
             return  new MsgInfo(false,"邮件发送失败");
         }
+
+        tem.setRandomFindPassword(SHA256.encrypt(randomNum));
+        userDao.updateUser(tem);
 
         String mail = tem.getMail();
 
@@ -68,6 +71,25 @@ public class UserServiceImpl implements  UserService {
         }
 
         return new MsgInfo(true,"邮件发送成功,请查看您的邮箱:"+mail);
+    }
+
+    @Override
+    public MsgInfo modifyPassword(String userName, String findnum, String password) {
+        if(null == findnum){
+            return new MsgInfo(false,"链接已经失效,请重新生成链接");
+        }else  if(null == password ){
+            return  new MsgInfo(false,"请正确输入密码");
+        }else  if (null == userName){
+            return new MsgInfo(false,"链接已经失效,请重新生成链接");
+        }
+        User user = userDao.findUserbyName(userName);
+
+        if(!findnum.equals(user.getRandomFindPassword()))
+            return new MsgInfo(false,"链接已经失效,请重新生成链接");
+
+        user.setRandomFindPassword(null);
+        user.setPassword(password);
+        return userDao.updateUser(user);
     }
 
     public MsgInfo updatePassword(String userName, String password) {

@@ -1,15 +1,14 @@
 package present;
 
-import present.panel.account.LoginPanel;
-import present.panel.account.RegisterPanel;
+import present.panel.account.AccountPanel;
 import present.panel.introduce.IntroPanel;
 import present.panel.stock.SearchPanel;
 import present.panel.trade.TradePanel;
 
 import javax.swing.*;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Created by Y481L on 2016/8/25.
@@ -18,18 +17,23 @@ import java.awt.*;
  */
 public class MainFrame extends JFrame{
 
-    public static final int PANEL_W = 1000;
+    public static final int PANEL_W = 1100;
 
-    public static final int PANEL_H = 600;
+    public static final int PANEL_H = 680;
 
     private static final int MENU_W = 100;
 
     private static final int MENU_H = 48;
 
+    private static final Font font = new Font("微软雅黑", Font.PLAIN, 16);
+
     public MainFrame() {
 
         try {
             org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
+//            String[] fonts = GraphicsEnvironment.
+//                    getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+//            for(String s : fonts) System.out.println(s);
         }
         catch (Exception e) {
             System.out.println("Look and feel Exception!");
@@ -40,10 +44,12 @@ public class MainFrame extends JFrame{
     }
 
     private void setAttributes() {
+        this.setIconImage(new ImageIcon("src/main/resources/images/icon.png").getImage());
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setVisible(true);
         this.pack();
         this.setFrameAtCenter();
+        setMinimumSize(new Dimension(PANEL_W, PANEL_H + MENU_H));
+        this.setVisible(true);
     }
 
     private void addComponents() {
@@ -52,133 +58,91 @@ public class MainFrame extends JFrame{
         container.setPreferredSize(new Dimension(PANEL_W, PANEL_H));
         container.setLayout(new BorderLayout());
         PanelSwitcher switcher = new PanelSwitcher(container);
-        IntroPanel current = new IntroPanel(switcher);
+        IntroPanel current = new IntroPanel();
         switcher.setCurrent(current);
         container.add(current);
         this.add(container, BorderLayout.CENTER);
 
         //导航栏
-        JMenuBar bar = new JMenuBar();
-        bar.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        this.createNavigator(switcher);
+    }
 
-        //交易菜单
-        JMenu trade = this.createMenu("交易");
-        trade.addMenuListener(new MenuListener() {
+    /**
+     * 创建导航栏
+     */
+    private void createNavigator(PanelSwitcher switcher) {
+        //导航栏
+        JPanel bar = new JPanel(new BorderLayout());
+        bar.setBackground(new Color(0xeee7d9));
+
+        //图标面板
+        JPanel logoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        logoPanel.setOpaque(false);
+        JLabel logo = new JLabel(new ImageIcon("src/main/resources/images/logo.png"));
+        logo.setPreferredSize(new Dimension(MENU_W, MENU_H));
+        logoPanel.add(logo);
+        bar.add(logoPanel, BorderLayout.WEST);
+
+        //菜单面板
+        JPanel menuPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        menuPanel.setOpaque(false);
+        bar.add(menuPanel, BorderLayout.CENTER);
+
+        //交易
+        JButton trade = this.createButton("交易");
+        trade.addMouseListener(new MouseAdapter() {
             @Override
-            public void menuSelected(MenuEvent e) {
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
                 switcher.jump(new TradePanel());
             }
-
-            @Override
-            public void menuDeselected(MenuEvent e) {}
-
-            @Override
-            public void menuCanceled(MenuEvent e) {}
         });
-        bar.add(trade);
+        menuPanel.add(trade);
 
-        //股票菜单
-        JMenu stock = this.createMenu("股票");
-        stock.addMenuListener(new MenuListener() {
+        //股票
+        JButton stock = this.createButton("股票");
+        stock.addMouseListener(new MouseAdapter() {
             @Override
-            public void menuSelected(MenuEvent e) {
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
                 switcher.jump(new SearchPanel(switcher));
             }
-
-            @Override
-            public void menuDeselected(MenuEvent e) {}
-
-            @Override
-            public void menuCanceled(MenuEvent e) {}
         });
+        menuPanel.add(stock);
 
-//        //大单菜单项
-//        JMenuItem general = this.createMenuItem(
-//                "大单", (e) -> switcher.jump(new GeneralPanel())
-//        );
-//        stock.add(general);
-//        //逐笔菜单项
-//        JMenuItem single = this.createMenuItem(
-//                "逐笔", (e) -> switcher.jump(new SinglePanel())
-//        );
-//        stock.add(single);
-//        //分价菜单项
-//        JMenuItem price = this.createMenuItem(
-//                "分价", (e) -> switcher.jump(new PriceSharePanel())
-//        );
-//        stock.add(price);
-
-        bar.add(stock);
-
-        //简介菜单
-        JMenu introduce = this.createMenu("简介");
-        introduce.addMenuListener(new MenuListener() {
+        //简介
+        JButton introduce = this.createButton("简介");
+        introduce.addMouseListener(new MouseAdapter() {
             @Override
-            public void menuSelected(MenuEvent e) {
-                switcher.jump(new IntroPanel(switcher));
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                switcher.jump(new IntroPanel());
             }
-
-            @Override
-            public void menuDeselected(MenuEvent e) {}
-
-            @Override
-            public void menuCanceled(MenuEvent e) {}
         });
-        bar.add(introduce);
+        menuPanel.add(introduce);
 
-        //登录菜单
-        JMenu login = this.createMenu("登录");
-        login.addMenuListener(new MenuListener() {
+        //账户账单
+        JButton account = this.createButton("账户");
+        account.addMouseListener(new MouseAdapter() {
             @Override
-            public void menuSelected(MenuEvent e) {
-                switcher.jump(new LoginPanel(switcher));
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                switcher.jump(new AccountPanel(switcher));
             }
-
-            @Override
-            public void menuDeselected(MenuEvent e) {}
-
-            @Override
-            public void menuCanceled(MenuEvent e) {}
         });
-        bar.add(login);
+        menuPanel.add(account);
 
-        //注册菜单
-        JMenu register = this.createMenu("注册");
-        register.addMenuListener(new MenuListener() {
-            @Override
-            public void menuSelected(MenuEvent e) {
-                switcher.jump(new RegisterPanel(switcher));
-            }
-
-            @Override
-            public void menuDeselected(MenuEvent e) {}
-
-            @Override
-            public void menuCanceled(MenuEvent e) {}
-        });
-        bar.add(register);
-
-        this.setJMenuBar(bar);
-
-//        TitlePanel title = new TitlePanel(switcher);
-//        NavPanel nav = new NavPanel(switcher);
-//        this.add(title, BorderLayout.NORTH);
-//        this.add(nav, BorderLayout.WEST);
-
+        this.add(bar, BorderLayout.NORTH);
     }
 
-    private JMenu createMenu(String name) {
-        JMenu menu = new JMenu("        " + name);    //文字无法居中，用空格代替...
-        menu.setPreferredSize(new Dimension(MENU_W, MENU_H));
-        return menu;
+    private JButton createButton(String name) {
+        JButton btn = new JButton(name);
+        btn.setContentAreaFilled(false);
+        btn.setForeground(new Color(0xf4c400));
+        btn.setFont(font);
+        btn.setPreferredSize(new Dimension(MENU_W, MENU_H));
+        return btn;
     }
-
-//    private JMenuItem createMenuItem(String name, ActionListener listener) {
-//        JMenuItem item = new JMenuItem(name);
-//        item.setPreferredSize(new Dimension(MENU_W, MENU_H));
-//        item.addActionListener(listener);
-//        return item;
-//    }
 
     private void setFrameAtCenter() {
         Toolkit tk = Toolkit.getDefaultToolkit();

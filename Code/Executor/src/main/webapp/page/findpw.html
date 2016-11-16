@@ -25,6 +25,17 @@
                     <input type="text" class="form-control" placeholder="用户名" id="userName">
                 </div>
             </div>
+            <div class="row top-padding bottom-padding" id="success-info-content" style="display: none;">
+                <div class="col-xs-8 col-sm-6 col-md-4 col-lg-4">
+                    <div class="alert alert-success">
+                        <a class="close" data-dismiss="alert" href="" aria-hidden="true">
+                            &times;
+                        </a>
+                        <div id="success-info">
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row top-padding bottom-padding">
                 <div class="col-xs-8 col-sm-6 col-md-4 col-lg-4">
                     <button class="btn btn-primary btn-block" id="sendMail">发送重置密码邮件</button>
@@ -81,13 +92,26 @@
 <script type="text/javascript">
     $(function () {
         if (getUrlParam('num') != null) {
-            $('#nav').find('a[href="#confirm"]').attr('data-toggle', "../images/decrease.png")
+            $('#nav').find('a[href="#confirm"]').attr('data-toggle', "")
                     .parent().addClass('disabled')
-                    .parent().find('a[href="#reset"]').attr('data-toggle', "../images/decrease.png").tab('show');
+                    .parent().find('a[href="#reset"]').attr('data-toggle', "tab").tab('show');
+        }
+    });
+
+    $('#userName').on('keypress', function(e) {
+        if (e.which == 13) {
+            sendMail();
         }
     });
 
     $('#sendMail').on('click', function () {
+        sendMail();
+    });
+
+    /**
+     * 发送邮件
+     */
+    function sendMail() {
         if ($('#confirm').find('.error').length == 0) {
             jQuery.ajax({
                 url: '/findPassword',
@@ -96,6 +120,9 @@
                 data: 'userName=' + $('#userName').val().trim(),
                 success: function (data) {
                     if (data.state == true) {
+                        $('#success-info-content').show();
+                        $('#success-info').text(data.info);
+
                         startTimer();
                     } else {
                         alert(data.info);
@@ -103,7 +130,7 @@
                 }
             });
         }
-    });
+    }
 
     /**
      * 开始计时，60秒后重新发送邮件
@@ -124,13 +151,23 @@
         }, 1000);
     }
 
+    $('#password, #confirmPassword').on('keypress', function(e) {
+        if (e.which == 13) {
+            resetPassword();
+        }
+    });
+
     $('#reset-password').on('click', function () {
+        resetPassword();
+    });
+
+    function resetPassword() {
         if ($('#reset').find('.error').length == 0) {
             jQuery.ajax({
                 url: '/modifyPassword',
                 type: 'post',
                 dataType: 'json',
-                data: 'num=' + getUrlParam('num') + '&password=' + $('#password').val().trim(),
+                data: 'num=' + getUrlParam('num')+'&userName'+getUserName() + '&password=' + $('#password').val().trim(),
                 success: function (data) {
                     if (data.state == true) {
                         showSuccess();
@@ -140,7 +177,7 @@
                 }
             });
         }
-    });
+    }
 
     /**
      * 显示正确信息
@@ -155,6 +192,7 @@
                 $('#time').text(
                         time + ' s 后跳转'
                 );
+
                 time--;
             } else {
                 clearInterval(id);
@@ -182,10 +220,16 @@
      * 获取url中的参数
      */
     function getUrlParam(name) {
-        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
-        var r = window.location.searchStock.substr(1).match(reg);  //匹配目标参数
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");  //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
         if (r != null) return unescape(r[2]);
         return null; //返回参数值
+    }
+
+
+    function getUserName() {
+        var url = window.location.search; //获取url中"?"符后的字串
+        return url.substring(url.indexOf("="), url.indexOf("&"));
     }
 </script>
 </body>

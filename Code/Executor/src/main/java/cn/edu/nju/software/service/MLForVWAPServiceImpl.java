@@ -4,12 +4,11 @@ import cn.edu.nju.software.po.InforForMLPO;
 import cn.edu.nju.software.po.StockForMLPO;
 import cn.edu.nju.software.vo.MLForVWAPPriceVO;
 
-
 import libsvm.*;
-import org.springframework.context.annotation.Scope;
+import org.hibernate.type.IntegerType;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.Resource;
+import java.awt.geom.Arc2D;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.TimerTask;
@@ -33,35 +32,46 @@ public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService 
     private int numOfDynamicAttr;
 
     //用于存储深夜计算数据的list
-    private ArrayList<ArrayList<Integer>> staticVolAllStock;
-    private ArrayList<ArrayList<Double>> staticPriceAllStock;
-    private ArrayList<ArrayList<svm_model>> dynamicPriceModelAllStock;
+    private   ArrayList<ArrayList<Integer>> staticVolAllStock;
+    private   ArrayList<ArrayList<Double>> staticPriceAllStock;
+    private   ArrayList<ArrayList<svm_model>> dynamicPriceModelAllStock;
 
+    //单例模式
+    private static MLForVWAPServiceImpl single;
 
-    //单例模式(在注入还没加载前loading进来)
-    private static MLForVWAPServiceImpl single=null;
-
-    public static MLForVWAPServiceImpl getInstance(){
-        if ( single == null) {
+    public static  synchronized MLForVWAPServiceImpl getInstance(){
+        if(single == null){
             single=new MLForVWAPServiceImpl();
         }
         return single;
     }
 
+
     private MLForVWAPServiceImpl( ) {
-<<<<<<< HEAD
-=======
         stockService=new StockMLServiceImpl();
->>>>>>> c22f825089602728815fc4535f09dbc41e4685dc
         this.numOfDynamicAttr=36;
         this.numOfStaticAttr=30;
         this.staticVolAllStock =new ArrayList<>();
         this.staticPriceAllStock=new ArrayList<>();
+
+        ArrayList<Integer> list=new ArrayList<Integer>();
+        ArrayList<Double>  listt=new ArrayList<Double>();
+        for(int i=0;i<48;i++){
+            list.add(-1);
+            listt.add(-1.0);
+        }
+        for(int i=0;i<15;i++){
+            staticVolAllStock.add(list);
+            staticPriceAllStock.add(listt);
+        }
+
         this.dynamicPriceModelAllStock=new ArrayList<>();
     }
 
     //svm相关数据初始化
     private void initSVM(){
+        System.gc();
+
         // 定义svm_problem对象
         problem = new svm_problem();
         problem.l = trainingData.length; // 向量个数
@@ -224,61 +234,72 @@ public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService 
 
 
     //返回最新数据下静态预测的48个成交量
-    private void  getStaticVol_svm(String stockID){
+    private void  getStaticVol_svm( ){
 
-        ArrayList<Integer> list=new ArrayList<Integer>();
-
-        for(int i=1;i<49;i++){
-            /*
-             initStaticData(stockID,i,Type.VOL);
+        System.gc();
+        ArrayList<Integer> list ;
+        String[] all_stock=stockService .getStocksNeedCal();
+        for(int j=0;j<all_stock.length;j++) {
+            list=new ArrayList<Integer>();
+            for (int i = 1; i < 49; i++) {
+             initStaticData(all_stock[j],i,Type.VOL);
             initSVM();
             //训练模型
             model = svm.svm_train(problem, param);
             Double predictValue= svm.svm_predict(model,predict)*1000000;
             int value_int=predictValue.intValue();
             list.add( value_int);
-             */
-            list.add(i);
-       }
+            }
+            System.out.println(all_stock[j] +" size: "+staticVolAllStock.size()+" getStaticVol_svm currentThread: "+Thread.currentThread().getId());
+            this.staticVolAllStock.add(list);
+        }
 
-       this.staticVolAllStock.add(list);
+
     }
 
     //返回最新数据下静态预测的48个价格
-    private void getStaticPrice_svm(String stockID){
+    private void getStaticPrice_svm( ){
 
-        ArrayList<Double> list=new ArrayList<Double>();
+        System.gc();
+        ArrayList<Double> list;
         DecimalFormat df=new DecimalFormat("0.00");
 
-        for(int i=1;i<49;i++){
-            initStaticData(stockID,i,Type.PRICE);
+        String[] all_stock=stockService .getStocksNeedCal();
+        for(int j=0;j<all_stock.length;j++) {
+            list=new ArrayList<Double>();
+            for(int i=1;i<49;i++){
+            initStaticData(all_stock[j],i,Type.PRICE);
             initSVM();
             //训练模型
             model = svm.svm_train(problem, param);
             Double predictValue=svm.svm_predict(model,predict);
             String twobit= df.format(predictValue);
             list.add(Double.parseDouble(twobit));
+           }
+           this.staticPriceAllStock.add(list);
         }
-
-        this.staticPriceAllStock.add(list);
     }
-
 
     //动态预测的模型存储
-    private void getDynamicPrice_svm(String stockID){
+    private void getDynamicPrice_svm( ) {
 
-        ArrayList<svm_model> list=new ArrayList<>();
-        for(int i=4;i<49;i++){
-            initDynamicData(stockID,i);
-            initSVM();
-            //训练模型
-            model = svm.svm_train(problem, param);
-            list.add(model);
+        System.gc();
+        ArrayList<svm_model> list ;
+        String[] all_stock = stockService.getStocksNeedCal();
+        for (int j = 0; j < all_stock.length; j++) {
+            list = new ArrayList<>();
+            for (int i = 4; i < 49; i++) {
+                initDynamicData(all_stock[j], i);
+                initSVM();
+                //训练模型
+                model = svm.svm_train(problem, param);
+                list.add(model);
+            }
+            this.dynamicPriceModelAllStock.add(list);
         }
-
-        this.dynamicPriceModelAllStock.add(list);
     }
 
+    //动态模型的预测数据
     private void initDynamicPredict(String stockID,int currentTime){
         predict=new svm_node[numOfDynamicAttr];
 
@@ -345,11 +366,12 @@ public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService 
 
     //对外接口——成交量
     public ArrayList<Integer>   getStaticVol(String stockID){
+
         ArrayList<Integer> result =null;
         String[] all_stock=stockService.getStocksNeedCal();
         for(int i=0;i<all_stock.length;i++){
             if(stockID.equals(all_stock[i])){
-                result= staticVolAllStock.get(i);
+                result = staticVolAllStock.get(i);
                 break;
             }
         }
@@ -422,19 +444,15 @@ public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService 
     @Override
     public void run() {
         try {
+            this.staticPriceAllStock.clear();
+            this.staticVolAllStock.clear();
+            this.dynamicPriceModelAllStock.clear();
 
-            staticPriceAllStock.clear();
-            staticVolAllStock.clear();
-            dynamicPriceModelAllStock.clear();
-
-            String[] all_stock=stockService.getStocksNeedCal();
-            for(int i=0;i<all_stock.length;i++){
-                this.getStaticVol_svm(all_stock[i]);
-//                this.getStaticPrice_svm(all_stock[i]);
-//                this.getDynamicPrice_svm(all_stock[i]);
-            }
+            this.getStaticVol_svm();
+            this.getStaticPrice_svm();
+            this.getDynamicPrice_svm();
         } catch (Exception e) {
-              System.out.println("night factory error!");
+            System.out.println("svm thread error!");
         }
 
     }

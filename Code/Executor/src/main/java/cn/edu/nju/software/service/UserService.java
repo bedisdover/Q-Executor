@@ -17,6 +17,8 @@ public interface UserService {
 
     public MsgInfo findPassword(String userName,String randomNum);
 
+    public MsgInfo modifyPassword(String userName,String findnum,String password);
+
     public MsgInfo updatePassword(String userName, String password);
 
 }

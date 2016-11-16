@@ -1,19 +1,27 @@
 package present.panel.trade;
 
-import bl.VWAP;
-import blservice.VWAPService;
+import bl.stock.GetStockDataServiceImpl;
+import bl.time.TimeBlImpl;
+import bl.time.TimeUtil;
+import bl.vwap.VWAP;
+import bl.vwap.VWAP_Param;
+import blservice.stock.GetStockDataService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import present.component.TipText;
+import present.panel.account.QuestionnairePanel;
 import present.utils.StockJsonInfo;
 import util.JsonUtil;
+import util.NumberUtil;
+import vo.StockNowTimeVO;
+import vo.VolumeVO;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.*;
+import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by Y481L on 2016/8/28.
@@ -22,77 +30,126 @@ import java.util.List;
  */
 class ParamPanel extends JPanel {
 
+    //组件宽度
     private int componentW;
 
+    //组件高度
     private int componentH;
 
+    //组件水平间距
     private static final int H_GAP = 10;
 
+    //组件垂直间距
     private static final int V_GAP = 10;
 
+    //组件字体
     private static final Font font = new Font("宋体", Font.PLAIN, 12);
 
     //字符串切割符
     private static final String spliter = " : ";
 
-    //资金账户
-    private Line account;
+    //股票名称文本框
+    private TipText nameVal;
 
-    //可用资金
-    private Line money;
+    //股票代码文本框
+    private JTextField codeText = new JTextField();
 
-    //证券代码
-    private Line code;
+    //交易数量文本框
+    private JTextField quanVal = new JTextField();
 
-    //证券名称
-    private Line name;
+    //操作类型
+    private JComboBox<String> operationVal = new JComboBox<>();
 
-    //投资方向
-    private Line operation;
+    //开始时间输入框
+    private TimePanel start;
 
-    //数量（股）
-    private Line quantity;
+    //结束时间输入框
+    private TimePanel end;
 
-    //盘口类型
-    private Line type;
+    //启动计算按钮
+    private JButton trigger;
 
-    //下单金额
-    private Line invest;
+    //终止刷新按钮
+    private JButton stopUpdate;
 
-    private VWAPService vwap = new VWAP();
+    //参数面板的父容器
+    private TradePanel parent;
 
     ParamPanel(int width, int height, TradePanel parent) {
-        this.componentW = ((width >> 1) - 3 * H_GAP) >> 1;
+        this.parent = parent;
+        this.componentW = (width - 5 * H_GAP) >> 2;
         this.componentH = (int)(this.componentW * 0.4);
 
         Box box = Box.createVerticalBox();
+        box.setOpaque(false);
+        box.add(Box.createVerticalStrut(componentH));
+        box.add(createStockTypePanel());
+        box.add(createStockNumPanel());
+        box.add(start = new TimePanel("开始时间"));
+        box.add(end = new TimePanel("结束时间"));
+        box.add(createBtnPanel());
 
-        Box line1 = Box.createHorizontalBox();
-        //资金账户
-        JLabel accountLabel = new JLabel("资金账户");
-        JComboBox<String> accountValue = new JComboBox<>();
-        accountValue.addItem("12345");
-        accountValue.addItem("54321");
-        account = new Line(accountLabel, accountValue);
-        line1.add(account);
-        //可用资金
-        JLabel moneyLabel = new JLabel("可用资金");
-        JTextField moneyVal = new JTextField();
-        money = new Line(moneyLabel, moneyVal);
-        line1.add(money);
-        box.add(line1);
+        this.setLayout(new BorderLayout());
+        this.add(box, BorderLayout.CENTER);
+        this.setPreferredSize(new Dimension(width, height));
+        this.setBackground(new Color(0x222222));
+    }
 
-        Box line2 = Box.createHorizontalBox();
-        //证券名称
-        JLabel nameLabel = new JLabel("证券名称");
-        JTextField nameVal = new JTextField();
-        name = new Line(nameLabel, nameVal);
-        name.getInput().setEnabled(false);
-        line2.add(name);
-        //证券代码
-        JLabel codeLabel = new JLabel("证券代码");
-        TipText codeText = new TipText(componentW << 1, componentH);
-        codeText.setMatcher((key) -> {
+    /**
+     * 计算交易策略
+     * @param quantity 交易总量
+     */
+    void calculate(long quantity) {
+        Calculation calculation = new Calculation(quantity);
+        calculation.execute();
+    }
+
+    /**
+     * 停止刷新结果面板和分时图
+     */
+    void stopUpdate() {
+        parent.stopUpdate();
+        stopUpdate.setEnabled(false);
+    }
+
+    /**
+     * 生成股票数量输入面板
+     * @return JPanel
+     */
+    private JPanel createStockNumPanel() {
+        //投资方向
+        JLabel operationLabel = new JLabel("投资方向");
+        operationVal = new JComboBox<>();
+        operationVal.addItem("卖");
+        operationVal.addItem("买");
+        InputPair operation = new InputPair(operationLabel, operationVal);
+        //数量（手）
+        JLabel quantityLabel = new JLabel("数量/股");
+        InputPair quantity = new InputPair(quantityLabel, quanVal);
+
+        //数量（手）、下单金额
+        JPanel amount = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, 0));
+        amount.setOpaque(false);
+        amount.add(quantity);
+        amount.add(operation);
+
+        return amount;
+    }
+
+    /**
+     * 生成股票类型输入面板
+     * @return JPanel
+     */
+    private JPanel createStockTypePanel() {
+        //股票代码
+        JLabel codeLabel = new JLabel("股票代码");
+        codeText.setEnabled(false);
+        InputPair code = new InputPair(codeLabel, codeText);
+
+        //股票名称
+        JLabel nameLabel = new JLabel("股票名称");
+        nameVal = new TipText(componentW << 1, componentH);
+        nameVal.setMatcher((key) -> {
             Vector<String> v = new Vector<>();
             List<JSONObject> list = JsonUtil.contains(
                     StockJsonInfo.JSON_KEYS, StockJsonInfo.JSON_PATH, key
@@ -100,8 +157,8 @@ class ParamPanel extends JPanel {
             for (JSONObject obj : list) {
                 try {
                     v.addElement(
-                            obj.getString(StockJsonInfo.KEY_CODE) + spliter +
-                            obj.getString(StockJsonInfo.KEY_NAME)
+                            obj.getString(StockJsonInfo.KEY_NAME) + spliter +
+                                    obj.getString(StockJsonInfo.KEY_CODE)
                     );
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -109,196 +166,352 @@ class ParamPanel extends JPanel {
             }
             return v;
         });
-        codeText.setListClickHandler((text) -> {
+        nameVal.setListClickHandler((text) -> {
             String[] s = text.split(spliter);
-            codeText.setText(s[0]);
-            nameVal.setText(s[1]);
+            nameVal.setText(s[0]);
+            codeText.setText(s[1]);
+            parent.updateTimeSeriesPanel(s[1]);
         });
-        codeText.setListFocusHandler((field, text) -> {
+        nameVal.setListFocusHandler((field, text) -> {
             String[] s = text.split(spliter);
             field.setText(s[0]);
         });
-        code = new Line(codeLabel, codeText);
-        line2.add(code);
-        box.add(line2);
+        InputPair name = new InputPair(nameLabel, nameVal);
 
-        Box line3 = Box.createHorizontalBox();
-        //投资方向
-        JLabel operationLabel = new JLabel("投资方向");
-        JComboBox<String> operationVal = new JComboBox<>();
-        operationVal.addItem("买");
-        operationVal.addItem("卖");
-        operation = new Line(operationLabel, operationVal);
-        line3.add(operation);
-        //数量（股）
-        JLabel quantityLabel = new JLabel("数量/股");
-        JTextField quanVal = new JTextField();
-        quantity = new Line(quantityLabel, quanVal);
-        line3.add(quantity);
-        box.add(line3);
-
-        Box line4 = Box.createHorizontalBox();
-        //盘口
-        JLabel typeLabel = new JLabel("盘口");
-        JComboBox<String> typeVal = new JComboBox<>();
-        typeVal.addItem("自动盘口");
-        typeVal.addItem("手动盘口");
-        type = new Line(typeLabel, typeVal);
-        line4.add(type);
-        //下单金额
-        JLabel investLabel = new JLabel("下单金额");
-        JTextField investVal = new JTextField();
-        invest = new Line(investLabel, investVal);
-        line4.add(invest);
-        box.add(line4);
-
-//        west.add(this.getLineItem(start, startPanel));
-//        //成交置信度
-//        JLabel confidence = new JLabel("成交置信度");
-//        JComboBox<String> confiVal = new JComboBox<>();
-//        west.add(this.getLineItem(confidence, confiVal));
-//        //回测开始
-//        JLabel startDate = new JLabel("回测开始");
-//        JTextField startDateVal = new JTextField();
-//        Chooser chooser1 = Chooser.getInstance();
-//        chooser1.register(startDateVal);
-//        west.add(this.getLineItem(startDate, startDateVal));
-
-//        //结束时间
-//        JLabel end = new JLabel("结束时间");
-//        JComboBox<String> endVal = new JComboBox<>();
-//        east.add(this.getLineItem(end, endVal));
-//        //参考周期（分）
-//        JLabel reference = new JLabel("参考周期");
-//        JTextField refVal = new JTextField();
-//        east.add(this.getLineItem(reference, refVal));
-//        //回测结束
-//        JLabel endDate = new JLabel("回测结束");
-//        JTextField endDataVal = new JTextField();
-//        Chooser chooser2 = Chooser.getInstance();
-//        chooser2.register(endDataVal);
-//        east.add(this.getLineItem(endDate, endDataVal));
-
-
-        box.add(createTimePanel("开始时间"));
-        box.add(createTimePanel("结束时间"));
-
-        JPanel line7 = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, V_GAP));
-
-        JLabel mode = new JLabel("启动模式");
-        mode.setPreferredSize(new Dimension(componentW, componentH));
-        line7.add(mode);
-
-        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, V_GAP));
-        JRadioButton trade = new JRadioButton("交易");
-        trade.setPreferredSize(new Dimension(componentW, componentH));
-        p.add(trade);
-        JRadioButton test = new JRadioButton("回测");
-        test.setPreferredSize(new Dimension(componentW, componentH));
-        ButtonGroup group = new ButtonGroup();
-        group.add(trade);
-        group.add(test);
-        p.add(test);
-        line7.add(p);
-
-        JButton trigger = new JButton("启动");
-        trigger.setPreferredSize(new Dimension(componentW, componentH));
-        trigger.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                super.mouseReleased(e);
-//            int tradeNum = Integer.parseInt(quanVal.getText());
-//            String code = codeText.getText();
-//            try {
-//                vwap.predictVn(new VWAP_Param(
-//                       tradeNum, code, 0, 0, 0
-//                ));
-//            } catch (Exception e1) {
-//                e1.printStackTrace();
-//            }
-                parent.updateMsgPanel();
-            }
-        });
-        line7.add(trigger);
-        box.add(line7);
-
-        this.setLayout(new BorderLayout());
-        this.add(box, BorderLayout.CENTER);
-        this.setPreferredSize(new Dimension(width, height));
+        //证券名称、证券代码
+        JPanel stock = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, 0));
+        stock.setOpaque(false);
+        stock.add(name);
+        stock.add(code);
+        return stock;
     }
 
-    private JPanel createTimePanel(String name) {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, V_GAP));
+    /**
+     * 生成按钮面板
+     */
+    private JPanel createBtnPanel() {
+        //启动计算
+        trigger = new JButton("开始计算");
+        trigger.setPreferredSize(new Dimension(componentW - H_GAP, componentH));
+        trigger.addActionListener((e) -> {
+            if (!checkComplete()) {
+                return;
+            }
 
-        JLabel label = new JLabel(name);
-        label.setFont(font);
-        label.setPreferredSize(new Dimension(componentW, componentH));
-        panel.add(label);
+            if (operationVal.getSelectedItem().equals("买")) {
+                GetStockDataService service = new GetStockDataServiceImpl();
+                double price;
+                try {
+                    List<StockNowTimeVO> data = service.getNowTimeData(codeText.getText());
+                    price = data.get(0).getPrice();
+                    price = NumberUtil.round(price);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(parent, "网络异常");
+                    return;
+                }
+                double money = Integer.parseInt(quanVal.getText()) * price;
+                int isOK = JOptionPane.showConfirmDialog(parent, "此次交易共计需要" + money + "元，确定进行吗？");
+                if (isOK != JOptionPane.YES_OPTION) {
+                    return;
+                }
+            } else {
+                int isOk = JOptionPane.showConfirmDialog(parent, "确认卖出吗");
+                if (isOk != JOptionPane.OK_OPTION) {
+                    return ;
+                }
+            }
 
-        JComboBox<String> hour = new JComboBox<>();
-        initHourBox(hour);
-        hour.setFont(font);
-        hour.setPreferredSize(new Dimension(componentW, componentH));
-        panel.add(hour);
+            disableComponents();
+            parent.generatingResult();
+            calculate(Long.parseLong(quanVal.getText()));
+        });
 
-        JLabel split = new JLabel(":");
-        split.setPreferredSize(new Dimension(H_GAP, V_GAP));
-        split.setFont(new Font("黑体", Font.BOLD, 15));
-        panel.add(split);
+        //结束计算
+        stopUpdate = new JButton("停止刷新");
+        stopUpdate.setPreferredSize(new Dimension(componentW - H_GAP, componentH));
+        stopUpdate.setEnabled(false);
+        stopUpdate.addActionListener((e) -> {
+            int isOk = JOptionPane.showConfirmDialog(parent, "确定停止刷新吗？");
+            if (isOk != JOptionPane.YES_OPTION) {
+                return;
+            }
 
-        JComboBox<String> minute = new JComboBox<>();
-        initMinuteBox(minute);
-        minute.setFont(font);
-        minute.setPreferredSize(new Dimension(componentW, componentH));
-        panel.add(minute);
+            stopUpdate();
+        });
 
+        JPanel left = new JPanel();
+        left.setOpaque(false);
+        left.setPreferredSize(new Dimension(componentW - H_GAP, componentH));
+
+        JPanel center = new JPanel();
+        center.setOpaque(false);
+        center.setPreferredSize(new Dimension(H_GAP << 2, componentH));
+
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panel.setOpaque(false);
+        panel.add(left);
+        panel.add(trigger);
+        panel.add(center);
+        panel.add(stopUpdate);
         return panel;
     }
 
-    private void initMinuteBox(JComboBox<String> box) {
-        box.addItem("00");
-        box.addItem("05");
-        box.addItem("10");
-        box.addItem("15");
-        box.addItem("20");
-        box.addItem("30");
-        box.addItem("35");
-        box.addItem("40");
-        box.addItem("45");
-        box.addItem("50");
-        box.addItem("55");
+    private void disableComponents() {
+        nameVal.setEnabled(false);
+        quanVal.setEnabled(false);
+        operationVal.setEnabled(false);
+        start.setEnabled(false);
+        end.setEnabled(false);
+        trigger.setEnabled(false);
+        stopUpdate.setEnabled(false);
     }
 
-    private void initHourBox(JComboBox<String> box) {
-        box.addItem("9");
-        box.addItem("10");
-        box.addItem("15");
-        box.addItem("16");
+    private void enableComponents() {
+        nameVal.setEnabled(true);
+        quanVal.setEnabled(true);
+        operationVal.setEnabled(true);
+        start.setEnabled(true);
+        end.setEnabled(true);
+        trigger.setEnabled(true);
     }
 
-    private class Line extends JPanel {
+    private boolean checkComplete() {
+        if (codeText.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(parent, "请填写股票名称");
+            return false;
+        }
 
-        private JComponent input;
+        String quantity = quanVal.getText();
+        if (quantity.isEmpty()) {
+            JOptionPane.showMessageDialog(parent, "请填写交易数量");
+            return false;
+        }
 
+        try {
+            int num = Integer.parseInt(quantity);
+            if(num <= 0) {
+                JOptionPane.showMessageDialog(parent, "交易数量应该为正整数");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(parent, "交易数量应该为正整数");
+            return false;
+        }
+
+        return checkTime(start, end);
+    }
+
+    private boolean checkTime(TimePanel start, TimePanel end) {
+        Calendar now;
+        try {
+            now = new TimeBlImpl().getCurrentTime();
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(parent, "网络异常");
+            return false;
+        }
+        int nowHour = now.get(Calendar.HOUR_OF_DAY);
+        int nowMin = now.get(Calendar.MINUTE);
+
+        String hour1 = start.getHour();
+        String minute1 = start.getMinute();
+        String hour2 = end.getHour();
+        String minute2 = end.getMinute();
+        int h1 = Integer.parseInt(hour1), m1 = Integer.parseInt(minute1);
+        int h2 = Integer.parseInt(hour2), m2 = Integer.parseInt(minute2);
+
+        //判断时间是否合法
+        if (!(checkTimeValid(hour1, minute1) && checkTimeValid(hour2, minute2))) {
+            return false;
+        }
+
+        //判断当前时间是否已经过了交易时间
+        if (TimeUtil.isAfterTradeTime(nowHour, nowMin)) {
+            JOptionPane.showMessageDialog(parent, "已经过了交易时间,明天再来");
+            return false;
+        }
+
+        //判断当前时间是否小于结束时间
+        if (!TimeUtil.isLessThan(nowHour, nowMin, h2, m2)) {
+            JOptionPane.showMessageDialog(parent, "结束时间应该大于当前时间");
+            return false;
+        }
+
+        //判断结束时间是否至少大于开始时间一个时间片（5分钟）
+        if(h2 * 60 + m2 - h1 * 60 - m1 <= 5) {
+            JOptionPane.showMessageDialog(parent, "开始时间应该小于结束时间，且两个间隔应大于5分钟");
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean checkTimeValid(String hour, String minute) {
+        if (hour.isEmpty() || minute.isEmpty()) {
+            JOptionPane.showMessageDialog(parent, "请填写交易时间");
+            return false;
+        }
+
+        try {
+            int hourInt = Integer.parseInt(hour);
+            int minuteInt = Integer.parseInt(minute);
+            if (!TimeUtil.isTimeValid(hourInt, minuteInt)) {
+                JOptionPane.showMessageDialog(parent, "请输入有效时间");
+                return false;
+            }
+            if (!TimeUtil.isAtTradeTime(hourInt, minuteInt)) {
+                JOptionPane.showMessageDialog(parent, "输入时间不在交易时间内");
+                return false;
+            }
+            return true;
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(parent, "请输入有效时间");
+            return false;
+        }
+    }
+
+    private class InputPair extends JPanel {
         /**
          * 创建包含一行组件的面板，左边为标签，右边为输入组件
          *
          * @param name 标签
          * @param input 输入组件
          */
-        Line(JLabel name, JComponent input) {
-            this.input = input;
+        InputPair(JLabel name, JComponent input) {
             name.setPreferredSize(new Dimension(componentW - (H_GAP << 1), componentH));
             name.setFont(font);
+            name.setForeground(Color.WHITE);
             input.setPreferredSize(new Dimension(componentW + (H_GAP << 1), componentH));
             input.setFont(font);
             this.add(name);
             this.add(input);
-        }
-
-        JComponent getInput() {
-            return input;
+            this.setOpaque(false);
         }
     }
 
+    private class TimePanel extends JPanel {
+
+        private JTextField hour;
+
+        private JTextField minute;
+
+        /**
+         * @param name 标签名称
+         */
+        TimePanel(String name) {
+            this.setLayout(new FlowLayout(FlowLayout.LEFT, H_GAP, 0));
+            this.setOpaque(false);
+
+            JLabel label = new JLabel(name);
+            label.setFont(font);
+            label.setForeground(Color.WHITE);
+            label.setPreferredSize(new Dimension(componentW - (H_GAP << 1), componentH));
+            this.add(label);
+
+            hour = new JTextField();
+            hour.setFont(font);
+            hour.setPreferredSize(new Dimension(componentW + (H_GAP << 1), componentH));
+            this.add(hour);
+
+            JLabel split = new JLabel(":");
+            split.setForeground(Color.white);
+            split.setPreferredSize(new Dimension(H_GAP, V_GAP));
+            split.setFont(new Font("黑体", Font.BOLD, 15));
+            this.add(split);
+
+            minute = new JTextField();
+            minute.setFont(font);
+            minute.setPreferredSize(new Dimension(componentW, componentH));
+            this.add(minute);
+        }
+
+        String getHour() {
+            return hour.getText();
+        }
+
+        String getMinute() {
+            return minute.getText();
+        }
+
+        @Override
+        public void setEnabled(boolean enabled) {
+            hour.setEnabled(enabled);
+            minute.setEnabled(enabled);
+        }
+    }
+
+    private class Calculation extends SwingWorker<List<VolumeVO>, Void> {
+        private long quantity;
+
+        /**
+         *
+         * @param quantity 交易总量
+         */
+        Calculation(long quantity) {
+            this.quantity = quantity;
+        }
+
+        @Override
+        protected List<VolumeVO> doInBackground() throws Exception {
+            VWAP vwap = VWAP.getInstance();
+            Calendar s = Calendar.getInstance();
+            s.set(
+                    Calendar.HOUR_OF_DAY,
+                    Integer.parseInt(start.getHour())
+            );
+            s.set(
+                    Calendar.MINUTE,
+                    Integer.parseInt(start.getMinute())
+            );
+            Calendar e = Calendar.getInstance();
+            e.set(
+                    Calendar.HOUR_OF_DAY,
+                    Integer.parseInt(end.getHour())
+            );
+            e.set(
+                    Calendar.MINUTE,
+                    Integer.parseInt(end.getMinute())
+            );
+
+//            Calendar now = Calendar.getInstance();
+//            now.set(Calendar.HOUR_OF_DAY, 10);
+//            now.set(Calendar.MINUTE, 0);
+
+            VWAP_Param param = new VWAP_Param(
+                    quantity,
+                    codeText.getText(),
+                    QuestionnairePanel.risk,
+                    TimeUtil.timeToNode(
+                          new TimeBlImpl().getCurrentTime()
+                    ),
+                    TimeUtil.timeToNode(s),
+                    TimeUtil.timeToNode(e)
+            );
+            return vwap.predictVn(param);
+        }
+
+        @Override
+        protected void done() {
+            try {
+                List<VolumeVO> result = get();
+                parent.updateResultPanel(
+                        result, String.valueOf(operationVal.getSelectedItem())
+                );
+                enableComponents();
+                stopUpdate.setEnabled(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(parent, "网络异常或者该股票结果不可计算");
+                parent.updateResultPanel(
+                        null, String.valueOf(operationVal.getSelectedItem())
+                );
+                enableComponents();
+                stopUpdate.setEnabled(false);
+            }
+
+        }
+    }
 }

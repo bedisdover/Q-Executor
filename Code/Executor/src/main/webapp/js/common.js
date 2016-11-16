@@ -49,7 +49,7 @@ function afterLogin(userName) {
 
     $('#log-out').on('click', function (event) {
         event.preventDefault();
-        logOut();
+        logOut()
     });
 }
 
