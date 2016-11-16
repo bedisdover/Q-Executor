@@ -8,10 +8,7 @@ import bl.time.TimeUtil;
 import blservice.vwap.VWAPService;
 import vo.VolumeVO;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class VWAP implements VWAPService {
 
@@ -79,7 +76,7 @@ public class VWAP implements VWAPService {
 		return getVolumeVOList(Vn,param.getTimeNode());
 	}
 
-	public long getVWAPVol(VWAP_Param param) throws Exception {
+	public long getVWAPVol(VWAP_Param param,Date date) throws Exception {
 		//已交易比例阈值
 		double volThre = 0.8;
 		//时间阈值
