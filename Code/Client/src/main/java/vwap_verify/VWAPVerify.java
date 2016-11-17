@@ -1,7 +1,9 @@
 package vwap_verify;
 
+import bl.vwap.StockDataServiceImpl;
 import bl.vwap.VWAP;
 import bl.vwap.VWAP_Param;
+import blservice.vwap.StockDataService;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -44,9 +46,9 @@ public class VWAPVerify {
         return volList;
     }
     public List<Long> getActualDayVol(String stockid,Date date){
+        StockDataService stockData = new StockDataServiceImpl();
 
-
-        return null;
+        return stockData.getVolList(stockid,date);
     }
     public List<Long> getUniformDayVol(long userVol){
         List<Long> result = new ArrayList<>();
@@ -62,8 +64,8 @@ public class VWAPVerify {
     }
 
     private List<Double> getPriceList(String stockid, Date date){
-
-        return null;
+        StockDataService stockData =  new StockDataServiceImpl();
+        return stockData.getPriceList(stockid,date);
     }
     public void process(){
         String stockid;
@@ -90,6 +92,7 @@ public class VWAPVerify {
             double vwapBP = (vwapAvgPrice - actualAvgPrice)*10000.0/actualAvgPrice;
             double uniformBP = (uniformAvgPrice - actualAvgPrice)*10000.0/actualAvgPrice;
             out += vwapAvgPrice+" "+uniformAvgPrice+" "+actualAvgPrice+"  "+vwapBP+" "+uniformBP;
+            System.out.println(out);
             savefile(out);
         }
     }
