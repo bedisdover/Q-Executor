@@ -108,6 +108,7 @@ public class VWAPVerify {
         double sumPrice = 0;
         double avgPrice;
         long volsum = 0;
+        System.out.println(vol.size()+"  "+price.size());
         for (int i = 0; i < vol.size(); i++) {
             sumPrice += vol.get(i)*price.get(i);
             volsum += vol.get(i);
