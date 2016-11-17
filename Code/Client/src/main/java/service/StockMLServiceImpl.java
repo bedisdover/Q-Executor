@@ -133,18 +133,18 @@ public class StockMLServiceImpl implements StockMLService{
 
 
     /**********************************************实证部分***********************************************************/
+
     @Override
-    public ArrayList<StockForMLPO> getStockDataMLTest(String stockID, int currentTime, Date end) {
-        ArrayList<StockForMLPO> stockForMLPOs=new ArrayList<StockForMLPO>();
+    public ArrayList<StockForMLPO> getStockDataMLTest(String stockID, int numOfStock, int currentTime, Date date) {
         stockID =  StockUtil.getCode(stockID);
         int num = Integer.parseInt(stockID.substring(2))%20;
-
-        String sql = "SELECT open,high,low,close,volume,dealMoney FROM "+ StringUtil.HISTORY_5MIN_DATA+num+" WHERE CODE = \""+stockID+"\" AND DATE_FORMAT(DATE,\"%H:%i:%s\") = \""+timeFormat[currentTime-1]+"\" AND DATE<=? ORDER BY DATE DESC ";
+        ArrayList<StockForMLPO> stockForMLPOs = new ArrayList<StockForMLPO>();
+        String sql = "SELECT open,high,low,close,volume,dealMoney FROM "+ StringUtil.HISTORY_5MIN_DATA+num+" WHERE CODE = \""+stockID+"\" AND DATE_FORMAT(DATE,\"%H:%i:%s\") = \""+timeFormat[currentTime-1]+"\" and date<=? ORDER BY DATE DESC limit "+numOfStock;
 
         try {
             Connection connection = JdbcUtil.getInstance().getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setTimestamp(1,Timestamp.valueOf(TimeUtil.getDate(end)+" 00:00:00"));
+            statement.setTimestamp(1,Timestamp.valueOf(TimeUtil.getDate(date)+" 00:00:00"));
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
 
@@ -157,15 +157,16 @@ public class StockMLServiceImpl implements StockMLService{
         }
         Collections.reverse(stockForMLPOs);
         return stockForMLPOs;
+
     }
 
     @Override
-    public ArrayList<InforForMLPO> getDynamicInforMLTest(String stockID, int index, Date end) {
+    public ArrayList<InforForMLPO> getDynamicInforMLTest(String stockID, int numOfStock, int currentTime, Date date) {
         ArrayList<InforForMLPO> array=new ArrayList<InforForMLPO>();
-        ArrayList<StockForMLPO> currentTimes = getStockDataMLTest(stockID,index,end);
-        ArrayList<StockForMLPO> currentTimeLast1 = getStockDataMLTest(stockID,index-1,end);
-        ArrayList<StockForMLPO> currentTimeLast2 = getStockDataMLTest(stockID,index-2,end);
-        ArrayList<StockForMLPO> currentTimeLast3 = getStockDataMLTest(stockID,index-3,end);
+        ArrayList<StockForMLPO> currentTimes = getStockDataMLTest(stockID,numOfStock+3,currentTime,date);
+        ArrayList<StockForMLPO> currentTimeLast1 = getStockDataMLTest(stockID,numOfStock,currentTime-1,date);
+        ArrayList<StockForMLPO> currentTimeLast2 = getStockDataMLTest(stockID,numOfStock,currentTime-2,date);
+        ArrayList<StockForMLPO> currentTimeLast3 = getStockDataMLTest(stockID,numOfStock,currentTime-3,date);
         int currentTimesNums = currentTimes.size();
         int currentTimeLast1Nums = currentTimeLast1.size();
         int currentTimeLast2Nums = currentTimeLast2.size();
@@ -183,6 +184,33 @@ public class StockMLServiceImpl implements StockMLService{
             return array;
         }
         Collections.reverse(array);
+        return array;
+    }
+
+    @Override
+    public ArrayList<StockForMLPO> getTodayInforMLTest(String stockID, Date date) {
+        ArrayList<StockForMLPO> array=new ArrayList<StockForMLPO>();
+        stockID =  StockUtil.getCode(stockID);
+        int num = Integer.parseInt(stockID.substring(2))%20;
+
+
+        String sql = "SELECT open,high,low,close,volume,dealMoney FROM "+ StringUtil.HISTORY_5MIN_DATA+num+" WHERE CODE = \""+stockID+"\" AND DATE >= ? and DATE <= ?;";
+        try {
+            Connection connection = JdbcUtil.getInstance().getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setTimestamp(1,Timestamp.valueOf(TimeUtil.getDate(date)+" 00:00:00"));
+            statement.setTimestamp(2,Timestamp.valueOf(TimeUtil.getDate(date)+" 16:00:00"));
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+
+                array.add(getStockForMLPO(resultSet));
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+            return array;
+        }
         return array;
     }
 
