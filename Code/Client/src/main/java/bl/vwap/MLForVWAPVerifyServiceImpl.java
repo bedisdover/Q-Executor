@@ -60,7 +60,7 @@ public class MLForVWAPVerifyServiceImpl implements MLForVWAPVerifyService {
 
         this.dynamicPriceModelAllStock=new ArrayList<>();
 
-       // run();
+        run();
     }
 
     //svm相关数据初始化
