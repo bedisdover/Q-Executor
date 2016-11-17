@@ -1,7 +1,6 @@
 package bl.vwap;
 
 import blservice.vwap.StockDataService;
-import po.StockForMLPO;
 import util.JdbcUtil;
 import util.StockUtil;
 import util.StringUtil;
@@ -22,7 +21,7 @@ public class StockDataServiceImpl implements StockDataService{
         stockid =  StockUtil.getCode(stockid);
         int num = Integer.parseInt(stockid.substring(2))%20;
         List<Long> volumes = new ArrayList<>();
-        String sql = "SELECT volume FROM "+ StringUtil.HISTORY_5MIN_DATA+num+" WHERE CODE = \""+stockid+"\" AND date>=? and date <=? ORDER BY DATE DESC ";
+        String sql = "SELECT volume FROM "+ StringUtil.HISTORY_5MIN_DATA+num+" WHERE CODE = \""+stockid+"\" AND date>=? and date <=? ORDER BY DATE ";
         Timestamp start = Timestamp.valueOf(TimeUtil.getDate(date)+" 00:00:00");
         Timestamp end = Timestamp.valueOf(TimeUtil.getDate(date)+" 16:00:00");
 
@@ -30,7 +29,7 @@ public class StockDataServiceImpl implements StockDataService{
             Connection connection = JdbcUtil.getInstance().getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setTimestamp(1,start);
-            statement.setTimestamp(1,end);
+            statement.setTimestamp(2,end);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Long vol = (long)resultSet.getDouble(1);
@@ -49,7 +48,7 @@ public class StockDataServiceImpl implements StockDataService{
         stockid =  StockUtil.getCode(stockid);
         int num = Integer.parseInt(stockid.substring(2))%20;
         List<Double> prices = new ArrayList<>();
-        String sql = "SELECT volume,dealMoney FROM "+ StringUtil.HISTORY_5MIN_DATA+num+" WHERE CODE = \""+stockid+"\" AND date>=? and date <=? ORDER BY DATE DESC ";
+        String sql = "SELECT volume,dealMoney FROM "+ StringUtil.HISTORY_5MIN_DATA+num+" WHERE CODE = \""+stockid+"\" AND date>=? and date <=? ORDER BY DATE";
         Timestamp start = Timestamp.valueOf(TimeUtil.getDate(date)+" 00:00:00");
         Timestamp end = Timestamp.valueOf(TimeUtil.getDate(date)+" 16:00:00");
 
@@ -57,7 +56,7 @@ public class StockDataServiceImpl implements StockDataService{
             Connection connection = JdbcUtil.getInstance().getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setTimestamp(1,start);
-            statement.setTimestamp(1,end);
+            statement.setTimestamp(2,end);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
 
