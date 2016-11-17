@@ -66,6 +66,7 @@ public class StockDataServiceImpl implements StockDataService{
                 if (volume!=0){
                     avg = round(dealMoney/volume,2, BigDecimal.ROUND_HALF_UP);
                 }
+                prices.add(avg);
             }
 
         }catch (SQLException e){
