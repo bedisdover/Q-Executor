@@ -8,6 +8,9 @@ import blservice.vwap.StockDataService;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -75,8 +78,13 @@ public class VWAPVerify {
             String out = "";
             stockid = stockList[i];
             out += stockid+"  ";
-            Date date = new Date();
-            //TODO
+            DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = null;
+            try {
+                date = dateFormat1.parse("2015-07-15");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             out += date.toString()+":";
             userVol = userVolArray[i];
             List<Long> vwapVolList = getVWAPDayVol(stockid,userVol,date);
