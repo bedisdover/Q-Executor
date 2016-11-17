@@ -18,10 +18,10 @@ import java.util.List;
  */
 public class StockDataServiceImpl implements StockDataService{
     @Override
-    public List<Double> getVolList(String stockid, Date date) {
+    public List<Long> getVolList(String stockid, Date date) {
         stockid =  StockUtil.getCode(stockid);
         int num = Integer.parseInt(stockid.substring(2))%20;
-        List<Double> volumes = new ArrayList<>();
+        List<Long> volumes = new ArrayList<>();
         String sql = "SELECT volume FROM "+ StringUtil.HISTORY_5MIN_DATA+num+" WHERE CODE = \""+stockid+"\" AND date>=? and date <=? ORDER BY DATE DESC ";
         Timestamp start = Timestamp.valueOf(TimeUtil.getDate(date)+" 00:00:00");
         Timestamp end = Timestamp.valueOf(TimeUtil.getDate(date)+" 16:00:00");
@@ -33,8 +33,8 @@ public class StockDataServiceImpl implements StockDataService{
             statement.setTimestamp(1,end);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-
-                volumes.add(resultSet.getDouble(1));
+                Long vol = (long)resultSet.getDouble(1);
+                volumes.add(vol);
             }
 
         }catch (SQLException e){
