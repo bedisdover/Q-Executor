@@ -33,22 +33,12 @@ public class MLForVWAPVerifyServiceImpl extends TimerTask implements MLForVWAPVe
     private   ArrayList<ArrayList<Integer>> staticVolAllStock;
     private   ArrayList<ArrayList<Double>> staticPriceAllStock;
     private   ArrayList<ArrayList<svm_model>> dynamicPriceModelAllStock;
-
-    //单例模式
-    private static MLForVWAPServiceImpl single;
-
+ 
     //传入日期
     private Date date;
 
-    public static  synchronized MLForVWAPServiceImpl getInstance(){
-        if(single == null){
-            single=new MLForVWAPServiceImpl();
-        }
-        return single;
-    }
 
-
-    private MLForVWAPVerifyServiceImpl(Date date) {
+    public MLForVWAPVerifyServiceImpl(Date date) {
         stockService=new StockMLServiceImpl();
         this.numOfDynamicAttr=36;
         this.numOfStaticAttr=30;
