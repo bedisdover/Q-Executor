@@ -16,7 +16,7 @@ import java.util.TimerTask;
 /**
  * Created by admin on 2016/11/17.
  */
-public class MLForVWAPVerifyServiceImpl extends Thread implements MLForVWAPVerifyService {
+public class MLForVWAPVerifyServiceImpl implements MLForVWAPVerifyService {
     @Resource
     private StockMLService stockService;
 
@@ -59,6 +59,8 @@ public class MLForVWAPVerifyServiceImpl extends Thread implements MLForVWAPVerif
         }
 
         this.dynamicPriceModelAllStock=new ArrayList<>();
+
+       // run();
     }
 
     //svm相关数据初始化
@@ -434,7 +436,6 @@ public class MLForVWAPVerifyServiceImpl extends Thread implements MLForVWAPVerif
     }
 
 
-    @Override
     public void run() {
         try {
             this.staticPriceAllStock.clear();

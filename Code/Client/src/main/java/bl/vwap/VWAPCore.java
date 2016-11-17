@@ -24,7 +24,6 @@ public class VWAPCore {
         DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
         Date date = dateFormat1.parse("2015-07-15");
         mlv = new MLForVWAPVerifyServiceImpl(date);
-        mlv.start();
     }
 
     /**

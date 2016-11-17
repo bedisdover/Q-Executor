@@ -31,17 +31,17 @@ public class VWAPVerify {
 
         VWAP vwap = VWAP.getInstance();
         List<Long> volList = new ArrayList<>();
-        long userVol = userVol1;
-        for(int i=1;i<=48;i++){
-            VWAP_Param param = new VWAP_Param(userVol,stockid,1.0,i,1,48);
-            try {
-                long currentVol = vwap.getVWAPVol(param,date);
-                userVol = userVol - currentVol;
-                volList.add(currentVol);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+//        long userVol = userVol1;
+//        for(int i=1;i<=48;i++){
+//            VWAP_Param param = new VWAP_Param(userVol,stockid,1.0,i,1,48);
+//            try {
+//                long currentVol = vwap.getVWAPVol(param,date);
+//                userVol = userVol - currentVol;
+//                volList.add(currentVol);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
 
         return volList;
     }
