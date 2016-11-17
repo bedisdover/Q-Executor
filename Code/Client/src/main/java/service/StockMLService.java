@@ -84,4 +84,7 @@ public interface StockMLService {
  */
     public ArrayList<StockForMLPO> getTodayInforMLTest(String stockID,Date end,int index);
 
+
+    public String[]  getStocksNeedCalTest();
+
 }
