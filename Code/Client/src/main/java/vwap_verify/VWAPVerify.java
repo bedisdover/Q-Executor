@@ -32,8 +32,8 @@ public class VWAPVerify {
 
     public List<Long> getVWAPDayVol(String stockid,long userVol1,Date date){
 
-        VWAP vwap = VWAP.getInstance();
-        List<Long> volList = new ArrayList<>();
+//        VWAP vwap = VWAP.getInstance();
+//        List<Long> volList = new ArrayList<>();
 //        long userVol = userVol1;
 //        for(int i=1;i<=48;i++){
 //            VWAP_Param param = new VWAP_Param(userVol,stockid,1.0,i,1,48);
@@ -45,8 +45,19 @@ public class VWAPVerify {
 //                e.printStackTrace();
 //            }
 //        }
+//
+//        return volList;
 
-        return volList;
+        List<Long> result = new ArrayList<>();
+        long vol = userVol1/48;
+        long sum = 0;
+        for(int i = 0;i<47;i++){
+            result.add(vol);
+            sum += vol;
+        }
+        result.add(userVol1-sum);
+
+        return result;
     }
     public List<Long> getActualDayVol(String stockid,Date date){
         StockDataService stockData = new StockDataServiceImpl();
