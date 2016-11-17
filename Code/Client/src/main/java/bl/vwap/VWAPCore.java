@@ -22,7 +22,7 @@ public class VWAPCore {
         //TODO 获得机器学习接口
         ml = new MLForVWAPServiceImpl();
         DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = dateFormat1.parse("2015-07-15");
+        Date date = dateFormat1.parse("2015-07-18");
         mlv = new MLForVWAPVerifyServiceImpl(date);
     }
 
@@ -42,7 +42,7 @@ public class VWAPCore {
     public List<Double> getStaticPn(String stockid,Date date) throws Exception{
         //TODO 异常处理
         List<Integer> Vn = mlv.getStaticVol(stockid,date);
-        System.out.println("Vn:"+Vn);
+        System.out.println(stockid+"  Vn:"+Vn);
         return initPn(Vn);
     }
 

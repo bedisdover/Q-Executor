@@ -20,15 +20,15 @@ import java.util.List;
  */
 public class VWAPVerify {
 
-    private static final String stockList[] = { "600085","600352","601607",
-                                                "600533","600563","600628",
-                                                "600193","600523","600657",
-                                                "600116","600165","600862"};
+    private static final String stockList[] = { "sh600085","sh600352","sh601607",
+                                                "sh600533","sh600563","sh600628",
+                                                "sh600193","sh600523","sh600657",
+                                                "sh600116","sh600165","sh600862"};
 
-    private static final long userVolArray[] = {  1234,1234,1234,
-                                            1234,1234,1234,
-                                            1234,1234,1234,
-                                            1234,1234,1234};
+    private static final long userVolArray[] = {  1816086,8248370,2980771,
+                                            3538053,489700,1234,
+                                            1077303,274673,1234,
+                                            1130674,1234,1706140};
 
     public List<Long> getVWAPDayVol(String stockid,long userVol1,Date date){
 
@@ -94,7 +94,7 @@ public class VWAPVerify {
             DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
             Date date = null;
             try {
-                date = dateFormat1.parse("2015-07-15");
+                date = dateFormat1.parse("2015-07-18");
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -103,6 +103,10 @@ public class VWAPVerify {
             List<Long> vwapVolList = getVWAPDayVol(stockid,userVol,date);
             List<Long> uniformVolList = getUniformDayVol(userVol);
             List<Long> actualVolList = getActualDayVol(stockid,date);
+
+            System.out.println(vwapVolList);
+            System.out.println(uniformVolList);
+            System.out.println(actualVolList);
 
             List<Double> priceList = getPriceList(stockid,date);
 
