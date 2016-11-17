@@ -8,6 +8,7 @@ import bl.time.TimeUtil;
 import blservice.vwap.VWAPService;
 import vo.VolumeVO;
 
+import java.text.ParseException;
 import java.util.*;
 
 public class VWAP implements VWAPService {
@@ -18,7 +19,11 @@ public class VWAP implements VWAPService {
 
 	private VWAP(){
 		stockPnMap = new HashMap<String,List<Double>>();
-		vwapCore = new VWAPCore();
+		try {
+			vwapCore = new VWAPCore();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 	}
 	private static class SingletonHolder
 	{

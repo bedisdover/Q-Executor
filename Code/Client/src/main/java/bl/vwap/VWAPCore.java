@@ -3,6 +3,9 @@ package bl.vwap;
 import blservice.vwap.MLForVWAPVerifyService;
 import vo.MLForVWAPPriceVO;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,12 +16,15 @@ import java.util.List;
 public class VWAPCore {
 
     private blservice.vwap.MLForVWAPService ml = null;
-    private MLForVWAPVerifyService mlv = null;
+    private MLForVWAPVerifyServiceImpl mlv = null;
 
-    public VWAPCore(){
+    public VWAPCore() throws ParseException {
         //TODO 获得机器学习接口
         ml = new MLForVWAPServiceImpl();
-        mlv = MLForVWAPVerifyServiceImpl.getInstance();
+        DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = dateFormat1.parse("2015-07-15");
+        mlv = new MLForVWAPVerifyServiceImpl(date);
+        mlv.start();
     }
 
     /**
@@ -36,7 +42,7 @@ public class VWAPCore {
 
     public List<Double> getStaticPn(String stockid,Date date) throws Exception{
         //TODO 异常处理
-        List<Integer> Vn = ml.getStaticVol(stockid);
+        List<Integer> Vn = mlv.getStaticVol(stockid,date);
         System.out.println("Vn:"+Vn);
         return initPn(Vn);
     }
@@ -67,7 +73,7 @@ public class VWAPCore {
 
     public List<Double> getDynamicPn(List<Double> pList,VWAP_Param param,Date date) throws Exception{
         //TODO 异常处理
-        MLForVWAPPriceVO priceVO = ml.getDynamicPrice(param.getStockid());
+        MLForVWAPPriceVO priceVO = mlv.getDynamicPrice(param.getStockid(),date);
         List<Double> wList = priceVO.getPriceList();
         double Wp = 0;
         try {

@@ -16,7 +16,7 @@ import java.util.TimerTask;
 /**
  * Created by admin on 2016/11/17.
  */
-public class MLForVWAPVerifyServiceImpl extends TimerTask implements MLForVWAPVerifyService {
+public class MLForVWAPVerifyServiceImpl extends Thread implements MLForVWAPVerifyService {
     @Resource
     private StockMLService stockService;
 
