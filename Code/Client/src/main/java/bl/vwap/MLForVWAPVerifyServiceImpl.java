@@ -7,7 +7,6 @@ import po.StockForMLPO;
 import service.StockMLService;
 import service.StockMLServiceImpl;
 import vo.MLForVWAPPriceVO;
-
 import javax.annotation.Resource;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -38,6 +37,9 @@ public class MLForVWAPVerifyServiceImpl extends TimerTask implements MLForVWAPVe
     //单例模式
     private static MLForVWAPServiceImpl single;
 
+    //传入日期
+    private Date date;
+
     public static  synchronized MLForVWAPServiceImpl getInstance(){
         if(single == null){
             single=new MLForVWAPServiceImpl();
@@ -46,12 +48,14 @@ public class MLForVWAPVerifyServiceImpl extends TimerTask implements MLForVWAPVe
     }
 
 
-    private MLForVWAPVerifyServiceImpl( ) {
+    private MLForVWAPVerifyServiceImpl(Date date) {
         stockService=new StockMLServiceImpl();
         this.numOfDynamicAttr=36;
         this.numOfStaticAttr=30;
         this.staticVolAllStock =new ArrayList<>();
         this.staticPriceAllStock=new ArrayList<>();
+
+        this.date=date;
 
         ArrayList<Integer> list=new ArrayList<Integer>();
         ArrayList<Double>  listt=new ArrayList<Double>();
@@ -88,8 +92,8 @@ public class MLForVWAPVerifyServiceImpl extends TimerTask implements MLForVWAPVe
     }
 
     //获取指定股票指定时间片下用于静态模型的训练集和预测数据
-    private void initStaticData(String stockID, int currentTime, Type type){
-        ArrayList<StockForMLPO> poList=stockService.getStockDataML(stockID,200,currentTime);
+    private void initStaticData(String stockID, int currentTime, Type type,Date date){
+        ArrayList<StockForMLPO> poList=stockService.getStockDataMLTest(stockID,200,currentTime,date);
         trainingData=new svm_node[poList.size()-5][numOfStaticAttr];
         labels=new double[poList.size()-5];
         predict=new svm_node[numOfStaticAttr];
@@ -164,8 +168,8 @@ public class MLForVWAPVerifyServiceImpl extends TimerTask implements MLForVWAPVe
     }
 
     //获取指定股票指定时间片下用于动态模型的训练集和预测数据
-    private void initDynamicData(String stockID, int currentTime){
-        ArrayList<InforForMLPO> poList=  stockService.getDynamicInforML( stockID, 200 , currentTime);
+    private void initDynamicData(String stockID, int currentTime,Date date){
+        ArrayList<InforForMLPO> poList=  stockService.getDynamicInforMLTest( stockID, 200 , currentTime,date);
 
         trainingData=new svm_node[poList.size()][numOfDynamicAttr];
         labels=new double[poList.size()];
@@ -233,15 +237,15 @@ public class MLForVWAPVerifyServiceImpl extends TimerTask implements MLForVWAPVe
 
 
     //返回最新数据下静态预测的48个成交量
-    private void  getStaticVol_svm( ){
+    private void  getStaticVol_svm(Date date){
 
         System.gc();
         ArrayList<Integer> list ;
-        String[] all_stock=stockService .getStocksNeedCal();
+        String[] all_stock=stockService .getStocksNeedCalTest();
         for(int j=0;j<all_stock.length;j++) {
             list=new ArrayList<Integer>();
             for (int i = 1; i < 49; i++) {
-                initStaticData(all_stock[j],i,Type.VOL);
+                initStaticData(all_stock[j],i,Type.VOL,date);
                 initSVM();
                 //训练模型
                 model = svm.svm_train(problem, param);
@@ -257,17 +261,17 @@ public class MLForVWAPVerifyServiceImpl extends TimerTask implements MLForVWAPVe
     }
 
     //返回最新数据下静态预测的48个价格
-    private void getStaticPrice_svm( ){
+    private void getStaticPrice_svm(Date date){
 
         System.gc();
         ArrayList<Double> list;
         DecimalFormat df=new DecimalFormat("0.00");
 
-        String[] all_stock=stockService .getStocksNeedCal();
+        String[] all_stock=stockService .getStocksNeedCalTest();
         for(int j=0;j<all_stock.length;j++) {
             list=new ArrayList<Double>();
             for(int i=1;i<49;i++){
-                initStaticData(all_stock[j],i,Type.PRICE);
+                initStaticData(all_stock[j],i,Type.PRICE,date);
                 initSVM();
                 //训练模型
                 model = svm.svm_train(problem, param);
@@ -280,15 +284,15 @@ public class MLForVWAPVerifyServiceImpl extends TimerTask implements MLForVWAPVe
     }
 
     //动态预测的模型存储
-    private void getDynamicPrice_svm( ) {
+    private void getDynamicPrice_svm(Date date) {
 
         System.gc();
         ArrayList<svm_model> list ;
-        String[] all_stock = stockService.getStocksNeedCal();
+        String[] all_stock = stockService.getStocksNeedCalTest();
         for (int j = 0; j < all_stock.length; j++) {
             list = new ArrayList<>();
             for (int i = 4; i < 49; i++) {
-                initDynamicData(all_stock[j], i);
+                initDynamicData(all_stock[j], i,date);
                 initSVM();
                 //训练模型
                 model = svm.svm_train(problem, param);
@@ -299,15 +303,15 @@ public class MLForVWAPVerifyServiceImpl extends TimerTask implements MLForVWAPVe
     }
 
     //动态模型的预测数据
-    private void initDynamicPredict(String stockID,int currentTime){
+    private void initDynamicPredict(String stockID,int currentTime,Date date){
         predict=new svm_node[numOfDynamicAttr];
 
         //获取预测数据
 
         //前三天数据
-        ArrayList<StockForMLPO> threeDayList=stockService.getStockDataML(stockID,3,currentTime);
+        ArrayList<StockForMLPO> threeDayList=stockService.getStockDataMLTest(stockID,3,currentTime,date);
         //前三个时间片数据
-        ArrayList<StockForMLPO> todayList=stockService.getTodayInforML(stockID);
+        ArrayList<StockForMLPO> todayList=stockService.getTodayInforMLTest(stockID,date);
 
         StockForMLPO[] predictData=new StockForMLPO[6];
         predictData[0]=threeDayList.get(0);
@@ -367,7 +371,7 @@ public class MLForVWAPVerifyServiceImpl extends TimerTask implements MLForVWAPVe
     public ArrayList<Integer>   getStaticVol(String stockID,Date date){
 
         ArrayList<Integer> result =null;
-        String[] all_stock=stockService.getStocksNeedCal();
+        String[] all_stock=stockService.getStocksNeedCalTest();
         for(int i=0;i<all_stock.length;i++){
             if(stockID.equals(all_stock[i])){
                 result = staticVolAllStock.get(i);
@@ -385,8 +389,8 @@ public class MLForVWAPVerifyServiceImpl extends TimerTask implements MLForVWAPVe
         int currentTime=-1;
 
         int indexOfTarget=-1;
-        String[] all_stock=stockService.getStocksNeedCal();
-        ArrayList<StockForMLPO> todayList=stockService.getTodayInforML(stockID);
+        String[] all_stock=stockService.getStocksNeedCalTest();
+        ArrayList<StockForMLPO> todayList=stockService.getTodayInforMLTest(stockID,date);
         currentTime=todayList.size();
 
         //获得股票在股票列表的第几个（表驱动思想）
@@ -420,7 +424,7 @@ public class MLForVWAPVerifyServiceImpl extends TimerTask implements MLForVWAPVe
 
             //第二部分
             svm_model thisModel= this.dynamicPriceModelAllStock.get(indexOfTarget).get(currentTime-4);
-            initDynamicPredict(stockID,currentTime);
+            initDynamicPredict(stockID,currentTime,date);
             Double predictValue=svm.svm_predict(thisModel,predict);
             DecimalFormat df=new DecimalFormat("0.00");
             String twobit= df.format(predictValue);
@@ -447,9 +451,9 @@ public class MLForVWAPVerifyServiceImpl extends TimerTask implements MLForVWAPVe
             this.staticVolAllStock.clear();
             this.dynamicPriceModelAllStock.clear();
 
-            this.getStaticVol_svm();
-            this.getStaticPrice_svm();
-            this.getDynamicPrice_svm();
+            this.getStaticVol_svm(date);
+            this.getStaticPrice_svm(date);
+            this.getDynamicPrice_svm(date);
         } catch (Exception e) {
             System.out.println("svm thread error!");
         }
