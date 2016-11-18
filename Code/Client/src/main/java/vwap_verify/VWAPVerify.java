@@ -21,14 +21,14 @@ import java.util.List;
 public class VWAPVerify {
 
     private static final String stockList[] = { "sh600085","sh600352","sh601607",
-                                                "sh600533","sh600563","sh600628",
-                                                "sh600193","sh600523","sh600657",
-                                                "sh600116","sh600165","sh600862"};
+                                                "sh600533","sh600563",
+                                                "sh600193","sh600523",
+                                                "sh600116","sh600862"};
 
     private static final long userVolArray[] = {  1816086,8248370,2980771,
-                                            3538053,489700,1234,
-                                            1077303,274673,1234,
-                                            1130674,1234,1706140};
+                                            3538053,489700,
+                                            1077303,274673,
+                                            1130674,1706140};
 
     public List<Long> getVWAPDayVol(String stockid,long userVol1,Date date){
 
@@ -86,7 +86,7 @@ public class VWAPVerify {
         long userVol;
 
         int num = stockList.length;
-        num = 1;
+        //num = 2;
         for(int i = 0;i<num;i++){
             String out = "";
             stockid = stockList[i];
@@ -94,7 +94,7 @@ public class VWAPVerify {
             DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
             Date date = null;
             try {
-                date = dateFormat1.parse("2015-07-18");
+                date = dateFormat1.parse("2015-06-20");
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -110,6 +110,17 @@ public class VWAPVerify {
 
             List<Double> priceList = getPriceList(stockid,date);
 
+            if(vwapVolList == null || vwapVolList.size() == 0){
+                continue;
+            }
+            if(uniformVolList == null || uniformVolList.size() == 0){
+                continue;
+            }
+            if(actualVolList == null || actualVolList.size() == 0){
+                continue;
+            }if(priceList == null || priceList.size() == 0){
+                continue;
+            }
             double vwapAvgPrice = getAvgPrice(vwapVolList,priceList);
             double uniformAvgPrice = getAvgPrice(uniformVolList,priceList);
             double actualAvgPrice = getAvgPrice(actualVolList,priceList);
@@ -122,6 +133,9 @@ public class VWAPVerify {
         }
     }
     private double getAvgPrice(List<Long> vol,List<Double> price){
+        if(vol.size() == 0 || price.size() == 0){
+            return  0;
+        }
         double sumPrice = 0;
         double avgPrice;
         long volsum = 0;

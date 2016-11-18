@@ -22,7 +22,7 @@ public class VWAPCore {
         //TODO 获得机器学习接口
         ml = new MLForVWAPServiceImpl();
         DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = dateFormat1.parse("2015-07-18");
+        Date date = dateFormat1.parse("2015-06-20");
         mlv = new MLForVWAPVerifyServiceImpl(date);
     }
 
@@ -43,6 +43,9 @@ public class VWAPCore {
         //TODO 异常处理
         List<Integer> Vn = mlv.getStaticVol(stockid,date);
         System.out.println(stockid+"  Vn:"+Vn);
+        if(Vn == null){
+            return null;
+        }
         return initPn(Vn);
     }
 
@@ -57,6 +60,7 @@ public class VWAPCore {
         //TODO 异常处理
         MLForVWAPPriceVO priceVO = ml.getDynamicPrice(param.getStockid());
         List<Double> wList = priceVO.getPriceList();
+
         double Wp = 0;
         try {
             Wp = calcWp(pList, wList);
@@ -74,6 +78,9 @@ public class VWAPCore {
         //TODO 异常处理
         MLForVWAPPriceVO priceVO = mlv.getDynamicPrice(param.getStockid(),date);
         List<Double> wList = priceVO.getPriceList();
+        if(wList == null){
+            return null;
+        }
         double Wp = 0;
         try {
             Wp = calcWp(pList, wList);
