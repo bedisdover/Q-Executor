@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import bl.Connect;
+
 /**
  * Created by ZhangYF on 2016/9/8.
  */
@@ -22,7 +24,7 @@ public class VWAPCore {
         //TODO 获得机器学习接口
         ml = new MLForVWAPServiceImpl();
         DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = dateFormat1.parse("2015-06-29");
+        Date date = dateFormat1.parse(Connect.date);
         mlv = new MLForVWAPVerifyServiceImpl(date);
     }
 

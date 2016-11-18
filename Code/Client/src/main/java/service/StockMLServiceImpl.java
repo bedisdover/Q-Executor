@@ -11,8 +11,11 @@ import util.TimeUtil;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+
+import bl.Connect;
 
 /**
  * Created by 王栋 on 2016/8/17 0017.
@@ -249,8 +252,8 @@ public class StockMLServiceImpl implements StockMLService{
     public String[] getStocksNeedCalTest() {
         String[] stocks = {"sh600085","sh600352","sh601607","sh600533","sh600563",
              "sh600193","sh600523","sh600116","sh600862"};
-//        String[] stocks = {"sh600563","sh600193"};
-        return stocks;
+        String[] stocks1 = Arrays.copyOfRange(stocks, Connect.start,Connect.end);
+        return stocks1;
     }
 
     private StockForMLPO getStockForMLPO(ResultSet resultSet) throws SQLException {

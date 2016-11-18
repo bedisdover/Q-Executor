@@ -1,5 +1,6 @@
 package vwap_verify;
 
+import bl.Connect;
 import bl.vwap.StockDataServiceImpl;
 import bl.vwap.VWAP;
 import bl.vwap.VWAP_Param;
@@ -87,14 +88,14 @@ public class VWAPVerify {
 
         int num = stockList.length;
 //        num = 2;
-        for(int i = 0;i<num;i++){
+        for(int i = Connect.start;i<Connect.end;i++){
             String out = "";
             stockid = stockList[i];
             out += stockid+"  ";
             DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
             Date date = null;
             try {
-                date = dateFormat1.parse("2015-06-29");
+                date = dateFormat1.parse(Connect.date);
             } catch (ParseException e) {
                 e.printStackTrace();
             }

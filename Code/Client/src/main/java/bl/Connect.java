@@ -11,7 +11,10 @@ import java.util.Properties;
  */
 public class Connect {
     public static final String IP;
-
+    public static final String date;
+    public static final int start;
+    public static final int end;
+    
     static {
         Properties properties = new Properties();
         try {
@@ -23,5 +26,8 @@ public class Connect {
         }
 
         IP = properties.getProperty("ip");
+        date = properties.getProperty("date");
+        start = Integer.parseInt(properties.getProperty("start"));
+        end = Integer.parseInt(properties.getProperty("end"));
     }
 }
