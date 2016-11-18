@@ -86,7 +86,7 @@ public class VWAPVerify {
         long userVol;
 
         int num = stockList.length;
-        //num = 2;
+//        num = 2;
         for(int i = 0;i<num;i++){
             String out = "";
             stockid = stockList[i];
@@ -94,7 +94,7 @@ public class VWAPVerify {
             DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
             Date date = null;
             try {
-                date = dateFormat1.parse("2015-06-20");
+                date = dateFormat1.parse("2015-06-29");
             } catch (ParseException e) {
                 e.printStackTrace();
             }

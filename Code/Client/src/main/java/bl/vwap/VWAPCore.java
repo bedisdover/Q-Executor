@@ -22,7 +22,7 @@ public class VWAPCore {
         //TODO 获得机器学习接口
         ml = new MLForVWAPServiceImpl();
         DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = dateFormat1.parse("2015-06-20");
+        Date date = dateFormat1.parse("2015-06-29");
         mlv = new MLForVWAPVerifyServiceImpl(date);
     }
 

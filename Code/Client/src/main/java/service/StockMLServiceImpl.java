@@ -243,9 +243,9 @@ public class StockMLServiceImpl implements StockMLService{
 
     @Override
     public String[] getStocksNeedCalTest() {
-//        String[] stocks = {"sh600085","sh600352","sh601607","sh600533","sh600563",
-//        "sh600628","sh600193","sh600523","sh600657","sh600116","sh600165","sh600862"};
-        String[] stocks = {"sh600085","sh600352"};
+        String[] stocks = {"sh600085","sh600352","sh601607","sh600533","sh600563",
+             "sh600193","sh600523","sh600116","sh600862"};
+//        String[] stocks = {"sh600563","sh600193"};
         return stocks;
     }
 
