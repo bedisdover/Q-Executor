@@ -43,6 +43,7 @@ public class StockMLServiceImpl implements StockMLService{
 
                 stockForMLPOs.add(getStockForMLPO(resultSet));
             }
+            connection.close();
 
         }catch (SQLException e){
             e.printStackTrace();
@@ -88,6 +89,7 @@ public class StockMLServiceImpl implements StockMLService{
 
                 array.add(getStockForMLPO(resultSet));
             }
+            connection.close();
 
         }catch (SQLException e){
             e.printStackTrace();
@@ -150,6 +152,7 @@ public class StockMLServiceImpl implements StockMLService{
 
                 stockForMLPOs.add(getStockForMLPO(resultSet));
             }
+            connection.close();
 
         }catch (SQLException e){
             e.printStackTrace();
@@ -206,6 +209,7 @@ public class StockMLServiceImpl implements StockMLService{
 
                 array.add(getStockForMLPO(resultSet));
             }
+            connection.close();
 
         }catch (SQLException e){
             e.printStackTrace();
@@ -233,7 +237,7 @@ public class StockMLServiceImpl implements StockMLService{
 
                 array.add(getStockForMLPO(resultSet));
             }
-
+            connection.close();
         }catch (SQLException e){
             e.printStackTrace();
             return array;
