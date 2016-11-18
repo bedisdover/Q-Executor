@@ -24,9 +24,9 @@ public class StockDataServiceImpl implements StockDataService{
         String sql = "SELECT volume FROM "+ StringUtil.HISTORY_5MIN_DATA+num+" WHERE CODE = \""+stockid+"\" AND date>=? and date <=? ORDER BY DATE ";
         Timestamp start = Timestamp.valueOf(TimeUtil.getDate(date)+" 00:00:00");
         Timestamp end = Timestamp.valueOf(TimeUtil.getDate(date)+" 16:00:00");
-
+        Connection connection = JdbcUtil.getInstance().getConnection();
         try {
-            Connection connection = JdbcUtil.getInstance().getConnection();
+
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setTimestamp(1,start);
             statement.setTimestamp(2,end);
@@ -35,11 +35,18 @@ public class StockDataServiceImpl implements StockDataService{
                 Long vol = (long)resultSet.getDouble(1);
                 volumes.add(vol);
             }
-
+            connection.close();
         }catch (SQLException e){
             e.printStackTrace();
+            try {
+                connection.close();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
             return volumes;
         }
+
+
         return volumes;
     }
 
@@ -51,9 +58,9 @@ public class StockDataServiceImpl implements StockDataService{
         String sql = "SELECT volume,dealMoney FROM "+ StringUtil.HISTORY_5MIN_DATA+num+" WHERE CODE = \""+stockid+"\" AND date>=? and date <=? ORDER BY DATE";
         Timestamp start = Timestamp.valueOf(TimeUtil.getDate(date)+" 00:00:00");
         Timestamp end = Timestamp.valueOf(TimeUtil.getDate(date)+" 16:00:00");
-
+        Connection connection = JdbcUtil.getInstance().getConnection();
         try {
-            Connection connection = JdbcUtil.getInstance().getConnection();
+
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setTimestamp(1,start);
             statement.setTimestamp(2,end);
@@ -68,9 +75,14 @@ public class StockDataServiceImpl implements StockDataService{
                 }
                 prices.add(avg);
             }
-
+            connection.close();
         }catch (SQLException e){
             e.printStackTrace();
+            try {
+                connection.close();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
             return prices;
         }
         //按照第一个到最后一个顺序
