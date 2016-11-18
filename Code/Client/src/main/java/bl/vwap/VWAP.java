@@ -106,10 +106,12 @@ public class VWAP implements VWAPService {
 			stockPnMap.put(param.getStockid(), Pn);
 		}else{
 			Pn=stockPnMap.get(param.getStockid());
-
 			if(param.getTimeNode()!=25){
 				double gama = 0;
 				for(int i = param.getTimeNode()-1;i<Pn.size();i++){
+					if(Pn == null){
+						return 0;
+					}
 					gama += Pn.get(i);
 				}
 				if(gama<volThre && 1.0*param.getTimeNode()/TimeUtil.TimeSliceNum <timrThre){
@@ -120,6 +122,9 @@ public class VWAP implements VWAPService {
 
 		}
 
+		if(Pn == null){
+			return 0;
+		}
 		List<Long> Vn = calcVn(Pn,param);
 		return Vn.get(0);
 	}
