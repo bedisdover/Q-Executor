@@ -43,7 +43,7 @@ class ParamPanel extends JPanel {
     private static final int V_GAP = 10;
 
     //组件字体
-    private static final Font font = new Font("宋体", Font.PLAIN, 12);
+    private static final Font font = new Font("微软雅黑", Font.PLAIN, 12);
 
     //字符串切割符
     private static final String spliter = " : ";

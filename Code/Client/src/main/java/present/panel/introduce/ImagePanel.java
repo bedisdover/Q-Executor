@@ -48,7 +48,7 @@ class ImagePanel extends JPanel {
         TextBlock block = new TextBlock(
                 3,
                 "A股订单优化执行系统由旗迹团队独立自主研发，支持沪深两市A股市场在线交易，可以帮助用户合理安排大额股票交易。系统集自身之独创与众家之所长为一身，软件小巧，功能强大，技术分析专业、精妙，是投资者纵横股市的必备工具",
-                new Font("宋体", Font.PLAIN, 20), Color.WHITE
+                new Font("微软雅黑", Font.PLAIN, 20), Color.WHITE
         );
         block.setPreferredSize(new Dimension(MainFrame.PANEL_W, PADDING << 1));
         JPanel text = new JPanel(new BorderLayout());

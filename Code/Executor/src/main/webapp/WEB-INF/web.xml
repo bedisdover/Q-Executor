@@ -59,11 +59,11 @@
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
 
-  <!--<listener>-->
-    <!--<listener-class>-->
-      <!--cn.edu.nju.software.nightfactory.NightFactoryML-->
-    <!--</listener-class>-->
-  <!--</listener>-->
+  <listener>
+    <listener-class>
+      cn.edu.nju.software.nightfactory.NightFactoryML
+    </listener-class>
+  </listener>
 
   <context-param>
 
