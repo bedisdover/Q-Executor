@@ -79,6 +79,49 @@ public class VWAP implements VWAPService {
 		return getVolumeVOList(Vn,param.getTimeNode());
 	}
 
+	public long getVWAPVol(VWAP_Param param) throws Exception {
+		//已交易比例阈值
+		double volThre = 0.8;
+		//时间阈值
+		double timrThre = 220.0/240;
+
+		if(param.getTimeNode()<param.getStartTimeNode()||param.getTimeNode()>=param.getEndTimeNode()){
+			param.setTimeNode(param.getStartTimeNode());
+		}
+
+		if(param.getUserVol()==0){
+			return 0;
+		}else if(param.getUserVol()<=500){
+
+			return param.getUserVol();
+		}
+
+
+		//交易量概率密度
+		List<Double> Pn;
+		if(param.getTimeNode()==param.getStartTimeNode()|| !stockPnMap.containsKey(param.getStockid())){
+			Pn=vwapCore.getStaticPn(param.getStockid());
+			stockPnMap.put(param.getStockid(), Pn);
+		}else{
+			Pn=stockPnMap.get(param.getStockid());
+
+			if(param.getTimeNode()!=25){
+				double gama = 0;
+				for(int i = param.getTimeNode()-1;i<Pn.size();i++){
+					gama += Pn.get(i);
+				}
+				if(gama<volThre && 1.0*param.getTimeNode()/TimeUtil.TimeSliceNum <timrThre){
+					Pn = vwapCore.getDynamicPn(Pn,param);
+					stockPnMap.put(param.getStockid(), Pn);
+				}
+			}
+
+		}
+
+		List<Long> Vn = calcVn(Pn,param);
+		return Vn.get(0);
+	}
+
     /**
      *
      * @param Pn
