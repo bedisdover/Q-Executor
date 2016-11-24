@@ -6,7 +6,6 @@ import config.MsgInfo;
 import present.PanelSwitcher;
 import present.component.QPasswordField;
 import present.component.QTextField;
-import present.component.VerticalBox;
 import present.panel.stock.SearchPanel;
 
 import javax.swing.*;
@@ -35,8 +34,6 @@ public class LoginPanel extends VerticalBox {
 
     private JButton findPW = new JButton("找回密码");
 
-    private static final int PADDING = 20;
-
     public static String LOGIN_USER = null;
 
     public static String LOGIN_PW = null;
@@ -46,13 +43,10 @@ public class LoginPanel extends VerticalBox {
     public LoginPanel(PanelSwitcher switcher) {
         this.switcher = switcher;
 
-        super.addStrut(AccountPanel.NAV_UP_H);
-        super.addItem(name);
-        super.addStrut(PADDING);
-        super.addItem(password);
-        super.addStrut(PADDING);
-        super.addItem(login);
 
+        super.addItem(name);
+        super.addItem(password);
+        super.addButton(login);
         this.addListeners();
     }
 

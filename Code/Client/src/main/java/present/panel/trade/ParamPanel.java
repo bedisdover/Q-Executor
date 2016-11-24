@@ -9,7 +9,7 @@ import blservice.stock.GetStockDataService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import present.component.TipText;
-import present.panel.account.QuestionnairePanel;
+import present.panel.account.RiskSettingPanel;
 import present.utils.StockJsonInfo;
 import util.JsonUtil;
 import util.NumberUtil;
@@ -483,7 +483,7 @@ class ParamPanel extends JPanel {
             VWAP_Param param = new VWAP_Param(
                     quantity,
                     codeText.getText(),
-                    QuestionnairePanel.risk,
+                    RiskSettingPanel.risk,
                     TimeUtil.timeToNode(
                           new TimeBlImpl().getCurrentTime()
                     ),

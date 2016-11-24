@@ -16,6 +16,7 @@ public class QTextField extends JTextField {
 
     public QTextField(String placeholder) {
         this.placeholder = placeholder;
+        this.setHorizontalAlignment(JTextField.CENTER);
         this.setForeground(Color.GRAY);
         this.setText(placeholder);
         this.setHandler();

@@ -1,7 +1,5 @@
 package present.panel.account;
 
-import present.utils.ImageLoader;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
@@ -12,7 +10,7 @@ import java.util.Map;
  *
  * 问卷面板
  */
-public class QuestionnairePanel extends JScrollPane {
+public class RiskSettingPanel extends JScrollPane {
 
     private static final int PADDING = 40;
 
@@ -20,9 +18,11 @@ public class QuestionnairePanel extends JScrollPane {
 
     private static final int QUESTION_H = 36;
 
-    private static final int ANSWER_W = 370;
+    private static final int ANSWER_W = 440;
 
     private static final int ANSWER_H = QUESTION_H;
+
+    private static final Font font = new Font("微软雅黑", Font.PLAIN, 15);
 
     /**
      * 风险偏好值
@@ -46,7 +46,7 @@ public class QuestionnairePanel extends JScrollPane {
         for (int i = 27; i <= 30; ++i) table.put(i, 0.6);
     }
 
-    QuestionnairePanel() {
+    RiskSettingPanel() {
         Box box = Box.createVerticalBox();
         box.setOpaque(false);
 
@@ -58,7 +58,9 @@ public class QuestionnairePanel extends JScrollPane {
         option1.addItem("谨慎增值");
         option1.addItem("稳健增值");
         option1.addItem("显著增长");
-        JPanel question1 = createQuestion(option1, ImageLoader.question1);
+        JPanel question1 = createQuestion(
+                option1, "1、贵司的投资目标是什么？"
+        );
         box.add(question1);
 
         box.add(Box.createVerticalStrut(PADDING));
@@ -69,7 +71,9 @@ public class QuestionnairePanel extends JScrollPane {
         option2.addItem("1到5年");
         option2.addItem("5到10年");
         option2.addItem("10年以上");
-        JPanel question2 = createQuestion(option2, ImageLoader.question2);
+        JPanel question2 = createQuestion(
+                option2, "2、贵公司投资研究团队人员的平均投资年限为"
+        );
         box.add(question2);
 
         box.add(Box.createVerticalStrut(PADDING));
@@ -80,7 +84,9 @@ public class QuestionnairePanel extends JScrollPane {
         option3.addItem("现金流短期有一定压力，需要流动性较高的投资");
         option3.addItem("现金流长期有一定压力，需要一定的投资收益弥补现金流");
         option3.addItem("现金流长期充裕，几乎没有压力");
-        JPanel question3 = createQuestion(option3, ImageLoader.question3);
+        JPanel question3 = createQuestion(
+                option3, "3、贵公司面临的现金流压力如何？"
+        );
         box.add(question3);
 
         box.add(Box.createVerticalStrut(PADDING));
@@ -92,7 +98,7 @@ public class QuestionnairePanel extends JScrollPane {
         option4.addItem("4到6种");
         option4.addItem("6种以上");
         JPanel question4 = createQuestion(
-                option4, ImageLoader.question4_1, ImageLoader.question4_2
+                option4, "4、股票、债券、基金、外汇、商品、专户理财、股指期货和融资融券，这八类投资工具贵司深入研究过几种"
         );
         box.add(question4);
 
@@ -105,7 +111,7 @@ public class QuestionnairePanel extends JScrollPane {
         option5.addItem("3到5年");
         option5.addItem("5年以上");
         JPanel question5 = createQuestion(
-                option5, ImageLoader.question5
+                option5, "5、贵司有多少年的证券投资经验？"
         );
         box.add(question5);
 
@@ -117,7 +123,7 @@ public class QuestionnairePanel extends JScrollPane {
         option6.addItem("持有量保持不变");
         option6.addItem("再次购入");
         JPanel question6 = createQuestion(
-                option6, ImageLoader.question6_1, ImageLoader.question6_2
+                option6, "6、若购入的股票对比购入时上涨20%，贵司将作出如何反应？"
         );
         box.add(question6);
 
@@ -130,7 +136,7 @@ public class QuestionnairePanel extends JScrollPane {
         option7.addItem("10%到20%");
         option7.addItem("20%以上");
         JPanel question7 = createQuestion(
-                option7, ImageLoader.question7_1, ImageLoader.question7_2
+                option7, "7、贵公司目前投资于风险资产的比例已经达到了资产的"
         );
         box.add(question7);
 
@@ -139,7 +145,7 @@ public class QuestionnairePanel extends JScrollPane {
         //提交按钮
         JButton submit = new JButton("提交");
         submit.setPreferredSize(new Dimension(100, ANSWER_H));
-        submit.setFont(new Font("微软雅黑", Font.PLAIN, 15));
+        submit.setFont(font);
         submit.addActionListener((e) -> {
             int sum = (option1.getSelectedIndex() + 1) +
                     (option2.getSelectedIndex() + 1) +
@@ -156,7 +162,7 @@ public class QuestionnairePanel extends JScrollPane {
                 risk = 0.4;
             }
 
-            JOptionPane.showMessageDialog(QuestionnairePanel.this, "系统已保存您的风险偏好");
+            JOptionPane.showMessageDialog(RiskSettingPanel.this, "系统已保存您的风险偏好");
         });
         JPanel inner = new JPanel(new FlowLayout(
                 FlowLayout.LEFT, PADDING, 0
@@ -171,35 +177,47 @@ public class QuestionnairePanel extends JScrollPane {
         box.add(Box.createVerticalStrut(PADDING));
 
         this.setViewportView(box);
-        this.getVerticalScrollBar().setUnitIncrement(200);
-        this.getViewport().setBackground(AccountConst.BACKGROUND);
-        this.setBackground(AccountConst.BACKGROUND);
+        this.getVerticalScrollBar().setUnitIncrement(50);
+        this.getViewport().setOpaque(false);
+        this.setOpaque(false);
     }
 
 
-    private JPanel createQuestion(JComboBox<String> options, ImageIcon... questions) {
+    private JPanel createQuestion(JComboBox<String> options, String question) {
         Box box = Box.createVerticalBox();
         box.setOpaque(false);
 
-        for (ImageIcon icon : questions) {
-            JLabel label = new JLabel(icon);
-            label.setPreferredSize(new Dimension(
+        //问题
+        int line = 25;
+        int length = question.length();
+        Box qb = Box.createVerticalBox();
+        qb.setOpaque(false);
+        for(int i = 0; i < length; i += line) {
+            JLabel q = new JLabel(question.substring(
+                    i, (i + line >= length) ? length : i + line
+            ));
+            q.setOpaque(false);
+            q.setPreferredSize(new Dimension(
                     QUESTION_W, QUESTION_H
             ));
-            JPanel p = new JPanel(new FlowLayout(
+            q.setFont(font);
+            JPanel qp = new JPanel(new FlowLayout(
                     FlowLayout.LEFT, PADDING, 0
             ));
-            p.setOpaque(false);
-            p.add(label);
-            box.add(p);
+            qp.setOpaque(false);
+            qp.add(q);
+            qb.add(qp);
         }
+
+        box.add(qb);
 
         box.add(Box.createVerticalStrut(PADDING));
 
+        //答案
         options.setPreferredSize(new Dimension(
                 ANSWER_W, ANSWER_H
         ));
-        options.setFont(new Font("等线", Font.ITALIC, 13));
+        options.setFont(font);
         JPanel p = new JPanel(new FlowLayout(
                 FlowLayout.LEFT, PADDING, 0
         ));

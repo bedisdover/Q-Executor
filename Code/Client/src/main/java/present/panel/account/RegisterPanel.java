@@ -5,7 +5,6 @@ import blservice.user.UserService;
 import config.MsgInfo;
 import present.component.QPasswordField;
 import present.component.QTextField;
-import present.component.VerticalBox;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -33,22 +32,14 @@ public class RegisterPanel extends VerticalBox{
 
     private JButton register = new JButton("注册");
 
-    private static final int PADDING = 20;
-
     public RegisterPanel() {
 
-        super.addStrut(PADDING << 2);
         super.addItem(email);
-        super.addStrut(PADDING);
         super.addItem(name);
-        super.addStrut(PADDING);
         super.addItem(nickname);
-        super.addStrut(PADDING);
         super.addItem(password);
-        super.addStrut(PADDING);
         super.addItem(confirmPW);
-        super.addStrut(PADDING);
-        super.addItem(register);
+        super.addButton(register);
 
         this.addBtnListener();
     }

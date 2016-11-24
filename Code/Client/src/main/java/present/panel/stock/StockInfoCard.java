@@ -12,13 +12,11 @@ import java.awt.event.MouseEvent;
  */
 class StockInfoCard extends JPanel {
 
-    private static final Font font = new Font("等线", Font.PLAIN, 16);
+    private static final Font font = new Font("微软雅黑", Font.PLAIN, 16);
 
     private static final Color KEY_COLOR = Color.WHITE;
 
-    private static final Color VAL_COLOR = Color.CYAN;
-
-    private static final Color bg = new Color(0xff9700);
+    private static final Color VAL_COLOR = Color.WHITE;
 
     /**
      *
@@ -42,12 +40,13 @@ class StockInfoCard extends JPanel {
         //股票价格
         box.add(createLine("股票价格 : ", price));
         //股票涨跌幅
-        box.add(createChangeCard(change));
+        box.add(createLine("涨跌幅   : ", String.valueOf(change)));
 
         this.setLayout(new BorderLayout());
         this.add(box, BorderLayout.CENTER);
         this.setPreferredSize(new Dimension(width, height));
-        this.setBackground(bg);
+        this.setOpaque(false);
+        this.setBorder(BorderFactory.createLineBorder(Color.WHITE));
     }
 
     void addListener(MouseAdapter adapter) {
@@ -61,13 +60,13 @@ class StockInfoCard extends JPanel {
             @Override
             public void mouseEntered(MouseEvent e) {
                 super.mouseEntered(e);
-                setBackground(Color.BLACK);
+                setBorder(BorderFactory.createLineBorder(Color.BLACK));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 super.mouseExited(e);
-                setBackground(bg);
+                setBorder(BorderFactory.createLineBorder(Color.WHITE));
             }
         });
     }
@@ -80,29 +79,7 @@ class StockInfoCard extends JPanel {
         valLabel.setFont(font);
         valLabel.setForeground(VAL_COLOR);
         JPanel panel = new JPanel(new FlowLayout(
-                FlowLayout.CENTER, 10, 0
-        ));
-        panel.add(keyLabel);
-        panel.add(valLabel);
-        panel.setOpaque(false);
-        return panel;
-    }
-
-    private JPanel createChangeCard(double value) {
-        JLabel keyLabel = new JLabel("涨跌幅  : ");
-        keyLabel.setFont(font);
-        keyLabel.setForeground(KEY_COLOR);
-        JLabel valLabel = new JLabel(String.valueOf(value));
-        valLabel.setFont(font);
-        if(value < 0) {
-            valLabel.setForeground(new Color(0x2CFF23));
-        } else if(value == 0) {
-            valLabel.setForeground(Color.BLACK);
-        } else {
-            valLabel.setForeground(new Color(0xFF0000));
-        }
-        JPanel panel = new JPanel(new FlowLayout(
-                FlowLayout.CENTER, 10, 0
+                FlowLayout.LEFT, 10, 0
         ));
         panel.add(keyLabel);
         panel.add(valLabel);

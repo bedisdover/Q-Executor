@@ -16,6 +16,7 @@ public class QPasswordField extends JPasswordField {
 
     public QPasswordField(String placeholder) {
         this.placeholder = placeholder;
+        this.setHorizontalAlignment(JPasswordField.CENTER);
         this.setForeground(Color.GRAY);
         this.setEchoChar((char) 0);
         this.setText(placeholder);
