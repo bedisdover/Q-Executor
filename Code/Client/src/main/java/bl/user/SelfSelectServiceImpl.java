@@ -21,6 +21,7 @@ public class SelfSelectServiceImpl implements SelfSelectService{
 		BufferedReader reader = new BufferedReader(new InputStreamReader(ur.openStream(), "utf-8"));
 		String line=reader.readLine();
 		JSONObject json=new JSONObject(line);
+		System.out.println(line);
 		return getJsonArray(json);
 		
 	}
