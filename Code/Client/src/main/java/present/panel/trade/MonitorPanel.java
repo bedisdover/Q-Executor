@@ -12,7 +12,7 @@ import java.util.Vector;
  */
 class MonitorPanel extends JPanel {
 
-    private static final Font font = new Font("宋体", Font.PLAIN, 11);
+    private static final Font font = new Font("微软雅黑", Font.PLAIN, 11);
 
     MonitorPanel(int width, int height) {
 

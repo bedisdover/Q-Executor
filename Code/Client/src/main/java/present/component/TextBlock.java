@@ -16,7 +16,7 @@ public class TextBlock extends JPanel {
      * @param text  文本
      */
     public TextBlock(int line, String text) {
-        this(line, text, new Font("宋体", Font.PLAIN, 10), Color.black);
+        this(line, text, new Font("微软雅黑", Font.PLAIN, 10), Color.black);
     }
 
     /**
