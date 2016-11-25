@@ -22,6 +22,24 @@ public class RiskSettingPanel extends JScrollPane {
 
     private static final int ANSWER_H = QUESTION_H;
 
+    /*===================问题默认选项，保存用户之前所选==========================*/
+
+    private static int Q1_SELECT = 0;
+
+    private static int Q2_SELECT = 0;
+
+    private static int Q3_SELECT = 0;
+
+    private static int Q4_SELECT = 0;
+
+    private static int Q5_SELECT = 0;
+
+    private static int Q6_SELECT = 0;
+
+    private static int Q7_SELECT = 0;
+
+    /*===============================================*/
+
     private static final Font font = new Font("微软雅黑", Font.PLAIN, 15);
 
     /**
@@ -58,6 +76,7 @@ public class RiskSettingPanel extends JScrollPane {
         option1.addItem("谨慎增值");
         option1.addItem("稳健增值");
         option1.addItem("显著增长");
+        option1.setSelectedIndex(Q1_SELECT);
         JPanel question1 = createQuestion(
                 option1, "1、贵司的投资目标是什么？"
         );
@@ -71,6 +90,7 @@ public class RiskSettingPanel extends JScrollPane {
         option2.addItem("1到5年");
         option2.addItem("5到10年");
         option2.addItem("10年以上");
+        option2.setSelectedIndex(Q2_SELECT);
         JPanel question2 = createQuestion(
                 option2, "2、贵公司投资研究团队人员的平均投资年限为"
         );
@@ -84,6 +104,7 @@ public class RiskSettingPanel extends JScrollPane {
         option3.addItem("现金流短期有一定压力，需要流动性较高的投资");
         option3.addItem("现金流长期有一定压力，需要一定的投资收益弥补现金流");
         option3.addItem("现金流长期充裕，几乎没有压力");
+        option3.setSelectedIndex(Q3_SELECT);
         JPanel question3 = createQuestion(
                 option3, "3、贵公司面临的现金流压力如何？"
         );
@@ -97,6 +118,7 @@ public class RiskSettingPanel extends JScrollPane {
         option4.addItem("3到4种");
         option4.addItem("4到6种");
         option4.addItem("6种以上");
+        option4.setSelectedIndex(Q4_SELECT);
         JPanel question4 = createQuestion(
                 option4, "4、股票、债券、基金、外汇、商品、专户理财、股指期货和融资融券，这八类投资工具贵司深入研究过几种"
         );
@@ -110,6 +132,7 @@ public class RiskSettingPanel extends JScrollPane {
         option5.addItem("1到3年");
         option5.addItem("3到5年");
         option5.addItem("5年以上");
+        option5.setSelectedIndex(Q5_SELECT);
         JPanel question5 = createQuestion(
                 option5, "5、贵司有多少年的证券投资经验？"
         );
@@ -122,6 +145,7 @@ public class RiskSettingPanel extends JScrollPane {
         option6.addItem("开始抛售");
         option6.addItem("持有量保持不变");
         option6.addItem("再次购入");
+        option6.setSelectedIndex(Q6_SELECT);
         JPanel question6 = createQuestion(
                 option6, "6、若购入的股票对比购入时上涨20%，贵司将作出如何反应？"
         );
@@ -135,6 +159,7 @@ public class RiskSettingPanel extends JScrollPane {
         option7.addItem("5%到10%");
         option7.addItem("10%到20%");
         option7.addItem("20%以上");
+        option7.setSelectedIndex(Q7_SELECT);
         JPanel question7 = createQuestion(
                 option7, "7、贵公司目前投资于风险资产的比例已经达到了资产的"
         );
@@ -147,13 +172,20 @@ public class RiskSettingPanel extends JScrollPane {
         submit.setPreferredSize(new Dimension(100, ANSWER_H));
         submit.setFont(font);
         submit.addActionListener((e) -> {
-            int sum = (option1.getSelectedIndex() + 1) +
-                    (option2.getSelectedIndex() + 1) +
-                    (option3.getSelectedIndex() + 1) +
-                    (option4.getSelectedIndex() + 1) +
-                    (option5.getSelectedIndex() + 1) +
-                    (option6.getSelectedIndex() + 1) * 2 +
-                    (option7.getSelectedIndex() + 1);
+            Q1_SELECT = option1.getSelectedIndex();
+            Q2_SELECT = option2.getSelectedIndex();
+            Q3_SELECT = option3.getSelectedIndex();
+            Q4_SELECT = option4.getSelectedIndex();
+            Q5_SELECT = option5.getSelectedIndex();
+            Q6_SELECT = option6.getSelectedIndex();
+            Q7_SELECT = option7.getSelectedIndex();
+            int sum=(Q1_SELECT + 1) +
+                    (Q2_SELECT + 1) +
+                    (Q3_SELECT + 1) +
+                    (Q4_SELECT + 1) +
+                    (Q5_SELECT + 1) +
+                    (Q6_SELECT + 1) * 2 +
+                    (Q7_SELECT + 1);
 
             try {
                 risk = table.get(sum);
