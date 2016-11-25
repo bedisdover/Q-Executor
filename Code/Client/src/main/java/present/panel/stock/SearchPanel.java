@@ -161,6 +161,7 @@ public class SearchPanel extends JPanel {
         search.getTextField().setFont(font);
         search.getButton().setFont(font);
         search.setOpaque(false);
+
         //设置字符串匹配规则
         search.setMatcher((key) -> {
             Vector<String> v = new Vector<>();
