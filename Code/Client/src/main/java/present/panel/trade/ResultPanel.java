@@ -3,7 +3,6 @@ package present.panel.trade;
 import vo.VolumeVO;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
@@ -40,22 +39,23 @@ class ResultPanel extends JScrollPane {
                 return false;
             }
         };
-        table.setForeground(Color.WHITE);
-        table.setBackground(Color.BLACK);
-        table.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
-            @Override
-            public Component getComponent(int n) {
-                JLabel label = new JLabel();
-                label.setBackground(Color.BLACK);
-                label.setForeground(Color.WHITE);
-                return label;
-            }
-        });
-        table.setFont(new Font("等线", Font.PLAIN, 13));
+//        table.setForeground(Color.WHITE);
+//        table.setBackground(Color.BLACK);
+//        table.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
+//            @Override
+//            public Component getComponent(int n) {
+//                JLabel label = new JLabel();
+//                label.setBackground(Color.BLACK);
+//                label.setForeground(Color.WHITE);
+//                return label;
+//            }
+//        });
+        table.setFont(new Font("微软雅黑", Font.PLAIN, 13));
         table.setRowHeight(ROW_HEIGHT);
 
         this.setPreferredSize(new Dimension(width, height));
         this.setViewportView(table);
+        this.getViewport().setOpaque(false);
     }
 
     void update(List<VolumeVO> result, String type) {

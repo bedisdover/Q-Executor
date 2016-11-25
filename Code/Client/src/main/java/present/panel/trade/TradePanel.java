@@ -11,7 +11,7 @@ import java.util.List;
 public class TradePanel extends JPanel {
 
     //参数面板宽度
-    private static final int PARAM_PANEL_W = 460;
+    private static final int PARAM_PANEL_W = 420;
 
     //参数面板高度
     private static final int PARAM_PANEL_H = 540;
@@ -23,7 +23,7 @@ public class TradePanel extends JPanel {
 //    private static final int TIME_SERIES_H = PARAM_PANEL_H;
 
     //结果面板宽度
-    private static final int RESULT_PANEL_W = PARAM_PANEL_W;
+    private static final int RESULT_PANEL_W = 500;
 
 //    //有分时面板时的高度
 //    //结果面板高度
@@ -156,6 +156,7 @@ public class TradePanel extends JPanel {
 
         //计时面板
         timerPanel.setPreferredSize(new Dimension(TIME_PANEL_W, RESULT_PANEL_H));
+        timerPanel.setOpaque(false);
 
 //        //将参数面板和分时面板添加到整个面板上方
 //        Box up = Box.createHorizontalBox();
