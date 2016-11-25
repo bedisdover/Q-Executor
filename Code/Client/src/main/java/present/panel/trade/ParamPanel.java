@@ -77,23 +77,25 @@ class ParamPanel extends JPanel {
 
     ParamPanel(int width, int height, TradePanel parent) {
         this.parent = parent;
-        this.componentW = (width - 5 * H_GAP) >> 2;
-        this.componentH = (int)(this.componentW * 0.4);
+        this.componentW = 150;
+        this.componentH = 30;
 
-        Box box = Box.createVerticalBox();
-        box.setOpaque(false);
-        box.add(Box.createVerticalStrut(componentH));
-        box.add(createStockTypePanel());
-        box.add(createStockNumPanel());
-        box.add(start = new TimePanel("开始时间"));
-        box.add(end = new TimePanel("结束时间"));
-        box.add(createBtnPanel());
+//        Box box = Box.createVerticalBox();
+//        box.setOpaque(false);
+//        box.add(Box.createVerticalStrut(componentH));
+//        box.add(createStockTypePanel());
+//        box.add(createStockNumPanel());
+//        box.add(start = new TimePanel("开始时间"));
+//        box.add(end = new TimePanel("结束时间"));
+//        box.add(createBtnPanel());
 
         this.setLayout(new BorderLayout());
-        this.add(box, BorderLayout.CENTER);
+        this.add(initContents(), BorderLayout.CENTER);
         this.setPreferredSize(new Dimension(width, height));
-//        this.setBackground(new Color(0x222222));
         this.setOpaque(false);
+//        this.setBorder(BorderFactory.createMatteBorder(
+//                0, 0, 0, 2, Color.WHITE
+//        ));
     }
 
     /**
@@ -114,43 +116,86 @@ class ParamPanel extends JPanel {
     }
 
     /**
-     * 生成股票数量输入面板
-     * @return JPanel
+     * 生成面板内容
+     * @return 面板
      */
-    private JPanel createStockNumPanel() {
+    private Box initContents() {
+        Box box = Box.createVerticalBox();
+
+        box.add(Box.createVerticalStrut(V_GAP << 1));
+
+        //股票名称
+        initStockNameText();
+        initTextField(nameVal, componentW + (H_GAP << 1));
+        box.add(pack(createLabel("股票名称"), nameVal));
+
+        //股票代码
+        codeText = new JTextField();
+        initTextField(codeText, componentW + (H_GAP << 1));
+        box.add(pack(createLabel("股票代码"), codeText));
+
+        //股票数量
+        quanVal = new JTextField();
+        initTextField(quanVal, componentW + (H_GAP << 1));
+        box.add(pack(createLabel("数量/股"), quanVal));
+
         //投资方向
-        JLabel operationLabel = new JLabel("投资方向");
         operationVal = new JComboBox<>();
         operationVal.addItem("卖");
         operationVal.addItem("买");
-        InputPair operation = new InputPair(operationLabel, operationVal);
-        //数量（手）
-        JLabel quantityLabel = new JLabel("数量/股");
-        InputPair quantity = new InputPair(quantityLabel, quanVal);
+        initComboBox(operationVal);
+        box.add(pack(createLabel("投资方向"), operationVal));
 
-        //数量（手）、下单金额
-        JPanel amount = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, 0));
-        amount.setOpaque(false);
-        amount.add(quantity);
-        amount.add(operation);
+        //开始时间
+        box.add(start = new TimePanel("开始时间"));
 
-        return amount;
+        //结束时间
+        box.add(end = new TimePanel("结束时间"));
+
+        //按钮面板
+        box.add(createBtnPanel());
+
+        box.add(Box.createVerticalStrut(V_GAP));
+
+        return box;
     }
 
-    /**
-     * 生成股票类型输入面板
-     * @return JPanel
-     */
-    private JPanel createStockTypePanel() {
-        //股票代码
-        JLabel codeLabel = new JLabel("股票代码");
-        codeText.setEditable(false);
-        InputPair code = new InputPair(codeLabel, codeText);
+    private JLabel createLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setOpaque(false);
+        label.setPreferredSize(new Dimension(
+                componentW - (H_GAP << 1), componentH
+        ));
+        label.setFont(font);
+        label.setForeground(Color.WHITE);
+        return label;
+    }
 
-        //股票名称
-        JLabel nameLabel = new JLabel("股票名称");
+    private void initTextField(JTextField field, int width) {
+        field.setPreferredSize(new Dimension(
+                width, componentH
+        ));
+        field.setFont(font);
+        field.setHorizontalAlignment(JLabel.CENTER);
+        field.setCaretColor(Color.WHITE);
+        field.setForeground(Color.WHITE);
+        field.setOpaque(false);
+        field.setBorder(BorderFactory.createMatteBorder(
+                0, 0, 1, 0, Color.WHITE
+        ));
+    }
+
+    private void initComboBox(JComboBox box) {
+        box.setPreferredSize(new Dimension(
+                componentW + (H_GAP << 1), componentH
+        ));
+        box.setFont(font);
+    }
+
+    private void initStockNameText() {
         nameVal = new TipText(componentW << 1, componentH);
         nameVal.setTextColor(Color.WHITE);
+        initTextField(nameVal, componentW + (H_GAP << 1));
         nameVal.setMatcher((key) -> {
             Vector<String> v = new Vector<>();
             List<JSONObject> list = JsonUtil.contains(
@@ -178,15 +223,92 @@ class ParamPanel extends JPanel {
             String[] s = text.split(separator);
             field.setText(s[0]);
         });
-        InputPair name = new InputPair(nameLabel, nameVal);
-
-        //证券名称、证券代码
-        JPanel stock = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, 0));
-        stock.setOpaque(false);
-        stock.add(name);
-        stock.add(code);
-        return stock;
     }
+
+    private JPanel pack(JLabel label, JComponent component) {
+        JPanel panel = new JPanel(new FlowLayout(
+                FlowLayout.CENTER, V_GAP, H_GAP
+        ));
+        panel.setOpaque(false);
+        panel.add(label);
+        panel.add(component);
+        return panel;
+    }
+
+//    /**
+//     * 生成股票数量输入面板
+//     * @return JPanel
+//     */
+//    private JPanel createStockNumPanel() {
+//        //投资方向
+//        JLabel operationLabel = new JLabel("投资方向");
+//        operationVal = new JComboBox<>();
+//        operationVal.addItem("卖");
+//        operationVal.addItem("买");
+//        InputPair operation = new InputPair(operationLabel, operationVal);
+//        //数量（手）
+//        JLabel quantityLabel = new JLabel("数量/股");
+//        InputPair quantity = new InputPair(quantityLabel, quanVal);
+//
+//        //数量（手）、下单金额
+//        JPanel amount = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, 0));
+//        amount.setOpaque(false);
+//        amount.add(quantity);
+//        amount.add(operation);
+//
+//        return amount;
+//    }
+//
+//    /**
+//     * 生成股票类型输入面板
+//     * @return JPanel
+//     */
+//    private JPanel createStockTypePanel() {
+//        //股票代码
+//        JLabel codeLabel = new JLabel("股票代码");
+//        codeText.setEditable(false);
+//        InputPair code = new InputPair(codeLabel, codeText);
+//
+//        //股票名称
+//        JLabel nameLabel = new JLabel("股票名称");
+//        nameVal = new TipText(componentW << 1, componentH);
+//        nameVal.setTextColor(Color.WHITE);
+//        nameVal.setMatcher((key) -> {
+//            Vector<String> v = new Vector<>();
+//            List<JSONObject> list = JsonUtil.contains(
+//                    StockJsonInfo.JSON_KEYS, StockJsonInfo.JSON_PATH, key
+//            );
+//            for (JSONObject obj : list) {
+//                try {
+//                    v.addElement(
+//                            obj.getString(StockJsonInfo.KEY_NAME) + separator +
+//                                    obj.getString(StockJsonInfo.KEY_CODE)
+//                    );
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            return v;
+//        });
+//        nameVal.setListClickHandler((text) -> {
+//            String[] s = text.split(separator);
+//            nameVal.setText(s[0]);
+//            codeText.setText(s[1]);
+////            parent.updateTimeSeriesPanel(s[1]);
+//        });
+//        nameVal.setListFocusHandler((field, text) -> {
+//            String[] s = text.split(separator);
+//            field.setText(s[0]);
+//        });
+//        InputPair name = new InputPair(nameLabel, nameVal);
+//
+//        //证券名称、证券代码
+//        JPanel stock = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, 0));
+//        stock.setOpaque(false);
+//        stock.add(name);
+//        stock.add(code);
+//        return stock;
+//    }
 
     /**
      * 生成按钮面板
@@ -194,7 +316,7 @@ class ParamPanel extends JPanel {
     private JPanel createBtnPanel() {
         //启动计算
         trigger = new JButton("开始计算");
-        trigger.setPreferredSize(new Dimension(componentW - H_GAP, componentH));
+        trigger.setPreferredSize(new Dimension(componentW >> 1, componentH));
         trigger.addActionListener((e) -> {
             if (!checkComplete()) {
                 return;
@@ -231,7 +353,7 @@ class ParamPanel extends JPanel {
 
         //结束计算
         stopUpdate = new JButton("停止刷新");
-        stopUpdate.setPreferredSize(new Dimension(componentW - H_GAP, componentH));
+        stopUpdate.setPreferredSize(new Dimension(componentW >> 1, componentH));
         stopUpdate.setEnabled(false);
         stopUpdate.addActionListener((e) -> {
             int isOk = JOptionPane.showConfirmDialog(parent, "确定停止刷新吗？");
@@ -375,34 +497,35 @@ class ParamPanel extends JPanel {
         }
     }
 
-    private class InputPair extends JPanel {
-        /**
-         * 创建包含一行组件的面板，左边为标签，右边为输入组件
-         *
-         * @param name 标签
-         * @param input 输入组件
-         */
-        InputPair(JLabel name, JComponent input) {
-            name.setPreferredSize(new Dimension(componentW - (H_GAP << 1), componentH));
-            name.setFont(font);
-            name.setForeground(Color.WHITE);
-            input.setPreferredSize(new Dimension(componentW + (H_GAP << 1), componentH));
-            input.setFont(font);
-            if(input instanceof JTextField) {
-                JTextField field = (JTextField) input;
-                field.setCaretColor(Color.WHITE);
-            }
-            input.setForeground(Color.WHITE);
-            input.setOpaque(false);
-            input.setBorder(BorderFactory.createMatteBorder(
-                    0, 0, 1, 0, Color.WHITE
-            ));
-
-            this.add(name);
-            this.add(input);
-            this.setOpaque(false);
-        }
-    }
+//    private class InputPair extends JPanel {
+//        /**
+//         * 创建包含一行组件的面板，左边为标签，右边为输入组件
+//         *
+//         * @param name 标签
+//         * @param input 输入组件
+//         */
+//        InputPair(JLabel name, JComponent input) {
+//            name.setPreferredSize(new Dimension(componentW - (H_GAP << 1), componentH));
+//            name.setFont(font);
+//            name.setForeground(Color.WHITE);
+//            input.setPreferredSize(new Dimension(componentW + (H_GAP << 1), componentH));
+//            input.setFont(font);
+//            if(input instanceof JTextField) {
+//                JTextField field = (JTextField) input;
+//                field.setHorizontalAlignment(JLabel.CENTER);
+//                field.setCaretColor(Color.WHITE);
+//            }
+//            input.setForeground(Color.WHITE);
+//            input.setOpaque(false);
+//            input.setBorder(BorderFactory.createMatteBorder(
+//                    0, 0, 1, 0, Color.WHITE
+//            ));
+//
+//            this.add(name);
+//            this.add(input);
+//            this.setOpaque(false);
+//        }
+//    }
 
     private class TimePanel extends JPanel {
 
@@ -414,29 +537,30 @@ class ParamPanel extends JPanel {
          * @param name 标签名称
          */
         TimePanel(String name) {
-            this.setLayout(new FlowLayout(FlowLayout.LEFT, H_GAP, 0));
+            this.setLayout(new FlowLayout(
+                    FlowLayout.CENTER, V_GAP, H_GAP
+            ));
             this.setOpaque(false);
 
-            JLabel label = new JLabel(name);
-            label.setFont(font);
-            label.setForeground(Color.WHITE);
-            label.setPreferredSize(new Dimension(componentW - (H_GAP << 1), componentH));
+            //名称
+            JLabel label = createLabel(name);
             this.add(label);
 
+            //时
             hour = new JTextField();
-            hour.setFont(font);
-            hour.setPreferredSize(new Dimension(componentW + (H_GAP << 1), componentH));
+            initTextField(hour, componentW >> 1);
             this.add(hour);
 
+            //分隔符
             JLabel split = new JLabel(":");
-            split.setForeground(Color.white);
+            split.setForeground(Color.WHITE);
             split.setPreferredSize(new Dimension(H_GAP, V_GAP));
             split.setFont(new Font("黑体", Font.BOLD, 15));
             this.add(split);
 
+            //分
             minute = new JTextField();
-            minute.setFont(font);
-            minute.setPreferredSize(new Dimension(componentW, componentH));
+            initTextField(minute, componentW >> 1);
             this.add(minute);
         }
 

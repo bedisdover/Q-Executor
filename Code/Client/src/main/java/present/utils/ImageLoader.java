@@ -78,7 +78,7 @@ public class ImageLoader {
         account_header = new ImageIcon("src/main/resources/images/account_header.png").getImage();
         trade_bg = new ImageIcon("src/main/resources/images/trade_bg.jpg").getImage();
         empty_time_series = new ImageIcon("src/main/resources/images/empty_time_series.jpg").getImage();
-        empty_result = new ImageIcon("src/main/resources/images/empty_strategy.jpg").getImage();
+        empty_result = new ImageIcon("src/main/resources/images/empty_strategy.png").getImage();
         timer = new ImageIcon("src/main/resources/images/timer.png").getImage();
 
         pre_enter = new ImageIcon("src/main/resources/images/pre_enter.png").getImage();

@@ -11,10 +11,10 @@ import java.util.List;
 public class TradePanel extends JPanel {
 
     //参数面板宽度
-    private static final int PARAM_PANEL_W = 400;
+    private static final int PARAM_PANEL_W = 460;
 
     //参数面板高度
-    private static final int PARAM_PANEL_H = 380;
+    private static final int PARAM_PANEL_H = 540;
 
 //    //分时面板宽度
 //    private static final int TIME_SERIES_W = MainFrame.PANEL_W - PARAM_PANEL_W;
@@ -105,7 +105,7 @@ public class TradePanel extends JPanel {
     private static final int TIME_Y = 214;
 
     //参数面板和结果面板距离上边框的距离
-    private static final int PANEL_Y = 170;
+    private static final int PANEL_Y = 100;
 
     //参数面板和结果面板之间的距离
     private static final int PANEL_GAP = 100;
@@ -148,8 +148,10 @@ public class TradePanel extends JPanel {
 //        timeContainer.add(empty_time, BorderLayout.CENTER);
 
         //设置空白结果面板
+        empty_result.setOpaque(false);
         empty_result.setPreferredSize(new Dimension(RESULT_PANEL_W, RESULT_PANEL_H));
         resultContainer.setPreferredSize(new Dimension(RESULT_PANEL_W, RESULT_PANEL_H));
+        resultContainer.setOpaque(false);
         resultContainer.add(empty_result, BorderLayout.CENTER);
 
         //计时面板
