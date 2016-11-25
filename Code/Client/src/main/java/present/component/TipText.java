@@ -71,6 +71,8 @@ public class TipText extends QTextField {
 
     private int textH;
 
+    private Color textColor = Color.BLACK;
+
     public TipText(String placeholder, int width, int height) {
         super(placeholder);
         this.textW = width;
@@ -102,6 +104,10 @@ public class TipText extends QTextField {
         tips.setVisible(false);
     }
 
+    public void setTextColor(Color color) {
+        this.textColor = color;
+    }
+
     private void setTextListener() {
         this.addKeyListener(new KeyAdapter() {
             @Override
@@ -114,6 +120,7 @@ public class TipText extends QTextField {
                 boolean isRight = code == KeyEvent.VK_RIGHT;
                 if(isUp || isDown || isLeft || isRight || isShift) return;
 
+                setForeground(textColor);
                 mappedStrings = matcher.getMatchString(getText());
                 showTipList();
                 requestFocus();

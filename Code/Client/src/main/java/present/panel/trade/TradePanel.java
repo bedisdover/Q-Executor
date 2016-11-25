@@ -1,8 +1,6 @@
 package present.panel.trade;
 
-import present.MainFrame;
 import present.panel.loading.CalculatingPanel;
-import present.panel.stock.center.TimeSeriesPanel;
 import present.utils.ImageLoader;
 import vo.VolumeVO;
 
@@ -13,22 +11,26 @@ import java.util.List;
 public class TradePanel extends JPanel {
 
     //参数面板宽度
-    private static final int PARAM_PANEL_W = 420;
+    private static final int PARAM_PANEL_W = 400;
 
     //参数面板高度
     private static final int PARAM_PANEL_H = 380;
 
-    //分时面板宽度
-    private static final int TIME_SERIES_W = MainFrame.PANEL_W - PARAM_PANEL_W;
-
-    //分时面板高度
-    private static final int TIME_SERIES_H = PARAM_PANEL_H;
+//    //分时面板宽度
+//    private static final int TIME_SERIES_W = MainFrame.PANEL_W - PARAM_PANEL_W;
+//
+//    //分时面板高度
+//    private static final int TIME_SERIES_H = PARAM_PANEL_H;
 
     //结果面板宽度
     private static final int RESULT_PANEL_W = PARAM_PANEL_W;
 
+//    //有分时面板时的高度
+//    //结果面板高度
+//    private static final int RESULT_PANEL_H = MainFrame.PANEL_H - PARAM_PANEL_H;
+
     //结果面板高度
-    private static final int RESULT_PANEL_H = MainFrame.PANEL_H - PARAM_PANEL_H;
+    private static final int RESULT_PANEL_H = PARAM_PANEL_H;
 
     //计时面板宽度
     private static final int TIME_PANEL_W = 100;
@@ -36,11 +38,11 @@ public class TradePanel extends JPanel {
     //结果面板
     private ResultPanel resultPanel = new ResultPanel(RESULT_PANEL_W, RESULT_PANEL_H);
 
-    //分时面板
-    private TimeSeriesPanel timeSeriesPanel = new TimeSeriesPanel();
+//    //分时面板
+//    private TimeSeriesPanel timeSeriesPanel = new TimeSeriesPanel();
 
-    //分时面板容器
-    private JPanel timeContainer = new JPanel(new BorderLayout());
+//    //分时面板容器
+//    private JPanel timeContainer = new JPanel(new BorderLayout());
 
     //结果面板容器
     private JPanel resultContainer = new JPanel(new BorderLayout());
@@ -48,23 +50,23 @@ public class TradePanel extends JPanel {
     //加载效果显示面板
     private CalculatingPanel loading = new CalculatingPanel(RESULT_PANEL_W, RESULT_PANEL_H);
 
-    //空白分时面板
-    private JPanel empty_time = new JPanel() {
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            g.drawImage(
-                    ImageLoader.empty_time_series, 0, 0, this.getWidth(), this.getHeight(),
-                    0, 0,
-                    ImageLoader.empty_time_series.getWidth(null),
-                    ImageLoader.empty_time_series.getHeight(null),
-                    null
-            );
-        }
-    };
+//    //空白分时面板
+//    private JPanel empty_time = new JPanel() {
+//        @Override
+//        protected void paintComponent(Graphics g) {
+//            super.paintComponent(g);
+//            g.drawImage(
+//                    ImageLoader.empty_time_series, 0, 0, this.getWidth(), this.getHeight(),
+//                    0, 0,
+//                    ImageLoader.empty_time_series.getWidth(null),
+//                    ImageLoader.empty_time_series.getHeight(null),
+//                    null
+//            );
+//        }
+//    };
 
-    //分时面板显示的股票的股票代码
-    private String stockCode;
+//    //分时面板显示的股票的股票代码
+//    private String stockCode;
 
     //当前计算进度
     private int percent = 1;
@@ -102,6 +104,12 @@ public class TradePanel extends JPanel {
     //时间相对于计时面板的纵坐标
     private static final int TIME_Y = 214;
 
+    //参数面板和结果面板距离上边框的距离
+    private static final int PANEL_Y = 170;
+
+    //参数面板和结果面板之间的距离
+    private static final int PANEL_GAP = 100;
+
     //计时面板
     private JPanel timerPanel = new JPanel() {
         @Override
@@ -134,10 +142,10 @@ public class TradePanel extends JPanel {
         //参数面板
         param = new ParamPanel(PARAM_PANEL_W, PARAM_PANEL_H, this);
 
-        //设置空白分时面板
-        empty_time.setPreferredSize(new Dimension(TIME_SERIES_W, TIME_SERIES_H));
-        timeContainer.setPreferredSize(new Dimension(TIME_SERIES_W, TIME_SERIES_H));
-        timeContainer.add(empty_time, BorderLayout.CENTER);
+//        //设置空白分时面板
+//        empty_time.setPreferredSize(new Dimension(TIME_SERIES_W, TIME_SERIES_H));
+//        timeContainer.setPreferredSize(new Dimension(TIME_SERIES_W, TIME_SERIES_H));
+//        timeContainer.add(empty_time, BorderLayout.CENTER);
 
         //设置空白结果面板
         empty_result.setPreferredSize(new Dimension(RESULT_PANEL_W, RESULT_PANEL_H));
@@ -147,15 +155,29 @@ public class TradePanel extends JPanel {
         //计时面板
         timerPanel.setPreferredSize(new Dimension(TIME_PANEL_W, RESULT_PANEL_H));
 
-        //将参数面板和分时面板添加到整个面板上方
-        Box up = Box.createHorizontalBox();
-        up.add(param);
-        up.add(timeContainer);
+//        //将参数面板和分时面板添加到整个面板上方
+//        Box up = Box.createHorizontalBox();
+//        up.add(param);
+//        up.add(timeContainer);
 
-        //将结果面板添加到整个面板下方
-        this.setLayout(new BorderLayout());
-        this.add(up, BorderLayout.NORTH);
-        this.add(resultContainer, BorderLayout.CENTER);
+//        //将结果面板添加到整个面板下方
+//        this.setLayout(new BorderLayout());
+//        this.add(up, BorderLayout.NORTH);
+//        this.add(resultContainer, BorderLayout.CENTER);
+
+        this.setLayout(new FlowLayout(
+                FlowLayout.CENTER, PANEL_GAP, PANEL_Y
+        ));
+        this.add(param);
+        this.add(resultContainer);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(
+                ImageLoader.trade_bg, 0, 0, this.getWidth(), this.getHeight(), null
+        );
     }
 
     void stopUpdate() {
@@ -239,12 +261,12 @@ public class TradePanel extends JPanel {
         resultContainer.revalidate();
     }
 
-    void updateTimeSeriesPanel(String code) {
-        stockCode = code;
-        timeContainer.remove(empty_time);
-        timeContainer.add(timeSeriesPanel, BorderLayout.CENTER);
-        timeSeriesPanel.setStockCode(code);
-    }
+//    void updateTimeSeriesPanel(String code) {
+//        stockCode = code;
+//        timeContainer.remove(empty_time);
+//        timeContainer.add(timeSeriesPanel, BorderLayout.CENTER);
+//        timeSeriesPanel.setStockCode(code);
+//    }
 
     private void start() {
         loading.setProcess(0);
@@ -265,7 +287,7 @@ public class TradePanel extends JPanel {
      */
     private void update() {
         //刷新分时面板
-        timeSeriesPanel.setStockCode(stockCode);
+//        timeSeriesPanel.setStockCode(stockCode);
 
         //刷新结果面板
         generatingResult();

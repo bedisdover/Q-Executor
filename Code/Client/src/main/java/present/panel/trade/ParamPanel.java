@@ -43,10 +43,10 @@ class ParamPanel extends JPanel {
     private static final int V_GAP = 10;
 
     //组件字体
-    private static final Font font = new Font("微软雅黑", Font.PLAIN, 12);
+    private static final Font font = new Font("微软雅黑", Font.PLAIN, 14);
 
     //字符串切割符
-    private static final String spliter = " : ";
+    private static final String separator = " : ";
 
     //股票名称文本框
     private TipText nameVal;
@@ -92,7 +92,8 @@ class ParamPanel extends JPanel {
         this.setLayout(new BorderLayout());
         this.add(box, BorderLayout.CENTER);
         this.setPreferredSize(new Dimension(width, height));
-        this.setBackground(new Color(0x222222));
+//        this.setBackground(new Color(0x222222));
+        this.setOpaque(false);
     }
 
     /**
@@ -143,12 +144,13 @@ class ParamPanel extends JPanel {
     private JPanel createStockTypePanel() {
         //股票代码
         JLabel codeLabel = new JLabel("股票代码");
-        codeText.setEnabled(false);
+        codeText.setEditable(false);
         InputPair code = new InputPair(codeLabel, codeText);
 
         //股票名称
         JLabel nameLabel = new JLabel("股票名称");
         nameVal = new TipText(componentW << 1, componentH);
+        nameVal.setTextColor(Color.WHITE);
         nameVal.setMatcher((key) -> {
             Vector<String> v = new Vector<>();
             List<JSONObject> list = JsonUtil.contains(
@@ -157,7 +159,7 @@ class ParamPanel extends JPanel {
             for (JSONObject obj : list) {
                 try {
                     v.addElement(
-                            obj.getString(StockJsonInfo.KEY_NAME) + spliter +
+                            obj.getString(StockJsonInfo.KEY_NAME) + separator +
                                     obj.getString(StockJsonInfo.KEY_CODE)
                     );
                 } catch (JSONException e) {
@@ -167,13 +169,13 @@ class ParamPanel extends JPanel {
             return v;
         });
         nameVal.setListClickHandler((text) -> {
-            String[] s = text.split(spliter);
+            String[] s = text.split(separator);
             nameVal.setText(s[0]);
             codeText.setText(s[1]);
-            parent.updateTimeSeriesPanel(s[1]);
+//            parent.updateTimeSeriesPanel(s[1]);
         });
         nameVal.setListFocusHandler((field, text) -> {
-            String[] s = text.split(spliter);
+            String[] s = text.split(separator);
             field.setText(s[0]);
         });
         InputPair name = new InputPair(nameLabel, nameVal);
@@ -386,6 +388,16 @@ class ParamPanel extends JPanel {
             name.setForeground(Color.WHITE);
             input.setPreferredSize(new Dimension(componentW + (H_GAP << 1), componentH));
             input.setFont(font);
+            if(input instanceof JTextField) {
+                JTextField field = (JTextField) input;
+                field.setCaretColor(Color.WHITE);
+            }
+            input.setForeground(Color.WHITE);
+            input.setOpaque(false);
+            input.setBorder(BorderFactory.createMatteBorder(
+                    0, 0, 1, 0, Color.WHITE
+            ));
+
             this.add(name);
             this.add(input);
             this.setOpaque(false);
