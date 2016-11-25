@@ -16,37 +16,37 @@ import vo.StockTimeSeriesVO;
 import blservice.stock.GetTimeSeriesDataService;
 
 
-public class GetTimeSeriesDataServiceImpl implements GetTimeSeriesDataService{
+public class GetTimeSeriesDataServiceImpl implements GetTimeSeriesDataService {
 
-	public List<StockTimeSeriesVO> getData(String codeNum) throws Exception {
-		String url="http://" + Connect.IP + "/StockInfoByTime?codeNum="+codeNum;
-		List<StockTimeSeriesVO> stockList=new ArrayList<StockTimeSeriesVO>();
-			URL ur=new URL(url);
-			BufferedReader reader=new BufferedReader(new InputStreamReader(ur.openStream()));
-			String line=reader.readLine();
-			JSONArray jsonArray=new JSONArray(line);
-			int size=jsonArray.length();
-			double price=0;
-			double volume=0;
-			for(int i=(size-1);i>=0;i--){
-				StockTimeSeriesVO stockTimeSeriesVO=new StockTimeSeriesVO();
-				JSONObject jsonObj=jsonArray.getJSONObject(i);
-				if (jsonObj.getDouble("price") != 0) {
-					price += jsonObj.getDouble("price") * jsonObj.getDouble("volume");
-					volume += jsonObj.getDouble("volume");
-					double ave = 0;
-					if (volume != 0) {
-						DecimalFormat df = new DecimalFormat("0.00");
-						ave = price / volume;
-						ave = Double.parseDouble(df.format(ave));
-					}
-					stockTimeSeriesVO.setAvePrice(ave);
-					stockTimeSeriesVO.setTimeLine((String) jsonObj.get("time"));
-					stockTimeSeriesVO.setPrice((Double) jsonObj.get("price"));
-					stockTimeSeriesVO.setVolume(NumberUtil.round(jsonObj.getDouble("volume")));
-					stockList.add(stockTimeSeriesVO);
-				}
-			}
-		return stockList;
-	}
+    public List<StockTimeSeriesVO> getData(String codeNum) throws Exception {
+        String url = "http://" + Connect.IP + "/StockInfoByTime?codeNum=" + codeNum;
+        List<StockTimeSeriesVO> stockList = new ArrayList<>();
+        URL ur = new URL(url);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(ur.openStream()));
+        String line = reader.readLine();
+        JSONArray jsonArray = new JSONArray(line);
+        int size = jsonArray.length();
+        double price = 0;
+        double volume = 0;
+        for (int i = (size - 1); i >= 0; i--) {
+            StockTimeSeriesVO stockTimeSeriesVO = new StockTimeSeriesVO();
+            JSONObject jsonObj = jsonArray.getJSONObject(i);
+            if (jsonObj.getDouble("price") != 0) {
+                price += jsonObj.getDouble("price") * jsonObj.getDouble("volume");
+                volume += jsonObj.getDouble("volume");
+                double ave = 0;
+                if (volume != 0) {
+                    DecimalFormat df = new DecimalFormat("0.00");
+                    ave = price / volume;
+                    ave = Double.parseDouble(df.format(ave));
+                }
+                stockTimeSeriesVO.setAvePrice(ave);
+                stockTimeSeriesVO.setTimeLine((String) jsonObj.get("time"));
+                stockTimeSeriesVO.setPrice((Double) jsonObj.get("price"));
+                stockTimeSeriesVO.setVolume(NumberUtil.round(jsonObj.getDouble("volume")));
+                stockList.add(stockTimeSeriesVO);
+            }
+        }
+        return stockList;
+    }
 }
