@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 import java.awt.geom.Arc2D;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.TimerTask;
 
 
@@ -444,13 +445,18 @@ public class MLForVWAPServiceImpl extends TimerTask implements MLForVWAPService 
     @Override
     public void run() {
         try {
-            this.staticPriceAllStock.clear();
-            this.staticVolAllStock.clear();
-            this.dynamicPriceModelAllStock.clear();
+            Calendar cd = Calendar.getInstance();
+            int dayOfWeek = cd.get(Calendar.DAY_OF_WEEK) - 1;
 
-            this.getStaticVol_svm();
-            this.getStaticPrice_svm();
-            this.getDynamicPrice_svm();
+            if (dayOfWeek != 7 && dayOfWeek != 6) {
+                this.staticPriceAllStock.clear();
+                this.staticVolAllStock.clear();
+                this.dynamicPriceModelAllStock.clear();
+
+                this.getStaticVol_svm();
+                this.getStaticPrice_svm();
+                this.getDynamicPrice_svm();
+            }
         } catch (Exception e) {
             System.out.println("svm thread error!");
         }

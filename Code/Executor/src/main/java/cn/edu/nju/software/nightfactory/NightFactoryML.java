@@ -32,7 +32,7 @@ public class NightFactoryML implements ServletContextListener {
         event.getServletContext().log("timer begin!");
         // 设置每晚00:02分执行任务
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 16);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 10);
         calendar.set(Calendar.SECOND, 0);
         Date date = calendar.getTime();
