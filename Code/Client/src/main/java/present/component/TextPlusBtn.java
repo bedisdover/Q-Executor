@@ -59,4 +59,12 @@ public class TextPlusBtn extends JPanel {
         return text.getText();
     }
 
+    public TipText getTextField() {
+        return this.text;
+    }
+
+    public JButton getButton() {
+        return this.search;
+    }
+
 }
