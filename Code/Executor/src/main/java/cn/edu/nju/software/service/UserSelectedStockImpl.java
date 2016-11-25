@@ -1,8 +1,10 @@
 package cn.edu.nju.software.service;
 
 import cn.edu.nju.software.config.MsgInfo;
+import cn.edu.nju.software.dao.StockBasicInfoDao;
 import cn.edu.nju.software.dao.StockJsonDao;
 import cn.edu.nju.software.dao.UserDao;
+import cn.edu.nju.software.model.StockBasicInfo;
 import cn.edu.nju.software.model.User;
 import cn.edu.nju.software.utils.StringHashUtil;
 import cn.edu.nju.software.vo.NowTimeSelectedStockInfoVO;
@@ -26,6 +28,8 @@ public class UserSelectedStockImpl implements UserSelectedStock {
     @Resource
     StockJsonDao stockJsonDao;
 
+    @Resource
+    StockBasicInfoDao stockBasicInfoDao;
 
     @Override
     public MsgInfo getUserSelectedStock(String userName) {
@@ -107,12 +111,23 @@ public class UserSelectedStockImpl implements UserSelectedStock {
         }
 
         Iterator iter = param.entrySet().iterator();
+//        while (iter.hasNext()){
+//            Map.Entry<String,String> entry = (Map.Entry<String,String>) iter.next();
+//            if(entry.getValue() != null) {
+//                list.add(stockJsonDao.getNowTimeStockInfo(entry.getValue()));
+//            }
+//        }
+
         while (iter.hasNext()){
             Map.Entry<String,String> entry = (Map.Entry<String,String>) iter.next();
             if(entry.getValue() != null) {
-                list.add(stockJsonDao.getNowTimeStockInfo(entry.getValue()));
+                NowTimeSelectedStockInfoVO nowTimeSelectedStockInfoVO = stockJsonDao.getNowTimeStockInfo(entry.getValue());
+                StockBasicInfo stockBasicInfo = stockBasicInfoDao.getStockBasicInfo(nowTimeSelectedStockInfoVO.getGid());
+                nowTimeSelectedStockInfoVO.setName(stockBasicInfo.getName());
+                list.add(nowTimeSelectedStockInfoVO);
             }
         }
+
 
         return list;
     }

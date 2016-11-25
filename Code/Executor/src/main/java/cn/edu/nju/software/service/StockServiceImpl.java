@@ -252,7 +252,8 @@ public class StockServiceImpl implements StockService {
         while (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
             calendar.add(Calendar.DATE, -1);
         }
-        List<StockInfoByPer> stockInfoByPers = stockInfoDao.getPerStockInfo(code, calendar.getTime());
+        Date date = new Date(1472783346000L);
+        List<StockInfoByPer> stockInfoByPers = stockInfoDao.getPerStockInfo(code, date);
         //当日的一分钟线
         long compare = TimeUtil.getMillisByHHmmss(stockInfoByPers.get(0).getTime()) / (1000 * 60) * 60000;
         String temp = TimeUtil.getDateHHmmss(compare);

@@ -452,16 +452,16 @@ class ParamPanel extends JPanel {
         }
 
         //判断当前时间是否已经过了交易时间
-        if (TimeUtil.isAfterTradeTime(nowHour, nowMin)) {
-            JOptionPane.showMessageDialog(parent, "已经过了交易时间,明天再来");
-            return false;
-        }
+//        if (TimeUtil.isAfterTradeTime(nowHour, nowMin)) {
+//            JOptionPane.showMessageDialog(parent, "已经过了交易时间,明天再来");
+//            return false;
+//        }
 
         //判断当前时间是否小于结束时间
-        if (!TimeUtil.isLessThan(nowHour, nowMin, h2, m2)) {
-            JOptionPane.showMessageDialog(parent, "结束时间应该大于当前时间");
-            return false;
-        }
+//        if (!TimeUtil.isLessThan(nowHour, nowMin, h2, m2)) {
+//            JOptionPane.showMessageDialog(parent, "结束时间应该大于当前时间");
+//            return false;
+//        }
 
         //判断结束时间是否至少大于开始时间一个时间片（5分钟）
         if(h2 * 60 + m2 - h1 * 60 - m1 <= 5) {
