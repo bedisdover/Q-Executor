@@ -108,7 +108,7 @@ public class TradePanel extends JPanel {
     private static final int PANEL_Y = 100;
 
     //参数面板和结果面板之间的距离
-    private static final int PANEL_GAP = 100;
+    private static final int PANEL_GAP = 20;
 
     //计时面板
     private JPanel timerPanel = new JPanel() {
