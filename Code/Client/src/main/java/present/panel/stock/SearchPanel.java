@@ -158,7 +158,6 @@ public class SearchPanel extends JPanel {
                 "输入股票名称或股票代码", MainFrame.PANEL_W >> 1, SEARCH_H
         );
         search.setOpaque(false);
-
         //设置字符串匹配规则
         search.setMatcher((key) -> {
             Vector<String> v = new Vector<>();
