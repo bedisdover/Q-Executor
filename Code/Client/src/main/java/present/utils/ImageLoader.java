@@ -31,9 +31,6 @@ public class ImageLoader {
     //账户界面背景
     public static Image account_bg;
 
-    //交易界面背景
-    public static Image trade_bg;
-
     //账户界面文字
     public static Image account_text;
 
@@ -76,7 +73,6 @@ public class ImageLoader {
         account_bg = new ImageIcon("src/main/resources/images/account_bg.jpg").getImage();
         account_text = new ImageIcon("src/main/resources/images/account_text.png").getImage();
         account_header = new ImageIcon("src/main/resources/images/account_header.png").getImage();
-        trade_bg = new ImageIcon("src/main/resources/images/trade_bg.jpg").getImage();
         empty_time_series = new ImageIcon("src/main/resources/images/empty_time_series.jpg").getImage();
         empty_result = new ImageIcon("src/main/resources/images/empty_strategy.png").getImage();
         timer = new ImageIcon("src/main/resources/images/timer.png").getImage();

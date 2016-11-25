@@ -157,9 +157,6 @@ public class SearchPanel extends JPanel {
         TextPlusBtn search = new TextPlusBtn(
                 "输入股票名称或股票代码", MainFrame.PANEL_W >> 1, SEARCH_H
         );
-        Font font = new Font("微软雅黑", Font.PLAIN, 14);
-        search.getTextField().setFont(font);
-        search.getButton().setFont(font);
         search.setOpaque(false);
 
         //设置字符串匹配规则

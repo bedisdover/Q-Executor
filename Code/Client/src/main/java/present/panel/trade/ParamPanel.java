@@ -43,10 +43,10 @@ class ParamPanel extends JPanel {
     private static final int V_GAP = 10;
 
     //组件字体
-    private static final Font font = new Font("微软雅黑", Font.PLAIN, 14);
+    private static final Font font = new Font("微软雅黑", Font.PLAIN, 12);
 
     //字符串切割符
-    private static final String separator = " : ";
+    private static final String spliter = " : ";
 
     //股票名称文本框
     private TipText nameVal;
@@ -92,10 +92,14 @@ class ParamPanel extends JPanel {
         this.setLayout(new BorderLayout());
         this.add(initContents(), BorderLayout.CENTER);
         this.setPreferredSize(new Dimension(width, height));
+<<<<<<< HEAD
         this.setOpaque(false);
 //        this.setBorder(BorderFactory.createMatteBorder(
 //                0, 0, 0, 2, Color.WHITE
 //        ));
+=======
+        this.setBackground(new Color(0x222222));
+>>>>>>> parent of f62bf87... 去掉交易界面分时图
     }
 
     /**
@@ -160,6 +164,7 @@ class ParamPanel extends JPanel {
         return box;
     }
 
+<<<<<<< HEAD
     private JLabel createLabel(String text) {
         JLabel label = new JLabel(text);
         label.setOpaque(false);
@@ -170,6 +175,17 @@ class ParamPanel extends JPanel {
         label.setForeground(Color.WHITE);
         return label;
     }
+=======
+    /**
+     * 生成股票类型输入面板
+     * @return JPanel
+     */
+    private JPanel createStockTypePanel() {
+        //股票代码
+        JLabel codeLabel = new JLabel("股票代码");
+        codeText.setEnabled(false);
+        InputPair code = new InputPair(codeLabel, codeText);
+>>>>>>> parent of f62bf87... 去掉交易界面分时图
 
     private void initTextField(JTextField field, int width) {
         field.setPreferredSize(new Dimension(
@@ -194,8 +210,11 @@ class ParamPanel extends JPanel {
 
     private void initStockNameText() {
         nameVal = new TipText(componentW << 1, componentH);
+<<<<<<< HEAD
         nameVal.setTextColor(Color.WHITE);
         initTextField(nameVal, componentW + (H_GAP << 1));
+=======
+>>>>>>> parent of f62bf87... 去掉交易界面分时图
         nameVal.setMatcher((key) -> {
             Vector<String> v = new Vector<>();
             List<JSONObject> list = JsonUtil.contains(
@@ -204,7 +223,7 @@ class ParamPanel extends JPanel {
             for (JSONObject obj : list) {
                 try {
                     v.addElement(
-                            obj.getString(StockJsonInfo.KEY_NAME) + separator +
+                            obj.getString(StockJsonInfo.KEY_NAME) + spliter +
                                     obj.getString(StockJsonInfo.KEY_CODE)
                     );
                 } catch (JSONException e) {
@@ -214,13 +233,13 @@ class ParamPanel extends JPanel {
             return v;
         });
         nameVal.setListClickHandler((text) -> {
-            String[] s = text.split(separator);
+            String[] s = text.split(spliter);
             nameVal.setText(s[0]);
             codeText.setText(s[1]);
-//            parent.updateTimeSeriesPanel(s[1]);
+            parent.updateTimeSeriesPanel(s[1]);
         });
         nameVal.setListFocusHandler((field, text) -> {
-            String[] s = text.split(separator);
+            String[] s = text.split(spliter);
             field.setText(s[0]);
         });
     }
@@ -497,6 +516,7 @@ class ParamPanel extends JPanel {
         }
     }
 
+<<<<<<< HEAD
 //    private class InputPair extends JPanel {
 //        /**
 //         * 创建包含一行组件的面板，左边为标签，右边为输入组件
@@ -526,6 +546,26 @@ class ParamPanel extends JPanel {
 //            this.setOpaque(false);
 //        }
 //    }
+=======
+    private class InputPair extends JPanel {
+        /**
+         * 创建包含一行组件的面板，左边为标签，右边为输入组件
+         *
+         * @param name 标签
+         * @param input 输入组件
+         */
+        InputPair(JLabel name, JComponent input) {
+            name.setPreferredSize(new Dimension(componentW - (H_GAP << 1), componentH));
+            name.setFont(font);
+            name.setForeground(Color.WHITE);
+            input.setPreferredSize(new Dimension(componentW + (H_GAP << 1), componentH));
+            input.setFont(font);
+            this.add(name);
+            this.add(input);
+            this.setOpaque(false);
+        }
+    }
+>>>>>>> parent of f62bf87... 去掉交易界面分时图
 
     private class TimePanel extends JPanel {
 
